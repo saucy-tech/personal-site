@@ -1,0 +1,21 @@
+{
+  "name": "Brandon's Portfolio",
+  "short_name": "Brandon",
+  "description": "Love Jesus, Explore Ideas, Create Things, Save in Bitcoin",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#07251F",
+  "theme_color": "#07251F",
+  "icons": [
+    {
+      "src": "/icons/github-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/icons/nostr-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
