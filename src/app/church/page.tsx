@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import { SITE_NAME, SITE_URL } from '@/utils/constants';
 
 export const metadata: Metadata = {
-  title: 'Learn About Church',
+  title: 'Learn About My Church',
   description: 'Learn about our church community and beliefs.',
   openGraph: {
     title: 'Learn About Church',
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 
 export default function Church() {
   return (
-    <PageLayout title="Learn About Our Church">
+    <PageLayout title="Learn About My Church">
       <section>
         <h2 className="text-2xl font-semibold mb-4">✝️ Our Beliefs</h2>
         <div className="bg-white/10 p-6 rounded-lg">

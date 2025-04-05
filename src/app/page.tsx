@@ -73,11 +73,11 @@ export default function Home() {
           />
         </Section>
 
-        <Section title="Projects" emoji="💻">
+        <Section title="Links" emoji="💻">
           <LinkCard
-            key="portfolio-website"
-            title="Portfolio Website"
-            href="https://yourportfolio.com"
+            key="nostr"
+            title="Learn about Nostr"
+            href="https://nstart.me/"
             icon={<CodeBracketIcon className="h-6 w-6" />}
           />
         </Section>
