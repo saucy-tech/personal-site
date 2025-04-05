@@ -52,18 +52,14 @@ export default function Support() {
           <div className="bg-white/10 p-6 rounded-lg">
             <h3 className="text-xl font-medium mb-2">₿ Send Bitcoin On-Chain</h3>
             <p className="mb-3">Prefer to support via Bitcoin? Here’s my on-chain address:</p>
-            <code className="block text-sm break-words bg-black/40 p-3 rounded">
-              bc1qexampleaddresshere1234... {/* Replace with your actual BTC address */}
-            </code>
+            <code className="block text-sm break-words bg-black/40 p-3 rounded">bc1...</code>
           </div>
 
           {/* Lightning LNURL */}
           <div className="bg-white/10 p-6 rounded-lg">
             <h3 className="text-xl font-medium mb-2">⚡ Lightning Tips (LNURL)</h3>
             <p className="mb-3">If you're on Lightning, you can send a tip using this LNURL:</p>
-            <code className="block text-sm break-words bg-black/40 p-3 rounded">
-              lnurl1dp68gurn8ghj7mrww4exctn9w3skcc3... {/* Replace with your LNURL */}
-            </code>
+            <code className="block text-sm break-words bg-black/40 p-3 rounded">lnurl1...</code>
             <p className="mt-2 text-sm text-gray-400">
               You can also scan the QR on my contact page or use Zeus, Breez, Phoenix, or Mutiny.
             </p>
