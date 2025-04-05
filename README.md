@@ -2,8 +2,6 @@
 
 A minimalist, galaxy-inspired linktree app built with Next.js that serves as a central hub for all your online presence. Featuring a dark teal-green background with animated stars, gold accents, and a clean, centered layout.
 
-![Linktree App Screenshot](public/app-screenshot.jpg)
-
 ## Features
 
 - 🌌 Beautiful galaxy-themed UI with animated starfield background
@@ -16,14 +14,12 @@ A minimalist, galaxy-inspired linktree app built with Next.js that serves as a c
 
 ## Project Purpose
 
-This app serves as a personal "Linktree" alternative that reflects your personal ethos - "Love Jesus, Explore Ideas, Create Things, Save in Bitcoin." It provides a centralized hub where friends, family, and professional contacts can find links to your:
+This app provides a centralized hub where friends, family, and professional contacts can find links to your:
 
 - Social media profiles
 - Latest content and announcements
 - Projects and portfolio work
 - Articles, videos, and other media you create
-
-Unlike traditional Linktree, this is fully customizable and self-hosted, giving you complete control over appearance and content.
 
 ## Project Structure
 
@@ -81,16 +77,6 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Customization
-
-See the [CUSTOMIZATION_GUIDE.md](CUSTOMIZATION_GUIDE.md) for detailed instructions on how to:
-
-- Change profile information
-- Add/edit social links
-- Create or modify sections
-- Add new link cards
-- Customize colors and styling
-
 ## Component Layout
 
 The app uses a consistent vertical spacing system:
@@ -125,4 +111,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Design inspired by modern link aggregation services
 - Galaxy animation adapted from various open source implementations
 - Built with the Next.js framework
+
 # personal-site
