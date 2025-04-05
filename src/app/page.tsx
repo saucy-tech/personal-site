@@ -42,6 +42,11 @@ export default function Home() {
       icon: <Image src="/icons/substack-logo.svg" width={32} height={32} alt="Substack" />,
       label: 'Substack',
     },
+    {
+      href: 'https://discord.com/users/saucybtc',
+      icon: <Image src="/icons/discord-logo.svg" width={32} height={32} alt="Discord" />,
+      label: 'Discord',
+    },
   ];
 
   return (
@@ -55,14 +60,14 @@ export default function Home() {
             key="writting-blog"
             title="Read or subscribe to my blog"
             href="https://example.com/bitcoin-strategy"
-            icon={<CurrencyDollarIcon className="h-6 w-6" />}
+            icon={<span className="text-2xl">📝</span>}
           />
 
           <LinkCard
             key="read-article"
             title="What I'm currently into"
             href="/explore"
-            icon={<DocumentTextIcon className="h-6 w-6" />}
+            icon={<span className="text-2xl">🔍</span>}
           />
         </Section>
 
@@ -71,19 +76,19 @@ export default function Home() {
             key="truth-chapel"
             title="Need Hope? Check Out My Church"
             href="https://www.youtube.com/@TruthChapelUPC/streams"
-            icon={<DocumentTextIcon className="h-6 w-6" />}
+            icon={<span className="text-2xl">✝️</span>}
           />
           <LinkCard
             key="bitcoin-resources"
             title="Curious About Bitcoin?"
             href="/bitcoin"
-            icon={<DocumentTextIcon className="h-6 w-6" />}
+            icon={<span className="text-2xl">₿</span>}
           />
           <LinkCard
             key="529"
             title="Support me"
             href=""
-            icon={<CodeBracketIcon className="h-6 w-6" />}
+            icon={<span className="text-2xl">❤️</span>}
           />
         </Section>
       </div>
