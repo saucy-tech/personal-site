@@ -59,12 +59,12 @@ export default function Home() {
           <LinkCard
             key="writting-blog"
             title="Read or subscribe to my blog"
-            href="https://example.com/bitcoin-strategy"
+            href="https://substack.com/@saucybtc"
             icon={<span className="text-2xl">📝</span>}
           />
 
           <LinkCard
-            key="read-article"
+            key="explore"
             title="What I'm currently into"
             href="/explore"
             icon={<span className="text-2xl">🔍</span>}
@@ -79,15 +79,15 @@ export default function Home() {
             icon={<span className="text-2xl">✝️</span>}
           />
           <LinkCard
-            key="bitcoin-resources"
+            key="bitcoin"
             title="Curious About Bitcoin?"
             href="/bitcoin"
             icon={<span className="text-2xl">₿</span>}
           />
           <LinkCard
-            key="529"
+            key="support"
             title="Support me"
-            href=""
+            href="/support"
             icon={<span className="text-2xl">❤️</span>}
           />
         </Section>

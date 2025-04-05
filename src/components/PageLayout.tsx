@@ -1,4 +1,3 @@
-import GalaxyBackground from '@/components/GalaxyBackground';
 import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 
@@ -9,8 +8,8 @@ interface PageLayoutProps {
 
 export default function PageLayout({ children, title }: PageLayoutProps) {
   return (
-    <GalaxyBackground>
-      <div className="container mx-auto px-4 py-8">
+    <div className="flex flex-col min-h-screen">
+      <div className="container mx-auto px-4 py-8 flex-grow">
         <Link
           href="/"
           className="inline-flex items-center text-[#D4AF37] hover:text-[#D4AF37]/80 transition-colors mb-8"
@@ -23,6 +22,6 @@ export default function PageLayout({ children, title }: PageLayoutProps) {
 
         <div className="space-y-8">{children}</div>
       </div>
-    </GalaxyBackground>
+    </div>
   );
 }
