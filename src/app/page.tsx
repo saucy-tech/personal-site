@@ -64,20 +64,25 @@ export default function Home() {
             href="/explore"
             icon={<DocumentTextIcon className="h-6 w-6" />}
           />
-
-          <LinkCard
-            key="learn-about-church"
-            title="Learn About Church"
-            href="/church"
-            icon={<DocumentTextIcon className="h-6 w-6" />}
-          />
         </Section>
 
         <Section title="Links" emoji="💻">
           <LinkCard
-            key="nostr"
-            title="Learn about Nostr"
-            href="https://nstart.me/"
+            key="truth-chapel"
+            title="Need Hope? Check Out My Church"
+            href="https://www.youtube.com/@TruthChapelUPC/streams"
+            icon={<DocumentTextIcon className="h-6 w-6" />}
+          />
+          <LinkCard
+            key="bitcoin-resources"
+            title="Curious About Bitcoin?"
+            href="/bitcoin"
+            icon={<DocumentTextIcon className="h-6 w-6" />}
+          />
+          <LinkCard
+            key="529"
+            title="Support me"
+            href=""
             icon={<CodeBracketIcon className="h-6 w-6" />}
           />
         </Section>
