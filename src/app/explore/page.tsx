@@ -4,10 +4,12 @@ import { SITE_NAME, SITE_URL } from '@/utils/constants';
 
 export const metadata: Metadata = {
   title: "What I'm Currently Into",
-  description: "Explore what I'm currently reading, listening to, and discovering.",
+  description:
+    "A glimpse into what I'm exploring, thinking about, and diving deeper into right now.",
   openGraph: {
     title: "What I'm Currently Into",
-    description: "Explore what I'm currently reading, listening to, and discovering.",
+    description:
+      "A glimpse into what I'm exploring, thinking about, and diving deeper into right now.",
     url: `${SITE_URL}/explore`,
     type: 'website',
     images: [
@@ -24,35 +26,89 @@ export const metadata: Metadata = {
 export default function Explore() {
   return (
     <PageLayout title="What I'm Currently Into">
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">📚 Currently Reading</h2>
-        <div className="bg-white/10 p-6 rounded-lg">
-          <h3 className="text-xl font-medium">The Price of Tomorrow</h3>
-          <p className="text-gray-300 mt-2">by Jeff Booth</p>
-          <p className="mt-4">
-            A thought-provoking exploration of how technology and deflation will shape our future,
-            and why Bitcoin might be the key to navigating the coming economic transformation.
-          </p>
-        </div>
-      </section>
+      <section className="space-y-6">
+        <ul className="space-y-6">
+          <li className="bg-white/10 p-6 rounded-lg">
+            <p className="text-sm text-white/60 mb-2">🧠 March 15, 2024</p>
+            <h3 className="text-xl font-semibold mb-2">Big Questions on My Mind</h3>
+            <p>
+              Lately, I've been fascinated by the tension between Plato and Aristotle. I'm leaning
+              toward Plato—drawn to the idea of higher forms and unseen structures behind reality.
+              I'm slowly reading and watching more to understand how this philosophical split still
+              shapes our world.
+            </p>
+            <p className="mt-2">
+              At the same time, I've been going deep into AI—especially the wild explosion of Gen AI
+              tools and LLMs. I'm watching a few YouTubers and podcasts covering the space, and
+              experimenting with how tools like Claude and ChatGPT can help me think, write, and
+              create better.
+            </p>
+          </li>
 
-      <section>
-        <h2 className="text-2xl font-semibold mb-4">🎧 Currently Listening</h2>
-        <div className="bg-white/10 p-6 rounded-lg">
-          <h3 className="text-xl font-medium">Knowledge Project with Adam Grant</h3>
-          <p className="mt-4">
-            Exploring the intersection of psychology and business, with insights on motivation,
-            productivity, and meaningful work.
-          </p>
-          <a
-            href="https://fs.blog/knowledge-project-podcast/adam-grant/"
-            className="text-blue-400 hover:text-blue-300 mt-4 inline-block"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Listen to the episode →
-          </a>
-        </div>
+          <li className="bg-white/10 p-6 rounded-lg">
+            <p className="text-sm text-white/60 mb-2">✍️ March 10, 2024</p>
+            <h3 className="text-xl font-semibold mb-2">Creating, Reflecting, Capturing</h3>
+            <p>
+              I've been writing more lately, and it's a big reason I want this site up and
+              running—to have a place to reflect out loud, connect ideas, and share what I'm
+              learning.
+            </p>
+            <p className="mt-2">
+              I've also started using Obsidian more seriously. Inspired by{' '}
+              <a
+                href="https://www.youtube.com/watch?v=tDmjz6HB-yw"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-400 underline"
+              >
+                Sam Altman's note-taking approach
+              </a>
+              , I'm building a second brain that helps me revisit thoughts, track questions, and
+              generate better ideas.
+            </p>
+          </li>
+
+          <li className="bg-white/10 p-6 rounded-lg">
+            <p className="text-sm text-white/60 mb-2">💰 March 5, 2024</p>
+            <h3 className="text-xl font-semibold mb-2">Five Types of Wealth</h3>
+            <p>
+              I’ve been diving into{' '}
+              <a
+                href="https://www.amazon.com/Types-Wealth-Transformative-Guide-Design/dp/059372318X"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-400 underline font-semibold"
+              >
+                The Five Types of Wealth
+              </a>{' '}
+              by Sahil Bloom—time, social, mental, physical, and financial. It’s one of those
+              frameworks that instantly clicked.
+            </p>
+            <br />
+            <p>
+              Lately I’ve been making more space for consuming great stuff—reading, listening,
+              studying—and it’s feeding everything else. As James Clear says, “everything you create
+              is downstream from what you consume.”
+              <br />
+              <br />
+              I’ve also been more intentional about leaving room for reflection—journaling, walking,
+              sitting in stillness. That’s where my best ideas tend to show up.
+              <br />
+              <br />
+              This all led to creating something of my own—I used Claude to help me "vibe code" the
+              quiz, adding more context and style than the original. It was a fun build straight
+              from this blend of consuming, reflecting, and then creating.
+            </p>
+            <a
+              href="https://claude.site/artifacts/fd893e83-4526-42f1-afdd-3be118b02a36"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 underline font-semibold inline-block mt-2"
+            >
+              → Take the quiz I built
+            </a>
+          </li>
+        </ul>
       </section>
     </PageLayout>
   );

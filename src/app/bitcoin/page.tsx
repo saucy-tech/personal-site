@@ -24,144 +24,179 @@ export const metadata: Metadata = {
 export default function Bitcoin() {
   return (
     <PageLayout title="Why I Believe in Bitcoin">
+      {/* VISUAL HOOK */}
       <section>
-        <h2 className="text-2xl font-semibold mb-4">🧠 Learn What Shaped My Thinking</h2>
+        <img
+          src="/bitcoin-journey.png"
+          alt="Bitcoin vs. Gold – A Visual Journey"
+          className="rounded-lg shadow-lg w-full max-w-md mx-auto mb-6 px-4"
+        />
+      </section>
+
+      {/* PERSONAL STORY */}
+      <section>
+        <h2 className="text-2xl font-semibold mb-4">🧠 Why This Matters to Me</h2>
         <div className="bg-white/10 p-6 rounded-lg space-y-4">
           <p>
-            As a Christian, I care deeply about truth, justice, and caring for others. Over time, I
-            began to realize that the way our money works often undermines those values—rewarding
-            debt, punishing savers, and quietly transferring wealth in ways that aren't fair or
-            transparent.
+            As a Christian, I care about truth, justice, and caring for others. Over time, I
+            realized the way our money works often undermines those values—rewarding debt, punishing
+            savers, and quietly transferring wealth.
           </p>
           <p>
-            Learning about Bitcoin opened my eyes. It's a tool for honest weights and measures.
-            Bitcoin is transparent, open to all, and resistant to corruption. It just makes sense to
-            me in the bigger picture of stewardship, integrity, and how our world is supposed to
-            work.
+            Bitcoin opened my eyes. It's transparent, incorruptible, and rooted in honesty. It
+            aligns with values of stewardship, fairness, and long-term thinking.
           </p>
           <p>
-            I'm still learning every day, and I don't have all the answers. But if you're curious,
-            I'd love to share what's helped me understand it—and why I believe it matters for the
-            future.
+            I'm still learning, but I believe this matters—not just financially, but spiritually and
+            socially. If you're curious, here's where to start.
           </p>
         </div>
       </section>
+
+      {/* START HERE SECTION */}
       <section>
         <h2 className="text-2xl font-semibold mt-8 mb-4">🚀 Start Here</h2>
-        <div className="bg-white/10 p-6 rounded-lg space-y-4">
-          <p>
-            New to Bitcoin? You're not alone. Here's a simple place to start learning without
-            getting overwhelmed.
+        <div className="bg-white/10 p-6 rounded-lg space-y-6">
+          <div className="text-center mb-6">
+            <p className="text-lg mb-4">
+              New to Bitcoin? You're not alone. Start with this documentary.
+            </p>
+            <div className="max-w-2xl mx-auto">
+              <a
+                href="https://www.youtube.com/watch?v=oksraL7wN6Q"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+              >
+                Watch "God Bless Bitcoin" →
+              </a>
+            </div>
+          </div>
+
+          <div className="border-t border-white/20 pt-6">
+            <h3 className="text-xl font-semibold mb-4">Want to go deeper?</h3>
+            <p className="mb-4">After watching the documentary, I recommend these resources:</p>
+            <ul className="list-disc list-inside space-y-2">
+              <li>
+                <strong>📚 Read:</strong>{' '}
+                <a
+                  href="https://www.amazon.com/Bitcoin-Standard-Decentralized-Alternative-Central/dp/1119473861"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 underline"
+                >
+                  The Bitcoin Standard
+                </a>{' '}
+                – The most comprehensive book on Bitcoin's role in monetary history.
+              </li>
+              <li>
+                <strong>🎥 Watch:</strong>{' '}
+                <a
+                  href="https://www.youtube.com/watch?v=4rvTppy1qLI&list=PL2jAZ0x9H0bQFY6wIbQfnrnIlqMcSHd6X"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 underline"
+                >
+                  What is Money? – Michael Saylor Series
+                </a>{' '}
+                – A deep dive into the nature of money, time, and energy.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* GROWING RESOURCE LIST */}
+      <section>
+        <h2 className="text-2xl font-semibold mb-4">📚 Growing Resource List</h2>
+        <div className="bg-white/10 p-6 rounded-lg space-y-6">
+          <p className="text-md mb-2">
+            A curated list of resources that have shaped my understanding of Bitcoin - from
+            technical deep dives to philosophical discussions about money and society. I'll keep
+            adding to it as I discover more valuable content.
           </p>
-          <ul className="list-disc list-inside space-y-2">
-            <li>
-              <strong>Read:</strong>{' '}
-              <a
-                href="https://www.amazon.com/Thank-God-Bitcoin-Corruption-Redemption-ebook/dp/B08P3Z2H48"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-400 underline"
-              >
-                Thank God for Bitcoin
-              </a>{' '}
-              – A clear and moral look at why Bitcoin matters.
-            </li>
-          </ul>
-        </div>
-      </section>
-      <section>
-        <h2 className="text-2xl font-semibold mt-8 mb-4">🎧 Podcasts & Videos</h2>
-        <div className="bg-white/10 p-6 rounded-lg space-y-2">
-          <p>Some episodes that really spoke to me:</p>
-          <ul className="list-disc list-inside space-y-2">
-            <li>
-              <a
-                href="https://www.youtube.com/watch?v=oksraL7wN6Q&t=483s"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-400 underline"
-              >
-                START HERE: "God Bless Bitcoin" Short Film
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://www.youtube.com/watch?v=4rvTppy1qLI&list=PL2jAZ0x9H0bQFY6wIbQfnrnIlqMcSHd6X"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-400 underline"
-              >
-                What is Money? – Michael Saylor Series
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://www.youtube.com/watch?v=wRxc7uUqAyE"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-400 underline"
-              >
-                What is Money? – Jason Lowery Series
-              </a>
-            </li>
-          </ul>
+
+          <div>
+            <h3 className="text-xl font-semibold mb-3">📖 Read</h3>
+            <ul className="list-disc list-inside space-y-2">
+              <li>
+                <a
+                  href="https://blog.river.com/entering-the-dual-money-era/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 underline"
+                >
+                  Entering The Dual Money Era – River Financial
+                </a>{' '}
+                <span className="text-sm text-white/60">(Nov 2024)</span> – A compelling thesis on
+                how Bitcoin will replace the dollar as a way to save while dollars remain for
+                spending.
+              </li>
+              <li>
+                <a
+                  href="https://www.amazon.com/Price-Tomorrow-Technology-Deflation-Abundant/dp/1999257405"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 underline"
+                >
+                  The Price of Tomorrow – Jeff Booth
+                </a>{' '}
+                <span className="text-sm text-white/60">(Jan 2020)</span> – Explores how technology
+                and deflation will shape our future.
+              </li>
+              <li>
+                <a
+                  href="https://www.swanbitcoin.com/inventing-bitcoin/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 underline"
+                >
+                  Inventing Bitcoin – Yan Pritzker
+                </a>{' '}
+                <span className="text-sm text-white/60">(Jun 2019)</span> – Short, clear, and great
+                for technical newcomers.
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold mb-3">🎥 Watch/Listen</h3>
+            <ul className="list-disc list-inside space-y-2">
+              <li>
+                <a
+                  href="https://youtu.be/Flra35NJV_I"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 underline"
+                >
+                  THE Bitcoin Podcast: Saving in Bitcoin Ep. 1
+                </a>{' '}
+                <span className="text-sm text-white/60">(Mar 2025)</span> – Jeff Booth joins Walker
+                for Episode 1 to introduce Bitcoin.
+              </li>
+              <li>
+                <a
+                  href="https://www.youtube.com/watch?v=example"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 underline"
+                >
+                  Top 5 Bitcoin Clips of Q1 2025
+                </a>{' '}
+                <span className="text-sm text-white/60">(Feb 2025)</span> – Joe Burnett joins
+                Preston Pysh to Joe Burnett breaks down.
+              </li>
+            </ul>
+          </div>
         </div>
       </section>
 
+      {/* WHERE TO BUY */}
       <section>
-        <h2 className="text-2xl font-semibold mt-8 mb-4">📚 Books That Helped Me</h2>
-        <div className="bg-white/10 p-6 rounded-lg space-y-2">
-          <p>These are some of the most influential Bitcoin books I've read:</p>
-          <ul className="list-disc list-inside space-y-2">
-            <li>
-              <a
-                href="https://www.amazon.com/Thank-God-Bitcoin-Corruption-Redemption-ebook/dp/B08P3Z2H48"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-400 underline"
-              >
-                Thank God for Bitcoin – The Creation, Corruption & Redemption of Money
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://www.amazon.com/Bitcoin-Standard-Decentralized-Alternative-Central/dp/1119473861"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-400 underline"
-              >
-                The Bitcoin Standard – Saifedean Ammous
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://www.amazon.com/dp/1999257405"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-400 underline"
-              >
-                Layered Money – Nik Bhatia
-              </a>
-            </li>
-            <li>
-              <a
-                href="https://www.swanbitcoin.com/inventing-bitcoin/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-400 underline"
-              >
-                Inventing Bitcoin – Yan Pritzker
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <section>
-        <h2 className="text-2xl font-semibold mt-8 mb-4">🏦 Where I Buy Bitcoin</h2>
+        <h2 className="text-2xl font-semibold mt-8 mb-4">🏦 How I Buy Bitcoin</h2>
         <div className="bg-white/10 p-6 rounded-lg space-y-4">
           <p>
-            I personally use{' '}
+            I use{' '}
             <a
               href="https://river.com/signup?r=6UMRATB6"
               target="_blank"
@@ -170,33 +205,34 @@ export default function Bitcoin() {
             >
               River
             </a>{' '}
-            to buy and store my Bitcoin. They're a U.S.-based company focused on security,
-            transparency, and long-term savings.
+            because they prioritize security and transparency. It's focused on long-term savings.
           </p>
-          <p>What I like about River:</p>
           <ul className="list-disc list-inside space-y-2">
-            <li>No hidden fees – you see the true cost upfront</li>
-            <li>Daily auto-purchases (DCA) are easy to set up</li>
-            <li>Full-reserve custody (not a trading platform)</li>
-            <li>Great tax reporting and history tracking</li>
+            <li>No fees for recurring purchases (DCA)</li>
+            <li>White glove customer service and tax reports</li>
+            <li>100% full-reserve custody</li>
+            <li>FDIC-insured cash balances earn bitcoin interest</li>
           </ul>
           <p>
-            If you're ready to take the next step,{' '}
             <a
               href="https://river.com/signup?r=6UMRATB6"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-400 underline"
+              className="text-blue-400 underline font-semibold"
             >
-              click here to sign up with River
-            </a>{' '}
-            using my referral link.
+              → Sign up here with my referral link
+            </a>
           </p>
           <p className="text-sm text-white/60">
-            (Referral link means we both benefit if you sign up – thank you!)
+            (I may earn a small reward—thanks for supporting my work!)
           </p>
         </div>
       </section>
+
+      {/* PAGE LAST UPDATED */}
+      <div className="mt-12 text-center">
+        <p className="text-sm text-white/60">Page last updated: March 2024</p>
+      </div>
     </PageLayout>
   );
 }
