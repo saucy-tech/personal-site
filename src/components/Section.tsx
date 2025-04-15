@@ -27,13 +27,12 @@ const Section: React.FC<SectionProps> = ({
       transition={{ duration: 0.4 }}
     >
       <motion.div 
-        className="mb-4 flex items-center justify-center"
+        className="mb-3 flex items-center justify-center min-h-[44px]"
         initial={{ opacity: 0, y: -5 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <div className="h-[2px] flex-grow max-w-[15%] bg-[var(--accent)] opacity-70 mr-4"></div>
-        
+        <div className="h-[2px] flex-1 max-w-[120px] bg-[var(--accent)] opacity-70 mr-4" />
         <div className="flex items-center">
           {emoji && (
             <motion.span 
@@ -47,8 +46,7 @@ const Section: React.FC<SectionProps> = ({
           )}
           <h2 className="text-xl font-semibold text-[var(--text-primary)]">{title}</h2>
         </div>
-        
-        <div className="h-[2px] flex-grow max-w-[15%] bg-[var(--accent)] opacity-70 ml-4"></div>
+        <div className="h-[2px] flex-1 max-w-[120px] bg-[var(--accent)] opacity-70 ml-4" />
       </motion.div>
       
       {childrenArray.map((child, index) => (

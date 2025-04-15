@@ -59,9 +59,6 @@ export default function Support() {
             <code className="block text-sm break-words bg-black/40 p-3 rounded">
               saucy@getalby.com
             </code>
-            <p className="mt-2 text-sm text-gray-400">
-              You can also scan the QR on my contact page or use Zeus, Breez, Phoenix, or Mutiny.
-            </p>
           </div>
         </div>
       </section>

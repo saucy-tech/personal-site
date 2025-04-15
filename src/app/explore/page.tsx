@@ -28,22 +28,6 @@ export default function Explore() {
     <PageLayout title="What I&apos;m Currently Into">
       <section className="space-y-6">
         <ul className="space-y-6">
-          <li className="bg-white/10 p-6 rounded-lg">
-            <p className="text-sm text-white/60 mb-2">🧠 March 15, 2024</p>
-            <h3 className="text-xl font-semibold mb-2">Big Questions on My Mind</h3>
-            <p>
-              Lately, I&apos;ve been fascinated by the tension between Plato and Aristotle. I&apos;m leaning
-              toward Plato—drawn to the idea of higher forms and unseen structures behind reality.
-              I&apos;m slowly reading and watching more to understand how this philosophical split still
-              shapes our world.
-            </p>
-            <p className="mt-2">
-              At the same time, I&apos;ve been going deep into AI—especially the wild explosion of Gen AI
-              tools and LLMs. I&apos;m watching a few YouTubers and podcasts covering the space, and
-              experimenting with how tools like Claude and ChatGPT can help me think, write, and
-              create better.
-            </p>
-          </li>
 
           <li className="bg-white/10 p-6 rounded-lg">
             <p className="text-sm text-white/60 mb-2">✍️ March 10, 2024</p>

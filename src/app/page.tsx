@@ -3,13 +3,6 @@ import SocialBar from '@/components/SocialBar';
 import Section from '@/components/Section';
 import LinkCard from '@/components/LinkCard';
 import Image from 'next/image';
-import {
-  CodeBracketIcon,
-  CurrencyDollarIcon,
-  DocumentTextIcon,
-  VideoCameraIcon,
-  LightBulbIcon,
-} from '@heroicons/react/24/outline';
 
 export default function Home() {
   // Profile data
@@ -56,37 +49,58 @@ export default function Home() {
         <SocialBar socials={socialLinks} />
 
         <Section title="Latest" emoji="🔥">
-          <LinkCard
-            key="writting-blog"
-            title="Read or subscribe to my blog"
-            href="https://substack.com/@saucybtc"
-            icon={<span className="text-2xl">📝</span>}
-          />
 
           <LinkCard
-            key="explore"
-            title="What I'm currently into"
+            key="what-im-into"
+            title="What I’m Currently Into"
             href="/explore"
             icon={<span className="text-2xl">🔍</span>}
           />
-        </Section>
-
-        <Section title="Links" emoji="💻">
           <LinkCard
-            key="truth-chapel"
-            title="Need Hope? Check Out My Church"
-            href="https://www.youtube.com/@TruthChapelUPC/streams"
-            icon={<span className="text-2xl">✝️</span>}
+            key="talks-sermons"
+            title="Talks & Sermons"
+            href="/talks"
+            icon={<span className="text-2xl">🎤</span>}
           />
           <LinkCard
-            key="bitcoin"
-            title="Curious About Bitcoin?"
+            key="my-projects"
+            title="My Projects"
+            href="/projects"
+            icon={<span className="text-2xl">🚀</span>}
+          />
+        </Section>
+
+        <Section title="Explore" emoji="🌐">
+          <LinkCard
+            key="subscribe-blog"
+            title="Subscribe to Blog"
+            href="https://saucybtc.substack.com/subscribe"
+            icon={<span className="text-2xl">📬</span>}
+          />
+          <LinkCard
+            key="past-blogs"
+            title="Past Blogs"
+            href="https://saucybtc.substack.com/archive"
+            icon={<span className="text-2xl">📝</span>}
+          />
+          <LinkCard
+            key="curious-bitcoin"
+            title="Curious about Bitcoin?"
             href="/bitcoin"
             icon={<span className="text-2xl">₿</span>}
           />
           <LinkCard
-            key="support"
-            title="Support me"
+            key="find-hope-church"
+            title="Find Hope at My Church"
+            href="https://www.youtube.com/@TruthChapelUPC/streams"
+            icon={<span className="text-2xl">⛪</span>}
+          />
+        </Section>
+
+        <Section title="Connect" emoji="❤️">
+          <LinkCard
+            key="support-my-work"
+            title="Support My Work"
             href="/support"
             icon={<span className="text-2xl">❤️</span>}
           />

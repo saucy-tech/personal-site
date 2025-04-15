@@ -208,11 +208,11 @@ export default function Bitcoin() {
             >
               River
             </a>{' '}
-            because they prioritize security and transparency. It&apos;s focused on long-term savings.
+            because they prioritize security, transparency, and customer service.
           </p>
           <ul className="list-disc list-inside space-y-2">
             <li>No fees for recurring purchases (DCA)</li>
-            <li>White glove customer service and tax reports</li>
+            <li>White-glove customer service and tax reports</li>
             <li>100% full-reserve custody</li>
             <li>FDIC-insured cash balances earn bitcoin interest</li>
           </ul>
@@ -226,16 +226,8 @@ export default function Bitcoin() {
               → Sign up here with my referral link
             </a>
           </p>
-          <p className="text-sm text-white/60">
-            (I may earn a small reward—thanks for supporting my work!)
-          </p>
         </div>
       </section>
-
-      {/* PAGE LAST UPDATED */}
-      <div className="mt-12 text-center">
-        <p className="text-sm text-white/60">Page last updated: March 2024</p>
-      </div>
     </PageLayout>
   );
 }

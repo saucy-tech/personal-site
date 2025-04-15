@@ -17,31 +17,36 @@ const LinkCard: React.FC<LinkCardProps> = ({
   href,
   icon,
   imageSrc,
-  expandable = false,
   children,
 }) => {
   const CardContent = () => (
-    <div className="flex items-center min-h-[54px] px-4 py-3">
-      <div className="flex items-center w-full">
-        {imageSrc ? (
-          <div className="w-8 h-8 mr-4 flex-shrink-0">
-            <Image
-              src={imageSrc}
-              alt={title}
-              width={32}
-              height={32}
-              className="rounded-full"
-            />
+    <div className="flex items-center min-h-[54px] px-4 py-3 w-full">
+      {/* Left: Icon or Image */}
+      {imageSrc ? (
+        <div className="w-8 h-8 flex-shrink-0 flex items-center justify-start mr-4">
+          <Image
+            src={imageSrc}
+            alt={title}
+            width={32}
+            height={32}
+            className="rounded-full"
+          />
+        </div>
+      ) : (
+        icon && (
+          <div className="w-9 h-9 flex items-center justify-start flex-shrink-0 text-[var(--accent)] mr-4">
+            {icon}
           </div>
-        ) : (
-          icon && (
-            <div className="w-9 h-9 mr-4 flex items-center justify-center flex-shrink-0 text-[var(--accent)]">
-              {icon}
-            </div>
-          )
-        )}
-        <span className="text-sm sm:text-base font-medium text-[var(--text-primary)]">{title}</span>
+        )
+      )}
+      {/* Center: Title */}
+      <div className="flex-1 flex justify-center">
+        <span className="text-sm sm:text-base font-medium text-[var(--text-primary)] text-center break-words w-full max-w-full">
+          {title}
+        </span>
       </div>
+      {/* Right: Empty spacer for symmetry */}
+      <div className="w-9 h-9 flex-shrink-0 mr-0" />
     </div>
   );
 
