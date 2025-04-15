@@ -4,10 +4,10 @@ import { SITE_NAME, SITE_URL } from '@/utils/constants';
 
 export const metadata: Metadata = {
   title: 'Support Me',
-  description: "Support Brandon's writing, projects, and long-term vision for his family.",
+  description: "Support Brandon&apos;s writing, projects, and long-term vision for his family.",
   openGraph: {
     title: 'Support Me',
-    description: "Contribute to Brandon's work, family savings, or send Bitcoin.",
+    description: "Contribute to Brandon&apos;s work, family savings, or send Bitcoin.",
     url: `${SITE_URL}/support`,
     type: 'website',
     images: [
@@ -26,16 +26,16 @@ export default function Support() {
     <PageLayout title="Support Me">
       <section className="mb-10">
         <p className="text-lg text-gray-300 mb-6">
-          If you've found value in my writing, projects, or perspective and want to help me keep
-          creating, here are a few ways to support my work and my family's future.
+          If you&apos;ve found value in my writing, projects, or perspective and want to help me keep
+          creating, here are a few ways to support my work and my family&apos;s future.
         </p>
 
         <div className="space-y-8">
           {/* 529 Gifting */}
           <div className="bg-white/10 p-6 rounded-lg">
-            <h3 className="text-xl font-medium mb-2">🎓 Gift to My Son's 529 Plan</h3>
+            <h3 className="text-xl font-medium mb-2">🎓 Gift to My Son&apos;s 529 Plan</h3>
             <p className="mb-3">
-              We're investing in our son's future through a 529 college savings plan. You can give
+              We&apos;re investing in our son&apos;s future through a 529 college savings plan. You can give
               directly using our Ugift code at{' '}
               <a
                 href="https://www.ugift529.com"
@@ -45,7 +45,7 @@ export default function Support() {
               >
                 Ugift529.com
               </a>
-              . It's simple and secure — just enter this code to send a contribution:
+              . It&apos;s simple and secure — just enter this code to send a contribution:
             </p>
             <code className="block text-sm break-words bg-black/40 p-3 rounded">21W-40K</code>
           </div>
@@ -54,7 +54,7 @@ export default function Support() {
           <div className="bg-white/10 p-6 rounded-lg">
             <h3 className="text-xl font-medium mb-2">⚡ Lightning Tips (LNURL)</h3>
             <p className="mb-3">
-              If you're on Lightning, you can send a tip directly to my Lightning Address:
+              If you&apos;re on Lightning, you can send a tip directly to my Lightning Address:
             </p>
             <code className="block text-sm break-words bg-black/40 p-3 rounded">
               saucy@getalby.com

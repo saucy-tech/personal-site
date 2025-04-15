@@ -1,5 +1,6 @@
 import PageLayout from '@/components/PageLayout';
 import { Metadata } from 'next';
+import Image from 'next/image';
 import { SITE_NAME, SITE_URL } from '@/utils/constants';
 
 export const metadata: Metadata = {
@@ -26,9 +27,11 @@ export default function Bitcoin() {
     <PageLayout title="Why I Believe in Bitcoin">
       {/* VISUAL HOOK */}
       <section>
-        <img
+        <Image
           src="/bitcoin-journey.png"
           alt="Bitcoin vs. Gold – A Visual Journey"
+          width={500}
+          height={300}
           className="rounded-lg shadow-lg w-full max-w-md mx-auto mb-6 px-4"
         />
       </section>
@@ -38,17 +41,17 @@ export default function Bitcoin() {
         <h2 className="text-2xl font-semibold mb-4">🧠 Why This Matters to Me</h2>
         <div className="bg-white/10 p-6 rounded-lg space-y-4">
           <p>
-            As a Christian, I care about truth, justice, and caring for others. Over time, I
+            As a Christian, I value truth, integrity, and caring for others. Over time, I
             realized the way our money works often undermines those values—rewarding debt, punishing
             savers, and quietly transferring wealth.
           </p>
           <p>
-            Bitcoin opened my eyes. It's transparent, incorruptible, and rooted in honesty. It
+            Bitcoin opened my eyes. It&apos;s transparent, incorruptible, and rooted in honesty. It
             aligns with values of stewardship, fairness, and long-term thinking.
           </p>
           <p>
-            I'm still learning, but I believe this matters—not just financially, but spiritually and
-            socially. If you're curious, here's where to start.
+            I&apos;m still learning, but I believe this matters—not just financially, but spiritually and
+            socially. If you&apos;re curious, here&apos;s where to start.
           </p>
         </div>
       </section>
@@ -59,7 +62,7 @@ export default function Bitcoin() {
         <div className="bg-white/10 p-6 rounded-lg space-y-6">
           <div className="text-center mb-6">
             <p className="text-lg mb-4">
-              New to Bitcoin? You're not alone. Start with this documentary.
+              New to Bitcoin? You&apos;re not alone. Start with this documentary.
             </p>
             <div className="max-w-2xl mx-auto">
               <a
@@ -68,7 +71,7 @@ export default function Bitcoin() {
                 rel="noopener noreferrer"
                 className="block bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
               >
-                Watch "God Bless Bitcoin" →
+                Watch &quot;God Bless Bitcoin&quot; →
               </a>
             </div>
           </div>
@@ -87,7 +90,7 @@ export default function Bitcoin() {
                 >
                   The Bitcoin Standard
                 </a>{' '}
-                – The most comprehensive book on Bitcoin's role in monetary history.
+                – The most comprehensive book on Bitcoin&apos;s role in monetary history.
               </li>
               <li>
                 <strong>🎥 Watch:</strong>{' '}
@@ -112,7 +115,7 @@ export default function Bitcoin() {
         <div className="bg-white/10 p-6 rounded-lg space-y-6">
           <p className="text-md mb-2">
             A curated list of resources that have shaped my understanding of Bitcoin - from
-            technical deep dives to philosophical discussions about money and society. I'll keep
+            technical deep dives to philosophical discussions about money and society. I&apos;ll keep
             adding to it as I discover more valuable content.
           </p>
 
@@ -205,7 +208,7 @@ export default function Bitcoin() {
             >
               River
             </a>{' '}
-            because they prioritize security and transparency. It's focused on long-term savings.
+            because they prioritize security and transparency. It&apos;s focused on long-term savings.
           </p>
           <ul className="list-disc list-inside space-y-2">
             <li>No fees for recurring purchases (DCA)</li>

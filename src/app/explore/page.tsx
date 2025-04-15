@@ -3,13 +3,13 @@ import { Metadata } from 'next';
 import { SITE_NAME, SITE_URL } from '@/utils/constants';
 
 export const metadata: Metadata = {
-  title: "What I'm Currently Into",
+  title: "What I&apos;m Currently Into",
   description:
-    "A glimpse into what I'm exploring, thinking about, and diving deeper into right now.",
+    "A glimpse into what I&apos;m exploring, thinking about, and diving deeper into right now.",
   openGraph: {
-    title: "What I'm Currently Into",
+    title: "What I&apos;m Currently Into",
     description:
-      "A glimpse into what I'm exploring, thinking about, and diving deeper into right now.",
+      "A glimpse into what I&apos;m exploring, thinking about, and diving deeper into right now.",
     url: `${SITE_URL}/explore`,
     type: 'website',
     images: [
@@ -25,21 +25,21 @@ export const metadata: Metadata = {
 
 export default function Explore() {
   return (
-    <PageLayout title="What I'm Currently Into">
+    <PageLayout title="What I&apos;m Currently Into">
       <section className="space-y-6">
         <ul className="space-y-6">
           <li className="bg-white/10 p-6 rounded-lg">
             <p className="text-sm text-white/60 mb-2">🧠 March 15, 2024</p>
             <h3 className="text-xl font-semibold mb-2">Big Questions on My Mind</h3>
             <p>
-              Lately, I've been fascinated by the tension between Plato and Aristotle. I'm leaning
+              Lately, I&apos;ve been fascinated by the tension between Plato and Aristotle. I&apos;m leaning
               toward Plato—drawn to the idea of higher forms and unseen structures behind reality.
-              I'm slowly reading and watching more to understand how this philosophical split still
+              I&apos;m slowly reading and watching more to understand how this philosophical split still
               shapes our world.
             </p>
             <p className="mt-2">
-              At the same time, I've been going deep into AI—especially the wild explosion of Gen AI
-              tools and LLMs. I'm watching a few YouTubers and podcasts covering the space, and
+              At the same time, I&apos;ve been going deep into AI—especially the wild explosion of Gen AI
+              tools and LLMs. I&apos;m watching a few YouTubers and podcasts covering the space, and
               experimenting with how tools like Claude and ChatGPT can help me think, write, and
               create better.
             </p>
@@ -49,21 +49,21 @@ export default function Explore() {
             <p className="text-sm text-white/60 mb-2">✍️ March 10, 2024</p>
             <h3 className="text-xl font-semibold mb-2">Creating, Reflecting, Capturing</h3>
             <p>
-              I've been writing more lately, and it's a big reason I want this site up and
-              running—to have a place to reflect out loud, connect ideas, and share what I'm
+              I&apos;ve been writing more lately, and it&apos;s a big reason I want this site up and
+              running—to have a place to reflect out loud, connect ideas, and share what I&apos;m
               learning.
             </p>
             <p className="mt-2">
-              I've also started using Obsidian more seriously. Inspired by{' '}
+              I&apos;ve also started using Obsidian more seriously. Inspired by{' '}
               <a
                 href="https://www.youtube.com/watch?v=tDmjz6HB-yw"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-400 underline"
               >
-                Sam Altman's note-taking approach
+                Sam Altman&apos;s note-taking approach
               </a>
-              , I'm building a second brain that helps me revisit thoughts, track questions, and
+              , I&apos;m building a second brain that helps me revisit thoughts, track questions, and
               generate better ideas.
             </p>
           </li>
@@ -95,7 +95,7 @@ export default function Explore() {
               sitting in stillness. That’s where my best ideas tend to show up.
               <br />
               <br />
-              This all led to creating something of my own—I used Claude to help me "vibe code" the
+              This all led to creating something of my own—I used Claude to help me &quot;vibe code&quot; the
               quiz, adding more context and style than the original. It was a fun build straight
               from this blend of consuming, reflecting, and then creating.
             </p>
