@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { BaseProps } from '@/types';
 import { cn } from '@/utils/helpers';
 import { SITE_NAME } from '@/utils/constants';

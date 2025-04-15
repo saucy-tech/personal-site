@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import GalaxyBackground from '@/components/GalaxyBackground';
 import Button from '@/components/ui/Button';
@@ -13,7 +12,6 @@ interface ErrorFallbackProps {
 }
 
 const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorBoundary }) => {
-  const router = useRouter();
   const isDev = process.env.NODE_ENV === 'development';
 
   return (

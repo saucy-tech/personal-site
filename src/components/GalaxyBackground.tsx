@@ -77,7 +77,6 @@ const GalaxyBackground: React.FC<{ children: React.ReactNode }> = ({
         const opacity = 0.2 + Math.sin(time * 2 + star.brightness * 10) * 0.2;
         
         // Subtle color variation around the accent color
-        const colorShift = star.color > 0.7 ? 1 : 0.7; // 70% gold stars, 30% slightly different
         
         ctx.fillStyle = `${cssVars.accent}${Math.floor(opacity * 255).toString(16).padStart(2, '0')}`;
         ctx.beginPath();

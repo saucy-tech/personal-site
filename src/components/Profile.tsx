@@ -5,12 +5,11 @@ import Image from 'next/image';
 
 interface ProfileProps {
   name: string;
-  username: string;
   bio: string;
   imageSrc: string;
 }
 
-const Profile: React.FC<ProfileProps> = ({ name, username, bio, imageSrc }) => {
+const Profile: React.FC<ProfileProps> = ({ name, bio, imageSrc }) => {
   return (
     <motion.div
       className="flex flex-col items-center space-y-4 w-full mx-auto px-2 mb-4"
