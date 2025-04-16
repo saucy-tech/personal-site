@@ -16,7 +16,7 @@ export const viewport: Viewport = {
 }
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://your-domain.com"),
+  metadataBase: new URL("https://saucy.tech"),
   title: {
     default: SITE_NAME,
     template: `%s | ${SITE_NAME}`
@@ -56,7 +56,9 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    images: ["/family-photo.jpeg"],
+    images: [
+      "https://saucy.tech/family-photo.jpeg"
+    ],
     creator: "@Saucy_Tech"
   },
   icons: {
@@ -75,22 +77,28 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // Add apple-touch-icon for iOS sharing
+  // You may want to use a dedicated icon file (e.g., /apple-touch-icon.png) for best results
+  // For now, we'll use the same image as og:image
   return (
     <html lang="en">
+      <head>
+        <link rel="apple-touch-icon" sizes="180x180" href="https://saucy.tech/apple-touch-icon.png" />
+      </head>
       <body className={montserrat.className}>
-        <ErrorBoundary>
-          <GalaxyBackground>
-            <div className="flex flex-col min-h-screen">
-              <Header />
-              <main className="flex-grow">
-                <div className="container mx-auto max-w-5xl">
+        <GalaxyBackground>
+          <div className="flex flex-col min-h-screen">
+            <Header />
+            <main className="flex-grow">
+              <div className="container mx-auto max-w-5xl">
+                <ErrorBoundary>
                   {children}
-                </div>
-              </main>
-              <Footer />
-            </div>
-          </GalaxyBackground>
-        </ErrorBoundary>
+                </ErrorBoundary>
+              </div>
+            </main>
+            <Footer />
+          </div>
+        </GalaxyBackground>
       </body>
     </html>
   );
