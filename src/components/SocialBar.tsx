@@ -18,7 +18,7 @@ const SocialBar: React.FC<SocialBarProps> = ({ socials }) => {
 
   return (
     <motion.div 
-      className="flex justify-center gap-4 py-1 flex-wrap"
+      className="flex justify-center gap-3 sm:gap-4 py-1 flex-wrap w-full max-w-xs sm:max-w-none"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5, delay: 0.2 }}
@@ -29,7 +29,7 @@ const SocialBar: React.FC<SocialBarProps> = ({ socials }) => {
           href={social.href}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center w-12 h-12 rounded-full p-2 bg-[var(--accent-transparent)] border border-[var(--accent-border)] hover:bg-[var(--accent-hover)] transition-all"
+          className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full p-2 bg-[var(--accent-transparent)] border border-[var(--accent-border)] hover:bg-[var(--accent-hover)] transition-all"
           aria-label={social.label}
           whileHover={{ 
             scale: 1.1,

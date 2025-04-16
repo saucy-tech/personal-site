@@ -20,7 +20,7 @@ const LinkCard: React.FC<LinkCardProps> = ({
   children,
 }) => {
   const CardContent = () => (
-    <div className="flex items-center min-h-[54px] px-4 py-3 w-full">
+    <div className="flex items-center min-h-[48px] px-2 py-2 sm:px-4 sm:py-3 w-full">
       {/* Left: Icon or Image */}
       {imageSrc ? (
         <div className="w-8 h-8 flex-shrink-0 flex items-center justify-start mr-4">
@@ -41,7 +41,7 @@ const LinkCard: React.FC<LinkCardProps> = ({
       )}
       {/* Center: Title */}
       <div className="flex-1 flex justify-center">
-        <span className="text-sm sm:text-base font-medium text-[var(--text-primary)] text-center break-words w-full max-w-full">
+        <span className="text-xs sm:text-base font-medium text-[var(--text-primary)] text-center break-words w-full max-w-full">
           {title}
         </span>
       </div>
@@ -56,7 +56,7 @@ const LinkCard: React.FC<LinkCardProps> = ({
         href={href || "#"}
         target="_blank"
         rel="noopener noreferrer"
-        className="block mx-auto max-w-[50%] w-full rounded-xl bg-[var(--accent-transparent)] backdrop-blur-sm border border-[var(--accent-border)] hover:bg-[var(--accent-hover)] hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all duration-300"
+        className="block mx-auto w-full max-w-full sm:max-w-[50%] rounded-xl bg-[var(--accent-transparent)] backdrop-blur-sm border border-[var(--accent-border)] hover:bg-[var(--accent-hover)] hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all duration-300"
         whileHover={{
           scale: 1.02,
           y: -2,

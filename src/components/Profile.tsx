@@ -45,7 +45,7 @@ const Profile: React.FC<ProfileProps> = ({ name, bio, imageSrc }) => {
           {/* Bio text container */}
           <div className="overflow-x-auto overflow-y-hidden pb-1 no-scrollbar">
             <motion.p
-              className="text-[var(--text-secondary)] text-center whitespace-nowrap mx-auto px-8"
+              className="text-[var(--text-secondary)] text-center whitespace-normal sm:whitespace-nowrap mx-auto px-2 sm:px-8 text-base sm:text-lg"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
