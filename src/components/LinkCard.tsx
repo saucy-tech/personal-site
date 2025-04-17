@@ -50,12 +50,15 @@ const LinkCard: React.FC<LinkCardProps> = ({
     </div>
   );
 
+  // Determine if link is external (keep internal links same window)
+  const isExternal = href ? /^https?:\/\//.test(href) : false;
+
   return (
     <div className="mb-4">
       <motion.a
         href={href || "#"}
-        target="_blank"
-        rel="noopener noreferrer"
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "noopener noreferrer" : undefined}
         className="block mx-auto w-full max-w-full sm:max-w-[50%] rounded-xl bg-[var(--accent-transparent)] backdrop-blur-sm border border-[var(--accent-border)] hover:bg-[var(--accent-hover)] hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all duration-300"
         whileHover={{
           scale: 1.02,
