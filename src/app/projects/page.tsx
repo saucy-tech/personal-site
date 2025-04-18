@@ -3,8 +3,8 @@ import { Metadata } from 'next';
 import { SITE_NAME, SITE_URL } from '@/utils/constants';
 
 export const metadata: Metadata = {
-  title: 'Projects',
-  description: `Explore Brandon's projects, apps, and experiments.`,
+  title: 'Projects & Contributions',
+  description: `Explore Brandon's projects and open-source contributions.`,
   openGraph: {
     title: 'Projects',
     description: `Explore Brandon's projects, apps, and experiments.`,
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 
 export default function Projects() {
   return (
-    <PageLayout title="Projects">
+    <PageLayout title="Projects & Contributions">
       <section className="flex flex-col gap-8 items-center min-h-[40vh]">
   {/* Portfolio Project Card */}
   <div className="w-full max-w-xl bg-white/10 rounded-lg shadow-lg border border-[var(--accent-border)] p-6 mb-2">
@@ -33,6 +33,22 @@ export default function Projects() {
     </p>
     <a
       href="https://github.com/saucy-tech/personal-site"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-block px-4 py-2 bg-[var(--accent)] text-white rounded hover:bg-[var(--accent-dark)] transition"
+    >
+      View on GitHub
+    </a>
+  </div>
+
+  {/* Abbot Project Card */}
+  <div className="w-full max-w-xl bg-white/10 rounded-lg shadow-lg border border-[var(--accent-border)] p-6 mb-2">
+    <h2 className="text-xl font-semibold mb-1 flex items-center gap-2">Abbot <span className="text-xs bg-blue-500/80 text-white px-2 py-1 rounded align-middle">Contributor</span></h2>
+    <p className="mb-2 text-base text-[var(--text-secondary)]">
+      Open-source Bitcoin/Lightning automation bot for Nostr and Telegram. Contributed to core features and improvements.
+    </p>
+    <a
+      href="https://github.com/ATLBitLab/abbot"
       target="_blank"
       rel="noopener noreferrer"
       className="inline-block px-4 py-2 bg-[var(--accent)] text-white rounded hover:bg-[var(--accent-dark)] transition"

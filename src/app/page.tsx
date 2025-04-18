@@ -64,7 +64,7 @@ export default function Home() {
           />
           <LinkCard
             key="my-projects"
-            title="My Projects"
+            title="Projects & Contributions"
             href="/projects"
             icon={<span className="text-2xl">🚀</span>}
           />
