@@ -74,7 +74,7 @@ export default function Home() {
           <LinkCard
             key="subscribe-blog"
             title="Subscribe to Blog"
-            href="https://saucybtc.substack.com/subscribe"
+            href="https://saucybtc.substack.com/subscribe?simple=true&free=true"
             icon={<span className="text-2xl">📬</span>}
           />
           <LinkCard

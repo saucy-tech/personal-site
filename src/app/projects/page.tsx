@@ -25,8 +25,12 @@ export default function Projects() {
   return (
     <PageLayout title="Projects">
       <section className="flex justify-center items-center min-h-[40vh]">
-        <span className="text-2xl md:text-3xl animate-pulse">🚧 Coming Soon!</span>
-      </section>
+  <span className="text-2xl md:text-3xl animate-pulse">🚧 Coming Soon!</span>
+  {/*
+    Table markup for future use:
+    Copy the table JSX from the talks page when ready to implement the projects table.
+  */}
+</section>
     </PageLayout>
   );
 }
