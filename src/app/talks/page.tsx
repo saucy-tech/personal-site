@@ -25,10 +25,8 @@ export const metadata: Metadata = {
 export default function Talks() {
   return (
     <PageLayout title="Talks & Sermons">
-      <section className="flex justify-center items-center min-h-[40vh]">
-        <span className="text-2xl md:text-3xl animate-pulse">🚧 Coming Soon!</span>
-        {/*
-        <section className="overflow-x-auto">
+      <section>
+        <div className="overflow-x-auto w-full max-w-2xl mx-auto mt-6">
           <table className="w-full min-w-[350px] bg-white/10 rounded-lg shadow-lg border border-[var(--accent-border)] backdrop-blur-sm">
             <thead>
               <tr className="text-left text-[var(--accent)] text-sm">
@@ -39,30 +37,15 @@ export default function Talks() {
               </tr>
             </thead>
             <tbody>
-              {talks.map((talk, idx) => (
-                <tr
-                  key={talk.link}
-                  className={`text-[var(--text-primary)] text-base ${idx % 2 === 0 ? 'bg-white/0' : 'bg-white/5'} hover:bg-[var(--accent-transparent)] transition`}
-                >
-                  <td className="py-3 px-4 whitespace-nowrap font-mono text-xs md:text-sm opacity-80">{talk.date}</td>
-                  <td className="py-3 px-4 font-medium">{talk.title}</td>
-                  <td className="py-3 px-4">{talk.venue}</td>
-                  <td className="py-3 px-4">
-                    <Link
-                      href={talk.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="underline text-[var(--accent)] hover:text-[var(--accent-hover)]"
-                    >
-                      Watch
-                    </Link>
-                  </td>
-                </tr>
-              ))}
+              <tr className="text-[var(--text-primary)] text-base">
+                <td className="py-3 px-4 whitespace-nowrap font-mono text-xs md:text-sm opacity-80">2025-03-26</td>
+                <td className="py-3 px-4 font-medium">The Price of Tomorrow</td>
+                <td className="py-3 px-4">Atlanta BitPlebs</td>
+                <td className="py-3 px-4"><span className="opacity-50">N/A</span></td>
+              </tr>
             </tbody>
           </table>
-        </section>
-        */}
+        </div>
       </section>
     </PageLayout>
   );

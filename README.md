@@ -1,64 +1,80 @@
-# Personal Linktree App
+# Personal Portfolio Site
 
-A minimalist, galaxy-inspired linktree app built with Next.js that serves as a central hub for all your online presence. Featuring a dark teal-green background with animated stars, gold accents, and a clean, centered layout.
+A modern, accessible portfolio site built with Next.js and React. This site showcases my projects, technical talks, and blog posts, with a focus on technology, user experience, and performance.
 
 ## Features
 
-- 🌌 Beautiful galaxy-themed UI with animated starfield background
-- 🏷️ Organized sections for different types of content (Latest, Projects)
-- 🔗 Customizable link cards with icons and clear hierarchy
-- 👤 Profile section with avatar, username, and bio
-- 🔍 Social media quick links with elegant icon design
-- 📱 Fully responsive design that works on all devices
-- ⚡ Built with Next.js for optimal performance
+- ⚡ Built with Next.js (App Router), React, and Tailwind CSS
+- 📝 Custom blog with MDX support
+- 💻 Projects page with detailed tech stack and features
+- 🎤 Talks & sermons archive
+- 🌗 Responsive design with dark mode
+- 🎨 Subtle UI animations and clean, modern design
+- ♿ Accessibility and performance best practices
+- 🔒 All content managed locally (no external CMS or templates)
 
-## Project Purpose
+## Live Site
 
-This app provides a centralized hub where friends, family, and professional contacts can find links to your:
-
-- Social media profiles
-- Latest content and announcements
-- Projects and portfolio work
-- Articles, videos, and other media you create
+[https://github.com/saucy-tech/personal-site](https://github.com/saucy-tech/personal-site)
 
 ## Project Structure
 
 ```
-active-linktree-brandon/
-├── public/               # Static assets like images
-├── src/                  # Application source code
-│   ├── app/             # Next.js App Router
-│   │   ├── page.tsx     # Main landing page component
-│   │   ├── layout.tsx   # Root layout with fonts and global styles
-│   │   └── globals.css  # Global styles and Tailwind directives
-│   └── components/      # Reusable UI components
-│       ├── Footer.tsx           # Page footer
-│       ├── GalaxyBackground.tsx # Animated background
-│       ├── LinkCard.tsx         # Individual link component
-│       ├── Profile.tsx          # User profile component
-│       ├── Section.tsx          # Section container component
-│       └── SocialBar.tsx        # Social media links bar
-├── package.json         # Project dependencies and scripts
-├── tailwind.config.js   # Tailwind CSS configuration
-├── postcss.config.js    # PostCSS configuration for Tailwind
-├── next.config.js       # Next.js configuration
-└── README.md           # Project documentation
+personal-site/
+├── public/               # Static assets (images, etc.)
+├── src/
+│   ├── app/              # Next.js App Router
+│   ├── components/       # Reusable UI components
+│   └── styles/           # Global styles and Tailwind config
+├── package.json          # Project dependencies and scripts
+├── tailwind.config.js    # Tailwind CSS configuration
+├── next.config.js        # Next.js configuration
+└── README.md             # Project documentation
 ```
 
 ## Tech Stack
 
-- **Framework**: Next.js 14.1.0
+- **Framework**: Next.js 14+
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS 3.4.1
-- **Animations**: Framer Motion 11.0.3
-- **Icons**: Heroicons 2.1.1
-- **Deployment**: Vercel (recommended)
+- **Styling**: Tailwind CSS
+- **Animations**: Framer Motion
+- **Icons**: Heroicons
 
 ## Getting Started
 
-First, clone the repository:
+1. **Clone the repository:**
 
-```bash
+   ```bash
+   git clone https://github.com/saucy-tech/personal-site.git
+   cd personal-site
+   ```
+
+2. **Install dependencies:**
+
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Run the development server:**
+
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request.
+
+## License
+
+[MIT](LICENSE)
+
 git clone https://github.com/yourusername/active-linktree-brandon.git
 cd active-linktree-brandon
 ```
