@@ -1,7 +1,6 @@
 import PageLayout from '@/components/PageLayout';
 import { Metadata } from 'next';
 import { SITE_NAME, SITE_URL } from '@/utils/constants';
-import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Talks & Sermons',
@@ -22,20 +21,6 @@ export const metadata: Metadata = {
   },
 };
 
-const talks = [
-  {
-    date: '2024-03-10',
-    title: 'Faith, Hope & Bitcoin',
-    venue: 'Truth Chapel',
-    link: '',
-  },
-  {
-    date: '2024-02-18',
-    title: 'Book Club: The Bitcoin Standard',
-    venue: 'Bitcoin Meetup',
-    link: '',
-  },
-];
 
 export default function Talks() {
   return (
