@@ -67,7 +67,7 @@ export default function Projects() {
             </span>
           </h2>
           <p className="mb-2 text-base text-[var(--text-secondary)]">
-            A Lightning tipping interface template from ATL BitLab's workshop, enhanced with
+            A Lightning tipping interface template from ATL BitLab&apos;s workshop, enhanced with
             @getalby/sdk integration for seamless NWC support. Users can select sats, generate
             invoices, and tip via Lightning.
           </p>
@@ -158,10 +158,6 @@ export default function Projects() {
             GitHub Repo
           </a>
         </div>
-        {/*
-    Table markup for future use:
-    Copy the table JSX from the talks page when ready to implement the projects table.
-  */}
       </section>
     </PageLayout>
   );

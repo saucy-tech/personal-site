@@ -86,7 +86,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className={montserrat.className}>
         {/* Background canvas and content wrapper */}
-        <div className="relative min-h-screen bg-[var(--background)]">
+        <div
+          className="relative min-h-screen bg-[var(--background)]"
+          style={{
+            backgroundImage:
+              'radial-gradient(circle at 20% 30%, var(--accent-transparent) 0%, transparent 60%), ' +
+              'radial-gradient(circle at 70% 40%, var(--accent-transparent) 0%, transparent 60%), ' +
+              'radial-gradient(circle at 40% 80%, var(--accent-transparent) 0%, transparent 60%)',
+          }}
+        >
           {/* Client-only animated background */}
           <GalaxyBackground />
           <div className="relative z-10 flex flex-col min-h-screen">

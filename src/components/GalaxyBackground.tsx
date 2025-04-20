@@ -1,22 +1,41 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef, ReactNode } from 'react';
 
-const GalaxyBackground: React.FC = () => {
+// Props for GalaxyBackground, allowing optional children to render on top of the canvas
+interface GalaxyBackgroundProps {
+  children?: ReactNode;
+}
+
+const GalaxyBackground: React.FC<GalaxyBackgroundProps> = ({ children }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [cssVars, setCssVars] = useState({
-    background: '#07251F',
-    accent: '#D4AF37',
-  });
 
   useEffect(() => {
-    // Get CSS variables for consistent colors
+    // Retrieve CSS variables or fallback to defaults
     const computedStyle = getComputedStyle(document.documentElement);
-    setCssVars({
-      background: computedStyle.getPropertyValue('--background').trim(),
-      accent: computedStyle.getPropertyValue('--accent').trim(),
-    });
+    const rawBg = computedStyle.getPropertyValue('--background').trim();
+    const rawAccent = computedStyle.getPropertyValue('--accent').trim();
+    const background = rawBg || '#07251F';
+    const accent = rawAccent || '#D4AF37';
+
+    // Helper to convert hex color to RGB
+    const hexToRgb = (hex: string) => {
+      let sanitizedHex = hex.replace('#', '');
+      if (sanitizedHex.length === 3) {
+        sanitizedHex = sanitizedHex
+          .split('')
+          .map((c) => c + c)
+          .join('');
+      }
+      const intVal = parseInt(sanitizedHex, 16);
+      return {
+        r: (intVal >> 16) & 255,
+        g: (intVal >> 8) & 255,
+        b: intVal & 255,
+      };
+    };
+    const bgRgb = hexToRgb(background);
+    const accentRgb = hexToRgb(accent);
 
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -56,7 +75,7 @@ const GalaxyBackground: React.FC = () => {
     }
 
     // Draw first solid background frame
-    ctx.fillStyle = cssVars.background;
+    ctx.fillStyle = `rgb(${bgRgb.r}, ${bgRgb.g}, ${bgRgb.b})`;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Animation loop
@@ -66,7 +85,7 @@ const GalaxyBackground: React.FC = () => {
       time += 0.002; // Slower time increment for smoother animation
 
       // Apply a semi-transparent layer to create trails
-      ctx.fillStyle = `${cssVars.background}80`; // 50% opacity
+      ctx.fillStyle = `rgba(${bgRgb.r}, ${bgRgb.g}, ${bgRgb.b}, 0.5)`; // 50% opacity
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // Draw and update stars
@@ -75,10 +94,7 @@ const GalaxyBackground: React.FC = () => {
         const opacity = 0.2 + Math.sin(time * 2 + star.brightness * 10) * 0.2;
 
         // Subtle color variation around the accent color
-
-        ctx.fillStyle = `${cssVars.accent}${Math.floor(opacity * 255)
-          .toString(16)
-          .padStart(2, '0')}`;
+        ctx.fillStyle = `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, ${opacity})`;
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
         ctx.fill();
@@ -95,8 +111,8 @@ const GalaxyBackground: React.FC = () => {
             star.y,
             star.size * 3
           );
-          gradient.addColorStop(0, `${cssVars.accent}20`); // 12.5% opacity
-          gradient.addColorStop(1, `${cssVars.accent}00`); // 0% opacity
+          gradient.addColorStop(0, `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, 0.125)`); // 12.5% opacity
+          gradient.addColorStop(1, `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, 0)`); // 0% opacity
           ctx.fillStyle = gradient;
           ctx.fill();
         }
@@ -119,11 +135,14 @@ const GalaxyBackground: React.FC = () => {
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="fixed inset-0 w-full h-full pointer-events-none"
-      style={{ zIndex: 0 }}
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        className="fixed inset-0 w-full h-full pointer-events-none"
+        style={{ zIndex: 0 }}
+      />
+      {children}
+    </>
   );
 };
 
