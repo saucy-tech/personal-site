@@ -32,10 +32,12 @@ export default function Support() {
         Choose a way to support my work and our family.
       </p>
 
-      <Section emoji="⚡" title="Lightning Tip Jar">
-        {/* TipJar is client-only: placeholder shown during SSR */}
-        <TipJar />
-      </Section>
+      <div id="lightning-tip-jar">
+        <Section emoji="⚡" title="Lightning Tip Jar">
+          {/* TipJar is client-only: placeholder shown during SSR */}
+          <TipJar />
+        </Section>
+      </div>
 
       <Section emoji="🎓" title={"Gift to My Son's 529 Plan"}>
         <div className="w-full max-w-md mx-auto p-6">
