@@ -1,7 +1,9 @@
 import PageLayout from '@/components/PageLayout';
 import { Metadata } from 'next';
 import { SITE_NAME, SITE_URL } from '@/utils/constants';
-import TipJar from '@/components/TipJar';
+import dynamic from 'next/dynamic';
+// Client-only TipJar component
+const TipJar = dynamic(() => import('@/components/TipJar'), { ssr: false });
 import Section from '@/components/Section';
 
 export const metadata: Metadata = {
@@ -31,6 +33,7 @@ export default function Support() {
       </p>
 
       <Section emoji="⚡" title="Lightning Tip Jar">
+        {/* TipJar is client-only: placeholder shown during SSR */}
         <TipJar />
       </Section>
 
