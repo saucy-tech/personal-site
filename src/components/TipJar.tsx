@@ -6,11 +6,12 @@ import ReactConfetti from 'react-confetti';
 import QRCode from 'react-qr-code';
 
 type TipJarState = 'select' | 'pay' | 'success';
-type AmountOption = 21 | 404 | 1000 | 20000 | 'custom';
+const PRESET_AMOUNTS = [21, 100, 1000, 10000] as const;
+type AmountOption = typeof PRESET_AMOUNTS[number] | 'custom';
 
 export default function TipJar() {
   const [state, setState] = useState<TipJarState>('select');
-  const [selectedAmount, setSelectedAmount] = useState<AmountOption>(21);
+  const [selectedAmount, setSelectedAmount] = useState<AmountOption>(PRESET_AMOUNTS[0]);
   const [customAmount, setCustomAmount] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [invoice, setInvoice] = useState<string>('');
@@ -19,6 +20,7 @@ export default function TipJar() {
   const [windowSize, setWindowSize] = useState({ width: 800, height: 800 });
   const [isGeneratingInvoice, setIsGeneratingInvoice] = useState<boolean>(false);
   const [copyButtonText, setCopyButtonText] = useState<string>('Copy');
+  const [usdRate, setUsdRate] = useState<number | null>(null);
   const pollTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -36,6 +38,18 @@ export default function TipJar() {
         clearInterval(pollTimerRef.current);
       }
     };
+  }, []);
+
+  useEffect(() => {
+    const fetchRate = async () => {
+      try {
+        const response = await axios.get('/api/btcusd');
+        setUsdRate(response.data.usd);
+      } catch (err) {
+        console.error('Error fetching BTC/USD rate:', err);
+      }
+    };
+    fetchRate();
   }, []);
 
   const handleAmountSelect = (amount: AmountOption) => {
@@ -105,7 +119,7 @@ export default function TipJar() {
 
   const resetForm = () => {
     setState('select');
-    setSelectedAmount(21);
+    setSelectedAmount(PRESET_AMOUNTS[0]);
     setCustomAmount('');
     setMessage('');
     setInvoice('');
@@ -146,34 +160,55 @@ export default function TipJar() {
               <label className="block text-sm font-medium mb-2 text-[var(--text-primary)]">
                 Select Amount (sats)
               </label>
-              <div className="grid grid-cols-2 gap-3">
-                {[21, 404, 1000, 20000].map((amount) => (
+              <div>
+                <div className="grid grid-cols-2 gap-3">
+                  {PRESET_AMOUNTS.map((amount) => (
+                    <button
+                      key={amount}
+                      onClick={() => handleAmountSelect(amount as AmountOption)}
+                      className={`py-2 px-4 rounded-md transition-colors duration-200 ${
+                        selectedAmount === amount
+                          ? 'bg-[var(--accent)] text-[var(--background)]'
+                          : 'bg-[var(--accent-transparent)] text-[var(--text-primary)] hover:bg-[var(--accent-hover)]'
+                      }`}
+                    >
+                      {amount} sats
+                    </button>
+                  ))}
+                </div>
+                <div className="flex items-center gap-2 mt-4">
                   <button
-                    key={amount}
-                    onClick={() => handleAmountSelect(amount as AmountOption)}
-                    className={`py-2 px-4 rounded-md transition-colors duration-200 ${
-                      selectedAmount === amount
-                        ? 'bg-[var(--accent)] text-[var(--background)]'
+                    type="button"
+                    onClick={() => handleAmountSelect('custom')}
+                    className={`px-3 py-1 rounded-md text-sm border border-[var(--accent-border)] transition-colors duration-200 ${
+                      selectedAmount === 'custom'
+                        ? 'bg-[var(--accent)] text-[var(--background)] border-[var(--accent)]'
                         : 'bg-[var(--accent-transparent)] text-[var(--text-primary)] hover:bg-[var(--accent-hover)]'
                     }`}
                   >
-                    {amount} sats
+                    Custom
                   </button>
-                ))}
+                  {selectedAmount === 'custom' && (
+                    <input
+                      type="text"
+                      value={customAmount}
+                      onChange={handleCustomAmountChange}
+                      placeholder="Enter sats"
+                      className="w-40 border border-[var(--accent-border)] p-2 rounded-md bg-transparent text-[var(--text-primary)]"
+                    />
+                  )}
+                </div>
+                {selectedAmount !== 'custom' && usdRate !== null && getAmount() > 0 && (
+                  <p className="mt-2 text-sm text-[var(--text-secondary)]">
+                    ≈ ${(getAmount() / 1e8 * usdRate).toFixed(2)} USD
+                  </p>
+                )}
+                {selectedAmount === 'custom' && usdRate !== null && getAmount() > 0 && (
+                  <p className="mt-2 text-sm text-[var(--text-secondary)]">
+                    ≈ ${(getAmount() / 1e8 * usdRate).toFixed(2)} USD
+                  </p>
+                )}
               </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-2 text-[var(--text-primary)]">
-                Custom Amount (sats)
-              </label>
-              <input
-                type="text"
-                value={customAmount}
-                onChange={handleCustomAmountChange}
-                placeholder="Enter sats"
-                className="w-full border border-[var(--accent-border)] p-2 rounded-md bg-transparent text-[var(--text-primary)]"
-              />
             </div>
 
             <div>
