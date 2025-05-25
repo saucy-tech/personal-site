@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { useState } from 'react';
 
 interface ProfileProps {
   name: string;
@@ -10,6 +11,18 @@ interface ProfileProps {
 }
 
 const Profile: React.FC<ProfileProps> = ({ name, bio, imageSrc }) => {
+  const [imageError, setImageError] = useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
+
+  const handleImageError = () => {
+    setImageError(true);
+    setImageLoading(false);
+  };
+
+  const handleImageLoad = () => {
+    setImageLoading(false);
+  };
+
   return (
     <motion.div
       className="flex flex-col items-center space-y-4 w-full mx-auto px-2 mb-4"
@@ -22,14 +35,28 @@ const Profile: React.FC<ProfileProps> = ({ name, bio, imageSrc }) => {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        <Image
-          src={imageSrc}
-          alt={name}
-          fill
-          className="object-cover"
-          priority
-          sizes="(max-width: 128px) 100vw, 128px"
-        />
+        {imageLoading && (
+          <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-full" />
+        )}
+        {imageError ? (
+          <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center">
+            <span className="text-white text-4xl font-bold">
+              {name.charAt(0).toUpperCase()}
+            </span>
+          </div>
+        ) : (
+          <Image
+            src={imageSrc}
+            alt={`${name}'s profile photo`}
+            fill
+            className="object-cover"
+            priority
+            sizes="(max-width: 128px) 100vw, 128px"
+            onLoad={handleImageLoad}
+            onError={handleImageError}
+            quality={85}
+          />
+        )}
       </motion.div>
 
       <motion.div

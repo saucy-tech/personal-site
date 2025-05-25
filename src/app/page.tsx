@@ -17,27 +17,67 @@ export default function Home() {
   const socialLinks = [
     {
       href: 'https://x.com/Saucy_Tech',
-      icon: <Image src="/icons/x-logo.svg" width={32} height={32} alt="X (Twitter)" />,
+      icon: (
+        <Image 
+          src="/icons/x-logo.svg" 
+          width={32} 
+          height={32} 
+          alt="X (Twitter) logo" 
+          quality={100}
+        />
+      ),
       label: 'X',
     },
     {
       href: 'https://github.com/saucy-tech',
-      icon: <Image src="/icons/github-logo.svg" width={32} height={32} alt="GitHub" />,
+      icon: (
+        <Image 
+          src="/icons/github-logo.svg" 
+          width={32} 
+          height={32} 
+          alt="GitHub logo" 
+          quality={100}
+        />
+      ),
       label: 'GitHub',
     },
     {
       href: 'https://primal.net/p/nprofile1qqsvzs8gfntzjs2wg8670nrfy64h44zy69kc3r8rp5wd7kw6t6njsassf62c7',
-      icon: <Image src="/icons/nostr-logo.svg" width={32} height={32} alt="Nostr" />,
+      icon: (
+        <Image 
+          src="/icons/nostr-logo.svg" 
+          width={32} 
+          height={32} 
+          alt="Nostr protocol logo" 
+          quality={100}
+        />
+      ),
       label: 'Nostr',
     },
     {
       href: 'https://substack.com/@saucybtc',
-      icon: <Image src="/icons/substack-logo.svg" width={32} height={32} alt="Substack" />,
+      icon: (
+        <Image 
+          src="/icons/substack-logo.svg" 
+          width={32} 
+          height={32} 
+          alt="Substack logo" 
+          quality={100}
+        />
+      ),
       label: 'Substack',
     },
     {
       href: 'https://discord.com/users/saucybtc',
-      icon: <Image src="/icons/discord-logo.svg" width={32} height={32} alt="Discord" />,
+      icon: (
+        <Image 
+          src="/icons/discord-logo.svg" 
+          width={32} 
+          height={32} 
+          alt="Discord logo" 
+          quality={100}
+        />
+      ),
       label: 'Discord',
     },
   ];
