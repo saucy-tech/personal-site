@@ -24,15 +24,22 @@ export default function TipJar() {
 
   useEffect(() => {
     // update window size for confetti
-    setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    const initialWidth = typeof window !== 'undefined' ? window.innerWidth : 800;
+    const initialHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
+    setWindowSize({ width: initialWidth, height: initialHeight });
+    
     const handleResize = () =>
       setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+    
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', handleResize);
+    }
 
-  useEffect(() => {
+    // Cleanup function for timers and listeners
     return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', handleResize);
+      }
       if (pollTimerRef.current) {
         clearInterval(pollTimerRef.current);
       }
@@ -165,7 +172,7 @@ export default function TipJar() {
         {state === 'select' && (
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium mb-2 text-[var(--text-primary)]">
+              <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
                 Select Amount (sats)
               </label>
               <div>
