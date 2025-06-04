@@ -1,12 +1,11 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
 import ReactConfetti from 'react-confetti';
 import QRCode from 'react-qr-code';
+import { PRESET_AMOUNTS } from '@/utils/tipjar';
 
 type TipJarState = 'select' | 'pay' | 'success';
-const PRESET_AMOUNTS = [21, 100, 1000, 10000] as const;
 type AmountOption = typeof PRESET_AMOUNTS[number] | 'custom';
 
 export default function TipJar() {
@@ -25,15 +24,22 @@ export default function TipJar() {
 
   useEffect(() => {
     // update window size for confetti
-    setWindowSize({ width: window.innerWidth, height: window.innerHeight });
+    const initialWidth = typeof window !== 'undefined' ? window.innerWidth : 800;
+    const initialHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
+    setWindowSize({ width: initialWidth, height: initialHeight });
+    
     const handleResize = () =>
       setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+    
+    if (typeof window !== 'undefined') {
+      window.addEventListener('resize', handleResize);
+    }
 
-  useEffect(() => {
+    // Cleanup function for timers and listeners
     return () => {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('resize', handleResize);
+      }
       if (pollTimerRef.current) {
         clearInterval(pollTimerRef.current);
       }
@@ -43,8 +49,10 @@ export default function TipJar() {
   useEffect(() => {
     const fetchRate = async () => {
       try {
-        const response = await axios.get('/api/btcusd');
-        setUsdRate(response.data.usd);
+        const res = await fetch('/api/btcusd');
+        if (!res.ok) throw new Error('Failed to fetch rate');
+        const data = await res.json();
+        setUsdRate(data.usd);
       } catch (err) {
         console.error('Error fetching BTC/USD rate:', err);
       }
@@ -81,13 +89,18 @@ export default function TipJar() {
         setIsGeneratingInvoice(false);
         return;
       }
-      const response = await axios.post('/api/invoice', {
-        amount,
-        memo: message || 'Lightning Tip Jar',
+      const res = await fetch('/api/invoice', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount, memo: message || 'Lightning Tip Jar' }),
       });
-      setInvoice(response.data.paymentRequest);
+      if (!res.ok) {
+        throw new Error('Failed to create invoice');
+      }
+      const data = await res.json();
+      setInvoice(data.paymentRequest);
       setState('pay');
-      startPolling(response.data.paymentHash);
+      startPolling(data.paymentHash);
     } catch (err) {
       console.error('Error generating invoice:', err);
       setError(
@@ -104,8 +117,10 @@ export default function TipJar() {
     }
     pollTimerRef.current = setInterval(async () => {
       try {
-        const response = await axios.get(`/api/invoice?paymentHash=${hash}`);
-        if (response.data.paid) {
+        const res = await fetch(`/api/invoice?paymentHash=${hash}`);
+        if (!res.ok) return; // continue polling silently
+        const data = await res.json();
+        if (data.paid) {
           if (pollTimerRef.current) clearInterval(pollTimerRef.current);
           setState('success');
           setShowConfetti(true);
@@ -157,7 +172,7 @@ export default function TipJar() {
         {state === 'select' && (
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium mb-2 text-[var(--text-primary)]">
+              <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
                 Select Amount (sats)
               </label>
               <div>
