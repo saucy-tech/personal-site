@@ -84,7 +84,8 @@ export default async function Home() {
             return (
               <LinkCard
                 key="latest-blog"
-                title={latest ? `Blog Post: ${latest.title}` : 'Blog'}
+                title={latest ? latest.title : 'Blog'}
+                cardTitle={latest?.cardTitle}
                 href={latest ? `/blog/${latest.slug}` : '/blog'}
                 icon={<span className="text-2xl">📝</span>}
               />

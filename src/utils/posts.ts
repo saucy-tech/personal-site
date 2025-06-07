@@ -14,6 +14,7 @@ function ensurePostsDir() {
 export interface PostMeta {
   slug: string;
   title: string;
+  cardTitle?: string; // Added optional cardTitle
   date: string;
   excerpt: string;
 }
@@ -38,6 +39,7 @@ export function getAllPostsMeta(): PostMeta[] {
       return {
         slug,
         title: data.title ?? slug,
+        cardTitle: data.cardTitle, // Extract cardTitle
         date: data.date ?? '',
         excerpt: data.excerpt ?? '',
       } as PostMeta;
@@ -53,6 +55,7 @@ export async function getPostBySlug(slug: string): Promise<Post> {
   return {
     slug,
     title: data.title ?? slug,
+    cardTitle: data.cardTitle, // Extract cardTitle for consistency
     date: data.date ?? '',
     excerpt: data.excerpt ?? '',
     content,
