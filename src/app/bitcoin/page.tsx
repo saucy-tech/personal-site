@@ -1,6 +1,7 @@
-import PageLayout from '@/components/PageLayout';
 import { Metadata } from 'next';
 import Image from 'next/image';
+
+import PageLayout from '@/components/PageLayout';
 import { SITE_NAME, SITE_URL } from '@/utils/constants';
 
 export const metadata: Metadata = {
@@ -41,17 +42,17 @@ export default function Bitcoin() {
         <h2 className="text-2xl font-semibold mb-4">🧠 Why This Matters to Me</h2>
         <div className="bg-white/10 p-6 rounded-lg space-y-4">
           <p>
-            As a Christian, I value truth, integrity, and caring for others. Over time, I
-            realized the way our money works often undermines those values—rewarding debt, punishing
-            savers, and quietly transferring wealth.
+            As a Christian, I value truth, integrity, and caring for others. Over time, I realized
+            the way our money works often undermines those values—rewarding debt, punishing savers,
+            and quietly transferring wealth.
           </p>
           <p>
             Bitcoin opened my eyes. It&apos;s transparent, incorruptible, and rooted in honesty. It
             aligns with values of stewardship, fairness, and long-term thinking.
           </p>
           <p>
-            I&apos;m still learning, but I believe this matters—not just financially, but spiritually and
-            socially. If you&apos;re curious, here&apos;s where to start.
+            I&apos;m still learning, but I believe this matters—not just financially, but
+            spiritually and socially. If you&apos;re curious, here&apos;s where to start.
           </p>
         </div>
       </section>
@@ -80,6 +81,18 @@ export default function Bitcoin() {
             <h3 className="text-xl font-semibold mb-4">Want to go deeper?</h3>
             <p className="mb-4">After watching the documentary, I recommend these resources:</p>
             <ul className="list-disc list-inside space-y-2">
+              <li>
+                <strong>📚 Read:</strong>{' '}
+                <a
+                  href="https://river.com/learn/bitcoin-in-just-21-minutes/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 underline"
+                >
+                  Bitcoin in 21 Minutes – River
+                </a>{' '}
+                – A concise guide covering the essentials of Bitcoin in just 21 minutes.
+              </li>
               <li>
                 <strong>📚 Read:</strong>{' '}
                 <a
@@ -115,8 +128,8 @@ export default function Bitcoin() {
         <div className="bg-white/10 p-6 rounded-lg space-y-6">
           <p className="text-md mb-2">
             A curated list of resources that have shaped my understanding of Bitcoin - from
-            technical deep dives to philosophical discussions about money and society. I&apos;ll keep
-            adding to it as I discover more valuable content.
+            technical deep dives to philosophical discussions about money and society. I&apos;ll
+            keep adding to it as I discover more valuable content.
           </p>
 
           <div>
