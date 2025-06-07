@@ -83,6 +83,18 @@ export default function Bitcoin() {
               <li>
                 <strong>📚 Read:</strong>{' '}
                 <a
+                  href="https://river.com/learn/bitcoin-in-just-21-minutes/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 underline"
+                >
+                  Bitcoin in 21 Minutes – River
+                </a>{' '}
+                – A concise guide covering the essentials of Bitcoin in just 21 minutes.
+              </li>
+              <li>
+                <strong>📚 Read:</strong>{' '}
+                <a
                   href="https://www.amazon.com/Bitcoin-Standard-Decentralized-Alternative-Central/dp/1119473861"
                   target="_blank"
                   rel="noopener noreferrer"
