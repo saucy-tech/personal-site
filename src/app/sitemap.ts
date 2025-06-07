@@ -1,5 +1,6 @@
-import { MetadataRoute } from 'next'
-import { SITE_URL } from '@/utils/constants'
+import { MetadataRoute } from 'next';
+
+import { SITE_URL } from '@/utils/constants';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
@@ -14,6 +15,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.8,
-    }
-  ]
+    },
+    {
+      url: `${SITE_URL}/support`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${SITE_URL}/blog`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${SITE_URL}/rss.xml`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly',
+      priority: 0.5,
+    },
+  ];
 }

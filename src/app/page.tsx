@@ -1,10 +1,13 @@
-import Profile from '@/components/Profile';
-import SocialBar from '@/components/SocialBar';
-import Section from '@/components/Section';
-import LinkCard from '@/components/LinkCard';
 import Image from 'next/image';
 
-export default function Home() {
+import LinkCard from '@/components/LinkCard';
+import Profile from '@/components/Profile';
+import Section from '@/components/Section';
+import SocialBar from '@/components/SocialBar';
+import SubscribeCard from '@/components/SubscribeCard'; // Added SubscribeCard import
+import { getAllPostsMeta } from '@/utils/posts';
+
+export default async function Home() {
   // Profile data
   const profileData = {
     name: 'Brandon',
@@ -18,11 +21,11 @@ export default function Home() {
     {
       href: 'https://x.com/Saucy_Tech',
       icon: (
-        <Image 
-          src="/icons/x-logo.svg" 
-          width={32} 
-          height={32} 
-          alt="X (Twitter) logo" 
+        <Image
+          src="/icons/x-logo.svg"
+          width={32}
+          height={32}
+          alt="X (Twitter) logo"
           quality={100}
         />
       ),
@@ -31,11 +34,11 @@ export default function Home() {
     {
       href: 'https://github.com/saucy-tech',
       icon: (
-        <Image 
-          src="/icons/github-logo.svg" 
-          width={32} 
-          height={32} 
-          alt="GitHub logo" 
+        <Image
+          src="/icons/github-logo.svg"
+          width={32}
+          height={32}
+          alt="GitHub logo"
           quality={100}
         />
       ),
@@ -44,37 +47,24 @@ export default function Home() {
     {
       href: 'https://primal.net/p/nprofile1qqsvzs8gfntzjs2wg8670nrfy64h44zy69kc3r8rp5wd7kw6t6njsassf62c7',
       icon: (
-        <Image 
-          src="/icons/nostr-logo.svg" 
-          width={32} 
-          height={32} 
-          alt="Nostr protocol logo" 
+        <Image
+          src="/icons/nostr-logo.svg"
+          width={32}
+          height={32}
+          alt="Nostr protocol logo"
           quality={100}
         />
       ),
       label: 'Nostr',
     },
     {
-      href: 'https://substack.com/@saucybtc',
-      icon: (
-        <Image 
-          src="/icons/substack-logo.svg" 
-          width={32} 
-          height={32} 
-          alt="Substack logo" 
-          quality={100}
-        />
-      ),
-      label: 'Substack',
-    },
-    {
       href: 'https://discord.com/users/saucybtc',
       icon: (
-        <Image 
-          src="/icons/discord-logo.svg" 
-          width={32} 
-          height={32} 
-          alt="Discord logo" 
+        <Image
+          src="/icons/discord-logo.svg"
+          width={32}
+          height={32}
+          alt="Discord logo"
           quality={100}
         />
       ),
@@ -89,13 +79,18 @@ export default function Home() {
         <SocialBar socials={socialLinks} />
 
         <Section title="Latest" emoji="🔥">
-
-          <LinkCard
-            key="what-im-into"
-            title="What I’m Currently Into"
-            href="/explore"
-            icon={<span className="text-2xl">🔍</span>}
-          />
+          {(() => {
+            const latest = getAllPostsMeta()[0];
+            return (
+              <LinkCard
+                key="latest-blog"
+                title={latest ? `Blog Post: ${latest.title}` : 'Blog'}
+                href={latest ? `/blog/${latest.slug}` : '/blog'}
+                icon={<span className="text-2xl">📝</span>}
+              />
+            );
+          })()}
+          <SubscribeCard />
           <LinkCard
             key="talks-sermons"
             title="Talks & Sermons"
@@ -112,16 +107,10 @@ export default function Home() {
 
         <Section title="Explore" emoji="🌐">
           <LinkCard
-            key="subscribe-blog"
-            title="Subscribe to Blog"
-            href="https://saucybtc.substack.com/subscribe?simple=true&free=true"
-            icon={<span className="text-2xl">📬</span>}
-          />
-          <LinkCard
-            key="past-blogs"
-            title="Past Blogs"
-            href="https://saucybtc.substack.com/archive"
-            icon={<span className="text-2xl">📝</span>}
+            key="blog-home"
+            title="Blog"
+            href="/blog"
+            icon={<span className="text-2xl">📚</span>}
           />
           <LinkCard
             key="curious-bitcoin"
