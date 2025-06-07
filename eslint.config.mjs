@@ -1,7 +1,9 @@
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
-import prettierConfig from './.prettierrc.json' assert { type: 'json' };
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
+const prettierConfig = require('./.prettierrc.json');
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

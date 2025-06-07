@@ -22,15 +22,18 @@
     "@heroicons/react": "^2.1.1",
     "clsx": "^2.1.1",
     "framer-motion": "^11.0.3",
+    "gray-matter": "^4.0.3",
     "lucide-react": "^0.488.0",
     "next": "^14.2.26",
+    "next-mdx-remote": "^4.3.0",
     "qrcode.react": "^4.2.0",
     "react": "^18.2.0",
     "react-confetti": "^6.4.0",
     "react-dom": "^18.2.0",
     "react-qr-code": "^2.0.15",
     "tailwind-merge": "^2.6.0",
-    "ws": "^8.18.1"
+    "ws": "^8.18.1",
+    "@tailwindcss/typography": "^0.5.13"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
