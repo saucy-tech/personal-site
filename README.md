@@ -1,44 +1,61 @@
-# Personal Portfolio Site
+# Personal Portfolio & Blog
 
-A modern, accessible portfolio site built with Next.js and React. This site showcases my projects, technical talks, and blog posts, with a focus on technology, user experience, and performance.
+A modern, accessible portfolio and blog built with Next.js, React, and MDX. This site showcases my projects, technical talks, and blog posts, with a focus on technology, user experience, and performance.
 
 ## Features
 
-- ⚡ Built with Next.js (App Router), React, and Tailwind CSS
-- 📝 Custom blog with MDX support
+- ⚡ Built with Next.js 14+ (App Router), React, and Tailwind CSS
+- 📝 Custom blog with MDX support and syntax highlighting
 - 💻 Projects page with detailed tech stack and features
 - 🎤 Talks & sermons archive
-- 🌗 Responsive design with dark mode
+- ⚡ Lightning Network integration for tips and donations
+- 🌗 Responsive design with dark mode support
 - 🎨 Subtle UI animations and clean, modern design
 - ♿ Accessibility and performance best practices
-- 🔒 All content managed locally (no external CMS or templates)
-
-## Live Site
-
-[https://github.com/saucy-tech/personal-site](https://github.com/saucy-tech/personal-site)
+- 🔒 All content managed locally with Git
+- 📱 Mobile-first, responsive layout
+- 📡 RSS feed and sitemap generation
 
 ## Project Structure
 
 ```
 personal-site/
-├── public/               # Static assets (images, etc.)
+├── public/                     # Static assets
+│   └── images/                 # Image assets
+│       └── blog/               # Blog post images
 ├── src/
-│   ├── app/              # Next.js App Router
-│   ├── components/       # Reusable UI components
-│   └── styles/           # Global styles and Tailwind config
-├── package.json          # Project dependencies and scripts
-├── tailwind.config.js    # Tailwind CSS configuration
-├── next.config.js        # Next.js configuration
-└── README.md             # Project documentation
+│   ├── app/                   # Next.js App Router
+│   │   ├── api/                # API routes
+│   │   ├── blog/               # Blog post pages
+│   │   ├── bitcoin/            # Bitcoin resources
+│   │   ├── projects/           # Projects showcase
+│   │   ├── support/            # Support/tipping page
+│   │   ├── talks/              # Talks and sermons
+│   │   └── ...                 # Other routes and configs
+│   │
+│   ├── components/            # Reusable UI components
+│   ├── posts/                  # Blog post content (MDX)
+│   ├── types/                  # TypeScript type definitions
+│   └── utils/                  # Utility functions
+│
+├── .env.example              # Environment variables example
+├── next.config.js             # Next.js configuration
+├── package.json               # Project dependencies and scripts
+├── tailwind.config.js         # Tailwind CSS configuration
+└── README.md                  # Project documentation
 ```
 
 ## Tech Stack
 
-- **Framework**: Next.js 14+
+- **Framework**: Next.js 14+ (App Router)
 - **Language**: TypeScript
-- **Styling**: Tailwind CSS
+- **Styling**: Tailwind CSS with CSS Modules
+- **Content**: MDX for blog posts
 - **Animations**: Framer Motion
 - **Icons**: Heroicons
+- **Payments**: Lightning Network integration
+- **Deployment**: Vercel
+- **Linting**: ESLint + Prettier
 
 ## Getting Started
 
