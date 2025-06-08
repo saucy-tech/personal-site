@@ -1,0 +1,45 @@
+.figure {
+  margin: 1.5rem auto;
+  text-align: center;
+  background: #faf9f7;
+  border-radius: 14px;
+  box-shadow: 0 2px 16px 0 rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+.caption {
+  font-size: 0.98em;
+  color: #666;
+  margin: 0.5em 0 0.7em;
+  line-height: 1.4;
+}
+.landscape {
+  width: 100%;
+}
+.portrait {
+  width: 100%;
+}
+.left {
+  float: left;
+  margin-right: 2rem;
+  margin-left: 0;
+  margin-bottom: 1rem;
+}
+.right {
+  float: right;
+  margin-left: 2rem;
+  margin-right: 0;
+  margin-bottom: 1rem;
+}
+.none {
+  float: none;
+  margin-left: auto;
+  margin-right: auto;
+}
+@media (max-width: 700px) {
+  .left,
+  .right {
+    float: none;
+    margin: 1.5rem auto;
+    display: block;
+  }
+}

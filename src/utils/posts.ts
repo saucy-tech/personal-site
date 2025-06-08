@@ -39,7 +39,7 @@ export function getAllPostsMeta(): PostMeta[] {
       return {
         slug,
         title: data.title ?? slug,
-        cardTitle: data.cardTitle, // Extract cardTitle
+        cardTitle: data.shortTitle || data.cardTitle, // Prefer 'shortTitle' if present
         date: data.date ?? '',
         excerpt: data.excerpt ?? '',
       } as PostMeta;
