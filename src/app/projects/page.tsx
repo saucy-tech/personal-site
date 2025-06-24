@@ -1,5 +1,6 @@
-import PageLayout from '@/components/PageLayout';
 import { Metadata } from 'next';
+
+import PageLayout from '@/components/PageLayout';
 import { SITE_NAME, SITE_URL } from '@/utils/constants';
 
 export const metadata: Metadata = {

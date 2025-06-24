@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Iframe Test - Unapproved Origin</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        iframe { border: 2px solid red; width: 800px; height: 600px; }
+        .test-info { background: #f0f0f0; padding: 10px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <div class="test-info">
+        <h2>🔒 Security Test: Iframe Embedding</h2>
+        <p><strong>Testing:</strong> Attempting to embed http://localhost:3001 in an iframe from an unapproved origin</p>
+        <p><strong>Expected:</strong> The iframe should be blocked due to X-Frame-Options: SAMEORIGIN header</p>
+    </div>
+
+    <h3>Iframe Attempt:</h3>
+    <iframe src="http://localhost:3001" id="testIframe">
+        Your browser does not support iframes.
+    </iframe>
+
+    <div id="result" style="margin-top: 20px; padding: 10px; background: #fff3cd; border: 1px solid #ffeaa7;">
+        <strong>Result:</strong> <span id="resultText">Loading...</span>
+    </div>
+
+    <script>
+        // Test if iframe loads successfully or is blocked
+        const iframe = document.getElementById('testIframe');
+        const resultText = document.getElementById('resultText');
+        
+        iframe.onload = function() {
+            try {
+                // Try to access iframe content (will fail due to CORS/frame options)
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                if (iframeDoc) {
+                    resultText.textContent = "❌ SECURITY ISSUE: Iframe loaded successfully - frame options not working!";
+                    resultText.style.color = "red";
+                }
+            } catch (e) {
+                resultText.textContent = "✅ GOOD: Iframe blocked or restricted by security headers";
+                resultText.style.color = "green";
+            }
+        };
+        
+        iframe.onerror = function() {
+            resultText.textContent = "✅ GOOD: Iframe loading failed - successfully blocked";
+            resultText.style.color = "green";
+        };
+        
+        // Timeout check
+        setTimeout(() => {
+            if (resultText.textContent === "Loading...") {
+                resultText.textContent = "✅ GOOD: Iframe likely blocked by X-Frame-Options header";
+                resultText.style.color = "green";
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

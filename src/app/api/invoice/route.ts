@@ -1,6 +1,9 @@
+/* eslint-disable import/order */
 import { NextRequest, NextResponse } from 'next/server';
 // @ts-expect-error no type declarations for ws
 import WebSocket from 'ws';
+import { nwc } from '@getalby/sdk';
+/* eslint-enable import/order */
 
 // Ensure global WebSocket is available for Nostr Wallet Connect
 declare global {
@@ -9,8 +12,6 @@ declare global {
   }
 }
 globalThis.WebSocket = WebSocket;
-
-import { nwc } from '@getalby/sdk';
 const NWC_URL = process.env.NOSTR_WALLET_CONNECT_URL || '';
 
 export async function POST(request: NextRequest) {

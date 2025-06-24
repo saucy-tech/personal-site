@@ -3,10 +3,11 @@
 import { useState, useEffect, useRef } from 'react';
 import ReactConfetti from 'react-confetti';
 import QRCode from 'react-qr-code';
+
 import { PRESET_AMOUNTS } from '@/utils/tipjar';
 
 type TipJarState = 'select' | 'pay' | 'success';
-type AmountOption = typeof PRESET_AMOUNTS[number] | 'custom';
+type AmountOption = (typeof PRESET_AMOUNTS)[number] | 'custom';
 
 export default function TipJar() {
   const [state, setState] = useState<TipJarState>('select');
@@ -27,10 +28,10 @@ export default function TipJar() {
     const initialWidth = typeof window !== 'undefined' ? window.innerWidth : 800;
     const initialHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
     setWindowSize({ width: initialWidth, height: initialHeight });
-    
+
     const handleResize = () =>
       setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-    
+
     if (typeof window !== 'undefined') {
       window.addEventListener('resize', handleResize);
     }
@@ -215,12 +216,12 @@ export default function TipJar() {
                 </div>
                 {selectedAmount !== 'custom' && usdRate !== null && getAmount() > 0 && (
                   <p className="mt-2 text-sm text-[var(--text-secondary)]">
-                    ≈ ${(getAmount() / 1e8 * usdRate).toFixed(2)} USD
+                    ≈ ${((getAmount() / 1e8) * usdRate).toFixed(2)} USD
                   </p>
                 )}
                 {selectedAmount === 'custom' && usdRate !== null && getAmount() > 0 && (
                   <p className="mt-2 text-sm text-[var(--text-secondary)]">
-                    ≈ ${(getAmount() / 1e8 * usdRate).toFixed(2)} USD
+                    ≈ ${((getAmount() / 1e8) * usdRate).toFixed(2)} USD
                   </p>
                 )}
               </div>

@@ -1,25 +1,35 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
 import { createRequire } from 'module';
 const require = createRequire(import.meta.url);
+
+// Import Prettier config
 const prettierConfig = require('./.prettierrc.json');
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+// Import required plugins
+import typescriptEslint from '@typescript-eslint/eslint-plugin';
+import typescriptParser from '@typescript-eslint/parser';
+import importPlugin from 'eslint-plugin-import';
+import prettierPlugin from 'eslint-plugin-prettier';
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals"),
   {
-    files: ["**/*.{ts,tsx,js,jsx}"],
+    ignores: ['node_modules/**', '.next/**', 'out/**', 'build/**'],
+  },
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    languageOptions: {
+      parser: typescriptParser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+        ecmaFeatures: {
+          jsx: true,
+        },
+      },
+    },
     plugins: {
-      import: require('eslint-plugin-import'),
-      prettier: require('eslint-plugin-prettier'),
-      '@typescript-eslint': require('@typescript-eslint/eslint-plugin'),
+      '@typescript-eslint': typescriptEslint,
+      import: importPlugin,
+      prettier: prettierPlugin,
     },
     rules: {
       // Import sorting
@@ -81,7 +91,7 @@ const eslintConfig = [
         },
       },
     },
-  }
+  },
 ];
 
 export default eslintConfig;

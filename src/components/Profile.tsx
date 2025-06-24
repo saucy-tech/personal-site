@@ -40,9 +40,7 @@ const Profile: React.FC<ProfileProps> = ({ name, bio, imageSrc }) => {
         )}
         {imageError ? (
           <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center">
-            <span className="text-white text-4xl font-bold">
-              {name.charAt(0).toUpperCase()}
-            </span>
+            <span className="text-white text-4xl font-bold">{name.charAt(0).toUpperCase()}</span>
           </div>
         ) : (
           <Image

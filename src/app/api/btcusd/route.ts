@@ -5,14 +5,16 @@ const CACHE_DURATION_MS = 10 * 60 * 1000; // 10 minutes
 export async function GET() {
   try {
     const now = Date.now();
-    if (cachedRate !== null && lastFetchTime !== null && (now - lastFetchTime) < CACHE_DURATION_MS) {
+    if (cachedRate !== null && lastFetchTime !== null && now - lastFetchTime < CACHE_DURATION_MS) {
       return new Response(JSON.stringify({ usd: cachedRate }), {
         status: 200,
         headers: { 'Content-Type': 'application/json', 'X-Cache-Status': 'HIT' },
       });
     }
 
-    const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd');
+    const response = await fetch(
+      'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd'
+    );
     if (!response.ok) {
       return new Response(JSON.stringify({ error: 'Failed to fetch price' }), { status: 502 });
     }
@@ -30,8 +32,7 @@ export async function GET() {
       console.error('Unexpected response format from CoinGecko:', data);
       return new Response(JSON.stringify({ error: 'Failed to parse price data' }), { status: 502 });
     }
-
-  } catch (err) {
+  } catch {
     return new Response(JSON.stringify({ error: 'Internal server error' }), { status: 500 });
   }
 }

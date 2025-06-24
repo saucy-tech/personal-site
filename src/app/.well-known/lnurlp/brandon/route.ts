@@ -3,7 +3,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   const username = 'brandon'; // Your chosen username
   // It's best to set NEXT_PUBLIC_APP_URL in your .env.local file (e.g., NEXT_PUBLIC_APP_URL=https://yourdomain.com)
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'; // Fallback for local dev
@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
   const responseData = {
     callback: `${appUrl}/api/lnurlp/${username}/callback`, // The callback URL on your server
     maxSendable: 1000000000, // Example: 1,000,000 sats (1 billion msats)
-    minSendable: 1000,       // Example: 1 sat (1000 msats)
+    minSendable: 1000, // Example: 1 sat (1000 msats)
     metadata: metadata,
     tag: 'payRequest',
     // nostrPubkey: 'your_nostr_hex_pubkey', // Optional: Your Nostr public key for Zaps

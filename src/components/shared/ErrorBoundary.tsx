@@ -1,6 +1,7 @@
 'use client';
 
 import React, { Component, ErrorInfo } from 'react';
+
 import ErrorFallback from './ErrorFallback';
 
 interface Props {
@@ -17,33 +18,33 @@ interface State {
 class ErrorBoundary extends Component<Props, State> {
   public state: State = {
     hasError: false,
-    error: null
+    error: null,
   };
 
   public static getDerivedStateFromError(error: Error): State {
-    return { 
+    return {
       hasError: true,
-      error
+      error,
     };
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Log the error
     console.error('Uncaught error:', error, errorInfo);
-    
+
     // Call custom error handler if provided
     if (this.props.onError) {
       this.props.onError(error, errorInfo);
     }
-    
+
     // You could also log to an error reporting service here
     // Example: reportErrorToService(error, errorInfo);
   }
-  
+
   private resetErrorBoundary = () => {
     this.setState({
       hasError: false,
-      error: null
+      error: null,
     });
   };
 
@@ -53,12 +54,12 @@ class ErrorBoundary extends Component<Props, State> {
       if (this.props.fallback) {
         return this.props.fallback;
       }
-      
+
       // Otherwise use our enhanced ErrorFallback
       return (
-        <ErrorFallback 
-          error={this.state.error as Error} 
-          resetErrorBoundary={this.resetErrorBoundary} 
+        <ErrorFallback
+          error={this.state.error as Error}
+          resetErrorBoundary={this.resetErrorBoundary}
         />
       );
     }

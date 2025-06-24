@@ -1,5 +1,6 @@
-import PageLayout from '@/components/PageLayout';
 import { Metadata } from 'next';
+
+import PageLayout from '@/components/PageLayout';
 import { SITE_NAME, SITE_URL } from '@/utils/constants';
 
 export const metadata: Metadata = {
@@ -21,7 +22,6 @@ export const metadata: Metadata = {
   },
 };
 
-
 export default function Talks() {
   return (
     <PageLayout title="Talks & Sermons">
@@ -38,10 +38,14 @@ export default function Talks() {
             </thead>
             <tbody>
               <tr className="text-[var(--text-primary)] text-base">
-                <td className="py-3 px-4 whitespace-nowrap font-mono text-xs md:text-sm opacity-80">2025-03-26</td>
+                <td className="py-3 px-4 whitespace-nowrap font-mono text-xs md:text-sm opacity-80">
+                  2025-03-26
+                </td>
                 <td className="py-3 px-4 font-medium">The Price of Tomorrow</td>
                 <td className="py-3 px-4">Atlanta BitPlebs</td>
-                <td className="py-3 px-4"><span className="opacity-50">N/A</span></td>
+                <td className="py-3 px-4">
+                  <span className="opacity-50">N/A</span>
+                </td>
               </tr>
             </tbody>
           </table>

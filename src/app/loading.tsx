@@ -1,4 +1,4 @@
-import Loading from "@/components/loading";
+import Loading from '@/components/loading';
 
 export default function PageLoading() {
   return (
@@ -7,4 +7,3 @@ export default function PageLoading() {
     </div>
   );
 }
-
