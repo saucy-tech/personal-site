@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 // @ts-expect-error no type declarations for ws
 import WebSocket from 'ws';
-import { nwc } from '@getalby/sdk';
 
 // Ensure global WebSocket is available for Nostr Wallet Connect
 declare global {

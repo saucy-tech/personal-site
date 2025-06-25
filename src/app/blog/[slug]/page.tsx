@@ -4,23 +4,28 @@ import PageLayout from '@/components/PageLayout';
 import Section from '@/components/Section';
 import SubscribeForm from '@/components/SubscribeForm';
 import { formatDate } from '@/utils/helpers';
-import { getPostBySlug, getPostSlugs, getPostOgMeta } from '@/utils/posts';
+import { getPostBySlug, getPostOgMeta } from '@/utils/posts';
 
-export async function generateStaticParams() {
-  const slugs = getPostSlugs();
-  return slugs.map((slug) => ({ slug }));
-}
+// Temporarily disable static generation due to Next.js 15 + MDX issue
+// export async function generateStaticParams() {
+//   const slugs = getPostSlugs();
+//   return slugs.map((slug) => ({ slug }));
+// }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  return getPostOgMeta(params.slug);
+export const dynamic = 'force-dynamic';
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  return getPostOgMeta(slug);
 }
 
 interface PostPageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const post = await getPostBySlug(params.slug);
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
 
   return (
     <PageLayout title={post.title} backHref="/blog" backLabel="Back to Blog">

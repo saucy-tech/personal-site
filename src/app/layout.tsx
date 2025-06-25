@@ -4,15 +4,9 @@ import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { SITE_NAME, SITE_DESCRIPTION } from '@/utils/constants';
-import dynamic from 'next/dynamic';
+import ClientGalaxyBackground from '@/components/ClientGalaxyBackground';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
-
-// Load background as a client-only component so it doesn't block SSR
-const GalaxyBackground = dynamic(() => import('@/components/GalaxyBackground'), {
-  ssr: false,
-  loading: () => null,
-});
 
 export const viewport: Viewport = {
   themeColor: '#07251F',
@@ -96,7 +90,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         >
           {/* Client-only animated background */}
-          <GalaxyBackground />
+          <ClientGalaxyBackground />
           <div className="relative z-10 flex flex-col min-h-screen">
             <Header />
             <main className="flex-grow">
