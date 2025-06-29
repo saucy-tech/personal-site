@@ -180,6 +180,19 @@ export default function Bitcoin() {
             <ul className="list-disc list-inside space-y-2">
               <li>
                 <a
+                  href="https://youtu.be/Pef22g53zsg"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-400 underline"
+                >
+                  Jack Mallers: Bitcoin is a Moral Revolution
+                </a>{' '}
+                <span className="text-sm text-white/60">(Jun 2025)</span> – A powerful and emotional
+                explanation of Bitcoin as more than just an investment - a moral revolution in money
+                offering hope and fairness to a generation facing economic hardship.
+              </li>
+              <li>
+                <a
                   href="https://youtu.be/Flra35NJV_I"
                   target="_blank"
                   rel="noopener noreferrer"
