@@ -90,27 +90,28 @@ Contributions are welcome! Please open an issue or submit a pull request.
 
 ## License
 
-[MIT](LICENSE)
+## Development
 
-git clone https://github.com/yourusername/active-linktree-brandon.git
-cd active-linktree-brandon
-```
+### Environment Variables
 
-Install dependencies:
+Create a `.env.local` file with the following variables:
 
 ```bash
-npm install
+# Required for Lightning Network functionality
+NOSTR_WALLET_CONNECT_URL=your_nwc_url_here
+
+# Optional LNURL-p configuration
+LNURL_MIN_SENDABLE=1000
+LNURL_MAX_SENDABLE=1000000000
+LNURL_COMMENT_ALLOWED=280
+LNURL_METADATA_TEXT="Tip to brandon"
+LNURL_METADATA_DESC="Lightning tip jar for brandon"
+
+# Next.js App URL (for OpenGraph)
+NEXT_PUBLIC_APP_URL=https://your-domain.com
 ```
 
-Run the development server:
-
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-## Component Layout
+### Component Architecture
 
 The app uses a consistent vertical spacing system:
 
@@ -120,7 +121,7 @@ The app uses a consistent vertical spacing system:
 - The profile section sits at the top with proper spacing to content below
 - Social bar and sections maintain visual hierarchy through spacing
 
-## Development Tips
+### Development Tips
 
 1. **Content Updates**: Most content is defined in `src/app/page.tsx` as JavaScript objects
 2. **Adding Links**: Add new `<LinkCard>` components within appropriate `<Section>` components
@@ -133,7 +134,7 @@ The app uses a consistent vertical spacing system:
 
 The easiest way to deploy your app is to use the [Vercel Platform](https://vercel.com/new).
 
-Check out the [DEPLOYMENT.md](DEPLOYMENT.md) for detailed deployment instructions.
+Ensure all environment variables are configured in your deployment platform.
 
 ## License
 
@@ -144,5 +145,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Design inspired by modern link aggregation services
 - Galaxy animation adapted from various open source implementations
 - Built with the Next.js framework
-
-# personal-site
+- Lightning Network integration via Alby SDK
