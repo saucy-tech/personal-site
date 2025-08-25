@@ -146,3 +146,81 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Galaxy animation adapted from various open source implementations
 - Built with the Next.js framework
 - Lightning Network integration via Alby SDK
+
+## CSP on Vercel: Production-compatible configuration
+
+This project uses a strict, nonce-based Content Security Policy (CSP) applied via middleware to work consistently in both local development and Vercel production/preview deployments.
+
+Key files:
+- [src/middleware.ts](src/middleware.ts)
+- [src/utils/security.ts](src/utils/security.ts)
+- [next.config.js](next.config.js)
+
+What was fixed:
+- Environment-aware CSP: production on Vercel vs local development are handled explicitly in [src/utils/security.ts](src/utils/security.ts).
+- Canvas-safe directives: allows 2D canvas animations and blobs for the animated galaxy background.
+- Worker allowances: permits blob/data workers sometimes needed for canvas ops.
+- Nonce-based script execution: prevents inline script execution without a valid nonce.
+- Removed unsafe-eval in production, retained only where needed in development.
+- Removed X-Powered-By in Next.js config to avoid leaking server info via [next.config.js](next.config.js).
+
+Effective CSP highlights (production):
+- default-src 'self'
+- script-src 'self' with request-scoped nonce and 'strict-dynamic' (no 'unsafe-eval' in production)
+- style-src 'self' 'unsafe-inline' [Next.js requirement], with optional data: in production
+- img-src 'self' data: blob: https: (required for canvas pixel operations and assets)
+- media-src 'self' data: blob:
+- worker-src 'self' blob: data:
+- child-src 'self' blob: data:
+- connect-src 'self' https: (includes CoinGecko endpoint used in this app)
+- font-src 'self' data: https:
+- object-src 'none', frame-src 'none', frame-ancestors 'none'
+- base-uri 'self', form-action 'self'
+- upgrade-insecure-requests (production only)
+
+Why middleware (not meta tags):
+- Nonces are generated per request in middleware and injected into the CSP header for robust, request-scoped enforcement.
+- Vercel’s edge/runtime headers are stricter than local; setting CSP at the edge ensures consistent behavior across environments.
+
+Verification steps:
+1) Local: verify headers
+   - curl -I http://localhost:3000
+   - Confirm presence of:
+     - content-security-policy with nonce
+     - img-src includes data:, blob:, https:
+     - worker-src and child-src include blob: data:
+     - In development only: script-src includes 'unsafe-eval'
+2) Vercel preview/prod:
+   - Deploy to Vercel (preview)
+   - Open devtools Network tab on first load (not client-side navigated page)
+   - Check Response Headers on the document:
+     - content-security-policy is present (no duplicates)
+     - script-src uses a nonce (no 'unsafe-eval' in prod)
+     - img-src has data: blob: https:
+     - worker-src/child-src allow blob: data:
+   - Confirm the animated galaxy background renders immediately on first load and interactive UI works.
+
+Operational notes:
+- Do not add another CSP header via next.config.js; CSP is centralized in [src/middleware.ts](src/middleware.ts) using [src/utils/security.ts](src/utils/security.ts).
+- Avoid adding meta http-equiv="Content-Security-Policy" tags; headers beat meta and Vercel may enforce more strictly.
+- Inline scripts must have a valid nonce to execute; rely on Next.js runtime script handling and the nonce-driven policy.
+- If adding new external APIs or CDNs, extend connect-src, font-src, img-src, etc., explicitly in [src/utils/security.ts](src/utils/security.ts).
+- If adding WebAssembly or specialized workers, ensure script-src and worker-src account for those needs without broadening to unsafe directives in production.
+
+Troubleshooting:
+- If the galaxy canvas is blank only on first navigation in Vercel:
+  - Ensure the page load (not client-routed) response has the CSP header with the directives above.
+  - Check that no second CSP header is present (duplicates can override each other). Keep CSP only in middleware.
+- If fonts or images fail in Vercel but work locally, verify the corresponding src directives (font-src/img-src) include https: and data:/blob: as applicable.
+- If you see blocked scripts in production, verify that no 'unsafe-eval' is required and that nonces are present on scripts Next injects.
+
+Security posture:
+- Production avoids 'unsafe-eval' (removed).
+- Strict nonce + strict-dynamic on scripts.
+- No frames or objects allowed.
+- Permissions-Policy is set with conservative defaults in middleware.
+
+Change log (CSP):
+- Centralized and hardened CSP in [src/utils/security.ts](src/utils/security.ts)
+- Ensured environment-aware behavior for Vercel deployments
+- Set poweredByHeader: false in [next.config.js](next.config.js) to remove X-Powered-By

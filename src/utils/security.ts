@@ -295,7 +295,7 @@ export function getSecurityHeaders(nonce?: string): Record<string, string> {
 
     // Script sources - more permissive in development, strict in production
     nonce
-      ? `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDevelopment ? " 'unsafe-eval'" : ''}`
+      ? `script-src 'self' 'nonce-${nonce}' ${isDevelopment ? " 'unsafe-eval'" : ''}`
       : `script-src 'self'${isDevelopment ? " 'unsafe-eval'" : ''}${isVercelProduction ? " 'wasm-unsafe-eval'" : ''}`,
 
     // Style sources - optimized for canvas animations and Next.js requirements
