@@ -246,9 +246,13 @@ export const validators = {
 };
 
 /**
- * Security headers configuration
+ * Security headers configuration with production canvas support
+ * Optimized for Vercel deployment environment
  */
 export function getSecurityHeaders(nonce?: string): Record<string, string> {
+  // Detect if we're in Vercel production environment
+  const isVercelProduction = process.env.VERCEL === '1' && process.env.NODE_ENV === 'production';
+  const isDevelopment = process.env.NODE_ENV === 'development';
   const headers: Record<string, string> = {
     // Prevent DNS prefetching for privacy
     'X-DNS-Prefetch-Control': 'off',
@@ -268,7 +272,7 @@ export function getSecurityHeaders(nonce?: string): Record<string, string> {
     // Remove server information
     'X-Powered-By': '',
 
-    // Permissions policy (replace feature policy)
+    // Enhanced permissions policy for canvas operations
     'Permissions-Policy': [
       'geolocation=()',
       'microphone=()',
@@ -279,28 +283,54 @@ export function getSecurityHeaders(nonce?: string): Record<string, string> {
       'vibrate=()',
       'fullscreen=(self)',
       'payment=(self)',
+      'accelerometer=()', // For smooth animations
+      'ambient-light-sensor=()', // Prevent sensor access
+      'autoplay=()', // Control autoplay
     ].join(', '),
   };
 
-  // Content Security Policy
+  // Content Security Policy with environment-specific optimizations
   const cspDirectives = [
     "default-src 'self'",
+
+    // Script sources - more permissive in development, strict in production
     nonce
-      ? `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-eval'`
-      : "script-src 'self' 'unsafe-eval'",
-    "style-src 'self' 'unsafe-inline'", // Next.js requires inline styles
-    "img-src 'self' data: https: blob:", // Add blob: for canvas operations
-    "font-src 'self' data:",
-    "connect-src 'self' https://api.coingecko.com",
-    "media-src 'self'",
+      ? `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDevelopment ? " 'unsafe-eval'" : ''}`
+      : `script-src 'self'${isDevelopment ? " 'unsafe-eval'" : ''}${isVercelProduction ? " 'wasm-unsafe-eval'" : ''}`,
+
+    // Style sources - optimized for canvas animations and Next.js requirements
+    `style-src 'self' 'unsafe-inline'${isVercelProduction ? ' data:' : ''}`,
+
+    // Image sources - comprehensive coverage for canvas operations
+    "img-src 'self' data: blob: https:",
+
+    // Font sources with CDN support
+    "font-src 'self' data: https:",
+
+    // Connection sources for API calls
+    "connect-src 'self' https://api.coingecko.com https:",
+
+    // Media sources for canvas-generated content
+    "media-src 'self' data: blob:",
+
+    // Security restrictions
     "object-src 'none'",
     "frame-src 'none'",
-    "worker-src 'self' blob:", // Allow Web Workers and blob workers for canvas operations
-    "child-src 'self' blob:", // Allow child contexts including workers
+
+    // Worker sources - essential for canvas operations
+    "worker-src 'self' blob: data:",
+
+    // Child contexts for Web Workers and canvas
+    "child-src 'self' blob: data:",
+
+    // PWA and security directives
+    "manifest-src 'self'",
     "base-uri 'self'",
     "form-action 'self'",
     "frame-ancestors 'none'",
-    'upgrade-insecure-requests',
+
+    // Upgrade insecure requests in production
+    ...(isVercelProduction ? ['upgrade-insecure-requests'] : []),
   ];
 
   headers['Content-Security-Policy'] = cspDirectives.join('; ');
