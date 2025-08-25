@@ -1,5 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
 import WebSocket from 'ws';
+import {
+  rateLimit,
+  createRateLimitResponse,
+  createSecureErrorResponse,
+  validators,
+  validateRequestSize,
+  logSecurityEvent,
+  getClientIP,
+  SECURITY_CONSTANTS,
+} from '@/utils/security';
+import { trackPaymentAttempt } from '@/utils/lnurl-config';
 
 // Ensure global WebSocket is available for Nostr Wallet Connect
 declare global {
@@ -14,70 +25,132 @@ const NWC_URL = process.env.NOSTR_WALLET_CONNECT_URL || '';
 
 export async function POST(request: NextRequest) {
   try {
+    // Validate request size
+    const sizeValidation = await validateRequestSize(request);
+    if (!sizeValidation.valid) {
+      return createSecureErrorResponse('Request too large', 413);
+    }
+
+    // Apply rate limiting - stricter for invoice creation
+    const rateLimitResult = rateLimit(
+      request,
+      SECURITY_CONSTANTS.RATE_LIMIT_INVOICE,
+      SECURITY_CONSTANTS.RATE_LIMIT_WINDOW_MS,
+      'invoice'
+    );
+    if (!rateLimitResult.allowed) {
+      logSecurityEvent('rate_limit_exceeded', {
+        endpoint: '/api/invoice',
+        ip: request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown',
+        userAgent: request.headers.get('user-agent') || 'unknown',
+      });
+      return createRateLimitResponse(rateLimitResult.resetTime);
+    }
+
     const body = await request.json();
     const { amount, memo } = body;
 
-    if (!amount || isNaN(Number(amount)) || Number(amount) <= 0) {
-      return NextResponse.json(
-        { error: 'Invalid amount. Please provide a positive number.' },
-        { status: 400 }
-      );
+    // Validate amount using security utilities
+    const amountValidation = validators.lightningAmount(amount, 'sats');
+    if (!amountValidation.valid) {
+      logSecurityEvent('invalid_input', {
+        endpoint: '/api/invoice',
+        reason: amountValidation.error,
+        ip: request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown',
+      });
+      return createSecureErrorResponse(amountValidation.error, 400);
+    }
+
+    // Validate memo
+    const memoValidation = validators.text(memo, SECURITY_CONSTANTS.MAX_MEMO_LENGTH);
+    if (!memoValidation.valid) {
+      return createSecureErrorResponse(memoValidation.error, 400);
     }
 
     if (!NWC_URL) {
-      return NextResponse.json({ error: 'Missing Nostr Wallet Connect URL' }, { status: 500 });
+      return createSecureErrorResponse('Service temporarily unavailable', 503, 'Missing NWC_URL');
     }
-    const client = new nwc.NWCClient({ nostrWalletConnectUrl: NWC_URL });
 
-    const satsAmount = Number(amount);
+    const client = new nwc.NWCClient({ nostrWalletConnectUrl: NWC_URL });
+    const satsAmount = amountValidation.sanitized!;
 
     try {
       const result = await client.makeInvoice({
         amount: satsAmount * 1000,
-        description: memo || 'Lightning Tip Jar',
+        description: memoValidation.sanitized || 'Lightning Tip Jar',
       });
+
       const paymentRequest = result.invoice;
       const paymentHash = result.payment_hash;
+
+      // Track payment attempt for security monitoring
+      const clientIP = getClientIP(request);
+      const trackingAllowed = trackPaymentAttempt(paymentHash, satsAmount, clientIP);
+
+      if (!trackingAllowed) {
+        logSecurityEvent('suspicious_request', {
+          endpoint: '/api/invoice',
+          reason: 'Rapid payment attempts detected',
+          ip: clientIP,
+        });
+        return createSecureErrorResponse('Too many rapid attempts', 429);
+      }
+
       return NextResponse.json({ paymentRequest, paymentHash });
     } catch (apiError) {
       console.error(
         'Nostr Wallet Connect makeInvoice error:',
         apiError instanceof Error ? apiError.message : 'Unknown error'
       );
-      return NextResponse.json(
-        {
-          error: 'Unable to connect to the Lightning Network. Please try again later.',
-        },
-        { status: 503 }
-      );
+      return createSecureErrorResponse('Unable to process payment request', 503);
     }
   } catch (error) {
     console.error(
       'Error creating invoice:',
       error instanceof Error ? error.message : 'Unknown error'
     );
-    return NextResponse.json(
-      { error: 'Failed to create invoice. Please try again later.' },
-      { status: 500 }
-    );
+    return createSecureErrorResponse('Failed to create invoice', 500);
   }
 }
 
 export async function GET(request: NextRequest) {
   try {
+    // Apply rate limiting for payment status checks
+    const rateLimitResult = rateLimit(
+      request,
+      SECURITY_CONSTANTS.RATE_LIMIT_API,
+      SECURITY_CONSTANTS.RATE_LIMIT_WINDOW_MS,
+      'invoice-status'
+    );
+    if (!rateLimitResult.allowed) {
+      return createRateLimitResponse(rateLimitResult.resetTime);
+    }
+
     const { searchParams } = new URL(request.url);
     const paymentHash = searchParams.get('paymentHash');
 
     if (!paymentHash) {
-      return NextResponse.json({ error: 'Payment hash is required' }, { status: 400 });
+      return createSecureErrorResponse('Payment hash is required', 400);
+    }
+
+    // Validate payment hash format
+    const hashValidation = validators.paymentHash(paymentHash);
+    if (!hashValidation.valid) {
+      logSecurityEvent('invalid_input', {
+        endpoint: '/api/invoice (GET)',
+        reason: hashValidation.error,
+        ip: request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown',
+      });
+      return createSecureErrorResponse('Invalid payment hash format', 400);
     }
 
     if (!NWC_URL) {
-      return NextResponse.json({ error: 'Missing Nostr Wallet Connect URL' }, { status: 500 });
+      return createSecureErrorResponse('Service temporarily unavailable', 503, 'Missing NWC_URL');
     }
+
     const client = new nwc.NWCClient({ nostrWalletConnectUrl: NWC_URL });
     try {
-      const status = await client.lookupInvoice({ payment_hash: paymentHash });
+      const status = await client.lookupInvoice({ payment_hash: hashValidation.sanitized });
       // invoice is settled if settled_at timestamp is present
       const paid = Boolean(status.settled_at);
       const preimage = status.preimage || null;

@@ -1,50 +1,101 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import {
+  rateLimit,
+  createRateLimitResponse,
+  createSecureErrorResponse,
+  validators,
+  validateRequestSize,
+  logSecurityEvent,
+  SECURITY_CONSTANTS,
+} from '@/utils/security';
 
-// VERY simple in-memory rate limiter (per edge/server instance). Good enough for hobby use.
-const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
-const RATE_LIMIT_MAX = 5; // max 5 requests per IP per window
-const requests: Map<string, { count: number; expires: number }> = new Map();
-
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const { email } = await req.json();
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
-      return NextResponse.json({ error: 'Valid email is required' }, { status: 400 });
+    // Validate request size
+    const sizeValidation = await validateRequestSize(req);
+    if (!sizeValidation.valid) {
+      return createSecureErrorResponse('Request too large', 413);
     }
 
-    // Basic rate-limit by IP address
-    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
-    const now = Date.now();
-    const bucket = requests.get(ip);
-    if (bucket && bucket.expires > now) {
-      if (bucket.count >= RATE_LIMIT_MAX) {
-        return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 });
-      }
-      bucket.count += 1;
-    } else {
-      requests.set(ip, { count: 1, expires: now + RATE_LIMIT_WINDOW_MS });
+    // Apply rate limiting - strict for subscription requests
+    const rateLimitResult = rateLimit(
+      req,
+      SECURITY_CONSTANTS.RATE_LIMIT_SUBSCRIBE,
+      SECURITY_CONSTANTS.RATE_LIMIT_WINDOW_MS,
+      'subscribe'
+    );
+    if (!rateLimitResult.allowed) {
+      logSecurityEvent('rate_limit_exceeded', {
+        endpoint: '/api/subscribe',
+        ip: req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown',
+        userAgent: req.headers.get('user-agent') || 'unknown',
+      });
+      return createRateLimitResponse(rateLimitResult.resetTime);
+    }
+
+    const { email } = await req.json();
+
+    // Validate email using security utilities
+    const emailValidation = validators.email(email);
+    if (!emailValidation.valid) {
+      logSecurityEvent('invalid_input', {
+        endpoint: '/api/subscribe',
+        reason: emailValidation.error,
+        ip: req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown',
+      });
+      return createSecureErrorResponse(emailValidation.error, 400);
     }
 
     const formId = process.env.CONVERTKIT_FORM_ID;
     const apiKey = process.env.CONVERTKIT_API_KEY;
     if (!formId || !apiKey) {
-      return NextResponse.json({ error: 'ConvertKit not configured' }, { status: 500 });
+      return createSecureErrorResponse(
+        'Service temporarily unavailable',
+        503,
+        'ConvertKit not configured'
+      );
     }
 
-    const response = await fetch(`https://api.convertkit.com/v3/forms/${formId}/subscribe`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, api_key: apiKey }),
-    });
+    // Add timeout to external API call
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), SECURITY_CONSTANTS.REQUEST_TIMEOUT);
 
-    if (!response.ok) {
-      const data = await response.json().catch(() => ({}));
-      return NextResponse.json({ error: data?.message ?? 'ConvertKit error' }, { status: 500 });
+    try {
+      const response = await fetch(`https://api.convertkit.com/v3/forms/${formId}/subscribe`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'User-Agent': 'Personal-Site/1.0',
+        },
+        body: JSON.stringify({
+          email: emailValidation.sanitized,
+          api_key: apiKey,
+        }),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        console.error('ConvertKit API error:', response.status, data);
+        return createSecureErrorResponse('Failed to subscribe', 502);
+      }
+
+      return NextResponse.json({ success: true });
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+
+      if (fetchError instanceof Error && fetchError.name === 'AbortError') {
+        console.error('ConvertKit API timeout');
+        return createSecureErrorResponse('Request timeout', 504);
+      }
+
+      console.error('Error calling ConvertKit API:', fetchError);
+      return createSecureErrorResponse('Failed to subscribe', 502);
     }
-
-    return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ error: 'Unexpected error' }, { status: 500 });
+  } catch (error) {
+    console.error('Error in subscribe endpoint:', error);
+    return createSecureErrorResponse('Service temporarily unavailable', 500);
   }
 }
