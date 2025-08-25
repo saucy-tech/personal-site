@@ -249,10 +249,12 @@ export const validators = {
  * Security headers configuration with production canvas support
  * Optimized for Vercel deployment environment
  */
-export function getSecurityHeaders(nonce?: string): Record<string, string> {
-  // Detect if we're in Vercel production environment
-  const isVercelProduction = process.env.VERCEL === '1' && process.env.NODE_ENV === 'production';
-  const isDevelopment = process.env.NODE_ENV === 'development';
+export function getSecurityHeaders(): Record<string, string> {
+  // Detect Vercel environment
+  const isVercel = process.env.VERCEL === '1';
+  const vercelEnv = process.env.VERCEL_ENV;
+  const isVercelProduction =
+    isVercel && (vercelEnv === 'production' || process.env.NODE_ENV === 'production');
   const headers: Record<string, string> = {
     // Prevent DNS prefetching for privacy
     'X-DNS-Prefetch-Control': 'off',
@@ -272,20 +274,12 @@ export function getSecurityHeaders(nonce?: string): Record<string, string> {
     // Remove server information
     'X-Powered-By': '',
 
-    // Enhanced permissions policy for canvas operations
+    // Minimal, widely-supported Permissions-Policy (avoid unrecognized features on Vercel/browsers)
     'Permissions-Policy': [
       'geolocation=()',
       'microphone=()',
       'camera=()',
-      'magnetometer=()',
-      'gyroscope=()',
-      'speaker=()',
-      'vibrate=()',
       'fullscreen=(self)',
-      'payment=(self)',
-      'accelerometer=()', // For smooth animations
-      'ambient-light-sensor=()', // Prevent sensor access
-      'autoplay=()', // Control autoplay
     ].join(', '),
   };
 
@@ -293,13 +287,16 @@ export function getSecurityHeaders(nonce?: string): Record<string, string> {
   const cspDirectives = [
     "default-src 'self'",
 
-    // Script sources - more permissive in development, strict in production
-    nonce
-      ? `script-src 'self' 'nonce-${nonce}' ${isDevelopment ? " 'unsafe-eval'" : ''}`
-      : `script-src 'self'${isDevelopment ? " 'unsafe-eval'" : ''}${isVercelProduction ? " 'wasm-unsafe-eval'" : ''}`,
+    // Script sources - allow inline in all envs; eval only in non-production (Vercel preview/dev)
+    isVercelProduction
+      ? "script-src 'self' 'unsafe-inline' blob:"
+      : "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:",
+    // Element-specific sources to satisfy browsers that split elem vs attr policies
+    "script-src-elem 'self' 'unsafe-inline' blob:",
 
-    // Style sources - optimized for canvas animations and Next.js requirements
-    `style-src 'self' 'unsafe-inline'${isVercelProduction ? ' data:' : ''}`,
+    // Style sources - allow data: for any inlined style blocks if emitted
+    "style-src 'self' 'unsafe-inline' data:",
+    "style-src-elem 'self' 'unsafe-inline'",
 
     // Image sources - comprehensive coverage for canvas operations
     "img-src 'self' data: blob: https:",
@@ -308,7 +305,7 @@ export function getSecurityHeaders(nonce?: string): Record<string, string> {
     "font-src 'self' data: https:",
 
     // Connection sources for API calls
-    "connect-src 'self' https://api.coingecko.com https:",
+    "connect-src 'self' https://api.coingecko.com https: wss:",
 
     // Media sources for canvas-generated content
     "media-src 'self' data: blob:",

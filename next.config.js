@@ -27,13 +27,8 @@ const nextConfig = {
             value: 'strict-origin-when-cross-origin',
           },
           {
-            key: 'X-Powered-By',
-            value: '',
-          },
-          {
             key: 'Permissions-Policy',
-            value:
-              'geolocation=(), microphone=(), camera=(), magnetometer=(), gyroscope=(), speaker=(), vibrate=(), fullscreen=(self), payment=(self)',
+            value: 'geolocation=(), microphone=(), camera=(), fullscreen=(self)',
           },
           // CSP is handled by middleware.ts with dynamic nonces
           // Removing duplicate CSP header that conflicts with middleware

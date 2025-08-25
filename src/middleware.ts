@@ -1,22 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSecurityHeaders, generateCSPNonce } from '@/utils/security';
+import { getSecurityHeaders } from '@/utils/security';
 
 export function middleware(_request: NextRequest) {
   const response = NextResponse.next();
 
-  // Generate CSP nonce for this request
-  const nonce = generateCSPNonce();
-
-  // Get security headers with nonce
-  const securityHeaders = getSecurityHeaders(nonce);
+  // Get security headers (CSP is environment-aware; no nonce required)
+  const securityHeaders = getSecurityHeaders();
 
   // Apply security headers to all responses
   Object.entries(securityHeaders).forEach(([key, value]) => {
     response.headers.set(key, value);
   });
-
-  // Store nonce for use in components (if needed)
-  response.headers.set('X-CSP-Nonce', nonce);
 
   return response;
 }
