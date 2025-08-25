@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  poweredByHeader: false,
   async headers() {
     return [
       {
@@ -7,31 +8,33 @@ const nextConfig = {
         headers: [
           {
             key: 'X-DNS-Prefetch-Control',
-            value: 'on'
+            value: 'off',
           },
           {
             key: 'X-XSS-Protection',
-            value: '1; mode=block'
+            value: '0',
           },
           {
             key: 'X-Frame-Options',
-            value: 'SAMEORIGIN'
+            value: 'DENY',
           },
           {
             key: 'X-Content-Type-Options',
-            value: 'nosniff'
+            value: 'nosniff',
           },
           {
             key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin'
+            value: 'strict-origin-when-cross-origin',
           },
           {
-            key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self';"
-          }
-        ]
-      }
-    ]
+            key: 'Permissions-Policy',
+            value: 'geolocation=(), microphone=(), camera=(), fullscreen=(self)',
+          },
+          // CSP is handled by middleware.ts with dynamic nonces
+          // Removing duplicate CSP header that conflicts with middleware
+        ],
+      },
+    ];
   },
   images: {
     domains: [],
