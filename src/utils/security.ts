@@ -285,14 +285,18 @@ export function getSecurityHeaders(nonce?: string): Record<string, string> {
   // Content Security Policy
   const cspDirectives = [
     "default-src 'self'",
-    nonce ? `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'` : "script-src 'self'",
+    nonce
+      ? `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' 'unsafe-eval'`
+      : "script-src 'self' 'unsafe-eval'",
     "style-src 'self' 'unsafe-inline'", // Next.js requires inline styles
-    "img-src 'self' data: https:",
+    "img-src 'self' data: https: blob:", // Add blob: for canvas operations
     "font-src 'self' data:",
     "connect-src 'self' https://api.coingecko.com",
     "media-src 'self'",
     "object-src 'none'",
     "frame-src 'none'",
+    "worker-src 'self' blob:", // Allow Web Workers and blob workers for canvas operations
+    "child-src 'self' blob:", // Allow child contexts including workers
     "base-uri 'self'",
     "form-action 'self'",
     "frame-ancestors 'none'",
