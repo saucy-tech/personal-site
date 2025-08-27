@@ -10,12 +10,13 @@ A focused guide for working quickly and safely in this Next.js personal portfoli
 
 - Requirements
   - Node 18.18+ (Node 20 LTS recommended)
-  - npm or yarn
+  - Corepack enabled (run once per machine: corepack enable)
+  - pnpm (pinned via packageManager)
 - Install and run (first time)
   - cp .env.example .env.local
   - Fill at least NEXT_PUBLIC_APP_URL in .env.local
-  - npm install
-  - npm run dev
+  - pnpm install
+  - pnpm dev
   - Open http://localhost:3000
 
 Git tip: Prefer --no-pager to see full output without paging:
@@ -34,13 +35,13 @@ Git tip: Prefer --no-pager to see full output without paging:
 
 ## Common Commands
 
-- Start dev server: npm run dev
-- Build production: npm run build
-- Run production locally: npm run start
-- Lint: npm run lint
-- Tests (Jest + RTL): npm run test
-- Watch tests: npm run test:watch
-- Husky install (auto via prepare): npm run prepare
+- Start dev server: pnpm dev
+- Build production: pnpm build
+- Run production locally: pnpm start
+- Lint: pnpm lint
+- Tests (Jest + RTL): pnpm test
+- Watch tests: pnpm test:watch
+- Husky install (auto via prepare): pnpm run prepare
 
 ## Environment Setup
 
@@ -176,9 +177,9 @@ Top-level highlights:
   - Purpose: Creates a DRAFT broadcast of the latest blog post intro + link via ConvertKit v4 API after deploy.
   - Env: CK_SECRET_KEY, CK_PUBLISHER_ID, NEXT_PUBLIC_APP_URL
   - Run:
-    - Install ts-node or tsx locally: npm i -D ts-node
-    - npx ts-node scripts/auto-broadcast.ts
-    - or: npx tsx scripts/auto-broadcast.ts
+    - Install ts-node or tsx locally: pnpm add -D ts-node
+    - pnpm dlx ts-node scripts/auto-broadcast.ts
+    - or: pnpm dlx tsx scripts/auto-broadcast.ts
   - CI: Optionally wire as a post-deploy step (guarded to only run on main/prod).
 
 Note: ts-node is not currently in devDependencies; add it if you plan to use this script.

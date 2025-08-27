@@ -2,6 +2,8 @@
 
 A modern, accessible portfolio and blog built with Next.js, React, and MDX. This site showcases my projects, technical talks, and blog posts, with a focus on technology, user experience, and performance.
 
+This repo uses pnpm pinned via Corepack (see package.json "packageManager").
+
 ## Features
 
 - ⚡ Built with Next.js 14+ (App Router), React, and Tailwind CSS
@@ -69,17 +71,14 @@ personal-site/
 2. **Install dependencies:**
 
    ```bash
-   npm install
-   # or
-   yarn install
+   corepack enable
+   pnpm install
    ```
 
 3. **Run the development server:**
 
    ```bash
-   npm run dev
-   # or
-   yarn dev
+   pnpm dev
    ```
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser.
