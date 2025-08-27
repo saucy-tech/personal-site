@@ -189,11 +189,11 @@ Note: ts-node is not currently in devDependencies; add it if you plan to use thi
 - Jest + RTL
   - Config: jest.config.js (next/jest), testEnvironment jsdom
   - Aliases: '@/' mapped to src in Jest via moduleNameMapper; ensure tsconfig paths match
-  - Commands: npm run test, npm run test:watch
+  - Commands: pnpm test, pnpm test:watch
 - ESLint + Prettier
   - ESLint config: eslint.config.mjs (extends next/core-web-vitals)
   - Pre-commit: husky + lint-staged for JS/TS files
-  - Run explicitly: npm run lint
+  - Run explicitly: pnpm lint
 
 ## Deployment
 
