@@ -2,6 +2,7 @@
   "name": "personal-site",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@10.15.0",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -34,6 +35,12 @@
     "react-qr-code": "^2.0.15",
     "tailwind-merge": "^2.6.0",
     "ws": "^8.18.1"
+  },
+  "pnpm": {
+    "allowScripts": {
+      "sharp": true,
+      "unrs-resolver": true
+    }
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
