@@ -5,6 +5,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { SITE_NAME, SITE_DESCRIPTION } from '@/utils/constants';
 import ClientGalaxyBackground from '@/components/ClientGalaxyBackground';
+import ClientSnowflakes from '@/components/ClientSnowflakes';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
@@ -91,6 +92,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           {/* Client-only animated background */}
           <ClientGalaxyBackground />
+          {/* Winter snowflakes with toggle */}
+          <ClientSnowflakes />
           <div className="relative z-10 flex flex-col min-h-screen">
             <Header />
             <main className="flex-grow">
