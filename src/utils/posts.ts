@@ -5,6 +5,7 @@ import matter from 'gray-matter';
 import yaml from 'js-yaml';
 
 // Configure gray-matter to use js-yaml 4.x's load function
+// @ts-expect-error - gray-matter's types don't include engines, but it exists at runtime
 matter.engines.yaml = {
   parse: (str: string) => yaml.load(str) as Record<string, unknown>,
   stringify: (obj: Record<string, unknown>) => yaml.dump(obj),
