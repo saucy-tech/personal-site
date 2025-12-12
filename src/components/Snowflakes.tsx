@@ -9,6 +9,8 @@ interface Snowflake {
   speed: number;
   drift: number;
   opacity: number;
+  rotation: number;
+  rotationSpeed: number;
 }
 
 const Snowflakes: React.FC = () => {
@@ -29,6 +31,60 @@ const Snowflakes: React.FC = () => {
     setCanvasSize();
     window.addEventListener('resize', setCanvasSize);
 
+    // Function to draw a snowflake shape
+    const drawSnowflake = (
+      x: number,
+      y: number,
+      radius: number,
+      rotation: number,
+      opacity: number
+    ) => {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(rotation);
+      ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
+      ctx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+      ctx.lineWidth = radius / 8;
+      ctx.lineCap = 'round';
+
+      // Draw 6 branches
+      for (let i = 0; i < 6; i++) {
+        ctx.rotate(Math.PI / 3);
+
+        // Main branch
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(0, -radius);
+        ctx.stroke();
+
+        // Side branches
+        for (let j = 1; j <= 3; j++) {
+          const y = (-radius * j) / 3;
+          const branchLength = radius / 4;
+
+          // Left branch
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(
+            -branchLength * Math.cos(Math.PI / 6),
+            y - branchLength * Math.sin(Math.PI / 6)
+          );
+          ctx.stroke();
+
+          // Right branch
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(
+            branchLength * Math.cos(Math.PI / 6),
+            y - branchLength * Math.sin(Math.PI / 6)
+          );
+          ctx.stroke();
+        }
+      }
+
+      ctx.restore();
+    };
+
     // Snowflake properties
     const snowflakes: Snowflake[] = [];
     const numSnowflakes = 100;
@@ -38,10 +94,12 @@ const Snowflakes: React.FC = () => {
       snowflakes.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        radius: Math.random() * 3 + 1,
+        radius: Math.random() * 4 + 3,
         speed: Math.random() * 1 + 0.5,
         drift: Math.random() * 0.5 - 0.25,
         opacity: Math.random() * 0.6 + 0.4,
+        rotation: Math.random() * Math.PI * 2,
+        rotationSpeed: (Math.random() - 0.5) * 0.02,
       });
     }
 
@@ -52,14 +110,13 @@ const Snowflakes: React.FC = () => {
 
       // Draw and update snowflakes
       snowflakes.forEach((flake) => {
-        ctx.fillStyle = `rgba(255, 255, 255, ${flake.opacity})`;
-        ctx.beginPath();
-        ctx.arc(flake.x, flake.y, flake.radius, 0, Math.PI * 2);
-        ctx.fill();
+        // Draw the snowflake shape
+        drawSnowflake(flake.x, flake.y, flake.radius, flake.rotation, flake.opacity);
 
         // Update position
         flake.y += flake.speed;
         flake.x += flake.drift;
+        flake.rotation += flake.rotationSpeed;
 
         // Reset snowflake if it goes off screen
         if (flake.y > canvas.height) {
