@@ -123,10 +123,7 @@ Top-level highlights:
     - upgrade-insecure-requests (production only)
   - Also sets: X-Frame-Options DENY, Referrer-Policy, X-Content-Type-Options, Permissions-Policy, etc.
 
-- Important mismatch note:
-  - README mentions a nonce-based CSP with 'strict-dynamic'. Current code implements an 'unsafe-inline' approach without nonces.
-  - Action: Choose one approach and align docs and code. If you want nonces + strict-dynamic, update getSecurityHeaders accordingly and remove 'unsafe-inline'. Otherwise, update README to match current code.
-  - Verify with:
+- Verify CSP with:
     - curl -I http://localhost:3000
     - Ensure only one Content-Security-Policy header exists and directives match expectations.
 
@@ -237,9 +234,6 @@ Note: ts-node is not currently in devDependencies; add it if you plan to use thi
   - Personal SSH host ados-v01 is configured with IdentityFile ~/.ssh/id_rsa_gda_azdo (not directly used by this repo).
 
 ## Maintainer Notes and To-Dos
-
-- Align CSP docs and implementation:
-  - Decide between nonce+strict-dynamic vs 'unsafe-inline' approach and update either README or security.ts accordingly.
 
 - Add dev dependency if using ConvertKit script:
   - npm i -D ts-node (or tsx) and add a package.json script if desired:
