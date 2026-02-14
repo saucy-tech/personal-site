@@ -19,7 +19,7 @@
     ]
   },
   "dependencies": {
-    "@getalby/sdk": "^5.0.0",
+    "@getalby/sdk": "^7.0.0",
     "@heroicons/react": "^2.1.1",
     "@tailwindcss/typography": "^0.5.13",
     "clsx": "^2.1.1",
