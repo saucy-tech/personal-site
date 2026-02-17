@@ -20,7 +20,7 @@ declare global {
 }
 globalThis.WebSocket = WebSocket as any;
 
-import { nwc } from '@getalby/sdk';
+import { NWCClient } from '@getalby/sdk';
 const NWC_URL = process.env.NOSTR_WALLET_CONNECT_URL || '';
 
 export async function POST(request: NextRequest) {
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
       return createSecureErrorResponse('Service temporarily unavailable', 503, 'Missing NWC_URL');
     }
 
-    const client = new nwc.NWCClient({ nostrWalletConnectUrl: NWC_URL });
+    const client = new NWCClient({ nostrWalletConnectUrl: NWC_URL });
     const satsAmount = amountValidation.sanitized!;
 
     try {
@@ -148,7 +148,7 @@ export async function GET(request: NextRequest) {
       return createSecureErrorResponse('Service temporarily unavailable', 503, 'Missing NWC_URL');
     }
 
-    const client = new nwc.NWCClient({ nostrWalletConnectUrl: NWC_URL });
+    const client = new NWCClient({ nostrWalletConnectUrl: NWC_URL });
     try {
       const status = await client.lookupInvoice({ payment_hash: hashValidation.sanitized });
       // invoice is settled if settled_at timestamp is present
