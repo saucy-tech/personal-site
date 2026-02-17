@@ -2,7 +2,7 @@
 // This handles the second step of the LNURL-p flow, generating the invoice.
 
 import { NextRequest, NextResponse } from 'next/server';
-import { nwc } from '@getalby/sdk';
+import { NWCClient } from '@getalby/sdk';
 import { validateLnurlAmount } from '@/utils/lnurl-config';
 import {
   rateLimit,
@@ -93,7 +93,7 @@ export async function GET(request: NextRequest) {
       sanitizedComment = commentValidation.sanitized || '';
     }
 
-    const client = new nwc.NWCClient({ nostrWalletConnectUrl: NWC_URL });
+    const client = new NWCClient({ nostrWalletConnectUrl: NWC_URL });
     const description = sanitizedComment || `Tip to brandon`;
 
     const invoiceResult = await client.makeInvoice({
