@@ -23,7 +23,7 @@
     "@heroicons/react": "^2.1.1",
     "@tailwindcss/typography": "^0.5.13",
     "clsx": "^2.1.1",
-    "framer-motion": "^11.0.3",
+    "framer-motion": "^12.34.1",
     "gray-matter": "^4.0.3",
     "js-yaml": "^4.1.1",
     "lucide-react": "^0.488.0",
