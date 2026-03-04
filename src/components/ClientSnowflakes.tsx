@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Snowflakes from './Snowflakes';
 
 const ClientSnowflakes: React.FC = () => {
-  const [showSnowflakes, setShowSnowflakes] = useState(true);
+  const [showSnowflakes, setShowSnowflakes] = useState(false);
 
   // Load preference from localStorage on mount
   useEffect(() => {
