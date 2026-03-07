@@ -3,7 +3,7 @@ import { Montserrat } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { SITE_NAME, SITE_DESCRIPTION } from '@/utils/constants';
+import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from '@/utils/constants';
 import ClientGalaxyBackground from '@/components/ClientGalaxyBackground';
 import ClientSnowflakes from '@/components/ClientSnowflakes';
 
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://your-domain.com',
+    url: SITE_URL,
     siteName: SITE_NAME,
     title: SITE_NAME,
     description: SITE_DESCRIPTION,

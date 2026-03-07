@@ -31,6 +31,10 @@ export interface Post extends PostMeta {
   content: string;
 }
 
+function getPostPath(slug: string): string {
+  return path.join(POSTS_DIR, `${slug}.mdx`);
+}
+
 export function getPostSlugs(): string[] {
   ensurePostsDir();
   return fs
@@ -42,7 +46,7 @@ export function getPostSlugs(): string[] {
 export function getAllPostsMeta(): PostMeta[] {
   return getPostSlugs()
     .map((slug) => {
-      const fileContent = fs.readFileSync(path.join(POSTS_DIR, `${slug}.mdx`), 'utf-8');
+      const fileContent = fs.readFileSync(getPostPath(slug), 'utf-8');
       const { data } = matter(fileContent);
       return {
         slug,
@@ -56,8 +60,13 @@ export function getAllPostsMeta(): PostMeta[] {
 }
 
 // Note: We will send raw MDX to the page and compile there with next-mdx-remote/rsc
-export async function getPostBySlug(slug: string): Promise<Post> {
-  const fileContent = fs.readFileSync(path.join(POSTS_DIR, `${slug}.mdx`), 'utf-8');
+export async function getPostBySlug(slug: string): Promise<Post | null> {
+  const postPath = getPostPath(slug);
+  if (!fs.existsSync(postPath)) {
+    return null;
+  }
+
+  const fileContent = fs.readFileSync(postPath, 'utf-8');
   const { data, content } = matter(fileContent);
 
   return {
@@ -84,8 +93,13 @@ export async function getPostOgMeta(slug: string): Promise<{
     title: string;
     description: string;
   };
-}> {
-  const { title, excerpt } = await getPostBySlug(slug);
+} | null> {
+  const post = await getPostBySlug(slug);
+  if (!post) {
+    return null;
+  }
+
+  const { title, excerpt } = post;
   return {
     title,
     description: excerpt,

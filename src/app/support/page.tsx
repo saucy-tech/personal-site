@@ -6,17 +6,17 @@ import Section from '@/components/Section';
 
 export const metadata: Metadata = {
   title: 'Support Me',
-  description: 'Support Brandon&apos;s writing, projects, and long-term vision for his family.',
+  description: "Support Brandon's writing, projects, and long-term vision for his family.",
   openGraph: {
     title: 'Support Me',
-    description: 'Contribute to Brandon&apos;s work, family savings, or send Bitcoin.',
+    description: "Contribute to Brandon's work, family savings, or send Bitcoin.",
     url: `${SITE_URL}/support`,
     type: 'website',
     images: [
       {
-        url: '/og-explore.jpg',
-        width: 1200,
-        height: 630,
+        url: '/family-photo.jpeg',
+        width: 1024,
+        height: 1024,
         alt: `${SITE_NAME} - Support Me`,
       },
     ],

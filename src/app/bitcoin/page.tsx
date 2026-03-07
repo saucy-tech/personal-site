@@ -14,9 +14,9 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/og-bitcoin.jpg',
-        width: 1200,
-        height: 630,
+        url: '/bitcoin-journey.png',
+        width: 1024,
+        height: 1536,
         alt: `${SITE_NAME} - Bitcoin`,
       },
     ],
