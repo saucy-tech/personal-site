@@ -12,9 +12,9 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/og-explore.jpg',
-        width: 1200,
-        height: 630,
+        url: '/family-photo.jpeg',
+        width: 1024,
+        height: 1024,
         alt: `${SITE_NAME} - Projects`,
       },
     ],

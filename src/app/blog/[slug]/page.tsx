@@ -1,22 +1,26 @@
 import { MDXRemote } from 'next-mdx-remote/rsc';
+import { notFound } from 'next/navigation';
 
 import PageLayout from '@/components/PageLayout';
 import Section from '@/components/Section';
 import SubscribeForm from '@/components/SubscribeForm';
 import { formatDate } from '@/utils/helpers';
-import { getPostBySlug, getPostOgMeta } from '@/utils/posts';
+import { getPostBySlug, getPostOgMeta, getPostSlugs } from '@/utils/posts';
 
-// Temporarily disable static generation due to Next.js 15 + MDX issue
-// export async function generateStaticParams() {
-//   const slugs = getPostSlugs();
-//   return slugs.map((slug) => ({ slug }));
-// }
+export async function generateStaticParams() {
+  return getPostSlugs().map((slug) => ({ slug }));
+}
 
-export const dynamic = 'force-dynamic';
+export const dynamicParams = false;
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  return getPostOgMeta(slug);
+  const metadata = await getPostOgMeta(slug);
+  if (!metadata) {
+    notFound();
+  }
+
+  return metadata;
 }
 
 interface PostPageProps {
@@ -26,6 +30,9 @@ interface PostPageProps {
 export default async function PostPage({ params }: PostPageProps) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
+  if (!post) {
+    notFound();
+  }
 
   return (
     <PageLayout title={post.title} backHref="/blog" backLabel="Back to Blog">
