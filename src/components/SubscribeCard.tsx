@@ -25,7 +25,7 @@ export default function SubscribeCard() {
           </div>
           <div className="flex-1 flex justify-center">
             <span className="text-xs sm:text-base font-medium text-[var(--text-primary)] text-center break-words w-full max-w-full">
-              Stay Updated – Subscribe
+              Daily Reflections — Subscribe Free
             </span>
           </div>
           <div className="w-9 h-9 flex-shrink-0 mr-0" />
@@ -49,7 +49,10 @@ export default function SubscribeCard() {
             >
               ×
             </button>
-            <h2 className="text-xl font-semibold mb-4 text-center">Join the Newsletter</h2>
+            <h2 className="text-xl font-semibold mb-2 text-center">Daily Reflections</h2>
+            <p className="text-sm text-gray-400 text-center mb-4">
+              Faith, ideas, and whatever&apos;s on my mind — Monday through Friday, with the occasional weekend thought. Free.
+            </p>
             <SubscribeForm />
           </div>
         </div>
