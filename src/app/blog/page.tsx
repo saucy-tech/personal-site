@@ -32,7 +32,7 @@ export default function BlogIndex() {
           ))}
         </ul>
       </Section>
-      <Section title="Daily Reflections" emoji="✉️">
+      <Section title="The Daily Word" emoji="✉️">
         <p className="text-sm text-gray-400 mb-4">
           Faith, ideas, and whatever&apos;s on my mind — Monday through Friday, with the occasional weekend thought. Free.
         </p>
