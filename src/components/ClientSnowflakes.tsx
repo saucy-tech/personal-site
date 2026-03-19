@@ -1,18 +1,16 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Snowflakes from './Snowflakes';
 
 const ClientSnowflakes: React.FC = () => {
-  const [showSnowflakes, setShowSnowflakes] = useState(false);
-
-  // Load preference from localStorage on mount
-  useEffect(() => {
-    const saved = localStorage.getItem('showSnowflakes');
-    if (saved !== null) {
-      setShowSnowflakes(JSON.parse(saved));
+  const [showSnowflakes, setShowSnowflakes] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('showSnowflakes');
+      return saved !== null ? JSON.parse(saved) : false;
     }
-  }, []);
+    return false;
+  });
 
   // Save preference to localStorage when it changes
   const toggleSnowflakes = () => {
