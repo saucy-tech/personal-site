@@ -1,0 +1,139 @@
+name: Devotion Broadcast
+
+# Triggers when a PR with the "devotion" label is merged into main.
+# Automatically sends a ConvertKit broadcast to "The Daily Word" subscribers.
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  broadcast:
+    name: Send ConvertKit Broadcast
+    # Only run when the PR was actually merged AND has the "devotion" label
+    if: >
+      github.event.pull_request.merged == true &&
+      contains(github.event.pull_request.labels.*.name, 'devotion')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Find new devotion post
+        id: post
+        run: |
+          BASE="${{ github.event.pull_request.base.sha }}"
+          HEAD="${{ github.event.pull_request.merge_commit_sha }}"
+
+          NEW_FILE=$(git diff --name-only --diff-filter=A "$BASE" "$HEAD" -- 'src/posts/*.mdx' | head -1)
+
+          if [ -z "$NEW_FILE" ]; then
+            echo "No new MDX post found in this PR — skipping broadcast."
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "file=$NEW_FILE" >> "$GITHUB_OUTPUT"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            echo "Found post: $NEW_FILE"
+          fi
+
+      - name: Extract post metadata
+        id: meta
+        if: steps.post.outputs.skip == 'false'
+        run: |
+          FILE="${{ steps.post.outputs.file }}"
+
+          TITLE=$(sed -n "s/^title:[[:space:]]*['\"]\\(.*\\)['\"][[:space:]]*$/\\1/p" "$FILE" | head -1)
+          EXCERPT=$(sed -n "s/^excerpt:[[:space:]]*['\"]\\(.*\\)['\"][[:space:]]*$/\\1/p" "$FILE" | head -1)
+          DATE=$(sed -n "s/^date:[[:space:]]*['\"]\\(.*\\)['\"][[:space:]]*$/\\1/p" "$FILE" | head -1)
+
+          SLUG=$(basename "$FILE" .mdx)
+
+          # First 3 non-empty, non-heading lines of body content
+          INTRO=$(awk '/^---/{c++; next} c==2{print}' "$FILE" | grep -v '^#' | grep -v '^$' | head -3 | tr '\n' ' ')
+
+          echo "title=$TITLE" >> "$GITHUB_OUTPUT"
+          echo "excerpt=$EXCERPT" >> "$GITHUB_OUTPUT"
+          echo "date=$DATE" >> "$GITHUB_OUTPUT"
+          echo "slug=$SLUG" >> "$GITHUB_OUTPUT"
+          echo "intro=$INTRO" >> "$GITHUB_OUTPUT"
+
+      - name: Send ConvertKit broadcast
+        if: steps.post.outputs.skip == 'false'
+        env:
+          CK_SECRET_KEY: ${{ secrets.CK_SECRET_KEY }}
+          CK_PUBLISHER_ID: ${{ secrets.CK_PUBLISHER_ID }}
+          NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_APP_URL }}
+        run: |
+          TITLE="${{ steps.meta.outputs.title }}"
+          EXCERPT="${{ steps.meta.outputs.excerpt }}"
+          SLUG="${{ steps.meta.outputs.slug }}"
+          INTRO="${{ steps.meta.outputs.intro }}"
+          POST_URL="${NEXT_PUBLIC_APP_URL}/blog/${SLUG}"
+
+          HTML_CONTENT="<p><em>${EXCERPT}</em></p>
+          <p>${INTRO}</p>
+          <p><a href=\"${POST_URL}\">Read the full post →</a></p>"
+
+          # Create the broadcast
+          CREATE_PAYLOAD=$(jq -n \
+            --arg subject "The Daily Word: $TITLE" \
+            --arg content "$HTML_CONTENT" \
+            '{broadcast: {subject: $subject, content: $content, confirmation_email: false}}')
+
+          CREATE_RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
+            "https://api.convertkit.com/v4/publishers/${CK_PUBLISHER_ID}/broadcasts?api_secret=${CK_SECRET_KEY}" \
+            -H "Content-Type: application/json" \
+            -d "$CREATE_PAYLOAD")
+
+          HTTP_CODE=$(echo "$CREATE_RESPONSE" | tail -1)
+          BODY=$(echo "$CREATE_RESPONSE" | sed '$d')
+
+          if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
+            echo "❌ Failed to create broadcast: HTTP $HTTP_CODE"
+            echo "$BODY"
+            exit 1
+          fi
+
+          echo "✅ Broadcast created."
+
+          # Extract broadcast ID and send it
+          BROADCAST_ID=$(echo "$BODY" | jq -r '.broadcast.id // .id // empty')
+
+          if [ -z "$BROADCAST_ID" ]; then
+            echo "⚠️ Could not extract broadcast ID from response. Broadcast was created but not sent automatically."
+            echo "Response: $BODY"
+            echo "Please send manually from https://app.convertkit.com/broadcasts"
+            exit 0
+          fi
+
+          # Send the broadcast
+          SEND_RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
+            "https://api.convertkit.com/v4/broadcasts/${BROADCAST_ID}/send?api_secret=${CK_SECRET_KEY}" \
+            -H "Content-Type: application/json")
+
+          SEND_CODE=$(echo "$SEND_RESPONSE" | tail -1)
+
+          if [ "$SEND_CODE" -ge 200 ] && [ "$SEND_CODE" -lt 300 ]; then
+            echo "✅ Broadcast sent to The Daily Word subscribers!"
+          else
+            echo "⚠️ Broadcast created (ID: $BROADCAST_ID) but auto-send failed (HTTP $SEND_CODE)."
+            echo "Send manually: https://app.convertkit.com/broadcasts"
+          fi
+
+      - name: Comment on PR
+        if: steps.post.outputs.skip == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          SLUG="${{ steps.meta.outputs.slug }}"
+          POST_URL="${{ vars.NEXT_PUBLIC_APP_URL }}/blog/${SLUG}"
+          gh pr comment ${{ github.event.pull_request.number }} \
+            --body "📬 **The Daily Word broadcast sent!**
+
+          Post URL: ${POST_URL}
+
+          The broadcast has been sent to all Daily Word subscribers via ConvertKit."
