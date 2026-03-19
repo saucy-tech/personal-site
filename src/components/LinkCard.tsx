@@ -21,7 +21,7 @@ const LinkCard: React.FC<LinkCardProps> = ({
   imageSrc,
   children,
 }) => {
-  const CardContent = () => (
+  const cardContent = (
     <div className="flex items-center min-h-[48px] px-2 py-2 sm:px-4 sm:py-3 w-full">
       {/* Left: Icon or Image */}
       {imageSrc ? (
@@ -67,7 +67,7 @@ const LinkCard: React.FC<LinkCardProps> = ({
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3, ease: 'easeOut' }}
       >
-        <CardContent />
+        {cardContent}
         {children}
       </motion.a>
     </div>
