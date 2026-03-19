@@ -1,20 +1,28 @@
 name: Devotion Broadcast
 
 # Triggers when a PR with the "devotion" label is merged into main.
-# Automatically sends a ConvertKit broadcast to "The Daily Word" subscribers.
+# Can also be triggered manually via workflow_dispatch with a post slug.
 
 on:
   pull_request:
     types: [closed]
     branches: [main]
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: 'Post slug (e.g. 2026-03-18-the-word-that-mattered-most)'
+        required: true
+        type: string
 
 jobs:
   broadcast:
     name: Send ConvertKit Broadcast
-    # Only run when the PR was actually merged AND has the "devotion" label
+    # On PR: only run when merged with the "devotion" label.
+    # On manual dispatch: always run.
     if: >
-      github.event.pull_request.merged == true &&
-      contains(github.event.pull_request.labels.*.name, 'devotion')
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.pull_request.merged == true &&
+       contains(github.event.pull_request.labels.*.name, 'devotion'))
     runs-on: ubuntu-latest
 
     steps:
@@ -26,18 +34,30 @@ jobs:
       - name: Find new devotion post
         id: post
         run: |
-          BASE="${{ github.event.pull_request.base.sha }}"
-          HEAD="${{ github.event.pull_request.merge_commit_sha }}"
-
-          NEW_FILE=$(git diff --name-only --diff-filter=A "$BASE" "$HEAD" -- 'src/posts/*.mdx' | head -1)
-
-          if [ -z "$NEW_FILE" ]; then
-            echo "No new MDX post found in this PR — skipping broadcast."
-            echo "skip=true" >> "$GITHUB_OUTPUT"
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            NEW_FILE="src/posts/${{ inputs.slug }}.mdx"
+            if [ ! -f "$NEW_FILE" ]; then
+              echo "Post file not found: $NEW_FILE"
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "file=$NEW_FILE" >> "$GITHUB_OUTPUT"
+              echo "skip=false" >> "$GITHUB_OUTPUT"
+              echo "Found post: $NEW_FILE"
+            fi
           else
-            echo "file=$NEW_FILE" >> "$GITHUB_OUTPUT"
-            echo "skip=false" >> "$GITHUB_OUTPUT"
-            echo "Found post: $NEW_FILE"
+            BASE="${{ github.event.pull_request.base.sha }}"
+            HEAD="${{ github.event.pull_request.merge_commit_sha }}"
+
+            NEW_FILE=$(git diff --name-only --diff-filter=A "$BASE" "$HEAD" -- 'src/posts/*.mdx' | head -1)
+
+            if [ -z "$NEW_FILE" ]; then
+              echo "No new MDX post found in this PR — skipping broadcast."
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+            else
+              echo "file=$NEW_FILE" >> "$GITHUB_OUTPUT"
+              echo "skip=false" >> "$GITHUB_OUTPUT"
+              echo "Found post: $NEW_FILE"
+            fi
           fi
 
       - name: Extract post metadata
@@ -125,7 +145,7 @@ jobs:
           fi
 
       - name: Comment on PR
-        if: steps.post.outputs.skip == 'false'
+        if: steps.post.outputs.skip == 'false' && github.event_name == 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
