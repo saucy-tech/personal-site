@@ -76,14 +76,14 @@ export default async function Home() {
 
   return (
     <main className="pt-4 pb-6 px-4 md:px-8 flex flex-col items-center">
-      <div className="space-y-6 w-full max-w-xl mx-auto">
+      <div className="space-y-6 w-full max-w-lg mx-auto">
         <Profile {...profileData} />
         <SocialBar socials={socialLinks} />
 
         <div className="space-y-3">
           <div className="px-1 text-center">
             <p className="text-[10px] uppercase tracking-[0.28em] text-[var(--accent)] sm:text-xs">
-              Writing
+              Read
             </p>
           </div>
 
@@ -94,41 +94,33 @@ export default async function Home() {
               cardTitle={latest.cardTitle}
               href={`/blog/${latest.slug}`}
               icon={<span className="text-2xl">📝</span>}
-              eyebrow="Latest Article"
+              eyebrow="Latest Reflection"
               meta={[latest.categoryLabel, formatDate(new Date(latest.date))].join(' • ')}
             />
           )}
-          <LinkCard
-            key="blog-home"
-            title="Browse All Articles"
-            href="/blog"
-            icon={<span className="text-2xl">📚</span>}
-            eyebrow="Archive"
-            meta={`${posts.length} posts`}
-          />
           <SubscribeCard
             title="Subscribe to The Daily Word"
             meta="Free email updates"
             description={undefined}
             align="center"
           />
+          <LinkCard
+            key="blog-home"
+            title="Browse the Archive"
+            href="/blog"
+            icon={<span className="text-2xl">📚</span>}
+            eyebrow="Archive"
+            meta={`${posts.length} posts`}
+          />
         </div>
 
         <div className="space-y-3">
           <div className="px-1 text-center">
             <p className="text-[10px] uppercase tracking-[0.28em] text-[var(--accent)] sm:text-xs">
-              More
+              Other
             </p>
           </div>
 
-          <LinkCard
-            key="talks-sermons"
-            title="Talks & Sermons"
-            href="/talks"
-            icon={<span className="text-2xl">🎤</span>}
-            eyebrow="Teaching"
-            meta="Messages and notes"
-          />
           <LinkCard
             key="my-projects"
             title="Projects & Contributions"
@@ -148,7 +140,7 @@ export default async function Home() {
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4 text-center">
-          <p className="text-sm text-[var(--text-secondary)]">Also around the site</p>
+          <p className="text-sm text-[var(--text-secondary)]">Elsewhere</p>
           <div className="mt-3 flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm">
             <Link href="/bitcoin" className="text-[var(--accent)] transition hover:text-white">
               Bitcoin
