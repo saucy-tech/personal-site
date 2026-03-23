@@ -4,6 +4,8 @@ import path from 'path';
 import matter from 'gray-matter';
 import yaml from 'js-yaml';
 
+import { Post, PostMeta, toPostMeta } from '@/utils/post-taxonomy';
+
 // Configure gray-matter to use js-yaml 4.x's load function
 // @ts-expect-error - gray-matter's types don't include engines, but it exists at runtime
 matter.engines.yaml = {
@@ -17,18 +19,6 @@ function ensurePostsDir() {
   if (!fs.existsSync(POSTS_DIR)) {
     fs.mkdirSync(POSTS_DIR, { recursive: true });
   }
-}
-
-export interface PostMeta {
-  slug: string;
-  title: string;
-  cardTitle?: string; // Added optional cardTitle
-  date: string;
-  excerpt: string;
-}
-
-export interface Post extends PostMeta {
-  content: string;
 }
 
 function getPostPath(slug: string): string {
@@ -48,15 +38,9 @@ export function getAllPostsMeta(): PostMeta[] {
     .map((slug) => {
       const fileContent = fs.readFileSync(getPostPath(slug), 'utf-8');
       const { data } = matter(fileContent);
-      return {
-        slug,
-        title: data.title ?? slug,
-        cardTitle: data.shortTitle || data.cardTitle, // Prefer 'shortTitle' if present
-        date: data.date ?? '',
-        excerpt: data.excerpt ?? '',
-      } as PostMeta;
+      return toPostMeta(slug, data);
     })
-    .sort((a, b) => (a.date > b.date ? -1 : 1));
+    .sort((a, b) => b.date.localeCompare(a.date) || b.slug.localeCompare(a.slug));
 }
 
 // Note: We will send raw MDX to the page and compile there with next-mdx-remote/rsc
@@ -70,11 +54,7 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   const { data, content } = matter(fileContent);
 
   return {
-    slug,
-    title: data.title ?? slug,
-    cardTitle: data.cardTitle, // Extract cardTitle for consistency
-    date: data.date ?? '',
-    excerpt: data.excerpt ?? '',
+    ...toPostMeta(slug, data),
     content,
   };
 }

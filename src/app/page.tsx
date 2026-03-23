@@ -1,14 +1,14 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 import LinkCard from '@/components/LinkCard';
 import Profile from '@/components/Profile';
-import Section from '@/components/Section';
 import SocialBar from '@/components/SocialBar';
-import SubscribeCard from '@/components/SubscribeCard'; // Added SubscribeCard import
+import SubscribeCard from '@/components/SubscribeCard';
+import { formatDate } from '@/utils/helpers';
 import { getAllPostsMeta } from '@/utils/posts';
 
 export default async function Home() {
-  // Profile data
   const profileData = {
     name: 'Brandon',
     username: '',
@@ -16,7 +16,6 @@ export default async function Home() {
     imageSrc: '/family-photo.jpeg',
   };
 
-  // Social media links
   const socialLinks = [
     {
       href: 'https://x.com/Saucy_Tech',
@@ -72,69 +71,96 @@ export default async function Home() {
     },
   ];
 
+  const posts = getAllPostsMeta();
+  const latest = posts[0];
+
   return (
     <main className="pt-4 pb-6 px-4 md:px-8 flex flex-col items-center">
-      <div className="space-y-6 w-full max-w-2xl mx-auto">
+      <div className="space-y-6 w-full max-w-lg mx-auto">
         <Profile {...profileData} />
         <SocialBar socials={socialLinks} />
 
-        <Section title="Latest" emoji="🔥">
-          {(() => {
-            const latest = getAllPostsMeta()[0];
-            return (
-              <LinkCard
-                key="latest-blog"
-                title={latest ? latest.title : 'Blog'}
-                cardTitle={latest?.cardTitle}
-                href={latest ? `/blog/${latest.slug}` : '/blog'}
-                icon={<span className="text-2xl">📝</span>}
-              />
-            );
-          })()}
-          <SubscribeCard />
-          <LinkCard
-            key="talks-sermons"
-            title="Talks & Sermons"
-            href="/talks"
-            icon={<span className="text-2xl">🎤</span>}
+        <div className="space-y-3">
+          <div className="px-1 text-center">
+            <p className="text-[10px] uppercase tracking-[0.28em] text-[var(--accent)] sm:text-xs">
+              Blog
+            </p>
+          </div>
+
+          {latest && (
+            <LinkCard
+              key="latest-blog"
+              title={latest.title}
+              cardTitle={latest.cardTitle}
+              href={`/blog/${latest.slug}`}
+              icon={<span className="text-2xl">📝</span>}
+              eyebrow="Latest Reflection"
+              meta={[latest.categoryLabel, formatDate(new Date(latest.date))].join(' • ')}
+            />
+          )}
+          <SubscribeCard
+            title="Subscribe to The Daily Word"
+            meta="Free email updates"
+            description={undefined}
+            align="center"
           />
+          <LinkCard
+            key="blog-home"
+            title="Browse the Archive"
+            href="/blog"
+            icon={<span className="text-2xl">📚</span>}
+            eyebrow="Archive"
+            meta={`${posts.length} posts`}
+          />
+        </div>
+
+        <div className="space-y-3">
+          <div className="px-1 text-center">
+            <p className="text-[10px] uppercase tracking-[0.28em] text-[var(--accent)] sm:text-xs">
+              Portfolio
+            </p>
+          </div>
+
           <LinkCard
             key="my-projects"
             title="Projects & Contributions"
             href="/projects"
             icon={<span className="text-2xl">🚀</span>}
+            eyebrow="Building"
+            meta="Software and experiments"
           />
-        </Section>
+        </div>
 
-        <Section title="Explore" emoji="🌐">
+        <div className="space-y-3">
+          <div className="px-1 text-center">
+            <p className="text-[10px] uppercase tracking-[0.28em] text-[var(--accent)] sm:text-xs">
+              Passions
+            </p>
+          </div>
+
           <LinkCard
-            key="blog-home"
-            title="Blog"
-            href="/blog"
-            icon={<span className="text-2xl">📚</span>}
-          />
-          <LinkCard
-            key="curious-bitcoin"
-            title="Curious about Bitcoin?"
+            key="bitcoin"
+            title="Why Bitcoin Matters to Me"
             href="/bitcoin"
             icon={<span className="text-2xl">₿</span>}
+            eyebrow="Bitcoin"
+            meta="Where I would point someone who is curious"
           />
           <LinkCard
-            key="find-hope-church"
+            key="church"
             title="Find Hope at My Church"
             href="https://www.youtube.com/@TruthChapelUPC/streams"
             icon={<span className="text-2xl">⛪</span>}
+            eyebrow="Faith"
+            meta="Truth Chapel livestreams and teaching"
           />
-        </Section>
+        </div>
 
-        <Section title="Connect" emoji="❤️">
-          <LinkCard
-            key="support-my-work"
-            title="Support My Work"
-            href="/support"
-            icon={<span className="text-2xl">❤️</span>}
-          />
-        </Section>
+        <div className="text-center text-sm">
+          <Link href="/support" className="text-[var(--accent)] transition hover:text-white">
+            Support my work
+          </Link>
+        </div>
       </div>
     </main>
   );
