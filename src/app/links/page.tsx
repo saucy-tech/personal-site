@@ -63,7 +63,7 @@ export default function Links() {
         Favorite trackers, calculators, and dashboards.
       </p>
 
-      <section className="w-full max-w-2xl mx-auto">
+      <section className="w-full max-w-2xl mx-auto space-y-4">
         {links.map((link) => (
           <LinkCard key={link.href} title={link.title} href={link.href} icon={link.icon}>
             <p className="px-4 pb-3 text-xs text-[var(--text-secondary)] text-center leading-relaxed">

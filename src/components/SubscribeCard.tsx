@@ -1,38 +1,55 @@
 'use client';
 
+import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
+import { cn } from '@/utils/helpers';
+
 import SubscribeForm from './SubscribeForm';
 
-export default function SubscribeCard() {
+interface SubscribeCardProps {
+  className?: string;
+}
+
+export default function SubscribeCard({ className }: SubscribeCardProps) {
   const [open, setOpen] = useState(false);
 
   return (
     <>
-      {/* Card */}
       <motion.button
         onClick={() => setOpen(true)}
-        className="block mx-auto w-full max-w-full sm:max-w-[50%] rounded-xl bg-[var(--accent-transparent)] backdrop-blur-sm border border-[var(--accent-border)] hover:bg-[var(--accent-hover)] hover:shadow-[0_0_15px_rgba(212,175,55,0.3)] transition-all duration-300 mb-4"
-        whileHover={{ scale: 1.02, y: -2 }}
-        whileTap={{ scale: 0.97 }}
+        className={cn(
+          'group block h-full w-full rounded-2xl border border-[var(--accent-border)] bg-[linear-gradient(180deg,rgba(212,175,55,0.14),rgba(255,255,255,0.04))] text-left shadow-[0_10px_30px_rgba(0,0,0,0.16)] backdrop-blur-sm transition-all duration-300 hover:border-[var(--accent)] hover:bg-[linear-gradient(180deg,rgba(212,175,55,0.22),rgba(255,255,255,0.06))] hover:shadow-[0_20px_40px_rgba(0,0,0,0.24)]',
+          className
+        )}
+        whileHover={{ scale: 1.01, y: -2 }}
+        whileTap={{ scale: 0.985 }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
-        <div className="flex items-center min-h-[48px] px-2 py-2 sm:px-4 sm:py-3 w-full">
-          <div className="w-9 h-9 flex items-center justify-start flex-shrink-0 text-[var(--accent)] mr-4">
+        <div className="flex h-full w-full items-start gap-4 px-4 py-4 sm:px-5">
+          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-[var(--accent)]">
             <span className="text-2xl">✉️</span>
           </div>
-          <div className="flex-1 flex justify-center">
-            <span className="text-xs sm:text-base font-medium text-[var(--text-primary)] text-center break-words w-full max-w-full">
-              The Daily Word — Subscribe Free
-            </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--accent)] sm:text-xs">
+              Newsletter
+            </p>
+            <h3 className="mt-2 break-words text-sm font-semibold leading-snug text-[var(--text-primary)] sm:text-base">
+              The Daily Word
+            </h3>
+            <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
+              Weekday scripture reflections, the occasional weekend note, and future article
+              updates. Free.
+            </p>
           </div>
-          <div className="w-9 h-9 flex-shrink-0 mr-0" />
+          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center self-start rounded-full border border-white/10 bg-white/5 text-[var(--accent)] transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+            <ArrowRightIcon className="h-4 w-4" />
+          </div>
         </div>
       </motion.button>
 
-      {/* Modal */}
       {open && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
@@ -51,7 +68,8 @@ export default function SubscribeCard() {
             </button>
             <h2 className="text-xl font-semibold mb-2 text-center">The Daily Word</h2>
             <p className="text-sm text-gray-400 text-center mb-4">
-              Faith, ideas, and whatever&apos;s on my mind — Monday through Friday, with the occasional weekend thought. Free.
+              Faith, ideas, and whatever&apos;s on my mind — Monday through Friday, with the
+              occasional weekend thought. Free.
             </p>
             <SubscribeForm />
           </div>
