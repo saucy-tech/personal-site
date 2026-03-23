@@ -10,9 +10,21 @@ import SubscribeForm from './SubscribeForm';
 
 interface SubscribeCardProps {
   className?: string;
+  eyebrow?: string;
+  title?: string;
+  meta?: string;
+  description?: string;
+  align?: 'center' | 'left';
 }
 
-export default function SubscribeCard({ className }: SubscribeCardProps) {
+export default function SubscribeCard({
+  className,
+  eyebrow = 'Newsletter',
+  title = 'The Daily Word',
+  meta,
+  description = 'Weekday scripture reflections, the occasional weekend note, and future article updates. Free.',
+  align = 'left',
+}: SubscribeCardProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -28,23 +40,35 @@ export default function SubscribeCard({ className }: SubscribeCardProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
-        <div className="flex h-full w-full items-start gap-4 px-4 py-4 sm:px-5">
+        <div
+          className={cn(
+            'flex h-full w-full gap-4 px-4 py-4 sm:px-5',
+            align === 'left' ? 'items-start' : 'items-center'
+          )}
+        >
           <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-[var(--accent)]">
             <span className="text-2xl">✉️</span>
           </div>
-          <div className="min-w-0 flex-1">
+          <div className={cn('min-w-0 flex-1', align === 'left' ? 'text-left' : 'text-center')}>
             <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--accent)] sm:text-xs">
-              Newsletter
+              {eyebrow}
             </p>
             <h3 className="mt-2 break-words text-sm font-semibold leading-snug text-[var(--text-primary)] sm:text-base">
-              The Daily Word
+              {title}
             </h3>
-            <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
-              Weekday scripture reflections, the occasional weekend note, and future article
-              updates. Free.
-            </p>
+            {meta ? <p className="mt-2 text-xs text-[var(--text-secondary)]">{meta}</p> : null}
+            {description ? (
+              <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
+                {description}
+              </p>
+            ) : null}
           </div>
-          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center self-start rounded-full border border-white/10 bg-white/5 text-[var(--accent)] transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+          <div
+            className={cn(
+              'flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-[var(--accent)] transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5',
+              align === 'left' ? 'self-start' : 'self-center'
+            )}
+          >
             <ArrowRightIcon className="h-4 w-4" />
           </div>
         </div>
