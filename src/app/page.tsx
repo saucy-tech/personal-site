@@ -83,7 +83,7 @@ export default async function Home() {
         <div className="space-y-3">
           <div className="px-1 text-center">
             <p className="text-[10px] uppercase tracking-[0.28em] text-[var(--accent)] sm:text-xs">
-              Read
+              Blog
             </p>
           </div>
 
@@ -117,7 +117,7 @@ export default async function Home() {
         <div className="space-y-3">
           <div className="px-1 text-center">
             <p className="text-[10px] uppercase tracking-[0.28em] text-[var(--accent)] sm:text-xs">
-              Other
+              Portfolio
             </p>
           </div>
 
@@ -129,34 +129,37 @@ export default async function Home() {
             eyebrow="Building"
             meta="Software and experiments"
           />
+        </div>
+
+        <div className="space-y-3">
+          <div className="px-1 text-center">
+            <p className="text-[10px] uppercase tracking-[0.28em] text-[var(--accent)] sm:text-xs">
+              Passions
+            </p>
+          </div>
+
           <LinkCard
-            key="support-my-work"
-            title="Support My Work"
-            href="/support"
-            icon={<span className="text-2xl">❤️</span>}
-            eyebrow="Support"
-            meta="If you want to help"
+            key="bitcoin"
+            title="Why Bitcoin Matters to Me"
+            href="/bitcoin"
+            icon={<span className="text-2xl">₿</span>}
+            eyebrow="Bitcoin"
+            meta="Where I would point someone who is curious"
+          />
+          <LinkCard
+            key="church"
+            title="Find Hope at My Church"
+            href="https://www.youtube.com/@TruthChapelUPC/streams"
+            icon={<span className="text-2xl">⛪</span>}
+            eyebrow="Faith"
+            meta="Truth Chapel livestreams and teaching"
           />
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-4 text-center">
-          <p className="text-sm text-[var(--text-secondary)]">Elsewhere</p>
-          <div className="mt-3 flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm">
-            <Link href="/bitcoin" className="text-[var(--accent)] transition hover:text-white">
-              Bitcoin
-            </Link>
-            <Link href="/links" className="text-[var(--accent)] transition hover:text-white">
-              Favorite Links
-            </Link>
-            <a
-              href="https://www.youtube.com/@TruthChapelUPC/streams"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[var(--accent)] transition hover:text-white"
-            >
-              Church Livestream
-            </a>
-          </div>
+        <div className="text-center text-sm">
+          <Link href="/support" className="text-[var(--accent)] transition hover:text-white">
+            Support my work
+          </Link>
         </div>
       </div>
     </main>

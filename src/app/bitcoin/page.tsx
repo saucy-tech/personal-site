@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import PageLayout from '@/components/PageLayout';
 import { SITE_NAME, SITE_URL } from '@/utils/constants';
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
 
 export default function Bitcoin() {
   return (
-    <PageLayout title="Why I Believe in Bitcoin">
+    <PageLayout title="Why Bitcoin Matters to Me">
       {/* VISUAL HOOK */}
       <section>
         <Image
@@ -54,6 +55,22 @@ export default function Bitcoin() {
             I&apos;m still learning, but I believe this matters—not just financially, but
             spiritually and socially. If you&apos;re curious, here&apos;s where to start.
           </p>
+        </div>
+      </section>
+
+      <section>
+        <div className="bg-[var(--accent-transparent)] border border-[var(--accent-border)] p-6 rounded-lg space-y-4">
+          <h2 className="text-2xl font-semibold">🧰 Tools, Links, and Rabbit Holes</h2>
+          <p className="text-[var(--text-secondary)]">
+            If you already get the basic idea and want the dashboards, calculators, and articles I
+            actually send people, I keep those on a separate page so this one can stay focused.
+          </p>
+          <Link
+            href="/links"
+            className="inline-flex items-center rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm font-medium text-black transition hover:brightness-110"
+          >
+            Open my Bitcoin links page
+          </Link>
         </div>
       </section>
 
@@ -203,19 +220,14 @@ export default function Bitcoin() {
                 <span className="text-sm text-white/60">(Mar 2025)</span> – Jeff Booth joins Walker
                 for Episode 1 to introduce Bitcoin.
               </li>
-              <li>
-                <a
-                  href="https://www.youtube.com/watch?v=example"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-400 underline"
-                >
-                  Top 5 Bitcoin Clips of Q1 2025
-                </a>{' '}
-                <span className="text-sm text-white/60">(Feb 2025)</span> – Joe Burnett joins
-                Preston Pysh to Joe Burnett breaks down.
-              </li>
             </ul>
+            <p className="pt-3 text-sm text-[var(--text-secondary)]">
+              For more current dashboards, calculators, and links I actually use, head over to{' '}
+              <Link href="/links" className="text-[var(--accent)] underline">
+                Favorite Bitcoin Links
+              </Link>
+              .
+            </p>
           </div>
         </div>
       </section>
