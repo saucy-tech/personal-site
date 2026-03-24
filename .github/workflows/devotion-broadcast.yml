@@ -37,7 +37,7 @@ jobs:
           if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             NEW_FILE="src/posts/${{ inputs.slug }}.mdx"
             if [ ! -f "$NEW_FILE" ]; then
-              echo "Post file not found: $NEW_FILE"
+              echo "::error::Post file not found: $NEW_FILE"
               echo "skip=true" >> "$GITHUB_OUTPUT"
             else
               echo "file=$NEW_FILE" >> "$GITHUB_OUTPUT"
@@ -47,6 +47,7 @@ jobs:
           else
             BASE="${{ github.event.pull_request.base.sha }}"
             HEAD="${{ github.event.pull_request.merge_commit_sha }}"
+            echo "Checking diff: $BASE → $HEAD"
 
             NEW_FILE=$(git diff --name-only --diff-filter=A "$BASE" "$HEAD" -- 'src/posts/*.mdx' | head -1)
 
@@ -63,48 +64,105 @@ jobs:
       - name: Extract post metadata
         id: meta
         if: steps.post.outputs.skip == 'false'
+        env:
+          MDX_FILE: ${{ steps.post.outputs.file }}
         run: |
-          FILE="${{ steps.post.outputs.file }}"
+          echo "Extracting metadata from: $MDX_FILE"
 
-          TITLE=$(sed -n "s/^title:[[:space:]]*['\"]\\(.*\\)['\"][[:space:]]*$/\\1/p" "$FILE" | head -1)
-          EXCERPT=$(sed -n "s/^excerpt:[[:space:]]*['\"]\\(.*\\)['\"][[:space:]]*$/\\1/p" "$FILE" | head -1)
-          DATE=$(sed -n "s/^date:[[:space:]]*['\"]\\(.*\\)['\"][[:space:]]*$/\\1/p" "$FILE" | head -1)
+          # Use Python yaml for robust frontmatter parsing.
+          # Handles YAML single-quote escaping (e.g. 'She Didn''t Go' → She Didn't Go),
+          # double-quoted strings, unquoted values, and multi-line excerpts.
+          python3 - <<'PYEOF'
+import yaml, sys, os
 
-          SLUG=$(basename "$FILE" .mdx)
+file_path = os.environ['MDX_FILE']
+github_output = os.environ['GITHUB_OUTPUT']
 
-          # First 3 non-empty, non-heading lines of body content
-          INTRO=$(awk '/^---/{c++; next} c==2{print}' "$FILE" | grep -v '^#' | grep -v '^$' | head -3 | tr '\n' ' ')
+with open(file_path, encoding='utf-8') as f:
+    content = f.read()
 
-          echo "title=$TITLE" >> "$GITHUB_OUTPUT"
-          echo "excerpt=$EXCERPT" >> "$GITHUB_OUTPUT"
-          echo "date=$DATE" >> "$GITHUB_OUTPUT"
-          echo "slug=$SLUG" >> "$GITHUB_OUTPUT"
-          echo "intro=$INTRO" >> "$GITHUB_OUTPUT"
+# Split on '---' delimiters to isolate frontmatter
+parts = content.split('---', 2)
+if len(parts) < 3:
+    print('::error::Could not find YAML frontmatter in post')
+    sys.exit(1)
+
+fm = yaml.safe_load(parts[1])
+body = parts[2]
+
+title   = str(fm.get('title',   '')).strip()
+excerpt = str(fm.get('excerpt', '')).strip()
+date    = str(fm.get('date',    '')).strip()
+slug    = os.path.basename(file_path).replace('.mdx', '')
+
+# First 3 non-empty, non-heading body lines joined as intro
+intro_lines = [
+    l.strip() for l in body.splitlines()
+    if l.strip() and not l.strip().startswith('#')
+]
+intro = ' '.join(intro_lines[:3])
+
+print(f'Title:   {title}')
+print(f'Excerpt: {excerpt[:80]}{"..." if len(excerpt) > 80 else ""}')
+print(f'Date:    {date}')
+print(f'Slug:    {slug}')
+
+with open(github_output, 'a', encoding='utf-8') as out:
+    out.write(f'title={title}\n')
+    out.write(f'excerpt={excerpt}\n')
+    out.write(f'date={date}\n')
+    out.write(f'slug={slug}\n')
+    out.write(f'intro={intro}\n')
+PYEOF
 
       - name: Send Kit broadcast
         if: steps.post.outputs.skip == 'false'
         env:
           KIT_API_KEY: ${{ secrets.KIT_API_KEY }}
           NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_APP_URL }}
+          POST_TITLE: ${{ steps.meta.outputs.title }}
+          POST_EXCERPT: ${{ steps.meta.outputs.excerpt }}
+          POST_SLUG: ${{ steps.meta.outputs.slug }}
+          POST_INTRO: ${{ steps.meta.outputs.intro }}
         run: |
-          TITLE="${{ steps.meta.outputs.title }}"
-          EXCERPT="${{ steps.meta.outputs.excerpt }}"
-          SLUG="${{ steps.meta.outputs.slug }}"
-          INTRO="${{ steps.meta.outputs.intro }}"
-          POST_URL="${NEXT_PUBLIC_APP_URL}/blog/${SLUG}"
+          # Validate required secrets/vars up front with clear error messages
+          if [ -z "$KIT_API_KEY" ]; then
+            echo "::error::KIT_API_KEY secret is not set."
+            echo "Go to: GitHub repo → Settings → Secrets and variables → Actions → New repository secret"
+            echo "Name: KIT_API_KEY  |  Value: your Kit v4 API key (kit.com → Settings → Developer → API keys)"
+            exit 1
+          fi
 
-          HTML_CONTENT="<p><em>${EXCERPT}</em></p><p>${INTRO}</p><p><a href=\"${POST_URL}\">Read the full post &rarr;</a></p>"
+          if [ -z "$NEXT_PUBLIC_APP_URL" ]; then
+            echo "::warning::NEXT_PUBLIC_APP_URL variable not set — post link will be relative."
+            echo "Go to: GitHub repo → Settings → Secrets and variables → Actions → Variables tab → New repository variable"
+            NEXT_PUBLIC_APP_URL="https://yourdomain.com"
+          fi
 
-          # Create and schedule the broadcast via Kit API v4
+          POST_URL="${NEXT_PUBLIC_APP_URL}/blog/${POST_SLUG}"
           SEND_AT=$(date -u -d '+2 minutes' +%Y-%m-%dT%H:%M:%SZ)
 
-          CREATE_PAYLOAD=$(jq -n \
-            --arg subject "The Daily Word: $TITLE" \
-            --arg content "$HTML_CONTENT" \
-            --arg send_at "$SEND_AT" \
-            '{subject: $subject, content: $content, public: true, send_at: $send_at}')
+          # Build HTML safely via jq to handle any special characters in content
+          HTML_CONTENT=$(jq -rn \
+            --arg excerpt "$POST_EXCERPT" \
+            --arg intro   "$POST_INTRO" \
+            --arg url     "$POST_URL" \
+            '"<p><em>" + $excerpt + "</em></p><p>" + $intro + "</p><p><a href=\"" + $url + "\">Read the full post \u2192</a></p>"')
 
-          echo "Creating and scheduling broadcast..."
+          CREATE_PAYLOAD=$(jq -n \
+            --arg subject  "The Daily Word: $POST_TITLE" \
+            --arg content  "$HTML_CONTENT" \
+            --arg send_at  "$SEND_AT" \
+            '{subject: $subject, content: $content, send_at: $send_at}')
+
+          echo "--- Broadcast details ---"
+          echo "Subject:    The Daily Word: $POST_TITLE"
+          echo "Post URL:   $POST_URL"
+          echo "Sending at: $SEND_AT"
+          echo "Payload:"
+          echo "$CREATE_PAYLOAD" | jq .
+
+          echo "--- Calling Kit API v4 ---"
           CREATE_RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
             "https://api.kit.com/v4/broadcasts" \
             -H "Content-Type: application/json" \
@@ -115,22 +173,25 @@ jobs:
           HTTP_CODE=$(echo "$CREATE_RESPONSE" | tail -1)
           BODY=$(echo "$CREATE_RESPONSE" | sed '$d')
 
+          echo "HTTP status: $HTTP_CODE"
+          echo "Response body:"
+          echo "$BODY" | jq . 2>/dev/null || echo "$BODY"
+
           if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
-            echo "Failed to create broadcast: HTTP $HTTP_CODE"
-            echo "$BODY"
+            echo "::error::Kit API returned HTTP $HTTP_CODE. Check API key and payload above."
             exit 1
           fi
 
           BROADCAST_ID=$(echo "$BODY" | jq -r '.broadcast.id // .id // empty')
-          echo "Broadcast created (ID: ${BROADCAST_ID:-unknown}) and scheduled to send."
+          echo "✓ Broadcast created (ID: ${BROADCAST_ID:-unknown}), scheduled for $SEND_AT"
 
       - name: Comment on PR
         if: steps.post.outputs.skip == 'false' && github.event_name == 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
+          POST_SLUG: ${{ steps.meta.outputs.slug }}
         run: |
-          SLUG="${{ steps.meta.outputs.slug }}"
-          POST_URL="${{ vars.NEXT_PUBLIC_APP_URL }}/blog/${SLUG}"
+          POST_URL="${{ vars.NEXT_PUBLIC_APP_URL }}/blog/${POST_SLUG}"
           gh pr comment ${{ github.event.pull_request.number }} \
             --body "**The Daily Word broadcast sent!**
 
