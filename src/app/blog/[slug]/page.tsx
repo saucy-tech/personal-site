@@ -1,12 +1,11 @@
 import { MDXRemote } from 'next-mdx-remote/rsc';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import PageLayout from '@/components/PageLayout';
 import Section from '@/components/Section';
 import SubscribeForm from '@/components/SubscribeForm';
 import { formatDate } from '@/utils/helpers';
-import { getAllPostsMeta, getPostBySlug, getPostOgMeta, getPostSlugs } from '@/utils/posts';
+import { getPostBySlug, getPostOgMeta, getPostSlugs } from '@/utils/posts';
 
 export async function generateStaticParams() {
   return getPostSlugs().map((slug) => ({ slug }));
@@ -34,13 +33,6 @@ export default async function PostPage({ params }: PostPageProps) {
   if (!post) {
     notFound();
   }
-
-  const relatedPosts = getAllPostsMeta()
-    .filter((candidate) => candidate.slug !== post.slug)
-    .filter((candidate) =>
-      post.series ? candidate.series === post.series : candidate.category === post.category
-    )
-    .slice(0, 3);
 
   return (
     <PageLayout title={post.title} backHref="/blog" backLabel="Back to Blog">
@@ -75,36 +67,6 @@ export default async function PostPage({ params }: PostPageProps) {
       <article className="prose prose-invert max-w-none">
         <MDXRemote source={post.content} />
       </article>
-
-      {relatedPosts.length > 0 && (
-        <Section
-          title={post.series ? `More in ${post.series}` : `More ${post.categoryLabel}`}
-          emoji="↗️"
-        >
-          <div className="grid gap-4 md:grid-cols-2">
-            {relatedPosts.map((relatedPost) => (
-              <Link
-                key={relatedPost.slug}
-                href={`/blog/${relatedPost.slug}`}
-                className="group flex h-full flex-col rounded-3xl border border-[var(--accent-border)] bg-white/[0.03] p-5 transition hover:border-[var(--accent)] hover:bg-[var(--accent-transparent)]"
-              >
-                <p className="text-xs uppercase tracking-[0.18em] text-[var(--accent)]">
-                  {relatedPost.categoryLabel}
-                </p>
-                <h2 className="mt-3 text-xl font-semibold leading-tight text-[var(--text-primary)] transition group-hover:text-[var(--accent)]">
-                  {relatedPost.title}
-                </h2>
-                <p className="mt-2 text-sm text-[var(--text-secondary)]">
-                  {formatDate(new Date(relatedPost.date))}
-                </p>
-                <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
-                  {relatedPost.excerpt}
-                </p>
-              </Link>
-            ))}
-          </div>
-        </Section>
-      )}
 
       <Section title="Enjoying the writing?" emoji="✉️">
         <SubscribeForm />
