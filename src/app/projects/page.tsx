@@ -115,6 +115,33 @@ export default function Projects() {
           </span>
         </div>
 
+        {/* Work Time Visualizer Project Card */}
+        <div className="w-full max-w-xl bg-white/10 rounded-lg shadow-lg border border-[var(--accent-border)] p-6 mb-2">
+          <h2 className="text-xl font-semibold mb-1 flex items-center gap-2">
+            Work Time Visualizer{' '}
+            <span className="text-xs bg-green-500/80 text-white px-2 py-1 rounded align-middle">
+              Launched
+            </span>
+            <span className="text-xs bg-orange-500/80 text-white px-2 py-1 rounded align-middle">
+              Rust
+            </span>
+          </h2>
+          <p className="mb-2 text-base text-[var(--text-secondary)]">
+            A lightweight Windows taskbar widget built in Rust using the Win32 API. Displays daily
+            and weekly work-time progress as colored block bars, updating every 15 seconds. Features
+            configurable work hours, 7 customizable colors, dark/light mode detection via the Windows
+            registry, weekend auto-detection, and a single-instance guard.
+          </p>
+          <a
+            href="https://github.com/saucy-tech/work-time-visualizer-rust"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block px-4 py-2 bg-[var(--accent)] text-white rounded hover:bg-[var(--accent-dark)] transition"
+          >
+            GitHub Repo
+          </a>
+        </div>
+
         {/* Abbot Project Card */}
         <div className="w-full max-w-xl bg-white/10 rounded-lg shadow-lg border border-[var(--accent-border)] p-6 mb-2">
           <h2 className="text-xl font-semibold mb-1 flex items-center gap-2">
