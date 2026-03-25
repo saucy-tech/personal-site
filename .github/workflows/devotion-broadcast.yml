@@ -73,47 +73,47 @@ jobs:
           # Handles YAML single-quote escaping (e.g. 'She Didn''t Go' → She Didn't Go),
           # double-quoted strings, unquoted values, and multi-line excerpts.
           python3 - <<'PYEOF'
-import yaml, sys, os
+          import yaml, sys, os
 
-file_path = os.environ['MDX_FILE']
-github_output = os.environ['GITHUB_OUTPUT']
+          file_path = os.environ['MDX_FILE']
+          github_output = os.environ['GITHUB_OUTPUT']
 
-with open(file_path, encoding='utf-8') as f:
-    content = f.read()
+          with open(file_path, encoding='utf-8') as f:
+              content = f.read()
 
-# Split on '---' delimiters to isolate frontmatter
-parts = content.split('---', 2)
-if len(parts) < 3:
-    print('::error::Could not find YAML frontmatter in post')
-    sys.exit(1)
+          # Split on '---' delimiters to isolate frontmatter
+          parts = content.split('---', 2)
+          if len(parts) < 3:
+              print('::error::Could not find YAML frontmatter in post')
+              sys.exit(1)
 
-fm = yaml.safe_load(parts[1])
-body = parts[2]
+          fm = yaml.safe_load(parts[1])
+          body = parts[2]
 
-title   = str(fm.get('title',   '')).strip()
-excerpt = str(fm.get('excerpt', '')).strip()
-date    = str(fm.get('date',    '')).strip()
-slug    = os.path.basename(file_path).replace('.mdx', '')
+          title   = str(fm.get('title',   '')).strip()
+          excerpt = str(fm.get('excerpt', '')).strip()
+          date    = str(fm.get('date',    '')).strip()
+          slug    = os.path.basename(file_path).replace('.mdx', '')
 
-# First 3 non-empty, non-heading body lines joined as intro
-intro_lines = [
-    l.strip() for l in body.splitlines()
-    if l.strip() and not l.strip().startswith('#')
-]
-intro = ' '.join(intro_lines[:3])
+          # First 3 non-empty, non-heading body lines joined as intro
+          intro_lines = [
+              l.strip() for l in body.splitlines()
+              if l.strip() and not l.strip().startswith('#')
+          ]
+          intro = ' '.join(intro_lines[:3])
 
-print(f'Title:   {title}')
-print(f'Excerpt: {excerpt[:80]}{"..." if len(excerpt) > 80 else ""}')
-print(f'Date:    {date}')
-print(f'Slug:    {slug}')
+          print(f'Title:   {title}')
+          print(f'Excerpt: {excerpt[:80]}{"..." if len(excerpt) > 80 else ""}')
+          print(f'Date:    {date}')
+          print(f'Slug:    {slug}')
 
-with open(github_output, 'a', encoding='utf-8') as out:
-    out.write(f'title={title}\n')
-    out.write(f'excerpt={excerpt}\n')
-    out.write(f'date={date}\n')
-    out.write(f'slug={slug}\n')
-    out.write(f'intro={intro}\n')
-PYEOF
+          with open(github_output, 'a', encoding='utf-8') as out:
+              out.write(f'title={title}\n')
+              out.write(f'excerpt={excerpt}\n')
+              out.write(f'date={date}\n')
+              out.write(f'slug={slug}\n')
+              out.write(f'intro={intro}\n')
+          PYEOF
 
       - name: Send Kit broadcast
         if: steps.post.outputs.skip == 'false'
