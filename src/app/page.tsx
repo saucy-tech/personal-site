@@ -3,8 +3,9 @@ import Link from 'next/link';
 
 import LinkCard from '@/components/LinkCard';
 import Profile from '@/components/Profile';
+import Section from '@/components/Section';
 import SocialBar from '@/components/SocialBar';
-import SubscribeCard from '@/components/SubscribeCard';
+import SubscribeForm from '@/components/SubscribeForm';
 import { formatDate } from '@/utils/helpers';
 import { getAllPostsMeta } from '@/utils/posts';
 
@@ -81,12 +82,6 @@ export default async function Home() {
         <SocialBar socials={socialLinks} />
 
         <div className="space-y-3">
-          <div className="px-1 text-center">
-            <p className="text-[10px] uppercase tracking-[0.28em] text-[var(--accent)] sm:text-xs">
-              Blog
-            </p>
-          </div>
-
           {latest && (
             <LinkCard
               key="latest-blog"
@@ -94,50 +89,26 @@ export default async function Home() {
               cardTitle={latest.cardTitle}
               href={`/blog/${latest.slug}`}
               icon={<span className="text-2xl">📝</span>}
-              eyebrow="Latest Reflection"
+              eyebrow="Latest Post"
               meta={[latest.categoryLabel, formatDate(new Date(latest.date))].join(' • ')}
             />
           )}
-          <SubscribeCard
-            title="Subscribe to The Daily Word"
-            meta="Free email updates"
-            description={undefined}
-            align="center"
-          />
           <LinkCard
             key="blog-home"
-            title="Browse the Archive"
+            title="Browse the Blog"
             href="/blog"
             icon={<span className="text-2xl">📚</span>}
-            eyebrow="Archive"
+            eyebrow="Blog"
             meta={`${posts.length} posts`}
           />
-        </div>
-
-        <div className="space-y-3">
-          <div className="px-1 text-center">
-            <p className="text-[10px] uppercase tracking-[0.28em] text-[var(--accent)] sm:text-xs">
-              Portfolio
-            </p>
-          </div>
-
           <LinkCard
             key="my-projects"
             title="Projects & Contributions"
             href="/projects"
             icon={<span className="text-2xl">🚀</span>}
-            eyebrow="Building"
+            eyebrow="Portfolio"
             meta="Software and experiments"
           />
-        </div>
-
-        <div className="space-y-3">
-          <div className="px-1 text-center">
-            <p className="text-[10px] uppercase tracking-[0.28em] text-[var(--accent)] sm:text-xs">
-              Passions
-            </p>
-          </div>
-
           <LinkCard
             key="bitcoin"
             title="Why Bitcoin Matters to Me"
@@ -154,6 +125,9 @@ export default async function Home() {
             eyebrow="Faith"
             meta="Truth Chapel livestreams and teaching"
           />
+          <Section title="Subscribe to The Daily Word" emoji="✉️">
+            <SubscribeForm />
+          </Section>
         </div>
 
         <div className="text-center text-sm">

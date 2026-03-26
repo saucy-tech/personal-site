@@ -68,7 +68,7 @@ export default async function PostPage({ params }: PostPageProps) {
         <MDXRemote source={post.content} />
       </article>
 
-      <Section title="Enjoying the writing?" emoji="✉️">
+      <Section title="Subscribe to The Daily Word" emoji="✉️">
         <SubscribeForm />
       </Section>
     </PageLayout>
