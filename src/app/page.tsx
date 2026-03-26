@@ -3,8 +3,9 @@ import Link from 'next/link';
 
 import LinkCard from '@/components/LinkCard';
 import Profile from '@/components/Profile';
+import Section from '@/components/Section';
 import SocialBar from '@/components/SocialBar';
-import SubscribeCard from '@/components/SubscribeCard';
+import SubscribeForm from '@/components/SubscribeForm';
 import { formatDate } from '@/utils/helpers';
 import { getAllPostsMeta } from '@/utils/posts';
 
@@ -124,12 +125,9 @@ export default async function Home() {
             eyebrow="Faith"
             meta="Truth Chapel livestreams and teaching"
           />
-          <SubscribeCard
-            title="Subscribe to The Daily Word"
-            meta="Free email updates"
-            description={undefined}
-            align="center"
-          />
+          <Section title="Subscribe to The Daily Word" emoji="✉️">
+            <SubscribeForm />
+          </Section>
         </div>
 
         <div className="text-center text-sm">
