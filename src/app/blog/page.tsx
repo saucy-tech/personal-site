@@ -82,7 +82,7 @@ export default function BlogIndex() {
         ))}
       </div>
 
-      <Section title="Archive" emoji="🗂️">
+      <Section title="Blog" emoji="🗂️">
         <BlogArchive posts={posts} />
       </Section>
 
