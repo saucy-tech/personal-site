@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { notFound } from 'next/navigation';
 
@@ -5,7 +6,20 @@ import PageLayout from '@/components/PageLayout';
 import Section from '@/components/Section';
 import SubscribeForm from '@/components/SubscribeForm';
 import { formatDate } from '@/utils/helpers';
-import { getPostBySlug, getPostOgMeta, getPostSlugs } from '@/utils/posts';
+import { getAllPostsMeta, getPostBySlug, getPostOgMeta, getPostSlugs } from '@/utils/posts';
+
+function getReadingTime(content: string) {
+  const plainText = content
+    .replace(/^---[\s\S]*?---/, '')
+    .replace(/!\[[^\]]*]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]+)]\([^)]*\)/g, '$1')
+    .replace(/[`*_>#-]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const wordCount = plainText ? plainText.split(' ').length : 0;
+
+  return Math.max(1, Math.ceil(wordCount / 200));
+}
 
 export async function generateStaticParams() {
   return getPostSlugs().map((slug) => ({ slug }));
@@ -33,44 +47,106 @@ export default async function PostPage({ params }: PostPageProps) {
   if (!post) {
     notFound();
   }
+  const readingTime = getReadingTime(post.content);
+  const relatedPosts = getAllPostsMeta()
+    .filter((candidate) => candidate.slug !== post.slug)
+    .filter((candidate) => candidate.category === post.category)
+    .slice(0, 3);
 
   return (
     <PageLayout title={post.title} backHref="/blog" backLabel="Back to Blog">
-      <div className="flex flex-wrap gap-2">
-        <span className="rounded-full border border-[var(--accent-border)] bg-[var(--accent-transparent)] px-3 py-1 text-xs uppercase tracking-[0.18em] text-[var(--accent)]">
-          {post.categoryLabel}
-        </span>
-        <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">
-          {formatDate(new Date(post.date))}
-        </span>
-        {post.series && (
-          <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">
-            {post.series}
-          </span>
+      <div className="mx-auto max-w-3xl space-y-10">
+        <section className="overflow-hidden rounded-[2rem] border border-[var(--accent-border)] bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.18),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-6 sm:p-8">
+          <div className="flex flex-wrap gap-2">
+            <span className="rounded-full border border-[var(--accent-border)] bg-[var(--accent-transparent)] px-3 py-1 text-xs uppercase tracking-[0.18em] text-[var(--accent)]">
+              {post.categoryLabel}
+            </span>
+            <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">
+              {formatDate(new Date(post.date))}
+            </span>
+            <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">
+              {readingTime} min read
+            </span>
+            {post.series && (
+              <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">
+                {post.series}
+              </span>
+            )}
+          </div>
+
+          {post.excerpt && (
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--text-secondary)] sm:text-xl">
+              {post.excerpt}
+            </p>
+          )}
+
+          {post.tags.length > 0 && (
+            <div className="mt-6 flex flex-wrap gap-2">
+              {post.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <article className="prose prose-invert prose-p:text-[1.05rem] prose-p:leading-8 prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:text-[var(--text-primary)] prose-h2:mt-12 prose-h2:border-t prose-h2:border-white/10 prose-h2:pt-8 prose-h2:text-2xl prose-h3:mt-10 prose-h3:text-xl prose-a:text-[var(--accent)] prose-a:no-underline hover:prose-a:text-[var(--text-primary)] prose-strong:text-[var(--text-primary)] prose-blockquote:rounded-2xl prose-blockquote:border-l-4 prose-blockquote:border-[var(--accent)] prose-blockquote:bg-white/[0.04] prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:text-[var(--text-primary)] prose-hr:border-white/10 prose-img:rounded-3xl prose-img:border prose-img:border-white/10 prose-img:shadow-[0_18px_40px_rgba(0,0,0,0.25)] prose-figcaption:text-sm prose-figcaption:text-[var(--text-secondary)] max-w-none">
+          <MDXRemote source={post.content} />
+        </article>
+
+        {relatedPosts.length > 0 && (
+          <section className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 sm:p-8">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <p className="text-sm uppercase tracking-[0.18em] text-[var(--accent)]">
+                  Recent Posts
+                </p>
+                <h2 className="mt-2 text-2xl font-semibold text-[var(--text-primary)]">
+                  Latest in {post.categoryLabel}
+                </h2>
+              </div>
+              <Link
+                href="/blog"
+                className="text-sm font-medium text-[var(--accent)] transition hover:text-[var(--text-primary)]"
+              >
+                Browse all posts
+              </Link>
+            </div>
+
+            <div className="mt-6 grid gap-4 md:grid-cols-3">
+              {relatedPosts.map((relatedPost) => (
+                <Link
+                  key={relatedPost.slug}
+                  href={`/blog/${relatedPost.slug}`}
+                  className="group rounded-3xl border border-[var(--accent-border)] bg-black/10 p-5 transition hover:border-[var(--accent)] hover:bg-[var(--accent-transparent)]"
+                >
+                  <p className="text-xs uppercase tracking-[0.18em] text-[var(--accent)]">
+                    {formatDate(new Date(relatedPost.date))}
+                  </p>
+                  <h3 className="mt-3 text-xl font-semibold leading-tight text-[var(--text-primary)] transition group-hover:text-[var(--accent)]">
+                    {relatedPost.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
+                    {relatedPost.excerpt}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </section>
         )}
-        {post.tags.map((tag) => (
-          <span
-            key={tag}
-            className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]"
-          >
-            {tag}
-          </span>
-        ))}
+
+        <Section title="Subscribe to The Daily Word" emoji="✉️">
+          <p className="text-sm text-[var(--text-secondary)]">
+            Short weekday reflections from Scripture, plus longer biblical reflections when a lesson
+            deserves more room.
+          </p>
+          <SubscribeForm />
+        </Section>
       </div>
-
-      {post.excerpt && (
-        <p className="max-w-3xl text-lg leading-relaxed text-[var(--text-secondary)]">
-          {post.excerpt}
-        </p>
-      )}
-
-      <article className="prose prose-invert max-w-none">
-        <MDXRemote source={post.content} />
-      </article>
-
-      <Section title="Subscribe to The Daily Word" emoji="✉️">
-        <SubscribeForm />
-      </Section>
     </PageLayout>
   );
 }
