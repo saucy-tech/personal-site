@@ -20,7 +20,6 @@ function ensurePostsDir() {
     fs.mkdirSync(POSTS_DIR, { recursive: true });
   }
 }
-
 function getPostPath(slug: string): string {
   return path.join(POSTS_DIR, `${slug}.mdx`);
 }
