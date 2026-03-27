@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 
 export default function Bitcoin() {
   return (
-    <PageLayout title="Why I Believe in Bitcoin">
+    <PageLayout title="Why Bitcoin Matters to Me">
       {/* VISUAL HOOK */}
       <section>
         <Image
@@ -202,18 +202,6 @@ export default function Bitcoin() {
                 </a>{' '}
                 <span className="text-sm text-white/60">(Mar 2025)</span> – Jeff Booth joins Walker
                 for Episode 1 to introduce Bitcoin.
-              </li>
-              <li>
-                <a
-                  href="https://www.youtube.com/watch?v=example"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-400 underline"
-                >
-                  Top 5 Bitcoin Clips of Q1 2025
-                </a>{' '}
-                <span className="text-sm text-white/60">(Feb 2025)</span> – Joe Burnett joins
-                Preston Pysh to Joe Burnett breaks down.
               </li>
             </ul>
           </div>

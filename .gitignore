@@ -35,3 +35,10 @@ next-env.d.ts
 # claude code
 CLAUDE.md
 .claude/
+
+# local session notes / wrap-up artifacts
+cs50x-session-logs/
+*-done-skill-session-summary.md
+SESSION-WRAP-UP-INDEX.txt
+session-wrap-up-activity-log.txt
+wrap-up-summary.txt
