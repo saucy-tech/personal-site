@@ -112,7 +112,20 @@ NEXT_PUBLIC_APP_URL=https://your-domain.com
 # ConvertKit API configuration for email subscriptions (optional)
 CONVERTKIT_API_KEY=
 CONVERTKIT_FORM_ID=
+
+# ConvertKit v4 API — required for the auto-broadcast script (pnpm broadcast)
+CK_SECRET_KEY=        # Settings → Advanced → API Secret
+CK_PUBLISHER_ID=      # numeric account ID from Settings → Advanced
 ```
+
+### GitHub Actions Secrets
+
+The CI/CD workflows require the following secrets configured in **GitHub → Settings → Secrets and variables → Actions**:
+
+| Secret | Required by | Description |
+|--------|-------------|-------------|
+| `KIT_API_KEY` | `devotion-broadcast.yml` | ConvertKit API key for broadcast workflow |
+| `NEXT_PUBLIC_APP_URL` | `devotion-broadcast.yml` | Your production site URL |
 
 ### Component Architecture
 
