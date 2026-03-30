@@ -73,7 +73,8 @@ jobs:
           # Handles YAML single-quote escaping (e.g. 'She Didn''t Go' → She Didn't Go),
           # double-quoted strings, unquoted values, and multi-line excerpts.
           python3 - <<'PYEOF'
-          import yaml, sys, os
+          import yaml, sys, os, re
+          from datetime import datetime
 
           file_path = os.environ['MDX_FILE']
           github_output = os.environ['GITHUB_OUTPUT']
@@ -95,24 +96,51 @@ jobs:
           date    = str(fm.get('date',    '')).strip()
           slug    = os.path.basename(file_path).replace('.mdx', '')
 
-          # First 3 non-empty, non-heading body lines joined as intro
-          intro_lines = [
-              l.strip() for l in body.splitlines()
-              if l.strip() and not l.strip().startswith('#')
-          ]
-          intro = ' '.join(intro_lines[:3])
+          # Format date as "Monday, March 30" for the email header
+          try:
+              dt = datetime.strptime(date, '%Y-%m-%d')
+              formatted_date = dt.strftime('%A, %B %-d')
+          except Exception:
+              formatted_date = date
 
-          print(f'Title:   {title}')
-          print(f'Excerpt: {excerpt[:80]}{"..." if len(excerpt) > 80 else ""}')
-          print(f'Date:    {date}')
-          print(f'Slug:    {slug}')
+          # Extract the opening blockquote verse (line starting with "> ")
+          verse = ''
+          for line in body.splitlines():
+              stripped = line.strip()
+              if stripped.startswith('> ') or stripped == '>':
+                  verse = stripped.lstrip('> ').strip()
+                  break
 
+          # Build summary: collect first 3 non-empty prose paragraphs
+          # (skip headings, blockquotes, blank lines)
+          prose_lines = []
+          for line in body.splitlines():
+              stripped = line.strip()
+              if (stripped
+                  and not stripped.startswith('#')
+                  and not stripped.startswith('>')
+                  and not stripped.startswith('---')):
+                  prose_lines.append(stripped)
+              if len(prose_lines) >= 3:
+                  break
+          summary = ' '.join(prose_lines)
+
+          print(f'Title:          {title}')
+          print(f'Formatted date: {formatted_date}')
+          print(f'Excerpt:        {excerpt[:80]}{"..." if len(excerpt) > 80 else ""}')
+          print(f'Verse:          {verse[:80]}{"..." if len(verse) > 80 else ""}')
+          print(f'Date:           {date}')
+          print(f'Slug:           {slug}')
+
+          # Use multiline output syntax (heredoc) so newlines in values are safe
           with open(github_output, 'a', encoding='utf-8') as out:
               out.write(f'title={title}\n')
               out.write(f'excerpt={excerpt}\n')
+              out.write(f'formatted_date={formatted_date}\n')
+              out.write(f'verse={verse}\n')
+              out.write(f'summary={summary}\n')
               out.write(f'date={date}\n')
               out.write(f'slug={slug}\n')
-              out.write(f'intro={intro}\n')
           PYEOF
 
       - name: Send Kit broadcast
@@ -122,8 +150,10 @@ jobs:
           NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_APP_URL }}
           POST_TITLE: ${{ steps.meta.outputs.title }}
           POST_EXCERPT: ${{ steps.meta.outputs.excerpt }}
+          POST_FORMATTED_DATE: ${{ steps.meta.outputs.formatted_date }}
+          POST_VERSE: ${{ steps.meta.outputs.verse }}
+          POST_SUMMARY: ${{ steps.meta.outputs.summary }}
           POST_SLUG: ${{ steps.meta.outputs.slug }}
-          POST_INTRO: ${{ steps.meta.outputs.intro }}
         run: |
           # Validate required secrets/vars up front with clear error messages
           if [ -z "$KIT_API_KEY" ]; then
@@ -142,12 +172,28 @@ jobs:
           POST_URL="${NEXT_PUBLIC_APP_URL}/blog/${POST_SLUG}"
           SEND_AT=$(date -u -d '+2 minutes' +%Y-%m-%dT%H:%M:%SZ)
 
-          # Build HTML safely via jq to handle any special characters in content
+          # Build a clean, inbox-safe HTML email via jq.
+          # Layout: date header → verse blockquote → excerpt (hook) → summary prose → CTA link
           HTML_CONTENT=$(jq -rn \
+            --arg date    "$POST_FORMATTED_DATE" \
+            --arg verse   "$POST_VERSE" \
             --arg excerpt "$POST_EXCERPT" \
-            --arg intro   "$POST_INTRO" \
+            --arg summary "$POST_SUMMARY" \
             --arg url     "$POST_URL" \
-            '"<p><em>" + $excerpt + "</em></p><p>" + $intro + "</p><p><a href=\"" + $url + "\">Read the full post \u2192</a></p>"')
+            '
+            "<div style=\"font-family: Georgia, serif; max-width: 600px; margin: 0 auto; color: #1a1a1a; padding: 0 16px;\">"
+            + "<p style=\"font-size: 13px; color: #888888; letter-spacing: 0.05em; text-transform: uppercase; margin: 0 0 24px 0;\">" + $date + "</p>"
+            + "<blockquote style=\"border-left: 3px solid #c9a84c; margin: 0 0 24px 0; padding: 4px 0 4px 20px;\">"
+            +   "<p style=\"font-size: 18px; line-height: 1.6; font-style: italic; color: #2c2c2c; margin: 0;\">" + $verse + "</p>"
+            + "</blockquote>"
+            + "<p style=\"font-size: 16px; line-height: 1.7; color: #3a3a3a; margin: 0 0 16px 0;\">" + $excerpt + "</p>"
+            + "<p style=\"font-size: 16px; line-height: 1.7; color: #3a3a3a; margin: 0 0 28px 0;\">" + $summary + "</p>"
+            + "<hr style=\"border: none; border-top: 1px solid #e5e5e5; margin: 0 0 24px 0;\" />"
+            + "<p style=\"margin: 0;\">"
+            +   "<a href=\"" + $url + "\" style=\"font-size: 14px; color: #c9a84c; text-decoration: none; font-family: sans-serif; letter-spacing: 0.03em;\">Continue reading &rarr;</a>"
+            + "</p>"
+            + "</div>"
+            ')
 
           CREATE_PAYLOAD=$(jq -n \
             --arg subject  "The Daily Word: $POST_TITLE" \
