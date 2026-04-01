@@ -40,9 +40,7 @@ const Profile: React.FC<ProfileProps> = ({ name, bio, imageSrc }) => {
         )}
         {imageError ? (
           <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center">
-            <span className="text-white text-4xl font-bold">
-              {name.charAt(0).toUpperCase()}
-            </span>
+            <span className="text-white text-4xl font-bold">{name.charAt(0).toUpperCase()}</span>
           </div>
         ) : (
           <Image
@@ -67,23 +65,15 @@ const Profile: React.FC<ProfileProps> = ({ name, bio, imageSrc }) => {
       >
         <h1 className="text-2xl font-bold text-[var(--text-primary)] mb-2">{name}</h1>
 
-        {/* Bio with proper overflow handling */}
-        <div className="relative w-full max-w-2xl mx-auto px-4">
-          {/* Bio text container */}
-          <div className="overflow-x-auto overflow-y-hidden pb-1 no-scrollbar">
-            <motion.p
-              className="text-[var(--text-secondary)] text-center whitespace-normal sm:whitespace-nowrap mx-auto px-2 sm:px-8 text-base sm:text-lg"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-            >
-              {bio}
-            </motion.p>
-          </div>
-
-          {/* Gradient fades for overflow */}
-          <div className="absolute top-0 right-0 h-full w-12 bg-gradient-to-l from-[var(--background)] to-transparent pointer-events-none"></div>
-          <div className="absolute top-0 left-0 h-full w-12 bg-gradient-to-r from-[var(--background)] to-transparent pointer-events-none"></div>
+        <div className="w-full max-w-2xl mx-auto px-4">
+          <motion.p
+            className="mx-auto px-2 sm:px-8 text-base sm:text-lg text-center text-[var(--text-secondary)] whitespace-normal"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            {bio}
+          </motion.p>
         </div>
       </motion.div>
     </motion.div>

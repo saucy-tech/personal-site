@@ -1,1 +1,1 @@
-npx -y pnpm@10.15.0 exec lint-staged
+pnpm exec lint-staged
