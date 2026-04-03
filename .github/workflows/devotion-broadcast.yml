@@ -26,6 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      issues: write
       pull-requests: write
 
     steps:
@@ -76,8 +77,12 @@ jobs:
           # Handles YAML single-quote escaping (e.g. 'She Didn''t Go' → She Didn't Go),
           # double-quoted strings, unquoted values, and multi-line excerpts.
           python3 - <<'PYEOF'
-          import yaml, sys, os, re
+          import os
+          import sys
+          from uuid import uuid4
           from datetime import datetime
+
+          import yaml
 
           file_path = os.environ['MDX_FILE']
           github_output = os.environ['GITHUB_OUTPUT']
@@ -135,18 +140,24 @@ jobs:
           print(f'Date:           {date}')
           print(f'Slug:           {slug}')
 
-          # Use multiline output syntax (heredoc) so newlines in values are safe
+          def write_output(out, name, value):
+              delimiter = f'EOF_{name}_{uuid4().hex}'
+              out.write(f'{name}<<{delimiter}\n')
+              out.write(f'{value}\n')
+              out.write(f'{delimiter}\n')
+
           with open(github_output, 'a', encoding='utf-8') as out:
-              out.write(f'title={title}\n')
-              out.write(f'excerpt={excerpt}\n')
-              out.write(f'formatted_date={formatted_date}\n')
-              out.write(f'verse={verse}\n')
-              out.write(f'summary={summary}\n')
-              out.write(f'date={date}\n')
-              out.write(f'slug={slug}\n')
+              write_output(out, 'title', title)
+              write_output(out, 'excerpt', excerpt)
+              write_output(out, 'formatted_date', formatted_date)
+              write_output(out, 'verse', verse)
+              write_output(out, 'summary', summary)
+              write_output(out, 'date', date)
+              write_output(out, 'slug', slug)
           PYEOF
 
       - name: Send Kit broadcast
+        id: send_broadcast
         if: steps.post.outputs.skip == 'false'
         env:
           KIT_API_KEY: ${{ secrets.KIT_API_KEY }}
@@ -188,7 +199,7 @@ jobs:
             + "<span style=\"display:none; max-height:0; overflow:hidden; opacity:0; color:transparent; mso-hide:all;\">" + $excerpt + "</span>"
             + "<p style=\"margin: 0 0 24px 0;\">"
             +   "<a href=\"" + $url + "\" style=\"display: block; text-decoration: none;\">"
-            +     "<img src=\"https://saucytech.com/images/daily-word-banner.png\" width=\"600\" alt=\"The Daily Word\" style=\"display: block; width: 100%; max-width: 600px; height: auto; margin: 0 auto; border: 0;\" />"
+            +     "<img src=\"https://www.saucy.tech/images/daily-word-banner.png\" width=\"600\" alt=\"The Daily Word\" style=\"display: block; width: 100%; max-width: 600px; height: auto; margin: 0 auto; border: 0;\" />"
             +   "</a>"
             + "</p>"
             + "<p style=\"font-size: 13px; color: #888888; letter-spacing: 0.05em; text-transform: uppercase; margin: 0 0 24px 0;\">" + $date + "</p>"
@@ -200,7 +211,7 @@ jobs:
             + "<p style=\"margin: 0 0 24px 0;\">"
             +   "<a href=\"" + $url + "\" style=\"background: #c9a84c; color: #ffffff; padding: 12px 24px; font-family: sans-serif; border-radius: 0; display: inline-block; text-decoration: none;\">Continue reading &rarr;</a>"
             + "</p>"
-            + "<p style=\"font-size: 12px; line-height: 1.6; color: #888888; text-align: center; margin: 0;\">You&#39;re receiving this because you subscribed to The Daily Word &middot; saucytech.com</p>"
+            + "<p style=\"font-size: 12px; line-height: 1.6; color: #888888; text-align: center; margin: 0;\">You&#39;re receiving this because you subscribed to The Daily Word &middot; saucy.tech</p>"
             + "</div>"
             ')
 
@@ -239,18 +250,32 @@ jobs:
           fi
 
           BROADCAST_ID=$(echo "$BODY" | jq -r '.broadcast.id // .id // empty')
+          {
+            echo "broadcast_id=${BROADCAST_ID}"
+            echo "post_url=${POST_URL}"
+          } >> "$GITHUB_OUTPUT"
           echo "✓ Broadcast created (ID: ${BROADCAST_ID:-unknown}), scheduled for $SEND_AT"
 
       - name: Comment on PR
         if: steps.post.outputs.skip == 'false' && github.event_name == 'pull_request'
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
-          POST_SLUG: ${{ steps.meta.outputs.slug }}
+          POST_URL: ${{ steps.send_broadcast.outputs.post_url }}
+          BROADCAST_ID: ${{ steps.send_broadcast.outputs.broadcast_id }}
         run: |
-          POST_URL="${{ vars.NEXT_PUBLIC_APP_URL }}/blog/${POST_SLUG}"
-          gh pr comment ${{ github.event.pull_request.number }} \
-            --body "**The Daily Word broadcast sent!**
+          COMMENT_BODY=$(cat <<EOF
+          **The Daily Word broadcast sent!**
 
           Post URL: ${POST_URL}
+          Broadcast ID: ${BROADCAST_ID:-unknown}
 
-          The broadcast has been scheduled to send to all Daily Word subscribers via Kit."
+          The broadcast has been scheduled to send to all Daily Word subscribers via Kit.
+          EOF
+          )
+
+          if gh pr comment ${{ github.event.pull_request.number }} --body "$COMMENT_BODY"; then
+            echo "Posted PR comment for broadcast ${BROADCAST_ID:-unknown}."
+          else
+            echo "::warning::Failed to post PR comment for broadcast ${BROADCAST_ID:-unknown}. The broadcast succeeded and the workflow will continue."
+          fi
