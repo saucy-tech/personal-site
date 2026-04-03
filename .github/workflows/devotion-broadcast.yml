@@ -176,7 +176,7 @@ jobs:
           SEND_AT=$(date -u -d '+2 minutes' +%Y-%m-%dT%H:%M:%SZ)
 
           # Build a clean, inbox-safe HTML email via jq.
-          # Layout: date header → verse blockquote → excerpt (hook) → summary prose → CTA link
+          # Layout: preheader → banner → date header → verse blockquote → excerpt → summary → CTA → footer
           HTML_CONTENT=$(jq -rn \
             --arg date    "$POST_FORMATTED_DATE" \
             --arg verse   "$POST_VERSE" \
@@ -185,27 +185,34 @@ jobs:
             --arg url     "$POST_URL" \
             '
             "<div style=\"font-family: Georgia, serif; max-width: 600px; margin: 0 auto; color: #1a1a1a; padding: 0 16px;\">"
+            + "<span style=\"display:none; max-height:0; overflow:hidden; opacity:0; color:transparent; mso-hide:all;\">" + $excerpt + "</span>"
+            + "<p style=\"margin: 0 0 24px 0;\">"
+            +   "<a href=\"" + $url + "\" style=\"display: block; text-decoration: none;\">"
+            +     "<img src=\"https://saucytech.com/images/daily-word-banner.png\" width=\"600\" alt=\"The Daily Word\" style=\"display: block; width: 100%; max-width: 600px; height: auto; margin: 0 auto; border: 0;\" />"
+            +   "</a>"
+            + "</p>"
             + "<p style=\"font-size: 13px; color: #888888; letter-spacing: 0.05em; text-transform: uppercase; margin: 0 0 24px 0;\">" + $date + "</p>"
-            + "<blockquote style=\"border-left: 3px solid #c9a84c; margin: 0 0 24px 0; padding: 4px 0 4px 20px;\">"
+            + "<blockquote style=\"border-left: 3px solid #c9a84c; margin: 0 0 24px 0; padding: 12px 0 12px 20px;\">"
             +   "<p style=\"font-size: 18px; line-height: 1.6; font-style: italic; color: #2c2c2c; margin: 0;\">" + $verse + "</p>"
             + "</blockquote>"
             + "<p style=\"font-size: 16px; line-height: 1.7; color: #3a3a3a; margin: 0 0 16px 0;\">" + $excerpt + "</p>"
             + "<p style=\"font-size: 16px; line-height: 1.7; color: #3a3a3a; margin: 0 0 28px 0;\">" + $summary + "</p>"
-            + "<hr style=\"border: none; border-top: 1px solid #e5e5e5; margin: 0 0 24px 0;\" />"
-            + "<p style=\"margin: 0;\">"
-            +   "<a href=\"" + $url + "\" style=\"font-size: 14px; color: #c9a84c; text-decoration: none; font-family: sans-serif; letter-spacing: 0.03em;\">Continue reading &rarr;</a>"
+            + "<p style=\"margin: 0 0 24px 0;\">"
+            +   "<a href=\"" + $url + "\" style=\"background: #c9a84c; color: #ffffff; padding: 12px 24px; font-family: sans-serif; border-radius: 0; display: inline-block; text-decoration: none;\">Continue reading &rarr;</a>"
             + "</p>"
+            + "<p style=\"font-size: 12px; line-height: 1.6; color: #888888; text-align: center; margin: 0;\">You&#39;re receiving this because you subscribed to The Daily Word &middot; saucytech.com</p>"
             + "</div>"
             ')
 
           CREATE_PAYLOAD=$(jq -n \
-            --arg subject  "The Daily Word: $POST_TITLE" \
+            --arg subject  "$POST_TITLE" \
             --arg content  "$HTML_CONTENT" \
+            --arg preview_text "$POST_EXCERPT" \
             --arg send_at  "$SEND_AT" \
-            '{subject: $subject, content: $content, send_at: $send_at}')
+            '{subject: $subject, content: $content, preview_text: $preview_text, send_at: $send_at}')
 
           echo "--- Broadcast details ---"
-          echo "Subject:    The Daily Word: $POST_TITLE"
+          echo "Subject:    $POST_TITLE"
           echo "Post URL:   $POST_URL"
           echo "Sending at: $SEND_AT"
           echo "Payload:"
