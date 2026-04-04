@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 
 import { SITE_URL } from '@/utils/constants';
-import { getAllPostsMeta } from '@/utils/posts';
+import { getAllPostsMeta, getAllSeries } from '@/utils/posts';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const posts = getAllPostsMeta().map((post) => ({
@@ -9,6 +9,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     lastModified: post.date,
     changeFrequency: 'monthly' as const,
     priority: 0.7,
+  }));
+
+  const seriesPages = getAllSeries().map((series) => ({
+    url: `${SITE_URL}/blog/series/${series.slug}`,
+    lastModified: series.posts[series.posts.length - 1]?.date ?? new Date().toISOString(),
+    changeFrequency: 'weekly' as const,
+    priority: 0.6,
   }));
 
   return [
@@ -42,6 +49,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 0.5,
     },
+    {
+      url: `${SITE_URL}/blog/series`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.6,
+    },
+    ...seriesPages,
     ...posts,
   ];
 }
