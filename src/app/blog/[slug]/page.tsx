@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 
 import PageLayout from '@/components/PageLayout';
 import Section from '@/components/Section';
+import ShareButtons from '@/components/ShareButtons';
 import SubscribeForm from '@/components/SubscribeForm';
 import { formatPostDate } from '@/utils/helpers';
 import { getAllPostsMeta, getPostBySlug, getPostOgMeta, getPostSlugs } from '@/utils/posts';
@@ -124,6 +125,12 @@ export default async function PostPage({ params }: PostPageProps) {
         <article className="prose prose-invert prose-p:text-[1.05rem] prose-p:leading-8 prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:text-[var(--text-primary)] prose-h2:mt-12 prose-h2:border-t prose-h2:border-white/10 prose-h2:pt-8 prose-h2:text-2xl prose-h3:mt-10 prose-h3:text-xl prose-a:text-[var(--accent)] prose-a:no-underline hover:prose-a:text-[var(--text-primary)] prose-strong:text-[var(--text-primary)] prose-blockquote:rounded-2xl prose-blockquote:border-l-4 prose-blockquote:border-[var(--accent)] prose-blockquote:bg-white/[0.04] prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:text-[var(--text-primary)] prose-hr:border-white/10 prose-img:rounded-3xl prose-img:border prose-img:border-white/10 prose-img:shadow-[0_18px_40px_rgba(0,0,0,0.25)] prose-figcaption:text-sm prose-figcaption:text-[var(--text-secondary)] max-w-none">
           <MDXRemote source={post.content} />
         </article>
+
+        <ShareButtons
+          title={post.title}
+          url={`${SITE_URL}/blog/${post.slug}`}
+          excerpt={post.excerpt}
+        />
 
         {relatedPosts.length > 0 && (
           <section className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 sm:p-8">
