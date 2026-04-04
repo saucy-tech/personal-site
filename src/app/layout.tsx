@@ -6,6 +6,8 @@ import Footer from '@/components/layout/Footer';
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from '@/utils/constants';
 import ClientGalaxyBackground from '@/components/ClientGalaxyBackground';
 import ClientSnowflakes from '@/components/ClientSnowflakes';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
@@ -102,6 +104,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Footer />
           </div>
         </div>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
