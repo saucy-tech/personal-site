@@ -8,6 +8,38 @@ import yaml from 'js-yaml';
 import { Post, PostMeta, toPostMeta } from '@/utils/post-taxonomy';
 import { SITE_URL } from '@/utils/constants';
 
+export interface SeriesMeta {
+  name: string;
+  slug: string;
+  posts: PostMeta[];
+  count: number;
+}
+
+export function seriesSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
+export function getAllSeries(): SeriesMeta[] {
+  const posts = getAllPostsMeta();
+  const seriesMap = new Map<string, PostMeta[]>();
+  posts.forEach((p) => {
+    if (p.series) {
+      const existing = seriesMap.get(p.series) ?? [];
+      existing.push(p);
+      seriesMap.set(p.series, existing);
+    }
+  });
+  return Array.from(seriesMap.entries()).map(([name, seriesPosts]) => ({
+    name,
+    slug: seriesSlug(name),
+    posts: seriesPosts.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()),
+    count: seriesPosts.length,
+  }));
+}
+
 // Configure gray-matter to use js-yaml 4.x's load function
 // @ts-expect-error - gray-matter's types don't include engines, but it exists at runtime
 matter.engines.yaml = {

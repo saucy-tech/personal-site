@@ -7,7 +7,13 @@ import Section from '@/components/Section';
 import ShareButtons from '@/components/ShareButtons';
 import SubscribeForm from '@/components/SubscribeForm';
 import { formatPostDate } from '@/utils/helpers';
-import { getAllPostsMeta, getPostBySlug, getPostOgMeta, getPostSlugs } from '@/utils/posts';
+import {
+  getAllPostsMeta,
+  getPostBySlug,
+  getPostOgMeta,
+  getPostSlugs,
+  seriesSlug,
+} from '@/utils/posts';
 import { SITE_URL } from '@/utils/constants';
 
 function getReadingTime(content: string) {
@@ -70,9 +76,12 @@ export default async function PostPage({ params }: PostPageProps) {
               {readingTime} min read
             </span>
             {post.series && (
-              <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">
+              <Link
+                href={`/blog/series/${seriesSlug(post.series)}`}
+                className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)] transition hover:border-[var(--accent-border)] hover:text-[var(--accent)]"
+              >
                 {post.series}
-              </span>
+              </Link>
             )}
           </div>
 
