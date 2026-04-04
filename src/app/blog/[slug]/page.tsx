@@ -7,6 +7,7 @@ import Section from '@/components/Section';
 import SubscribeForm from '@/components/SubscribeForm';
 import { formatPostDate } from '@/utils/helpers';
 import { getAllPostsMeta, getPostBySlug, getPostOgMeta, getPostSlugs } from '@/utils/posts';
+import { SITE_NAME, SITE_URL } from '@/utils/constants';
 
 function getReadingTime(content: string) {
   const plainText = content
@@ -53,8 +54,34 @@ export default async function PostPage({ params }: PostPageProps) {
     .filter((candidate) => candidate.category === post.category)
     .slice(0, 3);
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt,
+    datePublished: post.date,
+    url: `${SITE_URL}/blog/${post.slug}`,
+    image: `${SITE_URL}/family-photo.jpeg`,
+    author: {
+      '@type': 'Person',
+      name: 'Brandon',
+      url: SITE_URL,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+    articleSection: post.category,
+    keywords: post.tags,
+  };
+
   return (
     <PageLayout title={post.title} backHref="/blog" backLabel="Back to Blog">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="mx-auto max-w-3xl space-y-10">
         <section className="overflow-hidden rounded-[2rem] border border-[var(--accent-border)] bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.18),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-6 sm:p-8">
           <div className="flex flex-wrap gap-2">

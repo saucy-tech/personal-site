@@ -8,6 +8,7 @@ import SocialBar from '@/components/SocialBar';
 import SubscribeForm from '@/components/SubscribeForm';
 import { formatPostDate } from '@/utils/helpers';
 import { getAllPostsMeta } from '@/utils/posts';
+import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from '@/utils/constants';
 
 export default async function Home() {
   const profileData = {
@@ -75,8 +76,20 @@ export default async function Home() {
   const posts = getAllPostsMeta();
   const latest = posts[0];
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE_NAME,
+    url: SITE_URL,
+    description: SITE_DESCRIPTION,
+  };
+
   return (
     <main className="pt-4 pb-6 px-4 md:px-8 flex flex-col items-center">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="space-y-6 w-full max-w-lg mx-auto">
         <Profile {...profileData} />
         <SocialBar socials={socialLinks} />
