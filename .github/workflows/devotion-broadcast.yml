@@ -189,12 +189,13 @@ jobs:
           # Build a clean, inbox-safe HTML email via jq.
           # Layout: preheader → banner → date header → title → verse blockquote → excerpt → summary → CTA → footer
           HTML_CONTENT=$(jq -rn \
-            --arg date    "$POST_FORMATTED_DATE" \
-            --arg title   "$POST_TITLE" \
-            --arg verse   "$POST_VERSE" \
-            --arg excerpt "$POST_EXCERPT" \
-            --arg summary "$POST_SUMMARY" \
-            --arg url     "$POST_URL" \
+            --arg date          "$POST_FORMATTED_DATE" \
+            --arg title         "$POST_TITLE" \
+            --arg verse         "$POST_VERSE" \
+            --arg excerpt       "$POST_EXCERPT" \
+            --arg summary       "$POST_SUMMARY" \
+            --arg url           "$POST_URL" \
+            --arg daily_word_url "${NEXT_PUBLIC_APP_URL}/daily-word" \
             '
             "<div style=\"font-family: Georgia, serif; max-width: 600px; margin: 0 auto; color: #1a1a1a; padding: 0 16px;\">"
             + "<span style=\"display:none; max-height:0; overflow:hidden; opacity:0; color:transparent; mso-hide:all;\">" + $excerpt + "</span>"
@@ -213,7 +214,9 @@ jobs:
             + "<p style=\"margin: 0 0 24px 0;\">"
             +   "<a href=\"" + $url + "\" style=\"background: #c9a84c; color: #ffffff; padding: 12px 24px; font-family: sans-serif; border-radius: 0; display: inline-block; text-decoration: none;\">Continue reading &rarr;</a>"
             + "</p>"
-            + "<p style=\"font-size: 12px; line-height: 1.6; color: #888888; text-align: center; margin: 0;\">You&#39;re receiving this because you subscribed to The Daily Word &middot; saucy.tech</p>"
+            + "<hr style=\"border: none; border-top: 1px solid #e0e0e0; margin: 32px 0 16px 0;\" />"
+            + "<p style=\"font-size: 13px; line-height: 1.6; color: #888888; text-align: center; margin: 0 0 8px 0;\">Know someone who would enjoy this? <a href=\"" + $daily_word_url + "\" style=\"color: #c9a84c; text-decoration: underline;\">Share The Daily Word</a></p>"
+            + "<p style=\"font-size: 12px; line-height: 1.6; color: #888888; text-align: center; margin: 0;\">You&#39;re receiving this because you subscribed to The Daily Word &middot; <a href=\"" + $daily_word_url + "\" style=\"color: #888888; text-decoration: underline;\">saucy.tech</a></p>"
             + "</div>"
             ')
 
