@@ -6,7 +6,7 @@ import Profile from '@/components/Profile';
 import Section from '@/components/Section';
 import SocialBar from '@/components/SocialBar';
 import SubscribeForm from '@/components/SubscribeForm';
-import { formatDate } from '@/utils/helpers';
+import { formatPostDate } from '@/utils/helpers';
 import { getAllPostsMeta } from '@/utils/posts';
 
 export default async function Home() {
@@ -90,7 +90,7 @@ export default async function Home() {
               href={`/blog/${latest.slug}`}
               icon={<span className="text-2xl">📝</span>}
               eyebrow="Latest Post"
-              meta={[latest.categoryLabel, formatDate(new Date(latest.date))].join(' • ')}
+              meta={[latest.categoryLabel, formatPostDate(latest.date)].join(' • ')}
             />
           )}
           <LinkCard

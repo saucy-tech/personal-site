@@ -4,7 +4,7 @@ import BlogArchive from '@/components/BlogArchive';
 import PageLayout from '@/components/PageLayout';
 import Section from '@/components/Section';
 import SubscribeForm from '@/components/SubscribeForm';
-import { formatDate } from '@/utils/helpers';
+import { formatPostDate } from '@/utils/helpers';
 import { getAllPostsMeta } from '@/utils/posts';
 import { POST_CATEGORIES } from '@/utils/post-taxonomy';
 
@@ -75,7 +75,7 @@ export default function BlogIndex() {
                 {latest.categoryLabel}
               </span>
               <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">
-                {formatDate(new Date(latest.date))}
+                {formatPostDate(latest.date)}
               </span>
               {latest.series && (
                 <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">

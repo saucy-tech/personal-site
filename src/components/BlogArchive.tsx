@@ -10,7 +10,7 @@ import {
 import Link from 'next/link';
 import { useDeferredValue, useState } from 'react';
 
-import { cn, formatDate } from '@/utils/helpers';
+import { cn, formatPostDate } from '@/utils/helpers';
 import { POST_CATEGORIES, type PostCategory, type PostMeta } from '@/utils/post-taxonomy';
 
 type CategoryFilter = 'all' | PostCategory;
@@ -215,9 +215,7 @@ export default function BlogArchive({ posts }: BlogArchiveProps) {
                 <CategoryIcon category={post.category} className="h-4 w-4" />
                 <span>{post.categoryLabel}</span>
                 <span className="text-[var(--text-secondary)]">•</span>
-                <span className="text-[var(--text-secondary)]">
-                  {formatDate(new Date(post.date))}
-                </span>
+                <span className="text-[var(--text-secondary)]">{formatPostDate(post.date)}</span>
               </div>
 
               <h3 className="mt-4 text-xl font-semibold leading-tight text-[var(--text-primary)] transition group-hover:text-[var(--accent)]">

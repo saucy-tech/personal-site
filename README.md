@@ -113,19 +113,21 @@ NEXT_PUBLIC_APP_URL=https://your-domain.com
 CONVERTKIT_API_KEY=
 CONVERTKIT_FORM_ID=
 
-# ConvertKit v4 API — required for the auto-broadcast script (pnpm broadcast)
+# ConvertKit v4 API — optional manual fallback for `pnpm broadcast`
 CK_SECRET_KEY=        # Settings → Advanced → API Secret
 CK_PUBLISHER_ID=      # numeric account ID from Settings → Advanced
 ```
 
 ### GitHub Actions Secrets
 
-The CI/CD workflows require the following secrets configured in **GitHub → Settings → Secrets and variables → Actions**:
+The devotion broadcast workflow is the primary production path. Configure these in **GitHub → Settings → Secrets and variables → Actions**:
 
-| Secret | Required by | Description |
-|--------|-------------|-------------|
-| `KIT_API_KEY` | `devotion-broadcast.yml` | ConvertKit API key for broadcast workflow |
-| `NEXT_PUBLIC_APP_URL` | `devotion-broadcast.yml` | Your production site URL |
+| Name | Type | Required by | Description |
+|------|------|-------------|-------------|
+| `KIT_API_KEY` | Secret | `devotion-broadcast.yml` | ConvertKit API key for the merge-based broadcast workflow |
+| `NEXT_PUBLIC_APP_URL` | Variable | `devotion-broadcast.yml` | Your production site URL |
+
+`pnpm broadcast` is retained as a manual fallback. It creates a draft broadcast from the latest post by frontmatter date and should not be treated as the primary publishing path.
 
 ### Component Architecture
 

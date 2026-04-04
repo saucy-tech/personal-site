@@ -38,4 +38,20 @@ describe('posts utilities', () => {
       expect(post?.categoryLabel).toBe('Daily Word');
     }
   });
+
+  it('returns post metadata with a share image fallback', async () => {
+    const posts = getAllPostsMeta();
+    const metadata = await getPostOgMeta(posts[0]!.slug);
+
+    expect(metadata).not.toBeNull();
+    expect(metadata?.openGraph?.images).toEqual([
+      {
+        url: 'https://saucy.tech/family-photo.jpeg',
+        width: 1200,
+        height: 630,
+        alt: posts[0]!.title,
+      },
+    ]);
+    expect(metadata?.twitter?.images).toEqual(['https://saucy.tech/family-photo.jpeg']);
+  });
 });
