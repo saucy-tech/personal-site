@@ -139,6 +139,11 @@ export default async function Home() {
             meta="Truth Chapel livestreams and teaching"
           />
           <Section title="Subscribe to The Daily Word" emoji="✉️">
+            <p className="text-sm leading-relaxed text-[var(--text-secondary)]">
+              The Daily Word delivers a short scripture reflection to your inbox every weekday
+              morning. Rooted in weekly Sunday School lessons, each post is a 2-minute read designed
+              to start your day in the Word. Free, always.
+            </p>
             <SubscribeForm />
           </Section>
         </div>

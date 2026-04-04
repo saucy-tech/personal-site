@@ -183,9 +183,8 @@ export default async function PostPage({ params }: PostPageProps) {
         )}
 
         <Section title="Subscribe to The Daily Word" emoji="✉️">
-          <p className="text-sm text-[var(--text-secondary)]">
-            Short weekday reflections from Scripture, plus longer biblical reflections when a lesson
-            deserves more room.
+          <p className="text-sm leading-relaxed text-[var(--text-secondary)]">
+            Enjoyed this? Get The Daily Word in your inbox every weekday morning. Free, always.
           </p>
           <SubscribeForm />
         </Section>

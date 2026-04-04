@@ -156,9 +156,10 @@ export default function BlogIndex() {
 
       <div id="daily-word">
         <Section title="The Daily Word" emoji="✉️">
-          <p className="text-sm text-gray-400 mb-4">
-            Short weekday reflections from Scripture, plus longer biblical reflections when a Sunday
-            school lesson deserves more room. Free.
+          <p className="text-sm leading-relaxed text-[var(--text-secondary)]">
+            Subscribe to The Daily Word for free weekday scripture reflections, delivered to your
+            inbox every weekday morning. Short, KJV-rooted reflections rooted in the Sunday School
+            lesson series.
           </p>
           <SubscribeForm />
         </Section>
