@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import fs from 'fs';
 import path from 'path';
 
@@ -5,6 +6,7 @@ import matter from 'gray-matter';
 import yaml from 'js-yaml';
 
 import { Post, PostMeta, toPostMeta } from '@/utils/post-taxonomy';
+import { SITE_URL } from '@/utils/constants';
 
 // Configure gray-matter to use js-yaml 4.x's load function
 // @ts-expect-error - gray-matter's types don't include engines, but it exists at runtime
@@ -58,27 +60,16 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   };
 }
 
-export async function getPostOgMeta(slug: string): Promise<{
-  title: string;
-  description: string;
-  openGraph: {
-    title: string;
-    description: string;
-    type: string;
-    url: string;
-  };
-  twitter: {
-    card: string;
-    title: string;
-    description: string;
-  };
-} | null> {
+export async function getPostOgMeta(slug: string): Promise<Metadata | null> {
   const post = await getPostBySlug(slug);
   if (!post) {
     return null;
   }
 
   const { title, excerpt } = post;
+  const imageUrl = `${SITE_URL}/family-photo.jpeg`;
+  const url = `${SITE_URL}/blog/${slug}`;
+
   return {
     title,
     description: excerpt,
@@ -86,12 +77,21 @@ export async function getPostOgMeta(slug: string): Promise<{
       title,
       description: excerpt,
       type: 'article',
-      url: `${process.env.NEXT_PUBLIC_APP_URL}/blog/${slug}`,
+      url,
+      images: [
+        {
+          url: imageUrl,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description: excerpt,
+      images: [imageUrl],
     },
   };
 }

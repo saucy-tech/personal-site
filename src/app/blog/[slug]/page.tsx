@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import PageLayout from '@/components/PageLayout';
 import Section from '@/components/Section';
 import SubscribeForm from '@/components/SubscribeForm';
-import { formatDate } from '@/utils/helpers';
+import { formatPostDate } from '@/utils/helpers';
 import { getAllPostsMeta, getPostBySlug, getPostOgMeta, getPostSlugs } from '@/utils/posts';
 
 function getReadingTime(content: string) {
@@ -62,7 +62,7 @@ export default async function PostPage({ params }: PostPageProps) {
               {post.categoryLabel}
             </span>
             <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">
-              {formatDate(new Date(post.date))}
+              {formatPostDate(post.date)}
             </span>
             <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">
               {readingTime} min read
@@ -125,7 +125,7 @@ export default async function PostPage({ params }: PostPageProps) {
                   className="group rounded-3xl border border-[var(--accent-border)] bg-black/10 p-5 transition hover:border-[var(--accent)] hover:bg-[var(--accent-transparent)]"
                 >
                   <p className="text-xs uppercase tracking-[0.18em] text-[var(--accent)]">
-                    {formatDate(new Date(relatedPost.date))}
+                    {formatPostDate(relatedPost.date)}
                   </p>
                   <h3 className="mt-3 text-xl font-semibold leading-tight text-[var(--text-primary)] transition group-hover:text-[var(--accent)]">
                     {relatedPost.title}
