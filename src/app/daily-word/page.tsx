@@ -35,8 +35,9 @@ export default function DailyWordPage() {
           The Daily Word
         </h2>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-[var(--text-secondary)]">
-          Short weekday scripture reflections rooted in the Sunday School lesson series Brandon
-          teaches. Each post arrives in your inbox — free, no spam, unsubscribe any time.
+          The Daily Word is a free, weekday scripture reflection delivered straight to your inbox.
+          Each post is a 2-minute read rooted in the Sunday School lesson series — designed to start
+          your day in the Word.
         </p>
 
         {currentSeries && (

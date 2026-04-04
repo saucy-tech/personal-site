@@ -40,6 +40,9 @@ export default function SubscribeForm() {
       >
         {status === 'loading' ? 'Subscribing…' : 'Subscribe'}
       </button>
+      <p className="text-xs text-center text-[var(--text-secondary)]">
+        No spam, unsubscribe anytime.
+      </p>
       {status === 'success' && (
         <p className="text-green-400 text-center">Check your inbox for confirmation! 🎉</p>
       )}
