@@ -47,6 +47,9 @@ export default function SeriesIndexPage() {
                   </h2>
                   <div className="mt-3 flex flex-wrap gap-3">
                     <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">
+                      {series.weekCount} {series.weekCount === 1 ? 'week' : 'weeks'}
+                    </span>
+                    <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">
                       {series.count} {series.count === 1 ? 'post' : 'posts'}
                     </span>
                     {dateRange && (

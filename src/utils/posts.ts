@@ -13,6 +13,7 @@ export interface SeriesMeta {
   slug: string;
   posts: PostMeta[];
   count: number;
+  weekCount: number;
 }
 
 export function seriesSlug(name: string): string {
@@ -20,6 +21,19 @@ export function seriesSlug(name: string): string {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '');
+}
+
+// Returns a sortable ISO week key "YYYY-WNN" for a "YYYY-MM-DD" date string.
+// Uses ISO 8601 (Mon–Sun weeks; week 1 contains the year's first Thursday).
+export function isoWeekKey(dateStr: string): string {
+  const parts = dateStr.split('-').map(Number);
+  const [year, month, day] = [parts[0] ?? 0, parts[1] ?? 1, parts[2] ?? 1];
+  const d = new Date(Date.UTC(year, month - 1, day));
+  const dayOfWeek = d.getUTCDay() || 7; // 1=Mon … 7=Sun
+  d.setUTCDate(d.getUTCDate() + 4 - dayOfWeek); // shift to nearest Thursday
+  const jan1 = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const weekNum = Math.ceil(((d.getTime() - jan1.getTime()) / 86_400_000 + 1) / 7);
+  return `${d.getUTCFullYear()}-W${String(weekNum).padStart(2, '0')}`;
 }
 
 export function getAllSeries(): SeriesMeta[] {
@@ -32,12 +46,19 @@ export function getAllSeries(): SeriesMeta[] {
       seriesMap.set(p.series, existing);
     }
   });
-  return Array.from(seriesMap.entries()).map(([name, seriesPosts]) => ({
-    name,
-    slug: seriesSlug(name),
-    posts: seriesPosts.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()),
-    count: seriesPosts.length,
-  }));
+  return Array.from(seriesMap.entries()).map(([name, seriesPosts]) => {
+    const sorted = seriesPosts.sort(
+      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
+    const weekCount = new Set(sorted.map((p) => isoWeekKey(p.date))).size;
+    return {
+      name,
+      slug: seriesSlug(name),
+      posts: sorted,
+      count: sorted.length,
+      weekCount,
+    };
+  });
 }
 
 // Configure gray-matter to use js-yaml 4.x's load function
