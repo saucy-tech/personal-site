@@ -2,12 +2,18 @@ import { getAllPostsMeta, getPostBySlug, getPostOgMeta } from '@/utils/posts';
 import { POST_CATEGORIES } from '@/utils/post-taxonomy';
 
 describe('posts utilities', () => {
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
   it('returns null for a missing post slug', async () => {
     await expect(getPostBySlug('does-not-exist')).resolves.toBeNull();
     await expect(getPostOgMeta('does-not-exist')).resolves.toBeNull();
   });
 
   it('loads and sorts post metadata from the repo content', async () => {
+    jest.useFakeTimers().setSystemTime(new Date('2026-04-04T16:00:00.000Z'));
+
     const posts = getAllPostsMeta();
     const allPosts = getAllPostsMeta({ includeFuture: true });
 
@@ -62,6 +68,8 @@ describe('posts utilities', () => {
   });
 
   it('does not load future-dated posts without an explicit override', async () => {
+    jest.useFakeTimers().setSystemTime(new Date('2026-04-04T16:00:00.000Z'));
+
     await expect(getPostBySlug('2026-04-05-he-is-not-here')).resolves.toBeNull();
 
     const futurePost = await getPostBySlug('2026-04-05-he-is-not-here', { includeFuture: true });
