@@ -24,6 +24,7 @@ export default function BlogIndex() {
       key: category,
       label: details.label,
       description: details.description,
+      href: 'href' in details ? details.href : undefined,
       count: categoryPosts.length,
       latest: categoryPosts[0],
     };
@@ -132,14 +133,24 @@ export default function BlogIndex() {
             <p className="mt-4 text-sm leading-relaxed text-[var(--text-secondary)]">
               {category.description}
             </p>
-            {category.latest && (
-              <Link
-                href={`/blog/${category.latest.slug}`}
-                className="mt-5 inline-flex text-sm font-medium text-[var(--accent)] transition hover:text-[var(--text-primary)]"
-              >
-                Latest: {category.latest.title}
-              </Link>
-            )}
+            <div className="mt-5 flex flex-col gap-2">
+              {category.href && (
+                <Link
+                  href={category.href}
+                  className="inline-flex text-sm font-medium text-[var(--accent)] transition hover:text-[var(--text-primary)]"
+                >
+                  Visit the Daily Word →
+                </Link>
+              )}
+              {category.latest && (
+                <Link
+                  href={`/blog/${category.latest.slug}`}
+                  className="inline-flex text-sm font-medium text-[var(--accent)] transition hover:text-[var(--text-primary)]"
+                >
+                  Latest: {category.latest.title}
+                </Link>
+              )}
+            </div>
           </div>
         ))}
       </section>
