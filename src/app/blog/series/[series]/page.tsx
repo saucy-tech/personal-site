@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation';
 
 import PageLayout from '@/components/PageLayout';
 import { formatPostDate } from '@/utils/helpers';
-import { getAllSeries, isoWeekKey } from '@/utils/posts';
+import { getAllSeries, getSeriesBySlug, isoWeekKey } from '@/utils/posts';
 import type { PostMeta } from '@/utils/post-taxonomy';
 
 function isoWeekYear(key: string): number {
@@ -45,7 +45,10 @@ function weekDateRange(posts: PostMeta[]): string {
 }
 
 export async function generateStaticParams() {
-  return getAllSeries().map((series) => ({ series: series.slug }));
+  return getAllSeries().flatMap((series) => [
+    { series: series.slug },
+    ...series.aliases.map((alias) => ({ series: alias })),
+  ]);
 }
 
 export const dynamicParams = false;
@@ -56,7 +59,7 @@ interface SeriesPageProps {
 
 export async function generateMetadata({ params }: SeriesPageProps): Promise<Metadata> {
   const { series: seriesSlug } = await params;
-  const series = getAllSeries().find((s) => s.slug === seriesSlug);
+  const series = getSeriesBySlug(seriesSlug);
   if (!series) notFound();
 
   return {
@@ -67,7 +70,7 @@ export async function generateMetadata({ params }: SeriesPageProps): Promise<Met
 
 export default async function SeriesPage({ params }: SeriesPageProps) {
   const { series: seriesSlug } = await params;
-  const series = getAllSeries().find((s) => s.slug === seriesSlug);
+  const series = getSeriesBySlug(seriesSlug);
   if (!series) notFound();
 
   const weeks = groupByWeek(series.posts);
