@@ -18,7 +18,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://saucy.tech'),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: SITE_NAME,
     template: `%s | ${SITE_NAME}`,
@@ -58,7 +58,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    images: ['https://saucy.tech/family-photo.jpeg'],
+    images: [`${SITE_URL}/family-photo.jpeg`],
     creator: '@Saucy_Tech',
   },
   icons: {
@@ -75,11 +75,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="https://saucy.tech/apple-touch-icon.png"
-        />
+        <link rel="apple-touch-icon" sizes="180x180" href={`${SITE_URL}/apple-touch-icon.png`} />
       </head>
       <body className={montserrat.className}>
         {/* Background canvas and content wrapper */}
