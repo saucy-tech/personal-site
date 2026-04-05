@@ -1,7 +1,9 @@
 'use client';
 
-import React, { useState, useSyncExternalStore } from 'react';
+import React, { useEffect, useState, useSyncExternalStore } from 'react';
 import Snowflakes from './Snowflakes';
+
+const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 
 function subscribe() {
   return () => {};
@@ -13,6 +15,13 @@ const ClientSnowflakes: React.FC = () => {
     () => true,
     () => false
   );
+  const [reducedMotion, setReducedMotion] = useState(() => {
+    if (typeof window === 'undefined') {
+      return false;
+    }
+
+    return window.matchMedia(REDUCED_MOTION_QUERY).matches;
+  });
   const [showSnowflakes, setShowSnowflakes] = useState(() => {
     if (typeof window === 'undefined') {
       return false;
@@ -30,7 +39,30 @@ const ClientSnowflakes: React.FC = () => {
       return false;
     }
   });
-  const snowflakesVisible = hydrated && showSnowflakes;
+
+  useEffect(() => {
+    const mq = window.matchMedia(REDUCED_MOTION_QUERY);
+
+    const handleMotionPreferenceChange = (event: MediaQueryListEvent) => {
+      setReducedMotion(event.matches);
+    };
+
+    mq.addEventListener('change', handleMotionPreferenceChange);
+
+    return () => {
+      mq.removeEventListener('change', handleMotionPreferenceChange);
+    };
+  }, []);
+
+  const snowflakesVisible = hydrated && showSnowflakes && !reducedMotion;
+  const toggleLabel = reducedMotion
+    ? showSnowflakes
+      ? 'Snowflakes are hidden while Reduce Motion is enabled'
+      : 'Snowflakes are off and will stay hidden while Reduce Motion is enabled'
+    : snowflakesVisible
+      ? 'Hide snowflakes'
+      : 'Show snowflakes';
+  const toggleIcon = showSnowflakes ? '❄️' : '☃️';
 
   // Save preference to localStorage when it changes
   const toggleSnowflakes = () => {
@@ -45,10 +77,10 @@ const ClientSnowflakes: React.FC = () => {
       <button
         onClick={toggleSnowflakes}
         className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all shadow-lg"
-        aria-label={snowflakesVisible ? 'Hide snowflakes' : 'Show snowflakes'}
-        title={snowflakesVisible ? 'Hide snowflakes' : 'Show snowflakes'}
+        aria-label={toggleLabel}
+        title={toggleLabel}
       >
-        <span className="text-2xl">{snowflakesVisible ? '❄️' : '☃️'}</span>
+        <span className="text-2xl">{toggleIcon}</span>
       </button>
     </>
   );
