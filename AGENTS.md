@@ -55,7 +55,7 @@ next.config.js      # Security headers (non-CSP), image domains
 ## Architecture
 
 - **Routing**: App Router. `src/app/layout.tsx` provides global metadata, theme, fonts, animated background, header/footer. `src/app/page.tsx` composes Profile, SocialBar, and content Sections with LinkCard components.
-- **Content**: MDX posts in `src/posts/*.mdx`. Frontmatter: `title`, `shortTitle` (optional), `date`, `excerpt`. Parsed by `gray-matter`, rendered via `next-mdx-remote` in RSC.
+- **Content**: MDX posts in `src/posts/*.mdx`. Frontmatter: `title`, `shortTitle` (optional), `date`, `excerpt`, `category`. Parsed by `gray-matter`, rendered via `next-mdx-remote` in RSC.
 - **Styling**: Tailwind-first. Use `space-y-section` for vertical rhythm (3rem). Avoid custom CSS; prefer Tailwind utilities.
 - **Background**: `ClientGalaxyBackground` renders an animated canvas. CSP must allow `data:`, `blob:`, and worker sources for it to function.
 
@@ -87,6 +87,7 @@ Helpers in `src/utils/security.ts`: `getClientIP()`, `rateLimit()`, validators (
    shortTitle: "Card Label"
    date: "YYYY-MM-DD"
    excerpt: "One-liner for cards and OG."
+   category: "Daily Word"
    ```
 3. The homepage displays the latest post via `getAllPostsMeta()[0]`
 4. OG/Twitter metadata requires `NEXT_PUBLIC_APP_URL` to be set
