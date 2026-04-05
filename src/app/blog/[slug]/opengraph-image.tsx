@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 import { formatPostDate } from '@/utils/helpers';
-import { getPostBySlug, getPostSlugs } from '@/utils/posts';
+import { getAllPostsMeta, getPostBySlug } from '@/utils/posts';
 
 export const alt = 'Blog post preview image';
 export const size = { width: 1200, height: 630 };
@@ -32,7 +32,7 @@ function getAccentPalette(category: string) {
 }
 
 export async function generateStaticParams() {
-  return getPostSlugs().map((slug) => ({ slug }));
+  return getAllPostsMeta().map((post) => ({ slug: post.slug }));
 }
 
 export default async function OGImage({ params }: { params: Promise<{ slug: string }> }) {
