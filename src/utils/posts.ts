@@ -154,6 +154,10 @@ export async function getPostBySlug(
   return post;
 }
 
+export function getPostOgImageUrl(slug: string): string {
+  return `${SITE_URL}/blog/${slug}/opengraph-image`;
+}
+
 export async function getPostOgMeta(slug: string): Promise<Metadata | null> {
   const post = await getPostBySlug(slug);
   if (!post) {
@@ -161,7 +165,7 @@ export async function getPostOgMeta(slug: string): Promise<Metadata | null> {
   }
 
   const { title, excerpt } = post;
-  const imageUrl = `${SITE_URL}/blog/${slug}/opengraph-image`;
+  const imageUrl = getPostOgImageUrl(slug);
   const url = `${SITE_URL}/blog/${slug}`;
 
   return {
