@@ -10,6 +10,7 @@ import { formatPostDate } from '@/utils/helpers';
 import {
   getAllPostsMeta,
   getPostBySlug,
+  getPostOgImageUrl,
   getPostOgMeta,
   getPostSlugs,
   seriesSlug,
@@ -68,7 +69,7 @@ export default async function PostPage({ params }: PostPageProps) {
     description: post.excerpt,
     datePublished: post.date,
     url: `${SITE_URL}/blog/${post.slug}`,
-    image: `${SITE_URL}/family-photo.jpeg`,
+    image: getPostOgImageUrl(post.slug),
     author: {
       '@type': 'Person',
       name: 'Brandon',

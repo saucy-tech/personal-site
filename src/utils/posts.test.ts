@@ -1,4 +1,4 @@
-import { getAllPostsMeta, getPostBySlug, getPostOgMeta } from '@/utils/posts';
+import { getAllPostsMeta, getPostBySlug, getPostOgImageUrl, getPostOgMeta } from '@/utils/posts';
 import { POST_CATEGORIES } from '@/utils/post-taxonomy';
 
 describe('posts utilities', () => {
@@ -52,19 +52,18 @@ describe('posts utilities', () => {
   it('returns post metadata with a share image fallback', async () => {
     const posts = getAllPostsMeta();
     const metadata = await getPostOgMeta(posts[0]!.slug);
+    const imageUrl = getPostOgImageUrl(posts[0]!.slug);
 
     expect(metadata).not.toBeNull();
     expect(metadata?.openGraph?.images).toEqual([
       {
-        url: `https://saucy.tech/blog/${posts[0]!.slug}/opengraph-image`,
+        url: imageUrl,
         width: 1200,
         height: 630,
         alt: posts[0]!.title,
       },
     ]);
-    expect(metadata?.twitter?.images).toEqual([
-      `https://saucy.tech/blog/${posts[0]!.slug}/opengraph-image`,
-    ]);
+    expect(metadata?.twitter?.images).toEqual([imageUrl]);
   });
 
   it('does not load future-dated posts without an explicit override', async () => {
