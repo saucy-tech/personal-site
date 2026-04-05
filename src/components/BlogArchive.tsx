@@ -229,7 +229,7 @@ export default function BlogArchive({ posts }: BlogArchiveProps) {
               <div className="mt-4 flex flex-wrap gap-2">
                 {post.series && (
                   <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">
-                    Series: {post.series}
+                    {post.series}
                   </span>
                 )}
                 {post.tags.slice(0, 3).map((tag) => (
