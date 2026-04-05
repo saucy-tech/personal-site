@@ -33,7 +33,14 @@ export async function POST(req: NextRequest) {
       return createRateLimitResponse(rateLimitResult.resetTime);
     }
 
-    const { email } = await req.json();
+    let body: unknown;
+    try {
+      body = await req.json();
+    } catch {
+      return createSecureErrorResponse('Invalid request body', 400);
+    }
+
+    const { email } = body as { email?: unknown };
 
     // Validate email using security utilities
     const emailValidation = validators.email(email);

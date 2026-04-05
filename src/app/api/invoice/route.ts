@@ -47,8 +47,14 @@ export async function POST(request: NextRequest) {
       return createRateLimitResponse(rateLimitResult.resetTime);
     }
 
-    const body = await request.json();
-    const { amount, memo } = body;
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      return createSecureErrorResponse('Invalid request body', 400);
+    }
+
+    const { amount, memo } = body as { amount?: unknown; memo?: unknown };
 
     // Validate amount using security utilities
     const amountValidation = validators.lightningAmount(amount, 'sats');
