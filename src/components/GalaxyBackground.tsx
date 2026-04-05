@@ -1,14 +1,37 @@
 'use client';
 
-import React, { useEffect, useRef, ReactNode } from 'react';
+import React, { useEffect, useRef, useState, ReactNode } from 'react';
 
 // Props for GalaxyBackground, allowing optional children to render on top of the canvas
 interface GalaxyBackgroundProps {
   children?: ReactNode;
 }
 
+const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
+
 const GalaxyBackground: React.FC<GalaxyBackgroundProps> = ({ children }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [reducedMotion, setReducedMotion] = useState(() => {
+    if (typeof window === 'undefined') {
+      return false;
+    }
+
+    return window.matchMedia(REDUCED_MOTION_QUERY).matches;
+  });
+
+  useEffect(() => {
+    const mq = window.matchMedia(REDUCED_MOTION_QUERY);
+
+    const handleMotionPreferenceChange = (event: MediaQueryListEvent) => {
+      setReducedMotion(event.matches);
+    };
+
+    mq.addEventListener('change', handleMotionPreferenceChange);
+
+    return () => {
+      mq.removeEventListener('change', handleMotionPreferenceChange);
+    };
+  }, []);
 
   useEffect(() => {
     // Retrieve CSS variables or fallback to defaults
@@ -43,14 +66,6 @@ const GalaxyBackground: React.FC<GalaxyBackgroundProps> = ({ children }) => {
     const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
 
-    // Set canvas size
-    const setCanvasSize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    setCanvasSize();
-    window.addEventListener('resize', setCanvasSize);
-
     // Star properties
     const stars: {
       x: number;
@@ -62,44 +77,43 @@ const GalaxyBackground: React.FC<GalaxyBackgroundProps> = ({ children }) => {
     }[] = [];
     const numStars = 150; // Reduced star count for better performance
 
-    // Initialize stars
-    for (let i = 0; i < numStars; i++) {
-      stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        size: Math.random() * 2,
-        brightness: Math.random(),
-        speed: 0.005 + Math.random() * 0.02,
-        color: Math.random(),
-      });
-    }
+    const populateStars = () => {
+      stars.length = 0;
 
-    // Draw first solid background frame
-    ctx.fillStyle = `rgb(${bgRgb.r}, ${bgRgb.g}, ${bgRgb.b})`;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < numStars; i++) {
+        stars.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          size: Math.random() * 2,
+          brightness: Math.random(),
+          speed: 0.005 + Math.random() * 0.02,
+          color: Math.random(),
+        });
+      }
+    };
 
-    // Animation loop
-    let animationFrameId: number;
-    let time = 0;
-    const animate = () => {
-      time += 0.002; // Slower time increment for smoother animation
+    const setCanvasSize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
 
-      // Apply a semi-transparent layer to create trails
-      ctx.fillStyle = `rgba(${bgRgb.r}, ${bgRgb.g}, ${bgRgb.b}, 0.5)`; // 50% opacity
+    const drawBackground = (opacity = 1) => {
+      ctx.fillStyle =
+        opacity === 1
+          ? `rgb(${bgRgb.r}, ${bgRgb.g}, ${bgRgb.b})`
+          : `rgba(${bgRgb.r}, ${bgRgb.g}, ${bgRgb.b}, ${opacity})`;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
+    };
 
-      // Draw and update stars
+    const drawStars = () => {
       stars.forEach((star) => {
-        // More subtle pulsating effect
         const opacity = 0.2 + Math.sin(time * 2 + star.brightness * 10) * 0.2;
 
-        // Subtle color variation around the accent color
         ctx.fillStyle = `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, ${opacity})`;
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
         ctx.fill();
 
-        // Optional subtle glow effect for larger stars
         if (star.size > 1.5) {
           ctx.beginPath();
           ctx.arc(star.x, star.y, star.size * 2, 0, Math.PI * 2);
@@ -111,28 +125,72 @@ const GalaxyBackground: React.FC<GalaxyBackgroundProps> = ({ children }) => {
             star.y,
             star.size * 3
           );
-          gradient.addColorStop(0, `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, 0.125)`); // 12.5% opacity
-          gradient.addColorStop(1, `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, 0)`); // 0% opacity
+          gradient.addColorStop(0, `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, 0.125)`);
+          gradient.addColorStop(1, `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, 0)`);
           ctx.fillStyle = gradient;
           ctx.fill();
         }
+      });
+    };
 
-        // Update star position with parallax effect (more subtle)
+    const updateStars = () => {
+      stars.forEach((star) => {
         star.y = (star.y + star.speed) % canvas.height;
         star.x += Math.sin(time + star.brightness) * 0.1;
         star.x = (star.x + canvas.width) % canvas.width;
       });
-
-      animationFrameId = requestAnimationFrame(animate);
     };
 
-    animate();
+    const drawStaticFrame = () => {
+      drawBackground();
+      drawStars();
+    };
+
+    const handleResize = () => {
+      setCanvasSize();
+      populateStars();
+
+      if (reducedMotion) {
+        drawStaticFrame();
+        return;
+      }
+
+      drawBackground();
+      drawStars();
+    };
+
+    setCanvasSize();
+    populateStars();
+    window.addEventListener('resize', handleResize);
+
+    let animationFrameId: number | null = null;
+    let time = 0;
+
+    const animate = () => {
+      time += 0.002; // Slower time increment for smoother animation
+
+      drawBackground(0.5);
+      drawStars();
+      updateStars();
+
+      animationFrameId = window.requestAnimationFrame(animate);
+    };
+
+    drawBackground();
+    drawStars();
+
+    if (!reducedMotion) {
+      animationFrameId = window.requestAnimationFrame(animate);
+    }
 
     return () => {
-      window.removeEventListener('resize', setCanvasSize);
-      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('resize', handleResize);
+
+      if (animationFrameId !== null) {
+        window.cancelAnimationFrame(animationFrameId);
+      }
     };
-  }, []);
+  }, [reducedMotion]);
 
   return (
     <>
