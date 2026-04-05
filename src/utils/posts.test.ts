@@ -75,4 +75,8 @@ describe('posts utilities', () => {
     const futurePost = await getPostBySlug('2026-04-05-he-is-not-here', { includeFuture: true });
     expect(futurePost?.slug).toBe('2026-04-05-he-is-not-here');
   });
+
+  it('all posts have valid frontmatter', () => {
+    expect(() => getAllPostsMeta({ includeFuture: true })).not.toThrow();
+  });
 });

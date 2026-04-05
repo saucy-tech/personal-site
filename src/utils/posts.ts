@@ -6,6 +6,7 @@ import matter from 'gray-matter';
 import yaml from 'js-yaml';
 
 import { Post, PostMeta, toPostMeta } from '@/utils/post-taxonomy';
+import { frontmatterSchema } from '@/utils/frontmatter-schema';
 import { SITE_URL } from '@/utils/constants';
 
 export interface SeriesMeta {
@@ -112,6 +113,15 @@ export function getAllPostsMeta(options: PostQueryOptions = {}): PostMeta[] {
     .map((slug) => {
       const fileContent = fs.readFileSync(getPostPath(slug), 'utf-8');
       const { data } = matter(fileContent);
+      const result = frontmatterSchema.safeParse(data);
+      if (!result.success) {
+        const issues = result.error.issues
+          .map((issue) => `  - ${issue.path.join('.') || 'root'}: ${issue.message}`)
+          .join('\n');
+        throw new Error(
+          `Frontmatter validation failed for "${slug}.mdx":\n${issues}`
+        );
+      }
       return toPostMeta(slug, data);
     })
     .filter((post) => includeFuture || isPublishedDate(post.date))
