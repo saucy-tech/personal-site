@@ -12,6 +12,7 @@ import { SITE_URL } from '@/utils/constants';
 export interface SeriesMeta {
   name: string;
   slug: string;
+  aliases: string[];
   posts: PostMeta[];
   count: number;
   weekCount: number;
@@ -27,6 +28,14 @@ export function seriesSlug(name: string): string {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/(^-|-$)/g, '');
 }
+
+const SERIES_SLUG_ALIASES: Record<string, string[]> = {
+  'Nicodemus Series': ['nicodemus'],
+  'Woman at the Well Series': ['woman-at-the-well'],
+  'The Paralytic in Mark 2 Series': ['the-paralytic-in-mark-2'],
+  'Sent Like Witnesses Series': ['sent-like-witnesses'],
+  'He Has Risen Series': ['he-is-risen-the-victory-that-changes-everything'],
+};
 
 // Returns a sortable ISO week key "YYYY-WNN" for a "YYYY-MM-DD" date string.
 // Uses ISO 8601 (Mon–Sun weeks; week 1 contains the year's first Thursday).
@@ -56,14 +65,20 @@ export function getAllSeries(): SeriesMeta[] {
       (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
     );
     const weekCount = new Set(sorted.map((p) => isoWeekKey(p.date))).size;
+    const slug = seriesSlug(name);
     return {
       name,
-      slug: seriesSlug(name),
+      slug,
+      aliases: (SERIES_SLUG_ALIASES[name] ?? []).filter((alias) => alias !== slug),
       posts: sorted,
       count: sorted.length,
       weekCount,
     };
   });
+}
+
+export function getSeriesBySlug(slug: string): SeriesMeta | undefined {
+  return getAllSeries().find((series) => series.slug === slug || series.aliases.includes(slug));
 }
 
 // Configure gray-matter to use js-yaml 4.x's load function

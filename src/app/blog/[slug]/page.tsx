@@ -12,7 +12,6 @@ import {
   getPostBySlug,
   getPostOgImageUrl,
   getPostOgMeta,
-  getPostSlugs,
   seriesSlug,
 } from '@/utils/posts';
 import { SITE_NAME, SITE_URL } from '@/utils/constants';
@@ -31,7 +30,7 @@ function getReadingTime(content: string) {
 }
 
 export async function generateStaticParams() {
-  return getPostSlugs().map((slug) => ({ slug }));
+  return getAllPostsMeta().map((post) => ({ slug: post.slug }));
 }
 
 export const dynamicParams = false;

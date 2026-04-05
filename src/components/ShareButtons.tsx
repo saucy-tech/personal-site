@@ -49,6 +49,13 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
     return false;
   }
 
+  async function handleMobileShare() {
+    const shared = await handleNativeShare();
+    if (!shared) {
+      await handleCopy();
+    }
+  }
+
   return (
     <div className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 sm:p-8">
       <p className="text-sm uppercase tracking-[0.18em] text-[var(--accent)]">Share</p>
@@ -59,9 +66,9 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
       <div className="mt-4 flex flex-wrap gap-3">
         {/* Native share (mobile) — shown only on supporting devices via JS, but we render a fallback set always */}
         <button
-          onClick={handleNativeShare}
+          onClick={handleMobileShare}
           className="flex min-h-[44px] min-w-[44px] items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-2.5 text-sm font-medium text-[var(--text-secondary)] transition hover:border-[var(--accent-border)] hover:bg-[var(--accent-transparent)] hover:text-[var(--text-primary)] sm:hidden"
-          aria-label="Share this post"
+          aria-label="Share this post or copy the link"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
