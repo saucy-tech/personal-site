@@ -16,6 +16,10 @@ export interface SeriesMeta {
   weekCount: number;
 }
 
+interface PostQueryOptions {
+  includeFuture?: boolean;
+}
+
 export function seriesSlug(name: string): string {
   return name
     .toLowerCase()
@@ -69,6 +73,7 @@ matter.engines.yaml = {
 };
 
 const POSTS_DIR = path.join(process.cwd(), 'src', 'posts');
+const SITE_TIME_ZONE = 'America/New_York';
 
 function ensurePostsDir() {
   if (!fs.existsSync(POSTS_DIR)) {
@@ -87,18 +92,38 @@ export function getPostSlugs(): string[] {
     .map((file) => file.replace(/\.mdx?$/, ''));
 }
 
-export function getAllPostsMeta(): PostMeta[] {
+function getTodayDateString(): string {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: SITE_TIME_ZONE,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(new Date());
+}
+
+function isPublishedDate(date: string): boolean {
+  return !date || date <= getTodayDateString();
+}
+
+export function getAllPostsMeta(options: PostQueryOptions = {}): PostMeta[] {
+  const { includeFuture = false } = options;
+
   return getPostSlugs()
     .map((slug) => {
       const fileContent = fs.readFileSync(getPostPath(slug), 'utf-8');
       const { data } = matter(fileContent);
       return toPostMeta(slug, data);
     })
+    .filter((post) => includeFuture || isPublishedDate(post.date))
     .sort((a, b) => b.date.localeCompare(a.date) || b.slug.localeCompare(a.slug));
 }
 
 // Note: We will send raw MDX to the page and compile there with next-mdx-remote/rsc
-export async function getPostBySlug(slug: string): Promise<Post | null> {
+export async function getPostBySlug(
+  slug: string,
+  options: PostQueryOptions = {}
+): Promise<Post | null> {
+  const { includeFuture = false } = options;
   const postPath = getPostPath(slug);
   if (!fs.existsSync(postPath)) {
     return null;
@@ -107,10 +132,16 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
   const fileContent = fs.readFileSync(postPath, 'utf-8');
   const { data, content } = matter(fileContent);
 
-  return {
+  const post = {
     ...toPostMeta(slug, data),
     content,
   };
+
+  if (!includeFuture && !isPublishedDate(post.date)) {
+    return null;
+  }
+
+  return post;
 }
 
 export async function getPostOgMeta(slug: string): Promise<Metadata | null> {
@@ -120,7 +151,7 @@ export async function getPostOgMeta(slug: string): Promise<Metadata | null> {
   }
 
   const { title, excerpt } = post;
-  const imageUrl = `${SITE_URL}/family-photo.jpeg`;
+  const imageUrl = `${SITE_URL}/blog/${slug}/opengraph-image`;
   const url = `${SITE_URL}/blog/${slug}`;
 
   return {
