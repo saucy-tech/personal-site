@@ -177,6 +177,10 @@ export const validators = {
       return { valid: false, error: 'Amount must be a valid number' };
     }
 
+    if (!Number.isInteger(numAmount)) {
+      return { valid: false, error: 'Amount must be a whole number of satoshis' };
+    }
+
     if (numAmount <= 0) {
       return { valid: false, error: 'Amount must be positive' };
     }
