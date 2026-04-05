@@ -32,7 +32,7 @@ export interface Post extends PostMeta {
   content: string;
 }
 
-const CATEGORY_ALIASES: Record<string, PostCategory> = {
+export const CATEGORY_ALIASES: Record<string, PostCategory> = {
   'daily-word': 'daily-word',
   dailyword: 'daily-word',
   'daily word': 'daily-word',
