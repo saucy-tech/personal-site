@@ -2,6 +2,7 @@ export const POST_CATEGORIES = {
   'daily-word': {
     label: 'Daily Word',
     description: 'Short weekday scripture reflections and devotional notes.',
+    href: '/daily-word',
   },
   'biblical-reflection': {
     label: 'Biblical Reflection',
