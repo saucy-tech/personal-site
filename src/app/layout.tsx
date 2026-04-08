@@ -5,7 +5,6 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from '@/utils/constants';
 import ClientGalaxyBackground from '@/components/ClientGalaxyBackground';
-import ClientSnowflakes from '@/components/ClientSnowflakes';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
@@ -90,8 +89,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           {/* Client-only animated background */}
           <ClientGalaxyBackground />
-          {/* Winter snowflakes with toggle */}
-          <ClientSnowflakes />
           <div className="relative z-10 flex flex-col min-h-screen">
             <Header />
             <main className="flex-grow">

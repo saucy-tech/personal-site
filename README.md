@@ -139,6 +139,24 @@ The app uses a consistent vertical spacing system:
 - The profile section sits at the top with proper spacing to content below
 - Social bar and sections maintain visual hierarchy through spacing
 
+### Seasonal Features
+
+The snowflake animation (falling snow with a toggle button) is a **winter-only** feature. It was removed from the active layout because it is distracting outside of winter, especially on mobile.
+
+To re-enable it for the winter season:
+
+1. Open `src/app/layout.tsx`
+2. Add the import: `import ClientSnowflakes from '@/components/ClientSnowflakes';`
+3. Add the component inside the background `<div>`, after `<ClientGalaxyBackground />`:
+   ```tsx
+   {/* Winter snowflakes with toggle */}
+   <ClientSnowflakes />
+   ```
+
+The component files are preserved at:
+- `src/components/Snowflakes.tsx` — canvas-based snowflake animation
+- `src/components/ClientSnowflakes.tsx` — client-side toggle with reduced-motion support
+
 ### Development Tips
 
 1. **Content Updates**: Most content is defined in `src/app/page.tsx` as JavaScript objects
