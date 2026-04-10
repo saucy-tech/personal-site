@@ -311,3 +311,14 @@ describe('rateLimit', () => {
     jest.useRealTimers();
   });
 });
+
+// ---------------------------------------------------------------------------
+// rateLimitCleanupTimer
+// ---------------------------------------------------------------------------
+
+describe('rateLimitCleanupTimer', () => {
+  it('registers the cleanup timer as a singleton on globalThis', () => {
+    const timer = (globalThis as Record<string, unknown>)['__personalSiteRateLimitCleanup__'];
+    expect(timer).toBeDefined();
+  });
+});
