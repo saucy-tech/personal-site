@@ -31,15 +31,33 @@ interface RateLimitBucket {
 
 const rateLimitStore = new Map<string, RateLimitBucket>();
 
-// Clean up expired rate limit entries periodically
-setInterval(() => {
-  const now = Date.now();
-  for (const [key, bucket] of rateLimitStore.entries()) {
-    if (bucket.expires <= now) {
-      rateLimitStore.delete(key);
-    }
+// Clean up expired rate limit entries periodically.
+// Keep the timer unref'd and singleton-guarded so test imports do not pin the process open.
+const rateLimitCleanupKey = '__personalSiteRateLimitCleanup__';
+
+function startRateLimitCleanupTimer() {
+  const globalScope = globalThis as typeof globalThis & {
+    [rateLimitCleanupKey]?: ReturnType<typeof setInterval>;
+  };
+
+  if (globalScope[rateLimitCleanupKey]) {
+    return;
   }
-}, 60000); // Clean up every minute
+
+  const cleanupTimer = setInterval(() => {
+    const now = Date.now();
+    for (const [key, bucket] of rateLimitStore.entries()) {
+      if (bucket.expires <= now) {
+        rateLimitStore.delete(key);
+      }
+    }
+  }, 60000);
+
+  cleanupTimer.unref?.();
+  globalScope[rateLimitCleanupKey] = cleanupTimer;
+}
+
+startRateLimitCleanupTimer();
 
 /**
  * Generate a cryptographically secure nonce for CSP
