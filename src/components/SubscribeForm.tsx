@@ -25,7 +25,11 @@ export default function SubscribeForm() {
 
   return (
     <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto space-y-3">
+      <label htmlFor="subscribe-email" className="sr-only">
+        Email address
+      </label>
       <input
+        id="subscribe-email"
         type="email"
         required
         placeholder="Your email"

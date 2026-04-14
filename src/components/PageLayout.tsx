@@ -19,7 +19,7 @@ export default function PageLayout({
       <div className="container mx-auto px-4 py-8 flex-grow">
         <Link
           href={backHref}
-          className="inline-flex items-center text-[#D4AF37] hover:text-[#D4AF37]/80 transition-colors mb-8"
+          className="inline-flex items-center text-[var(--accent)] hover:opacity-80 transition-opacity mb-8"
         >
           <ArrowLeftIcon className="h-5 w-5 mr-2" />
           {backLabel}

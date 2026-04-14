@@ -90,9 +90,11 @@ export default function BlogArchive({ posts }: BlogArchiveProps) {
             Browse by type, topic, or scripture passage.
           </div>
 
-          <label className="relative block">
+          <label htmlFor="blog-search" className="relative block">
+            <span className="sr-only">Search posts</span>
             <MagnifyingGlassIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-secondary)]" />
             <input
+              id="blog-search"
               type="search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}

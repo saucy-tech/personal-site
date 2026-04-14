@@ -61,8 +61,9 @@ export const metadata: Metadata = {
     creator: '@Saucy_Tech',
   },
   icons: {
-    icon: [{ url: '/icons/github-logo.svg', type: 'image/svg+xml' }],
-    shortcut: [{ url: '/icons/github-logo.svg', type: 'image/svg+xml' }],
+    icon: [{ url: '/favicon.ico' }],
+    shortcut: [{ url: '/favicon.ico' }],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
   },
   manifest: '/manifest.json',
 };
@@ -91,7 +92,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <ClientGalaxyBackground />
           <div className="relative z-10 flex flex-col min-h-screen">
             <Header />
-            <main className="flex-grow">
+            <main id="main-content" className="flex-grow">
               <div className="container mx-auto max-w-5xl">{children}</div>
             </main>
             <Footer />
