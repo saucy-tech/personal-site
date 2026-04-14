@@ -13,7 +13,6 @@ import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from '@/utils/constants';
 export default async function Home() {
   const profileData = {
     name: 'Brandon',
-    username: '',
     bio: 'Love Jesus, Explore Ideas, Create Things, Save in Bitcoin',
     imageSrc: '/family-photo.jpeg',
   };
@@ -85,7 +84,7 @@ export default async function Home() {
   };
 
   return (
-    <main className="pt-4 pb-6 px-4 md:px-8 flex flex-col items-center">
+    <div className="pt-4 pb-6 px-4 md:px-8 flex flex-col items-center">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -154,6 +153,6 @@ export default async function Home() {
           </Link>
         </div>
       </div>
-    </main>
+    </div>
   );
 }
