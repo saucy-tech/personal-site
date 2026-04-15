@@ -37,6 +37,7 @@ jobs:
         env:
           SLUG_1: ${{ inputs.slug_1 }}
           SLUG_2: ${{ inputs.slug_2 }}
+          NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_APP_URL }}
         run: |
           python3 - <<'PYEOF'
           import os, sys, yaml
@@ -98,8 +99,6 @@ jobs:
           if p2:
               print(f"Post 2: {p2['title']} → {p2['url']}")
           PYEOF
-        env:
-          NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_APP_URL }}
 
       - name: Build and send correction broadcast
         env:
