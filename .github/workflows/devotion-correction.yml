@@ -1,0 +1,219 @@
+name: Devotion Correction Email
+
+# Manually send a "we missed a few days" correction email with links to
+# one or two specific devotion posts.  Triggered exclusively via
+# workflow_dispatch — never runs automatically.
+
+on:
+  workflow_dispatch:
+    inputs:
+      slug_1:
+        description: 'First missed post slug (e.g. 2026-04-14-the-moment-he-woke-up)'
+        required: true
+        type: string
+      slug_2:
+        description: 'Second missed post slug (leave blank if only one)'
+        required: false
+        type: string
+      note:
+        description: 'Optional personal note to include at the top of the email'
+        required: false
+        default: ''
+        type: string
+
+jobs:
+  send_correction:
+    name: Send Correction Broadcast
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve post metadata
+        id: meta
+        env:
+          SLUG_1: ${{ inputs.slug_1 }}
+          SLUG_2: ${{ inputs.slug_2 }}
+        run: |
+          python3 - <<'PYEOF'
+          import os, sys, yaml
+          from datetime import datetime
+
+          github_output = os.environ['GITHUB_OUTPUT']
+          app_url = os.environ.get('NEXT_PUBLIC_APP_URL', 'https://yourdomain.com').rstrip('/')
+
+          def load_post(slug):
+              if not slug:
+                  return None
+              path = f"src/posts/{slug}.mdx"
+              if not os.path.exists(path):
+                  print(f"::error::Post not found: {path}")
+                  sys.exit(1)
+              with open(path, encoding='utf-8') as f:
+                  content = f.read()
+              parts = content.split('---', 2)
+              if len(parts) < 3:
+                  print(f"::error::No frontmatter in {path}")
+                  sys.exit(1)
+              fm = yaml.safe_load(parts[1])
+              title   = str(fm.get('title',   '')).strip()
+              excerpt = str(fm.get('excerpt', '')).strip()
+              date    = str(fm.get('date',    '')).strip()
+              try:
+                  dt = datetime.strptime(date, '%Y-%m-%d')
+                  formatted_date = dt.strftime('%A, %B %-d')
+              except Exception:
+                  formatted_date = date
+              url = f"{app_url}/blog/{slug}"
+              return {'title': title, 'excerpt': excerpt,
+                      'formatted_date': formatted_date, 'url': url}
+
+          slug1 = os.environ.get('SLUG_1', '').strip()
+          slug2 = os.environ.get('SLUG_2', '').strip()
+
+          p1 = load_post(slug1)
+          p2 = load_post(slug2) if slug2 else None
+
+          def w(name, value):
+              return f"{name}={value}\n"
+
+          with open(github_output, 'a', encoding='utf-8') as out:
+              out.write(w('p1_title',  p1['title']))
+              out.write(w('p1_excerpt', p1['excerpt']))
+              out.write(w('p1_date',   p1['formatted_date']))
+              out.write(w('p1_url',    p1['url']))
+              if p2:
+                  out.write(w('p2_title',  p2['title']))
+                  out.write(w('p2_excerpt', p2['excerpt']))
+                  out.write(w('p2_date',   p2['formatted_date']))
+                  out.write(w('p2_url',    p2['url']))
+                  out.write(w('has_p2', 'true'))
+              else:
+                  out.write(w('has_p2', 'false'))
+
+          print(f"Post 1: {p1['title']} → {p1['url']}")
+          if p2:
+              print(f"Post 2: {p2['title']} → {p2['url']}")
+          PYEOF
+        env:
+          NEXT_PUBLIC_APP_URL: ${{ vars.NEXT_PUBLIC_APP_URL }}
+
+      - name: Build and send correction broadcast
+        env:
+          KIT_API_KEY:          ${{ secrets.KIT_API_KEY }}
+          NEXT_PUBLIC_APP_URL:  ${{ vars.NEXT_PUBLIC_APP_URL }}
+          P1_TITLE:    ${{ steps.meta.outputs.p1_title }}
+          P1_EXCERPT:  ${{ steps.meta.outputs.p1_excerpt }}
+          P1_DATE:     ${{ steps.meta.outputs.p1_date }}
+          P1_URL:      ${{ steps.meta.outputs.p1_url }}
+          P2_TITLE:    ${{ steps.meta.outputs.p2_title }}
+          P2_EXCERPT:  ${{ steps.meta.outputs.p2_excerpt }}
+          P2_DATE:     ${{ steps.meta.outputs.p2_date }}
+          P2_URL:      ${{ steps.meta.outputs.p2_url }}
+          HAS_P2:      ${{ steps.meta.outputs.has_p2 }}
+          EXTRA_NOTE:  ${{ inputs.note }}
+        run: |
+          if [ -z "$KIT_API_KEY" ]; then
+            echo "::error::KIT_API_KEY secret is not set."
+            exit 1
+          fi
+
+          APP_URL="${NEXT_PUBLIC_APP_URL:-https://yourdomain.com}"
+          DAILY_WORD_URL="${APP_URL}/daily-word"
+          SEND_AT=$(date -u -d '+2 minutes' +%Y-%m-%dT%H:%M:%SZ)
+
+          # Build the second post card only when HAS_P2 is true
+          if [ "$HAS_P2" = "true" ]; then
+            P2_CARD=$(jq -rn \
+              --arg date    "$P2_DATE" \
+              --arg title   "$P2_TITLE" \
+              --arg excerpt "$P2_EXCERPT" \
+              --arg url     "$P2_URL" \
+              '
+              "<hr style=\"border: none; border-top: 1px solid #e0e0e0; margin: 28px 0;\" />"
+              + "<p style=\"font-size: 13px; color: #888888; letter-spacing: 0.05em; text-transform: uppercase; margin: 0 0 8px 0;\">" + $date + "</p>"
+              + "<h2 style=\"font-family: Georgia, serif; font-size: 20px; font-weight: bold; color: #1a1a1a; margin: 0 0 12px 0; line-height: 1.3;\">" + $title + "</h2>"
+              + "<p style=\"font-size: 15px; line-height: 1.7; color: #3a3a3a; margin: 0 0 16px 0;\">" + $excerpt + "</p>"
+              + "<p style=\"margin: 0;\">"
+              +   "<a href=\"" + $url + "\" style=\"background: #c9a84c; color: #ffffff; padding: 10px 20px; font-family: sans-serif; border-radius: 0; display: inline-block; text-decoration: none;\">Read &rarr;</a>"
+              + "</p>"
+              ')
+          else
+            P2_CARD=""
+          fi
+
+          # Optional personal note block
+          if [ -n "$EXTRA_NOTE" ]; then
+            NOTE_BLOCK=$(jq -rn --arg note "$EXTRA_NOTE" \
+              '"<p style=\"font-size: 15px; line-height: 1.7; color: #3a3a3a; font-style: italic; margin: 0 0 24px 0;\">" + $note + "</p>"')
+          else
+            NOTE_BLOCK=""
+          fi
+
+          HTML_CONTENT=$(jq -rn \
+            --arg app_url        "$APP_URL" \
+            --arg daily_word_url "$DAILY_WORD_URL" \
+            --arg note_block     "$NOTE_BLOCK" \
+            --arg p1_date        "$P1_DATE" \
+            --arg p1_title       "$P1_TITLE" \
+            --arg p1_excerpt     "$P1_EXCERPT" \
+            --arg p1_url         "$P1_URL" \
+            --arg p2_card        "$P2_CARD" \
+            '
+            "<div style=\"font-family: Georgia, serif; max-width: 600px; margin: 0 auto; color: #1a1a1a; padding: 0 16px;\">"
+            + "<p style=\"margin: 0 0 24px 0;\">"
+            +   "<a href=\"" + $app_url + "\" style=\"display: block; text-decoration: none;\">"
+            +     "<img src=\"https://www.saucy.tech/images/daily-word-banner.png\" width=\"600\" alt=\"The Daily Word\" style=\"display: block; width: 100%; max-width: 600px; height: auto; margin: 0 auto; border: 0;\" />"
+            +   "</a>"
+            + "</p>"
+            + "<h1 style=\"font-family: Georgia, serif; font-size: 22px; font-weight: bold; color: #1a1a1a; margin: 0 0 16px 0; line-height: 1.3;\">A quick correction</h1>"
+            + "<p style=\"font-size: 16px; line-height: 1.7; color: #3a3a3a; margin: 0 0 16px 0;\">A technical issue caused the wrong devotion to go out the past couple of days. We are sorry for the confusion. Here are the ones you should have received, in case you missed them.</p>"
+            + $note_block
+            + "<hr style=\"border: none; border-top: 1px solid #e0e0e0; margin: 28px 0;\" />"
+            + "<p style=\"font-size: 13px; color: #888888; letter-spacing: 0.05em; text-transform: uppercase; margin: 0 0 8px 0;\">" + $p1_date + "</p>"
+            + "<h2 style=\"font-family: Georgia, serif; font-size: 20px; font-weight: bold; color: #1a1a1a; margin: 0 0 12px 0; line-height: 1.3;\">" + $p1_title + "</h2>"
+            + "<p style=\"font-size: 15px; line-height: 1.7; color: #3a3a3a; margin: 0 0 16px 0;\">" + $p1_excerpt + "</p>"
+            + "<p style=\"margin: 0;\">"
+            +   "<a href=\"" + $p1_url + "\" style=\"background: #c9a84c; color: #ffffff; padding: 10px 20px; font-family: sans-serif; border-radius: 0; display: inline-block; text-decoration: none;\">Read &rarr;</a>"
+            + "</p>"
+            + $p2_card
+            + "<hr style=\"border: none; border-top: 1px solid #e0e0e0; margin: 32px 0 16px 0;\" />"
+            + "<p style=\"font-size: 13px; line-height: 1.6; color: #888888; text-align: center; margin: 0 0 8px 0;\">Know someone who would enjoy this? <a href=\"" + $daily_word_url + "\" style=\"color: #c9a84c; text-decoration: underline;\">Share The Daily Word</a></p>"
+            + "<p style=\"font-size: 12px; line-height: 1.6; color: #888888; text-align: center; margin: 0;\">You&#39;re receiving this because you subscribed to The Daily Word &middot; <a href=\"" + $daily_word_url + "\" style=\"color: #888888; text-decoration: underline;\">saucy.tech</a></p>"
+            + "</div>"
+            ')
+
+          PAYLOAD=$(jq -n \
+            --arg subject      "A quick correction from The Daily Word" \
+            --arg content      "$HTML_CONTENT" \
+            --arg preview_text "We sent the wrong devotion — here are the ones you missed." \
+            --arg send_at      "$SEND_AT" \
+            '{subject: $subject, content: $content, preview_text: $preview_text, send_at: $send_at}')
+
+          echo "--- Correction broadcast ---"
+          echo "Subject: A quick correction from The Daily Word"
+          echo "Sending at: $SEND_AT"
+
+          RESPONSE=$(curl -s -w "\n%{http_code}" -X POST \
+            "https://api.kit.com/v4/broadcasts" \
+            -H "Content-Type: application/json" \
+            -H "Accept: application/json" \
+            -H "X-Kit-Api-Key: ${KIT_API_KEY}" \
+            -d "$PAYLOAD")
+
+          HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+          BODY=$(echo "$RESPONSE" | sed '$d')
+
+          echo "HTTP status: $HTTP_CODE"
+          echo "$BODY" | jq . 2>/dev/null || echo "$BODY"
+
+          if [ "$HTTP_CODE" -lt 200 ] || [ "$HTTP_CODE" -ge 300 ]; then
+            echo "::error::Kit API returned HTTP $HTTP_CODE."
+            exit 1
+          fi
+
+          BROADCAST_ID=$(echo "$BODY" | jq -r '.broadcast.id // .id // empty')
+          echo "✓ Correction broadcast created (ID: ${BROADCAST_ID:-unknown}), scheduled for $SEND_AT"
