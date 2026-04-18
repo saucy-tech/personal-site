@@ -12,5 +12,5 @@
 - Run `pnpm lint`, `pnpm test`, and `pnpm build` before release.
 - Exercise all public API routes with valid and invalid payloads.
 - Validate CSP is present once and includes per-request nonce in `script-src`.
-- Validate middleware excludes static assets (`.*\\..*` matcher path).
+- Validate proxy excludes static assets (`.*\\..*` matcher path).
 - Confirm `/api/btcusd` responds with `Cache-Control` and `X-Cache-Status` headers.

@@ -103,7 +103,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="relative z-10 flex flex-col min-h-screen">
             <Header />
             <main id="main-content" className="flex-grow">
-              <div className="container mx-auto max-w-5xl">{children}</div>
+              <div className="container mx-auto max-w-[min(100%,80rem)] px-4 sm:px-6">{children}</div>
             </main>
             <Footer />
           </div>
