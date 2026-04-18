@@ -88,12 +88,13 @@ export default async function PostPage({ params }: PostPageProps) {
   return (
     <PageLayout title={post.title} backHref="/blog" backLabel="Back to Blog">
       <script
-        nonce={nonce}
+        suppressHydrationWarning
         type="application/ld+json"
+        {...(nonce ? { nonce } : {})}
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="mx-auto max-w-3xl space-y-10">
-        <section className="overflow-hidden rounded-[2rem] border border-[var(--accent-border)] bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.18),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-6 sm:p-8">
+        <section className="overflow-hidden rounded-[2rem] border border-[var(--accent-border)] bg-[radial-gradient(circle_at_top_right,rgb(var(--accent-rgb)/0.18),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-6 sm:p-8">
           <div className="flex flex-wrap gap-2">
             <span className="rounded-full border border-[var(--accent-border)] bg-[var(--accent-transparent)] px-3 py-1 text-xs uppercase tracking-[0.18em] text-[var(--accent)]">
               {post.categoryLabel}

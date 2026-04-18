@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 
 import PageLayout from '@/components/PageLayout';
 import { SITE_NAME, SITE_URL } from '@/utils/constants';
@@ -239,6 +240,18 @@ export default function Bitcoin() {
             >
               → Sign up here with my referral link
             </a>
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 className="text-2xl font-semibold mt-8 mb-4">📓 Field notes</h2>
+        <div className="bg-white/10 p-6 rounded-lg space-y-3 text-sm leading-relaxed">
+          <p>
+            <Link href="/field-notes" className="text-blue-400 underline">
+              Field notes
+            </Link>{' '}
+            — how I use AI day to day (models, harnesses, subscriptions, gear).
           </p>
         </div>
       </section>

@@ -11,6 +11,9 @@ import { formatPostDate } from '@/utils/helpers';
 import { getAllPostsMeta } from '@/utils/posts';
 import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from '@/utils/constants';
 
+/** Inline JSON-LD uses CSP nonce from middleware; avoid static prerender without that header. */
+export const dynamic = 'force-dynamic';
+
 export default async function Home() {
   const nonce = (await headers()).get('x-nonce') ?? undefined;
   const profileData = {
@@ -88,8 +91,9 @@ export default async function Home() {
   return (
     <div className="pt-4 pb-6 px-4 md:px-8 flex flex-col items-center">
       <script
-        nonce={nonce}
+        suppressHydrationWarning
         type="application/ld+json"
+        {...(nonce ? { nonce } : {})}
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="space-y-6 w-full max-w-lg mx-auto">
@@ -115,6 +119,14 @@ export default async function Home() {
             icon={<span className="text-2xl">📚</span>}
             eyebrow="Blog"
             meta={`${posts.length} posts`}
+          />
+          <LinkCard
+            key="field-notes"
+            title="Field notes"
+            href="/field-notes"
+            icon={<span className="text-2xl">📓</span>}
+            eyebrow="Field notes"
+            meta="Models, harnesses, subscriptions—my AI stack"
           />
           <LinkCard
             key="my-projects"

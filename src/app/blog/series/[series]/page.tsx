@@ -94,7 +94,7 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
     <PageLayout title={series.name} backHref="/blog/series" backLabel="All Series">
       <div className="mx-auto max-w-3xl space-y-10">
         {/* Series header */}
-        <section className="overflow-hidden rounded-[2rem] border border-[var(--accent-border)] bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.18),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-6 sm:p-8">
+        <section className="overflow-hidden rounded-[2rem] border border-[var(--accent-border)] bg-[radial-gradient(circle_at_top_right,rgb(var(--accent-rgb)/0.18),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-6 sm:p-8">
           <p className="text-xs uppercase tracking-[0.18em] text-[var(--accent)]">Series</p>
           <h1 className="mt-2 text-3xl font-bold text-[var(--text-primary)]">{series.name}</h1>
           <div className="mt-4 flex flex-wrap gap-3">

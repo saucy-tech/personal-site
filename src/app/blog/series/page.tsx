@@ -39,7 +39,7 @@ export default function SeriesIndexPage() {
                 <Link
                   key={series.slug}
                   href={`/blog/series/${series.slug}`}
-                  className="group block overflow-hidden rounded-[2rem] border border-[var(--accent-border)] bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.08),transparent_60%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01))] p-6 transition hover:border-[var(--accent)] hover:bg-[var(--accent-transparent)] sm:p-8"
+                  className="group block overflow-hidden rounded-[2rem] border border-[var(--accent-border)] bg-[radial-gradient(circle_at_top_right,rgb(var(--accent-rgb)/0.1),transparent_60%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01))] p-6 transition hover:border-[var(--accent)] hover:bg-[var(--accent-transparent)] sm:p-8"
                 >
                   <p className="text-xs uppercase tracking-[0.18em] text-[var(--accent)]">Series</p>
                   <h2 className="mt-2 text-2xl font-semibold text-[var(--text-primary)] transition group-hover:text-[var(--accent)]">

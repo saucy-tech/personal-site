@@ -16,17 +16,19 @@ const SocialBar: React.FC<SocialBarProps> = ({ socials }) => {
   if (!socials || socials.length === 0) return null;
 
   return (
-    <div className="flex justify-center gap-3 sm:gap-4 py-1 flex-wrap w-full max-w-xs sm:max-w-none">
+    <div className="flex w-full flex-wrap items-center justify-center gap-3 sm:gap-4 py-1">
       {socials.map((social, index) => (
         <a
           key={index}
           href={social.href}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full p-2 bg-[var(--accent-transparent)] border border-[var(--accent-border)] hover:bg-[var(--accent-hover)] transition-all duration-200 hover:scale-110 active:scale-95"
+          className="inline-flex size-12 shrink-0 items-center justify-center rounded-full border border-[var(--accent-border)] bg-[var(--accent-transparent)] p-0 transition-all duration-200 hover:bg-[var(--accent-hover)] hover:scale-105 active:scale-95"
           aria-label={social.label}
         >
-          {social.icon}
+          <span className="flex size-8 items-center justify-center [&_img]:block [&_img]:h-8 [&_img]:w-8 [&_img]:object-contain">
+            {social.icon}
+          </span>
         </a>
       ))}
     </div>
