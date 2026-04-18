@@ -30,7 +30,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
   {
     id: 'using',
     title: 'Using',
-    blurb: 'Daily drivers — what I actually reach for without thinking.',
+    blurb: 'Daily drivers. What I reach for without thinking about it.',
     items: [
       {
         title: 'Warp',
@@ -47,7 +47,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
       {
         title: 'Claude Pro',
         tags: ['$20/mo'],
-        note: 'The subscription I care about most. I hit the caps regularly, which is its own signal about how much I lean on it.',
+        note: 'The subscription I care about most. I hit the caps regularly.',
       },
       {
         title: 'Opus 4.7',
@@ -70,13 +70,13 @@ export const fieldNotesSections: FieldNoteSection[] = [
   {
     id: 'trying',
     title: 'Trying',
-    blurb: 'Currently evaluating — jury\u2019s still out.',
+    blurb: 'Currently evaluating. Still making up my mind.',
     items: [
       {
         title: 'T3 Code',
         tags: ['wrapper'],
         badge: 'new',
-        note: 'Clean wrapper around Codex and Claude Code. Fast, focused, and gets out of the way — I\u2019ve been driving the CLIs through it more than directly.',
+        note: 'Clean wrapper around Codex and Claude Code. I\u2019ve been driving both CLIs through it more than directly.',
       },
       {
         title: 'Cursor Pro',
@@ -86,25 +86,25 @@ export const fieldNotesSections: FieldNoteSection[] = [
       {
         title: 'Codex',
         tags: ['openai', 'cli'],
-        note: 'OpenAI\u2019s terminal agent, mostly via T3 Code. Snappy with 5.4 Mini and a good fit for short, tool-using asks.',
+        note: 'OpenAI\u2019s terminal agent, mostly via T3 Code. Snappy with 5.4 Mini for short, tool-using asks.',
       },
       {
         title: 'Claude Teams (enhanced)',
         tags: ['anthropic', '$100/seat'],
         badge: 'watching',
-        note: 'Looking at this to stop bouncing off Pro limits. The economics take some thinking through.',
+        note: 'Looking at this to stop bouncing off Pro limits. Still doing the math on whether it\u2019s worth it.',
       },
     ],
   },
   {
     id: 'enjoying',
     title: 'Enjoying',
-    blurb: 'Things in tech I\u2019m into right now — not daily tools, just good.',
+    blurb: 'Things in tech I\u2019m into right now. Not what I rely on — just what I like.',
     items: [
       {
         title: 'Sonnet 4.6',
         tags: ['anthropic', 'workhorse'],
-        note: 'The middle-tier model that quietly does a lot of the work in Claude Code and Cursor. Good speed-to-capability tradeoff.',
+        note: 'Does more of my Claude Code and Cursor work than I\u2019d expect. Fast enough to live with, smart enough for most day-to-day asks.',
       },
     ],
   },
