@@ -13,8 +13,8 @@ function getAccentPalette(category: string) {
     case 'daily-word':
       return {
         accent: '#f7931a',
-        softAccent: 'rgba(212, 175, 55, 0.16)',
-        border: 'rgba(212, 175, 55, 0.34)',
+        softAccent: 'rgba(247, 147, 26, 0.16)',
+        border: 'rgba(247, 147, 26, 0.34)',
       };
     case 'biblical-reflection':
       return {
