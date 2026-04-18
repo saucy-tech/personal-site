@@ -365,7 +365,7 @@ export function getSecurityHeaders(options: { nonce?: string } = {}): Record<str
     "default-src 'self'",
 
     // Script sources: 'unsafe-inline' is required for Next.js App Router chunks/scripts that
-    // do not receive per-request nonces from middleware. Nonce remains for tagged inline scripts.
+    // do not receive per-request nonces from proxy. Nonce remains for tagged inline scripts.
     // eval only in non-production (Vercel preview local dev / non-prod NODE_ENV).
     isVercelProduction
       ? `script-src 'self' 'unsafe-inline'${nonce ? ` 'nonce-${nonce}'` : ''} blob:`

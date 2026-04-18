@@ -185,11 +185,11 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## CSP on Vercel: Production-compatible configuration
 
-This project uses a Content Security Policy (CSP) applied via middleware to work consistently in both local development and Vercel production/preview deployments.
+This project uses a Content Security Policy (CSP) applied via Next.js [proxy](https://nextjs.org/docs/app/api-reference/file-conventions/proxy) (formerly middleware) to work consistently in both local development and Vercel production/preview deployments.
 
 Key files:
 
-- [src/middleware.ts](src/middleware.ts)
+- [src/proxy.ts](src/proxy.ts)
 - [src/utils/security.ts](src/utils/security.ts)
 - [next.config.js](next.config.js)
 
@@ -216,10 +216,10 @@ Effective CSP highlights (production):
 - base-uri 'self', form-action 'self'
 - upgrade-insecure-requests (production only)
 
-Why middleware (not meta tags):
+Why proxy (not meta tags):
 
 - Vercel's edge/runtime headers are stricter than local; setting CSP at the edge ensures consistent behavior across environments.
-- Middleware allows environment-aware CSP that differs between dev and production.
+- Proxy allows environment-aware CSP that differs between dev and production.
 
 Verification steps:
 
@@ -242,7 +242,7 @@ Verification steps:
 
 Operational notes:
 
-- Do not add another CSP header via next.config.js; CSP is centralized in [src/middleware.ts](src/middleware.ts) using [src/utils/security.ts](src/utils/security.ts).
+- Do not add another CSP header via next.config.js; CSP is centralized in [src/proxy.ts](src/proxy.ts) using [src/utils/security.ts](src/utils/security.ts).
 - Avoid adding meta http-equiv="Content-Security-Policy" tags; headers beat meta and Vercel may enforce more strictly.
 - If adding new external APIs or CDNs, extend connect-src, font-src, img-src, etc., explicitly in [src/utils/security.ts](src/utils/security.ts).
 - If adding WebAssembly or specialized workers, ensure script-src and worker-src account for those needs without broadening to unsafe directives in production.
@@ -251,7 +251,7 @@ Troubleshooting:
 
 - If the galaxy canvas is blank only on first navigation in Vercel:
   - Ensure the page load (not client-routed) response has the CSP header with the directives above.
-  - Check that no second CSP header is present (duplicates can override each other). Keep CSP only in middleware.
+  - Check that no second CSP header is present (duplicates can override each other). Keep CSP only in proxy.
 - If fonts or images fail in Vercel but work locally, verify the corresponding src directives (font-src/img-src) include https: and data:/blob: as applicable.
 - If you see blocked scripts in production, verify that no 'unsafe-eval' is required.
 
@@ -260,7 +260,7 @@ Security posture:
 - Production avoids 'unsafe-eval' (removed).
 - Uses 'unsafe-inline' for scripts/styles (required for Next.js compatibility).
 - No frames or objects allowed.
-- Permissions-Policy is set with conservative defaults in middleware.
+- Permissions-Policy is set with conservative defaults in next.config.js headers; CSP and related security headers are set in proxy.
 
 Change log (CSP):
 
