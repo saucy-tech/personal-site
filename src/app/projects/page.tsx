@@ -65,13 +65,13 @@ export default function Projects() {
                   href="https://github.com/saucy-tech/personal-site"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block px-4 py-2 bg-[var(--accent)] text-white rounded hover:bg-[var(--accent-dark)] transition"
+                  className="inline-block px-4 py-2 bg-[var(--accent)] text-[var(--on-accent)] rounded hover:bg-[var(--accent-dark)] transition"
                 >
                   GitHub Repo
                 </a>
                 <a
                   href="/support#lightning-tip-jar"
-                  className="inline-block px-4 py-2 bg-[var(--accent)] text-white rounded hover:bg-[var(--accent-hover)] transition"
+                  className="inline-block px-4 py-2 bg-[var(--accent)] text-[var(--on-accent)] rounded hover:bg-[var(--accent-hover)] transition"
                 >
                   Try Lightning Tip Jar
                 </a>
@@ -102,7 +102,7 @@ export default function Projects() {
                 href="https://github.com/saucy-tech/work-time-visualizer-rust"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block px-4 py-2 bg-[var(--accent)] text-white rounded hover:bg-[var(--accent-dark)] transition"
+                className="inline-block px-4 py-2 bg-[var(--accent)] text-[var(--on-accent)] rounded hover:bg-[var(--accent-dark)] transition"
               >
                 GitHub Repo
               </a>
@@ -131,7 +131,7 @@ export default function Projects() {
                   href="https://github.com/saucy-tech/lntipjar"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block px-4 py-2 bg-[var(--accent)] text-white rounded hover:bg-[var(--accent-dark)] transition"
+                  className="inline-block px-4 py-2 bg-[var(--accent)] text-[var(--on-accent)] rounded hover:bg-[var(--accent-dark)] transition"
                 >
                   GitHub Repo
                 </a>
@@ -139,7 +139,7 @@ export default function Projects() {
                   href="/support"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block px-4 py-2 bg-[var(--accent)] text-white rounded hover:bg-[var(--accent-dark)] transition"
+                  className="inline-block px-4 py-2 bg-[var(--accent)] text-[var(--on-accent)] rounded hover:bg-[var(--accent-dark)] transition"
                 >
                   Live Demo
                 </a>
@@ -171,7 +171,7 @@ export default function Projects() {
                   href="https://github.com/saucy-tech/roll-to-eat"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block px-4 py-2 bg-[var(--accent)] text-white rounded hover:bg-[var(--accent-dark)] transition"
+                  className="inline-block px-4 py-2 bg-[var(--accent)] text-[var(--on-accent)] rounded hover:bg-[var(--accent-dark)] transition"
                 >
                   GitHub Repo
                 </a>
@@ -179,7 +179,7 @@ export default function Projects() {
                   href="https://roll-to-eat.vercel.app/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block px-4 py-2 bg-[var(--accent)] text-white rounded hover:bg-[var(--accent-dark)] transition"
+                  className="inline-block px-4 py-2 bg-[var(--accent)] text-[var(--on-accent)] rounded hover:bg-[var(--accent-dark)] transition"
                 >
                   Live Demo
                 </a>
@@ -217,7 +217,7 @@ export default function Projects() {
                 href="https://github.com/ATLBitLab/abbot"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block px-4 py-2 bg-[var(--accent)] text-white rounded hover:bg-[var(--accent-dark)] transition"
+                className="inline-block px-4 py-2 bg-[var(--accent)] text-[var(--on-accent)] rounded hover:bg-[var(--accent-dark)] transition"
               >
                 GitHub Repo
               </a>
@@ -244,7 +244,7 @@ export default function Projects() {
                 href="https://github.com/plebnet-dev/website"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-block px-4 py-2 bg-[var(--accent)] text-white rounded hover:bg-[var(--accent-dark)] transition"
+                className="inline-block px-4 py-2 bg-[var(--accent)] text-[var(--on-accent)] rounded hover:bg-[var(--accent-dark)] transition"
               >
                 GitHub Repo
               </a>

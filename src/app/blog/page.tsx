@@ -54,7 +54,7 @@ export default function BlogIndex() {
           <div className="mt-6 flex flex-wrap gap-3">
             <a
               href="#library"
-              className="rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm font-medium text-black transition hover:brightness-110"
+              className="rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm font-medium text-[var(--on-accent)] transition hover:brightness-110"
             >
               Browse the library
             </a>
@@ -68,7 +68,7 @@ export default function BlogIndex() {
         </div>
 
         {latest && (
-          <section className="rounded-[2rem] border border-[var(--accent-border)] bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.12),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-6">
+          <section className="rounded-[2rem] border border-[var(--accent-border)] bg-[radial-gradient(circle_at_top_right,rgb(var(--accent-rgb)/0.14),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-6">
             <p className="text-sm uppercase tracking-[0.18em] text-[var(--accent)]">Latest Post</p>
 
             <div className="mt-4 flex flex-wrap gap-2">

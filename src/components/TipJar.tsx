@@ -6,7 +6,7 @@ import QRCode from 'react-qr-code';
 import { PRESET_AMOUNTS } from '@/utils/tipjar';
 
 type TipJarState = 'select' | 'pay' | 'success';
-type AmountOption = typeof PRESET_AMOUNTS[number] | 'custom';
+type AmountOption = (typeof PRESET_AMOUNTS)[number] | 'custom';
 
 export default function TipJar() {
   const [state, setState] = useState<TipJarState>('select');
@@ -20,17 +20,32 @@ export default function TipJar() {
   const [isGeneratingInvoice, setIsGeneratingInvoice] = useState<boolean>(false);
   const [copyButtonText, setCopyButtonText] = useState<string>('Copy');
   const [usdRate, setUsdRate] = useState<number | null>(null);
+  const [confettiAccent, setConfettiAccent] = useState('#f7931a');
   const pollTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const syncAccent = () => {
+      const raw = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+      if (raw) setConfettiAccent(raw);
+    };
+    syncAccent();
+    const obs = new MutationObserver(syncAccent);
+    obs.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme', 'data-appearance'],
+    });
+    return () => obs.disconnect();
+  }, []);
 
   useEffect(() => {
     // update window size for confetti
     const initialWidth = typeof window !== 'undefined' ? window.innerWidth : 800;
     const initialHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
     setWindowSize({ width: initialWidth, height: initialHeight });
-    
+
     const handleResize = () =>
       setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-    
+
     if (typeof window !== 'undefined') {
       window.addEventListener('resize', handleResize);
     }
@@ -164,7 +179,7 @@ export default function TipJar() {
           height={windowSize.height}
           recycle={false}
           numberOfPieces={500}
-          colors={['#D4AF37', '#8b5cf6', '#ec4899', '#10b981']}
+          colors={[confettiAccent, '#8b5cf6', '#ec4899', '#10b981']}
         />
       )}
 
@@ -183,7 +198,7 @@ export default function TipJar() {
                       onClick={() => handleAmountSelect(amount as AmountOption)}
                       className={`py-2 px-4 rounded-md transition-colors duration-200 ${
                         selectedAmount === amount
-                          ? 'bg-[var(--accent)] text-[var(--background)]'
+                          ? 'bg-[var(--accent)] text-[var(--on-accent)]'
                           : 'bg-[var(--accent-transparent)] text-[var(--text-primary)] hover:bg-[var(--accent-hover)]'
                       }`}
                     >
@@ -197,7 +212,7 @@ export default function TipJar() {
                     onClick={() => handleAmountSelect('custom')}
                     className={`px-3 py-1 rounded-md text-sm border border-[var(--accent-border)] transition-colors duration-200 ${
                       selectedAmount === 'custom'
-                        ? 'bg-[var(--accent)] text-[var(--background)] border-[var(--accent)]'
+                        ? 'bg-[var(--accent)] text-[var(--on-accent)] border-[var(--accent)]'
                         : 'bg-[var(--accent-transparent)] text-[var(--text-primary)] hover:bg-[var(--accent-hover)]'
                     }`}
                   >
@@ -215,12 +230,12 @@ export default function TipJar() {
                 </div>
                 {selectedAmount !== 'custom' && usdRate !== null && getAmount() > 0 && (
                   <p className="mt-2 text-sm text-[var(--text-secondary)]">
-                    ≈ ${(getAmount() / 1e8 * usdRate).toFixed(2)} USD
+                    ≈ ${((getAmount() / 1e8) * usdRate).toFixed(2)} USD
                   </p>
                 )}
                 {selectedAmount === 'custom' && usdRate !== null && getAmount() > 0 && (
                   <p className="mt-2 text-sm text-[var(--text-secondary)]">
-                    ≈ ${(getAmount() / 1e8 * usdRate).toFixed(2)} USD
+                    ≈ ${((getAmount() / 1e8) * usdRate).toFixed(2)} USD
                   </p>
                 )}
               </div>
@@ -242,7 +257,7 @@ export default function TipJar() {
             <button
               onClick={generateInvoice}
               disabled={isGeneratingInvoice}
-              className="w-full py-2 rounded-md transition-colors duration-200 bg-[var(--accent)] text-[var(--background)] disabled:opacity-50"
+              className="w-full py-2 rounded-md transition-colors duration-200 bg-[var(--accent)] text-[var(--on-accent)] disabled:opacity-50"
             >
               {isGeneratingInvoice ? 'Generating...' : 'Tip me'}
             </button>
@@ -261,7 +276,7 @@ export default function TipJar() {
             </code>
             <button
               onClick={copyToClipboard}
-              className="mt-4 py-2 px-4 rounded-md transition-colors duration-200 bg-[var(--accent)] text-[var(--background)]"
+              className="mt-4 py-2 px-4 rounded-md transition-colors duration-200 bg-[var(--accent)] text-[var(--on-accent)]"
             >
               {copyButtonText}
             </button>
@@ -273,7 +288,7 @@ export default function TipJar() {
             <p className="text-[var(--accent)] text-lg font-semibold">Thank you for your tip!</p>
             <button
               onClick={resetForm}
-              className="mt-2 py-2 px-4 rounded-md transition-colors duration-200 bg-[var(--accent)] text-[var(--background)]"
+              className="mt-2 py-2 px-4 rounded-md transition-colors duration-200 bg-[var(--accent)] text-[var(--on-accent)]"
             >
               Send another
             </button>

@@ -4,8 +4,8 @@
   "description": "Love Jesus, Explore Ideas, Create Things, Save in Bitcoin",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#07251F",
-  "theme_color": "#07251F",
+  "background_color": "#0a0e0c",
+  "theme_color": "#f7931a",
   "icons": [
     {
       "src": "/icons/github-logo.svg",

@@ -44,6 +44,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${SITE_URL}/field-notes`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.65,
+    },
+    {
       url: `${SITE_URL}/rss.xml`,
       lastModified: new Date(),
       changeFrequency: 'monthly',

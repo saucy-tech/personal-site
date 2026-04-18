@@ -39,7 +39,7 @@ const GalaxyBackground: React.FC<GalaxyBackgroundProps> = ({ children }) => {
     const rawBg = computedStyle.getPropertyValue('--background').trim();
     const rawAccent = computedStyle.getPropertyValue('--accent').trim();
     const background = rawBg || '#07251F';
-    const accent = rawAccent || '#D4AF37';
+    const accent = rawAccent || '#f7931a';
 
     // Helper to convert hex color to RGB
     const hexToRgb = (hex: string) => {

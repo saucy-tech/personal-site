@@ -12,9 +12,9 @@ function getAccentPalette(category: string) {
   switch (category) {
     case 'daily-word':
       return {
-        accent: '#D4AF37',
-        softAccent: 'rgba(212, 175, 55, 0.16)',
-        border: 'rgba(212, 175, 55, 0.34)',
+        accent: '#f7931a',
+        softAccent: 'rgba(247, 147, 26, 0.16)',
+        border: 'rgba(247, 147, 26, 0.34)',
       };
     case 'biblical-reflection':
       return {
@@ -72,8 +72,7 @@ export default async function OGImage({ params }: { params: Promise<{ slug: stri
         height: '100%',
         display: 'flex',
         flexDirection: 'column',
-        background:
-          'linear-gradient(145deg, #041714 0%, #07251F 40%, #0C332B 100%)',
+        background: 'linear-gradient(145deg, #041714 0%, #07251F 40%, #0C332B 100%)',
         padding: '56px',
         position: 'relative',
         overflow: 'hidden',

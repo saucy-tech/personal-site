@@ -1,6 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   poweredByHeader: false,
+  async redirects() {
+    return [
+      { source: '/notebook', destination: '/field-notes', permanent: true },
+      { source: '/state-of-ai', destination: '/field-notes', permanent: true },
+    ];
+  },
   async headers() {
     return [
       {

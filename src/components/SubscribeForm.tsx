@@ -35,12 +35,12 @@ export default function SubscribeForm() {
         placeholder="Your email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        className="w-full p-3 rounded text-black"
+        className="w-full rounded border-2 border-[var(--surface-border)] bg-[var(--input-bg)] p-3 text-[var(--input-fg)] placeholder:text-[var(--input-placeholder)] shadow-sm transition focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--background)]"
       />
       <button
         type="submit"
         disabled={status === 'loading'}
-        className="bg-[var(--accent)] px-4 py-2 rounded w-full disabled:opacity-60"
+        className="w-full rounded bg-[var(--accent)] px-4 py-2 font-medium text-[var(--on-accent)] shadow-sm transition focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--background)] disabled:opacity-60"
       >
         {status === 'loading' ? 'Subscribing…' : 'Subscribe'}
       </button>
@@ -48,10 +48,14 @@ export default function SubscribeForm() {
         No spam, unsubscribe anytime.
       </p>
       {status === 'success' && (
-        <p className="text-green-400 text-center">Check your inbox for confirmation! 🎉</p>
+        <p className="text-center font-medium text-[var(--status-success)]">
+          Check your inbox for confirmation! 🎉
+        </p>
       )}
       {status === 'error' && (
-        <p className="text-red-400 text-center">Something went wrong. Try again.</p>
+        <p className="text-center font-medium text-[var(--status-error)]">
+          Something went wrong. Try again.
+        </p>
       )}
     </form>
   );

@@ -99,7 +99,7 @@ export default function BlogArchive({ posts }: BlogArchiveProps) {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search titles, excerpts, tags, or series"
-              className="w-full rounded-2xl border border-white/10 bg-black/10 py-3 pl-10 pr-4 text-sm text-[var(--text-primary)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[rgba(212,175,55,0.2)]"
+              className="w-full rounded-2xl border border-white/10 bg-black/10 py-3 pl-10 pr-4 text-sm text-[var(--text-primary)] outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[rgb(var(--accent-rgb)/0.22)]"
             />
           </label>
 
