@@ -1,16 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSecurityHeaders } from '@/utils/security';
+import { generateCSPNonce, getSecurityHeaders } from '@/utils/security';
 
-export function middleware(_request: NextRequest) {
-  const response = NextResponse.next();
+export function middleware(request: NextRequest) {
+  const nonce = generateCSPNonce();
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set('x-csp-nonce', nonce);
+  const response = NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
 
-  // Get security headers (CSP is environment-aware; no nonce required)
-  const securityHeaders = getSecurityHeaders();
+  // Get security headers with request-specific nonce for inline scripts.
+  const securityHeaders = getSecurityHeaders({ nonce });
 
   // Apply security headers to all responses
   Object.entries(securityHeaders).forEach(([key, value]) => {
     response.headers.set(key, value);
   });
+  response.headers.set('x-csp-nonce', nonce);
 
   return response;
 }
@@ -25,6 +33,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - public folder files
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|public).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)',
   ],
 };

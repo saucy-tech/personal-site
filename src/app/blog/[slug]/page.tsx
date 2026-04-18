@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { MDXRemote } from 'next-mdx-remote/rsc';
+import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 
 import PageLayout from '@/components/PageLayout';
@@ -51,6 +52,7 @@ interface PostPageProps {
 
 export default async function PostPage({ params }: PostPageProps) {
   const { slug } = await params;
+  const nonce = (await headers()).get('x-csp-nonce') ?? undefined;
   const post = await getPostBySlug(slug);
   if (!post) {
     notFound();
@@ -86,6 +88,7 @@ export default async function PostPage({ params }: PostPageProps) {
   return (
     <PageLayout title={post.title} backHref="/blog" backLabel="Back to Blog">
       <script
+        nonce={nonce}
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />

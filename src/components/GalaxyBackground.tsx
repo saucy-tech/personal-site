@@ -165,8 +165,14 @@ const GalaxyBackground: React.FC<GalaxyBackgroundProps> = ({ children }) => {
 
     let animationFrameId: number | null = null;
     let time = 0;
+    let isPageVisible = !document.hidden;
 
     const animate = () => {
+      if (!isPageVisible) {
+        animationFrameId = window.requestAnimationFrame(animate);
+        return;
+      }
+
       time += 0.002; // Slower time increment for smoother animation
 
       drawBackground(0.5);
@@ -179,12 +185,21 @@ const GalaxyBackground: React.FC<GalaxyBackgroundProps> = ({ children }) => {
     drawBackground();
     drawStars();
 
+    const handleVisibilityChange = () => {
+      isPageVisible = !document.hidden;
+      if (isPageVisible && reducedMotion) {
+        drawStaticFrame();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
     if (!reducedMotion) {
       animationFrameId = window.requestAnimationFrame(animate);
     }
 
     return () => {
       window.removeEventListener('resize', handleResize);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
 
       if (animationFrameId !== null) {
         window.cancelAnimationFrame(animationFrameId);

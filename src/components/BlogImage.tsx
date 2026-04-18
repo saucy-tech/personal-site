@@ -9,6 +9,7 @@ type Props = {
   float?: 'left' | 'right' | 'none';
   aspect?: 'portrait' | 'landscape';
   maxWidth?: number;
+  priority?: boolean;
 };
 
 export default function BlogImage({
@@ -18,6 +19,7 @@ export default function BlogImage({
   float = 'none',
   aspect = 'landscape',
   maxWidth = aspect === 'portrait' ? 340 : 640,
+  priority = false,
 }: Props) {
   return (
     <figure className={`${styles.figure} ${styles[aspect]} ${styles[float]}`} style={{ maxWidth }}>
@@ -28,7 +30,7 @@ export default function BlogImage({
         height={aspect === 'portrait' ? Math.round(maxWidth * 1.33) : Math.round(maxWidth * 0.6)}
         style={{ width: '100%', height: 'auto', borderRadius: 14 }}
         sizes="(max-width: 700px) 90vw, 640px"
-        priority
+        priority={priority}
       />
       {caption && <figcaption className={styles.caption}>{caption}</figcaption>}
     </figure>

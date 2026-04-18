@@ -90,6 +90,16 @@ matter.engines.yaml = {
 
 const POSTS_DIR = path.join(process.cwd(), 'src', 'posts');
 const SITE_TIME_ZONE = 'America/New_York';
+type ParsedPostEntry = {
+  slug: string;
+  meta: PostMeta;
+  content: string;
+};
+type PostsCache = {
+  signature: string;
+  posts: ParsedPostEntry[];
+};
+let postsCache: PostsCache | null = null;
 
 function ensurePostsDir() {
   if (!fs.existsSync(POSTS_DIR)) {
@@ -102,10 +112,54 @@ function getPostPath(slug: string): string {
 
 export function getPostSlugs(): string[] {
   ensurePostsDir();
-  return fs
+  return getParsedPosts().map((entry) => entry.slug);
+}
+
+function getPostsSignature(): string {
+  ensurePostsDir();
+  const files = fs
     .readdirSync(POSTS_DIR)
     .filter((file) => /\.mdx?$/.test(file))
-    .map((file) => file.replace(/\.mdx?$/, ''));
+    .sort();
+  return files
+    .map((file) => {
+      const fullPath = path.join(POSTS_DIR, file);
+      const stat = fs.statSync(fullPath);
+      return `${file}:${stat.mtimeMs}`;
+    })
+    .join('|');
+}
+
+function getParsedPosts(): ParsedPostEntry[] {
+  const signature = getPostsSignature();
+  if (postsCache && postsCache.signature === signature) {
+    return postsCache.posts;
+  }
+
+  const posts = fs
+    .readdirSync(POSTS_DIR)
+    .filter((file) => /\.mdx?$/.test(file))
+    .map((file) => {
+      const slug = file.replace(/\.mdx?$/, '');
+      const fileContent = fs.readFileSync(getPostPath(slug), 'utf-8');
+      const { data, content } = matter(fileContent);
+      const result = frontmatterSchema.safeParse(data);
+      if (!result.success) {
+        const issues = result.error.issues
+          .map((issue) => `  - ${issue.path.join('.') || 'root'}: ${issue.message}`)
+          .join('\n');
+        throw new Error(`Frontmatter validation failed for "${slug}.mdx":\n${issues}`);
+      }
+
+      return {
+        slug,
+        meta: toPostMeta(slug, data),
+        content,
+      };
+    });
+
+  postsCache = { signature, posts };
+  return posts;
 }
 
 function getTodayDateString(): string {
@@ -124,21 +178,8 @@ function isPublishedDate(date: string): boolean {
 export function getAllPostsMeta(options: PostQueryOptions = {}): PostMeta[] {
   const { includeFuture = false } = options;
 
-  return getPostSlugs()
-    .map((slug) => {
-      const fileContent = fs.readFileSync(getPostPath(slug), 'utf-8');
-      const { data } = matter(fileContent);
-      const result = frontmatterSchema.safeParse(data);
-      if (!result.success) {
-        const issues = result.error.issues
-          .map((issue) => `  - ${issue.path.join('.') || 'root'}: ${issue.message}`)
-          .join('\n');
-        throw new Error(
-          `Frontmatter validation failed for "${slug}.mdx":\n${issues}`
-        );
-      }
-      return toPostMeta(slug, data);
-    })
+  return getParsedPosts()
+    .map((entry) => entry.meta)
     .filter((post) => includeFuture || isPublishedDate(post.date))
     .sort((a, b) => b.date.localeCompare(a.date) || b.slug.localeCompare(a.slug));
 }
@@ -149,18 +190,11 @@ export async function getPostBySlug(
   options: PostQueryOptions = {}
 ): Promise<Post | null> {
   const { includeFuture = false } = options;
-  const postPath = getPostPath(slug);
-  if (!fs.existsSync(postPath)) {
+  const parsedPost = getParsedPosts().find((entry) => entry.slug === slug);
+  if (!parsedPost) {
     return null;
   }
-
-  const fileContent = fs.readFileSync(postPath, 'utf-8');
-  const { data, content } = matter(fileContent);
-
-  const post = {
-    ...toPostMeta(slug, data),
-    content,
-  };
+  const post = { ...parsedPost.meta, content: parsedPost.content };
 
   if (!includeFuture && !isPublishedDate(post.date)) {
     return null;
