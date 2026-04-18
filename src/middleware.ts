@@ -4,7 +4,7 @@ import { generateCSPNonce, getSecurityHeaders } from '@/utils/security';
 export function middleware(request: NextRequest) {
   const nonce = generateCSPNonce();
   const requestHeaders = new Headers(request.headers);
-  requestHeaders.set('x-csp-nonce', nonce);
+  requestHeaders.set('x-nonce', nonce);
   const response = NextResponse.next({
     request: {
       headers: requestHeaders,
@@ -18,7 +18,7 @@ export function middleware(request: NextRequest) {
   Object.entries(securityHeaders).forEach(([key, value]) => {
     response.headers.set(key, value);
   });
-  response.headers.set('x-csp-nonce', nonce);
+  response.headers.set('x-nonce', nonce);
 
   return response;
 }

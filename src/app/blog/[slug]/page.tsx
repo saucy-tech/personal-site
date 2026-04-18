@@ -52,7 +52,7 @@ interface PostPageProps {
 
 export default async function PostPage({ params }: PostPageProps) {
   const { slug } = await params;
-  const nonce = (await headers()).get('x-csp-nonce') ?? undefined;
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
   const post = await getPostBySlug(slug);
   if (!post) {
     notFound();

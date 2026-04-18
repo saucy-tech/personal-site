@@ -10,7 +10,7 @@ describe('middleware', () => {
     const response = middleware(request);
 
     expect(response.headers.get('Content-Security-Policy')).toContain('script-src');
-    expect(response.headers.get('x-csp-nonce')).toBeTruthy();
+    expect(response.headers.get('x-nonce')).toBeTruthy();
     expect(response.headers.get('Strict-Transport-Security')).toContain('max-age=');
   });
 
