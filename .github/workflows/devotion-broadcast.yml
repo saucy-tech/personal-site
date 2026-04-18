@@ -53,7 +53,7 @@ jobs:
             HEAD="${{ github.event.pull_request.merge_commit_sha }}"
             echo "Checking diff: $BASE → $HEAD"
 
-            NEW_FILE=$(git diff --name-only --diff-filter=A "$BASE" "$HEAD" -- 'src/posts/*.mdx' | head -1)
+            NEW_FILE=$(git diff --name-only --diff-filter=A "$BASE" "$HEAD" -- 'src/posts/*.mdx' | sort -r | head -1)
 
             if [ -z "$NEW_FILE" ]; then
               echo "No new MDX post found in this PR — skipping broadcast."

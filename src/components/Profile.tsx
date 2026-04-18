@@ -39,7 +39,7 @@ const Profile: React.FC<ProfileProps> = ({ name, bio, imageSrc }) => {
             fill
             className="object-cover"
             priority
-            sizes="(max-width: 128px) 100vw, 128px"
+            sizes="128px"
             onLoad={handleImageLoad}
             onError={handleImageError}
             quality={85}

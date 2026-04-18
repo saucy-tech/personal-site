@@ -1,12 +1,10 @@
-'use client';
-
 import { BaseProps } from '@/types';
 import { cn } from '@/utils/helpers';
 import { SITE_NAME } from '@/utils/constants';
 
 export default function Footer({ className }: BaseProps) {
   const currentYear = new Date().getFullYear();
-  
+
   return (
     <footer className={cn('py-6 transparent', className)}>
       <div className="container mx-auto px-4">
@@ -19,4 +17,3 @@ export default function Footer({ className }: BaseProps) {
     </footer>
   );
 }
-
