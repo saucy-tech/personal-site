@@ -3,19 +3,20 @@
 @tailwind utilities;
 
 :root {
-  /* Main colors */
-  --background: #07251F;
-  --foreground: #FFFFFF;
-  --accent: #D4AF37;
-  
+  /* Editorial “report” palette — near-black field, muted type, single accent */
+  --background: #0a0e0c;
+  --foreground: #ebe9e4;
+  --accent: #c4a43a;
+
   /* Accent variants */
-  --accent-transparent: rgba(212, 175, 55, 0.15);
-  --accent-hover: rgba(212, 175, 55, 0.25);
-  --accent-border: rgba(212, 175, 55, 0.3);
-  
+  --accent-transparent: rgba(196, 164, 58, 0.12);
+  --accent-hover: rgba(196, 164, 58, 0.22);
+  --accent-border: rgba(196, 164, 58, 0.28);
+
   /* Text colors */
-  --text-primary: #FFFFFF;
-  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-primary: #ebe9e4;
+  --text-secondary: rgba(235, 233, 228, 0.72);
+  --text-muted: rgba(235, 233, 228, 0.45);
 }
 
 @keyframes pulse {
@@ -56,6 +57,41 @@
   .section-spacing > * + * {
     margin-top: 3rem;
   }
+
+  /* Narrow reading measure for report-style pages */
+  .editorial-measure {
+    max-width: min(100%, 72ch);
+  }
+}
+
+/* + / − tradeoff lists (State-of-AI–style) */
+.tradeoff-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.tradeoff-list li {
+  position: relative;
+  padding-left: 1.25rem;
+}
+
+.tradeoff-list-pro li::before {
+  content: '+';
+  position: absolute;
+  left: 0;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.tradeoff-list-con li::before {
+  content: '\2212';
+  position: absolute;
+  left: 0;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  color: var(--text-muted);
+  font-weight: 600;
 }
 
 /* Custom scrollbar */

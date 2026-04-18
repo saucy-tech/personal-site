@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Montserrat } from 'next/font/google';
+import { IBM_Plex_Mono, IBM_Plex_Sans } from 'next/font/google';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -8,10 +8,22 @@ import ClientGalaxyBackground from '@/components/ClientGalaxyBackground';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
-const montserrat = Montserrat({ subsets: ['latin'] });
+const ibmSans = IBM_Plex_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-sans',
+  display: 'swap',
+});
+
+const ibmMono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-mono',
+  display: 'swap',
+});
 
 export const viewport: Viewport = {
-  themeColor: '#07251F',
+  themeColor: '#0a0e0c',
   width: 'device-width',
   initialScale: 1,
 };
@@ -77,7 +89,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link rel="apple-touch-icon" sizes="180x180" href={`${SITE_URL}/apple-touch-icon.png`} />
       </head>
-      <body className={montserrat.className}>
+      <body className={`${ibmSans.variable} ${ibmMono.variable} font-sans antialiased`}>
         {/* Background canvas and content wrapper */}
         <div
           className="relative min-h-screen bg-[var(--background)]"
@@ -93,7 +105,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <div className="relative z-10 flex flex-col min-h-screen">
             <Header />
             <main id="main-content" className="flex-grow">
-              <div className="container mx-auto max-w-5xl">{children}</div>
+              <div className="container mx-auto max-w-[min(100%,80rem)] px-4 sm:px-6">{children}</div>
             </main>
             <Footer />
           </div>

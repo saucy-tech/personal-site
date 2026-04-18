@@ -118,4 +118,4 @@ All passed.
 
 One follow-up note:
 
-- Next.js 16.2.1 warns that `middleware.ts` should move to the newer `proxy` convention eventually. That is not a blocker for article design work, but it is worth tracking.
+- CSP/security uses `src/proxy.ts` (Next.js proxy convention; replaces deprecated `middleware.ts`).

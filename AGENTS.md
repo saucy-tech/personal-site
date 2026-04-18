@@ -64,7 +64,7 @@ src/
 │   ├── posts.ts    # getAllPostsMeta(), getPostBySlug(), getPostOgMeta()
 │   ├── security.ts # CSP headers, rate-limit, validators
 │   └── constants.ts# SITE_NAME, SITE_DESCRIPTION, SITE_URL
-├── middleware.ts   # Current CSP/security entrypoint; Next.js 16 renames this convention to proxy.ts
+├── proxy.ts        # CSP/security entrypoint (Next.js file convention; formerly middleware)
 public/             # Static images and icons
 tailwind.config.js  # Custom spacing: section = 3rem
 next.config.js      # Security headers (non-CSP), image domains
@@ -80,7 +80,7 @@ next.config.js      # Security headers (non-CSP), image domains
 
 ## Security
 
-Security headers are currently applied via `src/middleware.ts` -> `src/utils/security.ts`. In Next.js 16, the `middleware.ts` file convention is deprecated in favor of `proxy.ts`, so treat this as the repo's current implementation detail rather than new framework guidance. CSP is still managed exclusively from this path. **Do not** add CSP via `next.config.js` or `<meta>` tags.
+Security headers are applied via `src/proxy.ts` -> `src/utils/security.ts`. CSP is managed exclusively from this path. **Do not** add CSP via `next.config.js` or `<meta>` tags.
 
 When adding external services:
 - Update `connect-src`, `img-src`, `font-src`, etc. in `src/utils/security.ts`
@@ -115,7 +115,7 @@ Helpers in `src/utils/security.ts`: `getClientIP()`, `rateLimit()`, validators (
 
 - Platform: Vercel
 - Set the env vars needed by the features you are deploying: `NOSTR_WALLET_CONNECT_URL` for Lightning flows, `CONVERTKIT_API_KEY` / `CONVERTKIT_FORM_ID` for `/api/subscribe`, and `CK_SECRET_KEY` / `CK_PUBLISHER_ID` plus `NEXT_PUBLIC_APP_URL` for `scripts/auto-broadcast.ts`
-- CSP comes only from `src/middleware.ts` -> `src/utils/security.ts` in the current repo; do not duplicate it in `next.config.js` or `<meta>` tags
+- CSP comes only from `src/proxy.ts` -> `src/utils/security.ts` in the current repo; do not duplicate it in `next.config.js` or `<meta>` tags
 - Verify in preview/prod: check Network tab for a single CSP header with expected directives
 
 ## Troubleshooting
