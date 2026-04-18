@@ -364,12 +364,14 @@ export function getSecurityHeaders(options: { nonce?: string } = {}): Record<str
   const cspDirectives = [
     "default-src 'self'",
 
-    // Script sources - nonce-based policy; eval only in non-production (Vercel preview/dev)
+    // Script sources: 'unsafe-inline' is required for Next.js App Router chunks/scripts that
+    // do not receive per-request nonces from middleware. Nonce remains for tagged inline scripts.
+    // eval only in non-production (Vercel preview local dev / non-prod NODE_ENV).
     isVercelProduction
-      ? `script-src 'self'${nonce ? ` 'nonce-${nonce}'` : ''} blob:`
-      : `script-src 'self'${nonce ? ` 'nonce-${nonce}'` : ''} 'unsafe-eval' blob:`,
+      ? `script-src 'self' 'unsafe-inline'${nonce ? ` 'nonce-${nonce}'` : ''} blob:`
+      : `script-src 'self' 'unsafe-inline'${nonce ? ` 'nonce-${nonce}'` : ''} 'unsafe-eval' blob:`,
     // Element-specific sources to satisfy browsers that split elem vs attr policies
-    `script-src-elem 'self'${nonce ? ` 'nonce-${nonce}'` : ''} blob:`,
+    `script-src-elem 'self' 'unsafe-inline'${nonce ? ` 'nonce-${nonce}'` : ''} blob:`,
 
     // Style sources - allow data: for any inlined style blocks if emitted
     "style-src 'self' 'unsafe-inline' data:",
