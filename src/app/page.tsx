@@ -122,11 +122,11 @@ export default async function Home() {
           />
           <LinkCard
             key="field-notes"
-            title="Field notes"
+            title="What I'm Into Right Now"
             href="/field-notes"
             icon={<span className="text-2xl">📓</span>}
             eyebrow="Field notes"
-            meta="Models, harnesses, subscriptions—my AI stack"
+            meta="Tools, tech, and gear I'm using this season"
           />
           <LinkCard
             key="my-projects"
