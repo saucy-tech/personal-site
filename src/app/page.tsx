@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { headers } from 'next/headers';
 
 import LinkCard from '@/components/LinkCard';
 import Profile from '@/components/Profile';
@@ -11,6 +12,7 @@ import { getAllPostsMeta } from '@/utils/posts';
 import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from '@/utils/constants';
 
 export default async function Home() {
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
   const profileData = {
     name: 'Brandon',
     bio: 'Love Jesus, Explore Ideas, Create Things, Save in Bitcoin',
@@ -86,6 +88,7 @@ export default async function Home() {
   return (
     <div className="pt-4 pb-6 px-4 md:px-8 flex flex-col items-center">
       <script
+        nonce={nonce}
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />

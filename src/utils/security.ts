@@ -30,6 +30,8 @@ interface RateLimitBucket {
 }
 
 const rateLimitStore = new Map<string, RateLimitBucket>();
+const UPSTASH_REDIS_REST_URL = process.env.UPSTASH_REDIS_REST_URL;
+const UPSTASH_REDIS_REST_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
 
 // Clean up expired rate limit entries periodically.
 // Keep the timer unref'd and singleton-guarded so test imports do not pin the process open.
@@ -105,15 +107,64 @@ export function getClientIP(request: NextRequest | Request): string {
 /**
  * Rate limiter with configurable limits per endpoint
  */
-export function rateLimit(
+async function rateLimitWithUpstash(
+  key: string,
+  maxRequests: number,
+  windowMs: number
+): Promise<{ allowed: boolean; resetTime: number; remaining: number } | null> {
+  if (!UPSTASH_REDIS_REST_URL || !UPSTASH_REDIS_REST_TOKEN) {
+    return null;
+  }
+
+  try {
+    const response = await fetch(`${UPSTASH_REDIS_REST_URL}/pipeline`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${UPSTASH_REDIS_REST_TOKEN}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify([
+        ['INCR', key],
+        ['PEXPIRE', key, windowMs, 'NX'],
+        ['PTTL', key],
+      ]),
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    const result = (await response.json()) as Array<{ result?: number | string }>;
+    const count = Number(result?.[0]?.result ?? 0);
+    const ttlMs = Number(result?.[2]?.result ?? windowMs);
+    const now = Date.now();
+    const resetTime = now + (ttlMs > 0 ? ttlMs : windowMs);
+    const remaining = Math.max(0, maxRequests - count);
+
+    return {
+      allowed: count <= maxRequests,
+      resetTime,
+      remaining,
+    };
+  } catch {
+    return null;
+  }
+}
+
+export async function rateLimit(
   request: NextRequest | Request,
   maxRequests: number = SECURITY_CONSTANTS.RATE_LIMIT_DEFAULT,
   windowMs: number = SECURITY_CONSTANTS.RATE_LIMIT_WINDOW_MS,
   keyPrefix: string = 'default'
-): { allowed: boolean; resetTime: number; remaining: number } {
+): Promise<{ allowed: boolean; resetTime: number; remaining: number }> {
   const clientIP = getClientIP(request);
   const key = `${keyPrefix}:${clientIP}`;
   const now = Date.now();
+  const distributedResult = await rateLimitWithUpstash(key, maxRequests, windowMs);
+
+  if (distributedResult) {
+    return distributedResult;
+  }
 
   const bucket = rateLimitStore.get(key);
 
@@ -271,7 +322,8 @@ export const validators = {
  * Security headers configuration with production canvas support
  * Optimized for Vercel deployment environment
  */
-export function getSecurityHeaders(): Record<string, string> {
+export function getSecurityHeaders(options: { nonce?: string } = {}): Record<string, string> {
+  const { nonce } = options;
   // Detect Vercel environment
   const isVercel = process.env.VERCEL === '1';
   const vercelEnv = process.env.VERCEL_ENV;
@@ -293,6 +345,9 @@ export function getSecurityHeaders(): Record<string, string> {
     // Referrer policy
     'Referrer-Policy': 'strict-origin-when-cross-origin',
 
+    // Force HTTPS in modern browsers
+    'Strict-Transport-Security': 'max-age=63072000; includeSubDomains; preload',
+
     // Remove server information
     'X-Powered-By': '',
 
@@ -309,12 +364,14 @@ export function getSecurityHeaders(): Record<string, string> {
   const cspDirectives = [
     "default-src 'self'",
 
-    // Script sources - allow inline in all envs; eval only in non-production (Vercel preview/dev)
+    // Script sources: 'unsafe-inline' is required for Next.js App Router chunks/scripts that
+    // do not receive per-request nonces from middleware. Nonce remains for tagged inline scripts.
+    // eval only in non-production (Vercel preview local dev / non-prod NODE_ENV).
     isVercelProduction
-      ? "script-src 'self' 'unsafe-inline' blob:"
-      : "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:",
+      ? `script-src 'self' 'unsafe-inline'${nonce ? ` 'nonce-${nonce}'` : ''} blob:`
+      : `script-src 'self' 'unsafe-inline'${nonce ? ` 'nonce-${nonce}'` : ''} 'unsafe-eval' blob:`,
     // Element-specific sources to satisfy browsers that split elem vs attr policies
-    "script-src-elem 'self' 'unsafe-inline' blob:",
+    `script-src-elem 'self' 'unsafe-inline'${nonce ? ` 'nonce-${nonce}'` : ''} blob:`,
 
     // Style sources - allow data: for any inlined style blocks if emitted
     "style-src 'self' 'unsafe-inline' data:",
@@ -412,6 +469,36 @@ export async function validateRequestSize(
   }
 
   return { valid: true };
+}
+
+/**
+ * Parse JSON request body while enforcing a hard byte limit.
+ * This protects routes even when Content-Length is missing or inaccurate.
+ */
+export async function parseJsonBody<T = unknown>(
+  request: Request,
+  maxSizeBytes: number = SECURITY_CONSTANTS.MAX_REQUEST_SIZE
+): Promise<{ valid: boolean; data?: T; error?: string }> {
+  const sizeValidation = await validateRequestSize(request);
+  if (!sizeValidation.valid) {
+    return { valid: false, error: sizeValidation.error };
+  }
+
+  const rawBody = await request.text();
+  const bodySize = new TextEncoder().encode(rawBody).byteLength;
+  if (bodySize > maxSizeBytes) {
+    return {
+      valid: false,
+      error: `Request too large (max: ${maxSizeBytes} bytes)`,
+    };
+  }
+
+  try {
+    const data = JSON.parse(rawBody) as T;
+    return { valid: true, data };
+  } catch {
+    return { valid: false, error: 'Invalid request body' };
+  }
 }
 
 /**

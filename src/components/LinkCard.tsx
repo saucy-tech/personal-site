@@ -1,7 +1,6 @@
 'use client';
 
 import { ArrowRightIcon, ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
-import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -37,20 +36,11 @@ const LinkCard: React.FC<LinkCardProps> = ({
   const isExternal = href ? /^https?:\/\//.test(href) : false;
 
   const cardContent = (
-    <motion.div
+    <div
       className={cn(
-        'group h-full w-full rounded-2xl border border-[var(--accent-border)] bg-[linear-gradient(180deg,rgba(212,175,55,0.14),rgba(255,255,255,0.04))] shadow-[0_10px_30px_rgba(0,0,0,0.16)] backdrop-blur-sm transition-all duration-300 hover:border-[var(--accent)] hover:bg-[linear-gradient(180deg,rgba(212,175,55,0.22),rgba(255,255,255,0.06))] hover:shadow-[0_20px_40px_rgba(0,0,0,0.24)]',
+        'group h-full w-full rounded-2xl border border-[var(--accent-border)] bg-[linear-gradient(180deg,rgba(212,175,55,0.14),rgba(255,255,255,0.04))] shadow-[0_10px_30px_rgba(0,0,0,0.16)] backdrop-blur-sm transition-all duration-300 hover:border-[var(--accent)] hover:bg-[linear-gradient(180deg,rgba(212,175,55,0.22),rgba(255,255,255,0.06))] hover:shadow-[0_20px_40px_rgba(0,0,0,0.24)] hover:-translate-y-0.5 active:scale-[0.985]',
         className
       )}
-      whileHover={{
-        scale: 1.01,
-        y: -2,
-        boxShadow: '0 18px 38px rgba(0, 0, 0, 0.26)',
-      }}
-      whileTap={{ scale: 0.985 }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.25, ease: 'easeOut' }}
     >
       <div
         className={cn(
@@ -107,7 +97,7 @@ const LinkCard: React.FC<LinkCardProps> = ({
       </div>
 
       {children ? <div className="px-4 pb-4 sm:px-5">{children}</div> : null}
-    </motion.div>
+    </div>
   );
 
   if (!href) {

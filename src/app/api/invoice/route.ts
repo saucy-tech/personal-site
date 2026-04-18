@@ -5,7 +5,7 @@ import {
   createRateLimitResponse,
   createSecureErrorResponse,
   validators,
-  validateRequestSize,
+  parseJsonBody,
   logSecurityEvent,
   getClientIP,
   SECURITY_CONSTANTS,
@@ -25,14 +25,8 @@ const NWC_URL = process.env.NOSTR_WALLET_CONNECT_URL || '';
 
 export async function POST(request: NextRequest) {
   try {
-    // Validate request size
-    const sizeValidation = await validateRequestSize(request);
-    if (!sizeValidation.valid) {
-      return createSecureErrorResponse('Request too large', 413);
-    }
-
     // Apply rate limiting - stricter for invoice creation
-    const rateLimitResult = rateLimit(
+    const rateLimitResult = await rateLimit(
       request,
       SECURITY_CONSTANTS.RATE_LIMIT_INVOICE,
       SECURITY_CONSTANTS.RATE_LIMIT_WINDOW_MS,
@@ -47,14 +41,18 @@ export async function POST(request: NextRequest) {
       return createRateLimitResponse(rateLimitResult.resetTime);
     }
 
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch {
-      return createSecureErrorResponse('Invalid request body', 400);
+    const bodyResult = await parseJsonBody<{
+      amount?: unknown;
+      memo?: unknown;
+    }>(request);
+    if (!bodyResult.valid) {
+      return createSecureErrorResponse(
+        bodyResult.error?.includes('too large') ? 'Request too large' : 'Invalid request body',
+        bodyResult.error?.includes('too large') ? 413 : 400
+      );
     }
 
-    const { amount, memo } = body as { amount?: unknown; memo?: unknown };
+    const { amount, memo } = bodyResult.data ?? {};
 
     // Validate amount using security utilities
     const amountValidation = validators.lightningAmount(amount, 'sats');
@@ -122,7 +120,7 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     // Apply rate limiting for payment status checks
-    const rateLimitResult = rateLimit(
+    const rateLimitResult = await rateLimit(
       request,
       SECURITY_CONSTANTS.RATE_LIMIT_API,
       SECURITY_CONSTANTS.RATE_LIMIT_WINDOW_MS,

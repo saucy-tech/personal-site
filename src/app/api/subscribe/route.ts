@@ -4,21 +4,15 @@ import {
   createRateLimitResponse,
   createSecureErrorResponse,
   validators,
-  validateRequestSize,
+  parseJsonBody,
   logSecurityEvent,
   SECURITY_CONSTANTS,
 } from '@/utils/security';
 
 export async function POST(req: NextRequest) {
   try {
-    // Validate request size
-    const sizeValidation = await validateRequestSize(req);
-    if (!sizeValidation.valid) {
-      return createSecureErrorResponse('Request too large', 413);
-    }
-
     // Apply rate limiting - strict for subscription requests
-    const rateLimitResult = rateLimit(
+    const rateLimitResult = await rateLimit(
       req,
       SECURITY_CONSTANTS.RATE_LIMIT_SUBSCRIBE,
       SECURITY_CONSTANTS.RATE_LIMIT_WINDOW_MS,
@@ -33,14 +27,15 @@ export async function POST(req: NextRequest) {
       return createRateLimitResponse(rateLimitResult.resetTime);
     }
 
-    let body: unknown;
-    try {
-      body = await req.json();
-    } catch {
-      return createSecureErrorResponse('Invalid request body', 400);
+    const bodyResult = await parseJsonBody<{ email?: unknown }>(req);
+    if (!bodyResult.valid) {
+      return createSecureErrorResponse(
+        bodyResult.error?.includes('too large') ? 'Request too large' : 'Invalid request body',
+        bodyResult.error?.includes('too large') ? 413 : 400
+      );
     }
 
-    const { email } = body as { email?: unknown };
+    const { email } = bodyResult.data ?? {};
 
     // Validate email using security utilities
     const emailValidation = validators.email(email);

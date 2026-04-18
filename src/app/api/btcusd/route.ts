@@ -10,11 +10,13 @@ import {
 let cachedRate: number | null = null;
 let lastFetchTime: number | null = null;
 const CACHE_DURATION_MS = 10 * 60 * 1000; // 10 minutes
+const EDGE_CACHE_CONTROL =
+  'public, max-age=60, s-maxage=300, stale-while-revalidate=600, stale-if-error=1800';
 
 export async function GET(request: NextRequest) {
   try {
     // Apply rate limiting for BTC price requests
-    const rateLimitResult = rateLimit(
+    const rateLimitResult = await rateLimit(
       request,
       SECURITY_CONSTANTS.RATE_LIMIT_API,
       SECURITY_CONSTANTS.RATE_LIMIT_WINDOW_MS,
@@ -35,7 +37,10 @@ export async function GET(request: NextRequest) {
         { usd: cachedRate },
         {
           status: 200,
-          headers: { 'X-Cache-Status': 'HIT' },
+          headers: {
+            'X-Cache-Status': 'HIT',
+            'Cache-Control': EDGE_CACHE_CONTROL,
+          },
         }
       );
     }
@@ -72,7 +77,10 @@ export async function GET(request: NextRequest) {
           { usd: cachedRate },
           {
             status: 200,
-            headers: { 'X-Cache-Status': 'MISS' },
+            headers: {
+              'X-Cache-Status': 'MISS',
+              'Cache-Control': EDGE_CACHE_CONTROL,
+            },
           }
         );
       } else {

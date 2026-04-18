@@ -17,7 +17,7 @@ const NWC_URL = process.env.NOSTR_WALLET_CONNECT_URL;
 export async function GET(request: NextRequest) {
   try {
     // Apply rate limiting for LNURL callback
-    const rateLimitResult = rateLimit(
+    const rateLimitResult = await rateLimit(
       request,
       SECURITY_CONSTANTS.RATE_LIMIT_INVOICE,
       SECURITY_CONSTANTS.RATE_LIMIT_WINDOW_MS,
