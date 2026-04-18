@@ -10,11 +10,11 @@ import { SITE_NAME, SITE_URL } from '@/utils/constants';
 export const metadata: Metadata = {
   title: `Field notes | ${SITE_NAME}`,
   description:
-    'What I\u2019m into in tech right now — tools I\u2019m using, things I\u2019m trying, and what I\u2019m enjoying. Updated when it changes.',
+    'What I\u2019m into in tech right now — tools I\u2019m using and things I\u2019m trying. Updated when it changes.',
   openGraph: {
     title: `Field notes | ${SITE_NAME}`,
     description:
-      'What I\u2019m into in tech right now — tools I\u2019m using, things I\u2019m trying, and what I\u2019m enjoying.',
+      'What I\u2019m into in tech right now — tools I\u2019m using and things I\u2019m trying.',
     url: `${SITE_URL}/field-notes`,
     type: 'website',
   },
@@ -27,8 +27,8 @@ export default function FieldNotesPage() {
     <PageLayout title="Field notes" backHref="/" backLabel="Back to Home">
       <div className="max-w-2xl space-y-3">
         <p className="text-base leading-relaxed text-[var(--text-secondary)]">
-          What I&rsquo;m into in tech right now — the tools I reach for, what I&rsquo;m evaluating,
-          and things I&rsquo;m enjoying. A snapshot, updated when it changes.
+          What I&rsquo;m into in tech right now — the tools I reach for and what I&rsquo;m still
+          evaluating. A snapshot, updated when it changes.
         </p>
         <p className="text-sm text-[var(--text-secondary)]">
           <span className="uppercase tracking-[0.14em] text-xs">

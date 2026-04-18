@@ -1,13 +1,13 @@
 /**
  * Field notes (`/field-notes`) — what I'm into in tech right now.
- * Three sections: what I'm using daily, what I'm trying, and what I'm enjoying.
+ * Two sections: what I'm using and what I'm trying.
  * Edit here to update copy; bump `fieldNotesLastUpdated` when you revise.
  */
 
 /** ISO date — bump when you revise items or copy. Shown on `/field-notes`. */
 export const fieldNotesLastUpdated = '2026-04-18';
 
-export type FieldNoteStatus = 'using' | 'trying' | 'enjoying';
+export type FieldNoteStatus = 'using' | 'trying';
 
 export type FieldNoteBadge = 'daily' | 'new' | 'watching';
 
@@ -36,18 +36,23 @@ export const fieldNotesSections: FieldNoteSection[] = [
         title: 'Warp',
         tags: ['terminal'],
         badge: 'daily',
-        note: 'My terminal. I live here — saved command blocks, reruns, and the in-terminal agent mean I rarely need to leave the shell to ask a quick question.',
+        note: 'My terminal. I also launch a lot of my Codex sessions from here — the included usage makes it the cheapest way to lean on Codex heavily.',
       },
       {
         title: 'Claude (desktop)',
         tags: ['anthropic'],
         badge: 'daily',
-        note: 'Home base for longer thinking and writing. The app that feels most like my workspace when I step out of an editor.',
+        note: 'Home for longer thinking and writing. Pushing more of my Claude Code and Cowork sessions into the desktop app instead of the browser.',
       },
       {
         title: 'Claude Pro',
         tags: ['$20/mo'],
         note: 'The subscription I care about most. I hit the caps regularly.',
+      },
+      {
+        title: 'Warp Builder',
+        tags: ['$20/mo'],
+        note: 'Unlocks the Warp agent and builder tier, including the Codex usage I actually lean on.',
       },
       {
         title: 'Opus 4.7',
@@ -58,6 +63,16 @@ export const fieldNotesSections: FieldNoteSection[] = [
         title: 'GPT 5.4',
         tags: ['openai', 'computer use'],
         note: 'Default for general "get this done" work and computer-use tasks. GPT 5.4 Mini shows up when I want something stupid-fast and cheap.',
+      },
+      {
+        title: 'Codex',
+        tags: ['openai', 'cli'],
+        note: 'OpenAI\u2019s terminal agent. Mostly launched from Warp, snappy with 5.4 Mini for short, tool-using asks.',
+      },
+      {
+        title: 'Sonnet 4.6',
+        tags: ['anthropic', 'workhorse'],
+        note: 'Does more of my Claude Code and Cursor work than I\u2019d expect. Fast enough to live with, smart enough for most day-to-day asks.',
       },
       {
         title: 'M1 MacBook Pro 16"',
@@ -84,27 +99,10 @@ export const fieldNotesSections: FieldNoteSection[] = [
         note: 'Paying for Cursor while I figure out how much I want to live in the editor vs. T3 Code + Warp. Still the tightest editor + agent loop when the work is clearly "in a repo."',
       },
       {
-        title: 'Codex',
-        tags: ['openai', 'cli'],
-        note: 'OpenAI\u2019s terminal agent, mostly via T3 Code. Snappy with 5.4 Mini for short, tool-using asks.',
-      },
-      {
         title: 'Claude Teams (enhanced)',
         tags: ['anthropic', '$100/seat'],
         badge: 'watching',
         note: 'Looking at this to stop bouncing off Pro limits. Still doing the math on whether it\u2019s worth it.',
-      },
-    ],
-  },
-  {
-    id: 'enjoying',
-    title: 'Enjoying',
-    blurb: 'Things in tech I\u2019m into right now. Not what I rely on — just what I like.',
-    items: [
-      {
-        title: 'Sonnet 4.6',
-        tags: ['anthropic', 'workhorse'],
-        note: 'Does more of my Claude Code and Cursor work than I\u2019d expect. Fast enough to live with, smart enough for most day-to-day asks.',
       },
     ],
   },
