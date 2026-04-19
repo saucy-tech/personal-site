@@ -36,7 +36,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         title: 'Claude (desktop)',
         tags: ['anthropic', 'Pro $20/mo'],
         badge: 'daily',
-        note: 'Cowork and Claude Code inside the desktop app. On Pro; I hit the caps regularly.',
+        note: 'Cowork and Claude Code inside the desktop app. On Pro; I use it heavily.',
       },
       {
         title: 'Warp',
@@ -57,9 +57,8 @@ export const fieldNotesSections: FieldNoteSection[] = [
       },
       {
         title: 'M1 MacBook Pro 16"',
-        tags: ['16GB', '1TB'],
         badge: 'daily',
-        note: 'Primary machine. Old but still getting the job done — 16GB is starting to feel tight for heavier local work.',
+        note: 'Primary machine. Old but still getting the job done — pushing 16GB limits for heavier local work.',
       },
     ],
   },
