@@ -39,8 +39,7 @@ export default function ClientGalaxyBackground() {
   );
 
   useEffect(() => {
-    if (pathname !== '/' || isLight) {
-      setCanMountGalaxy(false);
+    if (pathname !== '/' || isLight || canMountGalaxy) {
       return;
     }
 
@@ -81,7 +80,7 @@ export default function ClientGalaxyBackground() {
         window.clearTimeout(timeoutId);
       }
     };
-  }, [isLight, pathname]);
+  }, [canMountGalaxy, isLight, pathname]);
 
   if (pathname !== '/') return null;
 
