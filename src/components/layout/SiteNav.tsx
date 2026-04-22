@@ -7,7 +7,7 @@ import { type SiteNavItem, isNavActive } from '@/config/site-nav';
 import { cn } from '@/utils/helpers';
 
 const linkClass =
-  'text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--focus-ring)] focus:ring-offset-2 focus:ring-offset-[var(--background)] rounded-sm';
+  'a11y-focus-ring rounded-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--accent)]';
 
 const activeClass = 'text-[var(--accent)] font-medium';
 

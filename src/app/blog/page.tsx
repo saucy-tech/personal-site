@@ -54,13 +54,13 @@ export default function BlogIndex() {
           <div className="mt-6 flex flex-wrap gap-3">
             <a
               href="#library"
-              className="rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm font-medium text-[var(--on-accent)] transition hover:brightness-110"
+              className="a11y-focus-ring rounded-full bg-[var(--accent)] px-5 py-2.5 text-sm font-medium text-[var(--on-accent)] transition hover:brightness-110"
             >
               Browse the library
             </a>
             <a
               href="#daily-word"
-              className="rounded-full border border-[var(--accent-border)] px-5 py-2.5 text-sm font-medium text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:bg-[var(--accent-transparent)]"
+              className="a11y-focus-ring rounded-full border border-[var(--accent-border)] px-5 py-2.5 text-sm font-medium text-[var(--text-primary)] transition hover:border-[var(--accent)] hover:bg-[var(--accent-transparent)]"
             >
               Subscribe to The Daily Word
             </a>
@@ -94,7 +94,7 @@ export default function BlogIndex() {
 
             <Link
               href={`/blog/${latest.slug}`}
-              className="mt-5 inline-flex text-sm font-medium text-[var(--accent)] transition hover:text-[var(--text-primary)]"
+              className="a11y-focus-ring mt-5 inline-flex rounded-sm text-sm font-medium text-[var(--accent)] transition hover:text-[var(--text-primary)]"
             >
               Read the latest article →
             </Link>
@@ -137,7 +137,7 @@ export default function BlogIndex() {
               {category.href && (
                 <Link
                   href={category.href}
-                  className="inline-flex text-sm font-medium text-[var(--accent)] transition hover:text-[var(--text-primary)]"
+                  className="a11y-focus-ring inline-flex rounded-sm text-sm font-medium text-[var(--accent)] transition hover:text-[var(--text-primary)]"
                 >
                   Visit the Daily Word →
                 </Link>
@@ -145,7 +145,7 @@ export default function BlogIndex() {
               {category.latest && (
                 <Link
                   href={`/blog/${category.latest.slug}`}
-                  className="inline-flex text-sm font-medium text-[var(--accent)] transition hover:text-[var(--text-primary)]"
+                  className="a11y-focus-ring inline-flex rounded-sm text-sm font-medium text-[var(--accent)] transition hover:text-[var(--text-primary)]"
                 >
                   Latest: {category.latest.title}
                 </Link>

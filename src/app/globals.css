@@ -189,6 +189,10 @@ html[data-appearance='light'] article.prose a:hover {
 }
 
 @layer utilities {
+  .a11y-focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)];
+  }
+
   .section-spacing > * + * {
     margin-top: 3rem;
   }

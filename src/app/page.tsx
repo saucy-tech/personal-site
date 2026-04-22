@@ -163,7 +163,10 @@ export default async function Home() {
         </div>
 
         <div className="text-center text-sm">
-          <Link href="/support" className="text-[var(--accent)] transition hover:text-white">
+          <Link
+            href="/support"
+            className="a11y-focus-ring rounded-sm text-[var(--accent)] transition hover:text-white"
+          >
             Support my work
           </Link>
         </div>
