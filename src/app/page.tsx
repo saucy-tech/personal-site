@@ -114,7 +114,7 @@ export default async function Home() {
           )}
           <LinkCard
             key="blog-home"
-            title="Browse the Blog"
+            title="Writing"
             href="/blog"
             icon={<span className="text-2xl">📚</span>}
             eyebrow="Blog"
