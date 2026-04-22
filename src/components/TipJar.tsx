@@ -8,6 +8,14 @@ import { PRESET_AMOUNTS } from '@/utils/tipjar';
 type TipJarState = 'select' | 'pay' | 'success';
 type AmountOption = (typeof PRESET_AMOUNTS)[number] | 'custom';
 
+function getViewportSize() {
+  if (typeof window === 'undefined') {
+    return { width: 800, height: 800 };
+  }
+
+  return { width: window.innerWidth, height: window.innerHeight };
+}
+
 export default function TipJar() {
   const [state, setState] = useState<TipJarState>('select');
   const [selectedAmount, setSelectedAmount] = useState<AmountOption>(PRESET_AMOUNTS[0]);
@@ -16,7 +24,7 @@ export default function TipJar() {
   const [invoice, setInvoice] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
-  const [windowSize, setWindowSize] = useState({ width: 800, height: 800 });
+  const [windowSize, setWindowSize] = useState(getViewportSize);
   const [isGeneratingInvoice, setIsGeneratingInvoice] = useState<boolean>(false);
   const [copyButtonText, setCopyButtonText] = useState<string>('Copy');
   const [usdRate, setUsdRate] = useState<number | null>(null);
@@ -38,23 +46,21 @@ export default function TipJar() {
   }, []);
 
   useEffect(() => {
-    // update window size for confetti
-    const initialWidth = typeof window !== 'undefined' ? window.innerWidth : 800;
-    const initialHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
-    setWindowSize({ width: initialWidth, height: initialHeight });
-
-    const handleResize = () =>
-      setWindowSize({ width: window.innerWidth, height: window.innerHeight });
-
-    if (typeof window !== 'undefined') {
-      window.addEventListener('resize', handleResize);
+    if (typeof window === 'undefined') {
+      return () => {
+        if (pollTimerRef.current) {
+          clearInterval(pollTimerRef.current);
+        }
+      };
     }
+
+    const handleResize = () => setWindowSize(getViewportSize());
+
+    window.addEventListener('resize', handleResize);
 
     // Cleanup function for timers and listeners
     return () => {
-      if (typeof window !== 'undefined') {
-        window.removeEventListener('resize', handleResize);
-      }
+      window.removeEventListener('resize', handleResize);
       if (pollTimerRef.current) {
         clearInterval(pollTimerRef.current);
       }
