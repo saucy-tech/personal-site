@@ -132,11 +132,23 @@ export function slugifyHeading(value: string): string {
   return slug || 'section';
 }
 
+export function createHeadingIdGenerator() {
+  const slugCount = new Map<string, number>();
+
+  return (value: string): string => {
+    const baseId = slugifyHeading(value);
+    const count = (slugCount.get(baseId) ?? 0) + 1;
+    slugCount.set(baseId, count);
+    return count === 1 ? baseId : `${baseId}-${count}`;
+  };
+}
+
 export function extractPostHeadings(content: string): PostHeading[] {
   const withoutFrontmatter = stripMdxFrontmatter(content);
   const withoutCodeBlocks = stripMdxCodeFences(withoutFrontmatter);
   const lines = withoutCodeBlocks.split('\n');
   const headings: PostHeading[] = [];
+  const getHeadingId = createHeadingIdGenerator();
 
   for (const line of lines) {
     const match = /^(#{2,3})\s+(.+?)\s*#*\s*$/.exec(line);
@@ -151,7 +163,7 @@ export function extractPostHeadings(content: string): PostHeading[] {
     }
 
     headings.push({
-      id: slugifyHeading(text),
+      id: getHeadingId(text),
       text,
       level,
     });

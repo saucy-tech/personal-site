@@ -115,6 +115,18 @@ const hidden = "code block should not count";
     ]);
   });
 
+  it('deduplicates repeated heading ids in order', () => {
+    const content = `## Takeaway
+### Takeaway
+## Takeaway`;
+
+    expect(extractPostHeadings(content)).toEqual([
+      { id: 'takeaway', text: 'Takeaway', level: 2 },
+      { id: 'takeaway-2', text: 'Takeaway', level: 3 },
+      { id: 'takeaway-3', text: 'Takeaway', level: 2 },
+    ]);
+  });
+
   it('returns up to three related posts prioritized by category and tags', () => {
     const posts = getAllPostsMeta();
     const sourcePost = posts.find((post) => post.tags.length > 0) ?? posts[0];

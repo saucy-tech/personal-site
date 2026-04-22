@@ -18,7 +18,7 @@ import {
   getPostOgMeta,
   getRelatedPosts,
   seriesSlug,
-  slugifyHeading,
+  createHeadingIdGenerator,
 } from '@/utils/posts';
 import { SITE_NAME, SITE_URL, absoluteUrl } from '@/utils/constants';
 
@@ -67,9 +67,10 @@ export default async function PostPage({ params }: PostPageProps) {
   }
   const relatedPosts = getRelatedPosts(post, 3);
   const showTableOfContents = post.headings.length >= 3;
+  const getHeadingId = createHeadingIdGenerator();
   const mdxComponents = {
     h2: ({ children, ...props }: ComponentPropsWithoutRef<'h2'>) => {
-      const id = slugifyHeading(getHeadingText(children));
+      const id = getHeadingId(getHeadingText(children));
       return (
         <h2 {...props} id={id}>
           {children}
@@ -77,7 +78,7 @@ export default async function PostPage({ params }: PostPageProps) {
       );
     },
     h3: ({ children, ...props }: ComponentPropsWithoutRef<'h3'>) => {
-      const id = slugifyHeading(getHeadingText(children));
+      const id = getHeadingId(getHeadingText(children));
       return (
         <h3 {...props} id={id}>
           {children}
