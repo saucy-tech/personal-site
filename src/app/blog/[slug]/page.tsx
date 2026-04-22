@@ -108,7 +108,7 @@ export default async function PostPage({ params }: PostPageProps) {
             {post.series && (
               <Link
                 href={`/blog/series/${seriesSlug(post.series)}`}
-                className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)] transition hover:border-[var(--accent-border)] hover:text-[var(--accent)]"
+                className="a11y-focus-ring rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)] transition hover:border-[var(--accent-border)] hover:text-[var(--accent)]"
               >
                 {post.series}
               </Link>
@@ -135,7 +135,7 @@ export default async function PostPage({ params }: PostPageProps) {
           )}
         </section>
 
-        <article className="prose prose-invert prose-p:text-[1.05rem] prose-p:leading-8 prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:text-[var(--text-primary)] prose-h2:mt-12 prose-h2:border-t prose-h2:border-white/10 prose-h2:pt-8 prose-h2:text-2xl prose-h3:mt-10 prose-h3:text-xl prose-a:text-[var(--accent)] prose-a:no-underline hover:prose-a:text-[var(--text-primary)] prose-strong:text-[var(--text-primary)] prose-blockquote:rounded-2xl prose-blockquote:border-l-4 prose-blockquote:border-[var(--accent)] prose-blockquote:bg-white/[0.04] prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:text-[var(--text-primary)] prose-hr:border-white/10 prose-img:rounded-3xl prose-img:border prose-img:border-white/10 prose-img:shadow-[0_18px_40px_rgba(0,0,0,0.25)] prose-figcaption:text-sm prose-figcaption:text-[var(--text-secondary)] max-w-none">
+        <article className="prose prose-invert prose-p:text-[1.05rem] prose-p:leading-8 prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:text-[var(--text-primary)] prose-h2:mt-12 prose-h2:border-t prose-h2:border-white/10 prose-h2:pt-8 prose-h2:text-2xl prose-h3:mt-10 prose-h3:text-xl prose-a:text-[var(--accent)] prose-a:no-underline prose-a:decoration-[0.1em] prose-a:underline-offset-[0.2em] hover:prose-a:text-[var(--text-primary)] prose-a:focus-visible:rounded-sm prose-a:focus-visible:outline-none prose-a:focus-visible:ring-2 prose-a:focus-visible:ring-[var(--focus-ring)] prose-a:focus-visible:ring-offset-2 prose-a:focus-visible:ring-offset-[var(--background)] prose-strong:text-[var(--text-primary)] prose-blockquote:rounded-2xl prose-blockquote:border-l-4 prose-blockquote:border-[var(--accent)] prose-blockquote:bg-white/[0.04] prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:text-[var(--text-primary)] prose-hr:border-white/10 prose-img:rounded-3xl prose-img:border prose-img:border-white/10 prose-img:shadow-[0_18px_40px_rgba(0,0,0,0.25)] prose-figcaption:text-sm prose-figcaption:text-[var(--text-secondary)] max-w-none">
           <MDXRemote source={post.content} />
         </article>
 
@@ -158,7 +158,7 @@ export default async function PostPage({ params }: PostPageProps) {
               </div>
               <Link
                 href="/blog"
-                className="text-sm font-medium text-[var(--accent)] transition hover:text-[var(--text-primary)]"
+                className="a11y-focus-ring rounded-sm text-sm font-medium text-[var(--accent)] transition hover:text-[var(--text-primary)]"
               >
                 Browse all posts
               </Link>
@@ -169,7 +169,7 @@ export default async function PostPage({ params }: PostPageProps) {
                 <Link
                   key={relatedPost.slug}
                   href={`/blog/${relatedPost.slug}`}
-                  className="group rounded-3xl border border-[var(--accent-border)] bg-black/10 p-5 transition hover:border-[var(--accent)] hover:bg-[var(--accent-transparent)]"
+                  className="a11y-focus-ring group rounded-3xl border border-[var(--accent-border)] bg-black/10 p-5 transition hover:border-[var(--accent)] hover:bg-[var(--accent-transparent)]"
                 >
                   <p className="text-xs uppercase tracking-[0.18em] text-[var(--accent)]">
                     {formatPostDate(relatedPost.date)}

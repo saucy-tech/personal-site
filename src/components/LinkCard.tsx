@@ -64,14 +64,14 @@ const LinkCard: React.FC<LinkCardProps> = ({
               {eyebrow}
             </p>
           )}
-          <h3
+          <h2
             className={cn(
               'break-words text-sm font-semibold leading-snug text-[var(--text-primary)] sm:text-base',
               eyebrow ? 'mt-2' : ''
             )}
           >
             {cardTitle || title}
-          </h3>
+          </h2>
           {meta && <p className="mt-2 text-xs text-[var(--text-secondary)]">{meta}</p>}
           {description && (
             <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
@@ -104,14 +104,19 @@ const LinkCard: React.FC<LinkCardProps> = ({
 
   if (isExternal) {
     return (
-      <a href={href} target="_blank" rel="noopener noreferrer" className="block h-full w-full">
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="a11y-focus-ring block h-full w-full rounded-2xl"
+      >
         {cardContent}
       </a>
     );
   }
 
   return (
-    <Link href={href} className="block h-full w-full">
+    <Link href={href} className="a11y-focus-ring block h-full w-full rounded-2xl">
       {cardContent}
     </Link>
   );

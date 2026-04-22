@@ -17,7 +17,7 @@ export default function Header({ className, navItems }: HeaderProps) {
     <header className={cn('py-4 transparent', className)}>
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-4 focus:left-4 focus:rounded focus:bg-[var(--accent)] focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-[var(--on-accent)]"
+        className="sr-only focus-visible:not-sr-only focus-visible:absolute focus-visible:z-50 focus-visible:top-4 focus-visible:left-4 focus-visible:rounded focus-visible:bg-[var(--accent)] focus-visible:px-4 focus-visible:py-2 focus-visible:text-sm focus-visible:font-medium focus-visible:text-[var(--on-accent)]"
       >
         Skip to content
       </a>
@@ -29,7 +29,7 @@ export default function Header({ className, navItems }: HeaderProps) {
           <nav aria-label="Main navigation" className="flex justify-center">
             <Link
               href="/"
-              className="text-center text-xl font-bold text-[var(--accent)] hover:opacity-80 transition-opacity"
+              className="a11y-focus-ring rounded-sm text-center text-xl font-bold text-[var(--accent)] transition-opacity hover:opacity-80"
             >
               {SITE_NAME}
             </Link>
