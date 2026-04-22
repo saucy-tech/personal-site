@@ -1,16 +1,19 @@
 import PageLayout from '@/components/PageLayout';
 import { Metadata } from 'next';
-import { SITE_NAME, SITE_URL } from '@/utils/constants';
+import { SITE_NAME } from '@/utils/constants';
 import ClientTipJar from '@/components/ClientTipJar';
 import Section from '@/components/Section';
 
 export const metadata: Metadata = {
   title: 'Support Me',
   description: "Support Brandon's writing, projects, and long-term vision for his family.",
+  alternates: {
+    canonical: '/support',
+  },
   openGraph: {
     title: 'Support Me',
     description: "Contribute to Brandon's work, family savings, or send Bitcoin.",
-    url: `${SITE_URL}/support`,
+    url: '/support',
     type: 'website',
     images: [
       {

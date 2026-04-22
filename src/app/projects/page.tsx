@@ -1,14 +1,17 @@
 import PageLayout from '@/components/PageLayout';
 import { Metadata } from 'next';
-import { SITE_NAME, SITE_URL } from '@/utils/constants';
+import { SITE_NAME } from '@/utils/constants';
 
 export const metadata: Metadata = {
   title: 'Projects & Contributions',
   description: `Explore Brandon's projects and open-source contributions.`,
+  alternates: {
+    canonical: '/projects',
+  },
   openGraph: {
     title: 'Projects',
     description: `Explore Brandon's projects, apps, and experiments.`,
-    url: `${SITE_URL}/projects`,
+    url: '/projects',
     type: 'website',
     images: [
       {

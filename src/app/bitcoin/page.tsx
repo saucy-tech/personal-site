@@ -3,15 +3,18 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import PageLayout from '@/components/PageLayout';
-import { SITE_NAME, SITE_URL } from '@/utils/constants';
+import { SITE_NAME } from '@/utils/constants';
 
 export const metadata: Metadata = {
   title: 'Bitcoin Resources',
   description: 'Explore the ideas and resources that shaped my understanding of Bitcoin.',
+  alternates: {
+    canonical: '/bitcoin',
+  },
   openGraph: {
     title: 'Learn About Bitcoin',
     description: 'Explore the ideas and resources that shaped my understanding of Bitcoin.',
-    url: `${SITE_URL}/bitcoin`,
+    url: '/bitcoin',
     type: 'website',
     images: [
       {

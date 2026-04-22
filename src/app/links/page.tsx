@@ -3,16 +3,19 @@ import { Activity, BarChart2, Building2, Calculator, Database, TrendingUp } from
 
 import LinkCard from '@/components/LinkCard';
 import PageLayout from '@/components/PageLayout';
-import { SITE_NAME, SITE_URL } from '@/utils/constants';
+import { SITE_NAME } from '@/utils/constants';
 
 export const metadata: Metadata = {
   title: `Bitcoin Links | ${SITE_NAME}`,
   description: 'Favorite Bitcoin trackers, calculators, and dashboards.',
   robots: { index: false, follow: false },
+  alternates: {
+    canonical: '/links',
+  },
   openGraph: {
     title: 'Bitcoin Links',
     description: 'Favorite Bitcoin trackers, calculators, and dashboards.',
-    url: `${SITE_URL}/links`,
+    url: '/links',
     type: 'website',
   },
 };

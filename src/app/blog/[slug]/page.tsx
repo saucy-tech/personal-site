@@ -15,7 +15,7 @@ import {
   getPostOgMeta,
   seriesSlug,
 } from '@/utils/posts';
-import { SITE_NAME, SITE_URL } from '@/utils/constants';
+import { SITE_NAME, SITE_URL, absoluteUrl } from '@/utils/constants';
 
 function getReadingTime(content: string) {
   const plainText = content
@@ -69,7 +69,9 @@ export default async function PostPage({ params }: PostPageProps) {
     headline: post.title,
     description: post.excerpt,
     datePublished: post.date,
-    url: `${SITE_URL}/blog/${post.slug}`,
+    dateModified: post.date,
+    url: absoluteUrl(`/blog/${post.slug}`),
+    mainEntityOfPage: absoluteUrl(`/blog/${post.slug}`),
     image: getPostOgImageUrl(post.slug),
     author: {
       '@type': 'Person',
@@ -80,6 +82,10 @@ export default async function PostPage({ params }: PostPageProps) {
       '@type': 'Organization',
       name: SITE_NAME,
       url: SITE_URL,
+      logo: {
+        '@type': 'ImageObject',
+        url: absoluteUrl('/favicon.ico'),
+      },
     },
     articleSection: post.category,
     keywords: post.tags,
@@ -141,7 +147,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
         <ShareButtons
           title={post.title}
-          url={`${SITE_URL}/blog/${post.slug}`}
+          url={absoluteUrl(`/blog/${post.slug}`)}
           excerpt={post.excerpt}
         />
 

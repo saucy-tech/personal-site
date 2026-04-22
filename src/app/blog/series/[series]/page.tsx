@@ -65,6 +65,12 @@ export async function generateMetadata({ params }: SeriesPageProps): Promise<Met
   return {
     title: `${series.name} — Series`,
     description: `All ${series.count} posts in the "${series.name}" series.`,
+    alternates: {
+      canonical: `/blog/series/${series.slug}`,
+    },
+    openGraph: {
+      url: `/blog/series/${series.slug}`,
+    },
   };
 }
 

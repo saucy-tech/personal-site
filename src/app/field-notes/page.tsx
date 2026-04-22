@@ -5,17 +5,20 @@ import PageLayout from '@/components/PageLayout';
 import Section from '@/components/Section';
 import { fieldNotesLastUpdated, fieldNotesSections } from '@/data/field-notes';
 import { formatPostDate } from '@/utils/helpers';
-import { SITE_NAME, SITE_URL } from '@/utils/constants';
+import { SITE_NAME } from '@/utils/constants';
 
 export const metadata: Metadata = {
   title: `Field notes | ${SITE_NAME}`,
   description:
     'What I\u2019m into in tech right now — tools I\u2019m using and things I\u2019m trying. Updated when it changes.',
+  alternates: {
+    canonical: '/field-notes',
+  },
   openGraph: {
     title: `Field notes | ${SITE_NAME}`,
     description:
       'What I\u2019m into in tech right now — tools I\u2019m using and things I\u2019m trying.',
-    url: `${SITE_URL}/field-notes`,
+    url: '/field-notes',
     type: 'website',
   },
 };

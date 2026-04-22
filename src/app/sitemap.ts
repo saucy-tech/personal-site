@@ -1,18 +1,18 @@
 import { MetadataRoute } from 'next';
 
-import { SITE_URL } from '@/utils/constants';
+import { absoluteUrl } from '@/utils/constants';
 import { getAllPostsMeta, getAllSeries } from '@/utils/posts';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const posts = getAllPostsMeta().map((post) => ({
-    url: `${SITE_URL}/blog/${post.slug}`,
+    url: absoluteUrl(`/blog/${post.slug}`),
     lastModified: post.date,
     changeFrequency: 'monthly' as const,
     priority: 0.7,
   }));
 
   const seriesPages = getAllSeries().map((series) => ({
-    url: `${SITE_URL}/blog/series/${series.slug}`,
+    url: absoluteUrl(`/blog/series/${series.slug}`),
     lastModified: series.posts[series.posts.length - 1]?.date ?? new Date().toISOString(),
     changeFrequency: 'weekly' as const,
     priority: 0.6,
@@ -20,43 +20,43 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     {
-      url: SITE_URL,
+      url: absoluteUrl('/'),
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 1,
     },
     {
-      url: `${SITE_URL}/support`,
+      url: absoluteUrl('/support'),
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: `${SITE_URL}/blog`,
+      url: absoluteUrl('/blog'),
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
-      url: `${SITE_URL}/daily-word`,
+      url: absoluteUrl('/daily-word'),
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
-      url: `${SITE_URL}/field-notes`,
+      url: absoluteUrl('/field-notes'),
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.65,
     },
     {
-      url: `${SITE_URL}/rss.xml`,
+      url: absoluteUrl('/rss.xml'),
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
-      url: `${SITE_URL}/blog/series`,
+      url: absoluteUrl('/blog/series'),
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.6,
