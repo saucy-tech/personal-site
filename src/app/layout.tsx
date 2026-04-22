@@ -4,7 +4,9 @@ import { headers } from 'next/headers';
 import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { getFooterNavItems, getSiteNavItems } from '@/config/site-nav';
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from '@/utils/constants';
+import { getAllPostsMeta } from '@/utils/posts';
 import { APPEARANCE_STORAGE_KEY, THEME_STORAGE_KEY } from '@/utils/theme';
 import ClientGalaxyBackground from '@/components/ClientGalaxyBackground';
 import { Analytics } from '@vercel/analytics/react';
@@ -84,10 +86,14 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const nonce = (await headers()).get('x-nonce') ?? undefined;
+  const latestSlug = getAllPostsMeta()[0]?.slug ?? null;
+  const navItems = getSiteNavItems({ latestSlug });
+  const footerNavItems = getFooterNavItems({ latestSlug });
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
         <script
+          suppressHydrationWarning
           {...(nonce ? { nonce } : {})}
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=${JSON.stringify(THEME_STORAGE_KEY)};var a=${JSON.stringify(APPEARANCE_STORAGE_KEY)};if(localStorage.getItem(t)==='green')document.documentElement.setAttribute('data-theme','green');if(localStorage.getItem(a)==='light')document.documentElement.setAttribute('data-appearance','light');}catch(e){}})();`,
@@ -101,11 +107,13 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           {/* Client-only animated background */}
           <ClientGalaxyBackground />
           <div className="relative z-10 flex flex-col min-h-screen">
-            <Header />
+            <Header navItems={navItems} />
             <main id="main-content" className="flex-grow">
-              <div className="container mx-auto max-w-[min(100%,80rem)] px-4 sm:px-6">{children}</div>
+              <div className="container mx-auto max-w-[min(100%,80rem)] px-4 sm:px-6">
+                {children}
+              </div>
             </main>
-            <Footer />
+            <Footer navItems={footerNavItems} />
           </div>
         </div>
         <Analytics />
