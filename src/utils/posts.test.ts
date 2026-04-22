@@ -1,4 +1,12 @@
-import { getAllPostsMeta, getPostBySlug, getPostOgImageUrl, getPostOgMeta } from '@/utils/posts';
+import {
+  extractPostHeadings,
+  getAllPostsMeta,
+  getPostBySlug,
+  getPostOgImageUrl,
+  getPostOgMeta,
+  getReadingTimeFromContent,
+  getRelatedPosts,
+} from '@/utils/posts';
 import { POST_CATEGORIES } from '@/utils/post-taxonomy';
 
 describe('posts utilities', () => {
@@ -29,6 +37,8 @@ describe('posts utilities', () => {
     expect(firstPost?.title).toBe(posts[0]!.title);
     expect(firstPost?.categoryLabel).toBe(posts[0]!.categoryLabel);
     expect(Array.isArray(firstPost?.tags)).toBe(true);
+    expect(posts[0]?.readingTimeMinutes).toBeGreaterThan(0);
+    expect(firstPost?.headings.length).toBeGreaterThanOrEqual(0);
   });
 
   it('categorizes the recent March Daily Word posts correctly', async () => {
@@ -77,5 +87,56 @@ describe('posts utilities', () => {
 
   it('all posts have valid frontmatter', () => {
     expect(() => getAllPostsMeta({ includeFuture: true })).not.toThrow();
+  });
+
+  it('extracts headings and reading time from mdx content', () => {
+    const content = `---
+title: "Sample"
+date: "2026-04-05"
+excerpt: "Sample excerpt"
+category: "Daily Word"
+---
+
+## First Heading
+
+Some words in a paragraph.
+
+### Child Heading
+
+\`\`\`ts
+const hidden = "code block should not count";
+\`\`\`
+`;
+
+    expect(getReadingTimeFromContent(content)).toBe(1);
+    expect(extractPostHeadings(content)).toEqual([
+      { id: 'first-heading', text: 'First Heading', level: 2 },
+      { id: 'child-heading', text: 'Child Heading', level: 3 },
+    ]);
+  });
+
+  it('deduplicates repeated heading ids in order', () => {
+    const content = `## Takeaway
+### Takeaway
+## Takeaway`;
+
+    expect(extractPostHeadings(content)).toEqual([
+      { id: 'takeaway', text: 'Takeaway', level: 2 },
+      { id: 'takeaway-2', text: 'Takeaway', level: 3 },
+      { id: 'takeaway-3', text: 'Takeaway', level: 2 },
+    ]);
+  });
+
+  it('returns up to three related posts prioritized by category and tags', () => {
+    const posts = getAllPostsMeta();
+    const sourcePost = posts.find((post) => post.tags.length > 0) ?? posts[0];
+    expect(sourcePost).toBeDefined();
+    if (!sourcePost) {
+      throw new Error('Expected at least one post');
+    }
+
+    const related = getRelatedPosts(sourcePost);
+    expect(related.length).toBeLessThanOrEqual(3);
+    expect(related.some((post) => post.slug === sourcePost.slug)).toBe(false);
   });
 });
