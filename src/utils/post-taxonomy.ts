@@ -27,10 +27,18 @@ export interface PostMeta {
   categoryDescription: string;
   series?: string;
   tags: string[];
+  readingTimeMinutes: number;
+}
+
+export interface PostHeading {
+  id: string;
+  text: string;
+  level: 2 | 3;
 }
 
 export interface Post extends PostMeta {
   content: string;
+  headings: PostHeading[];
 }
 
 export const CATEGORY_ALIASES: Record<string, PostCategory> = {
@@ -115,7 +123,11 @@ export function normalizeCardTitle(data: Record<string, unknown>): string | unde
   return normalizeText(data.shortTitle) ?? normalizeText(data.cardTitle);
 }
 
-export function toPostMeta(slug: string, data: Record<string, unknown>): PostMeta {
+export function toPostMeta(
+  slug: string,
+  data: Record<string, unknown>,
+  readingTimeMinutes: number
+): PostMeta {
   const category = normalizePostCategory(data.category);
   const categoryDetails = getPostCategoryDetails(category);
 
@@ -130,5 +142,6 @@ export function toPostMeta(slug: string, data: Record<string, unknown>): PostMet
     categoryDescription: categoryDetails.description,
     series: normalizePostSeries(data.series),
     tags: normalizePostTags(data.tags),
+    readingTimeMinutes,
   };
 }

@@ -5,7 +5,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import yaml from 'js-yaml';
 
-import { Post, PostMeta, toPostMeta } from '@/utils/post-taxonomy';
+import { Post, PostHeading, PostMeta, toPostMeta } from '@/utils/post-taxonomy';
 import { frontmatterSchema } from '@/utils/frontmatter-schema';
 import { absoluteUrl } from '@/utils/constants';
 
@@ -94,12 +94,84 @@ type ParsedPostEntry = {
   slug: string;
   meta: PostMeta;
   content: string;
+  headings: PostHeading[];
 };
 type PostsCache = {
   signature: string;
   posts: ParsedPostEntry[];
 };
 let postsCache: PostsCache | null = null;
+const WORDS_PER_MINUTE = 200;
+
+function stripMdxFrontmatter(value: string): string {
+  return value.replace(/^---[\s\S]*?---\s*/, '');
+}
+
+function stripMdxCodeFences(value: string): string {
+  return value.replace(/```[\s\S]*?```/g, ' ');
+}
+
+function normalizeHeadingText(value: string): string {
+  return value
+    .replace(/!\[[^\]]*]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+export function slugifyHeading(value: string): string {
+  const slug = value
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-');
+  return slug || 'section';
+}
+
+export function extractPostHeadings(content: string): PostHeading[] {
+  const withoutFrontmatter = stripMdxFrontmatter(content);
+  const withoutCodeBlocks = stripMdxCodeFences(withoutFrontmatter);
+  const lines = withoutCodeBlocks.split('\n');
+  const headings: PostHeading[] = [];
+
+  for (const line of lines) {
+    const match = /^(#{2,3})\s+(.+?)\s*#*\s*$/.exec(line);
+    if (!match) {
+      continue;
+    }
+
+    const level = match[1]!.length as 2 | 3;
+    const text = normalizeHeadingText(match[2]!);
+    if (!text) {
+      continue;
+    }
+
+    headings.push({
+      id: slugifyHeading(text),
+      text,
+      level,
+    });
+  }
+
+  return headings;
+}
+
+export function getReadingTimeFromContent(content: string): number {
+  const plainText = stripMdxCodeFences(stripMdxFrontmatter(content))
+    .replace(/!\[[^\]]*]\([^)]*\)/g, ' ')
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/[#>*_~[\](){}|\\/-]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const wordCount = plainText ? plainText.split(' ').length : 0;
+  return Math.max(1, Math.ceil(wordCount / WORDS_PER_MINUTE));
+}
 
 function ensurePostsDir() {
   if (!fs.existsSync(POSTS_DIR)) {
@@ -151,10 +223,14 @@ function getParsedPosts(): ParsedPostEntry[] {
         throw new Error(`Frontmatter validation failed for "${slug}.mdx":\n${issues}`);
       }
 
+      const readingTimeMinutes = getReadingTimeFromContent(content);
+      const headings = extractPostHeadings(content);
+
       return {
         slug,
-        meta: toPostMeta(slug, data),
+        meta: toPostMeta(slug, result.data, readingTimeMinutes),
         content,
+        headings,
       };
     });
 
@@ -194,13 +270,65 @@ export async function getPostBySlug(
   if (!parsedPost) {
     return null;
   }
-  const post = { ...parsedPost.meta, content: parsedPost.content };
+  const post = {
+    ...parsedPost.meta,
+    content: parsedPost.content,
+    headings: parsedPost.headings,
+  };
 
   if (!includeFuture && !isPublishedDate(post.date)) {
     return null;
   }
 
   return post;
+}
+
+export function getRelatedPosts(
+  post: Pick<PostMeta, 'slug' | 'category' | 'tags'>,
+  limit = 3
+): PostMeta[] {
+  const candidates = getAllPostsMeta().filter((candidate) => candidate.slug !== post.slug);
+  const normalizedPostTags = new Set(post.tags.map((tag) => tag.toLowerCase()));
+
+  const primaryMatches = candidates
+    .map((candidate) => {
+      const sharedTagCount = candidate.tags.reduce((count, tag) => {
+        return normalizedPostTags.has(tag.toLowerCase()) ? count + 1 : count;
+      }, 0);
+      const sameCategory = candidate.category === post.category;
+      const score = (sameCategory ? 2 : 0) + sharedTagCount * 3;
+
+      return {
+        candidate,
+        score,
+        sharedTagCount,
+      };
+    })
+    .filter((item) => item.score > 0)
+    .sort((a, b) => {
+      if (a.score !== b.score) {
+        return b.score - a.score;
+      }
+      if (a.sharedTagCount !== b.sharedTagCount) {
+        return b.sharedTagCount - a.sharedTagCount;
+      }
+      return b.candidate.date.localeCompare(a.candidate.date);
+    })
+    .map((item) => item.candidate);
+
+  const related = [...primaryMatches];
+
+  for (const candidate of candidates) {
+    if (related.length >= limit) {
+      break;
+    }
+    if (related.some((relatedPost) => relatedPost.slug === candidate.slug)) {
+      continue;
+    }
+    related.push(candidate);
+  }
+
+  return related.slice(0, limit);
 }
 
 export function getPostOgImageUrl(slug: string): string {
