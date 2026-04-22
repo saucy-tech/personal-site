@@ -31,7 +31,7 @@ function getHeadingText(node: ReactNode): string {
     return node.map((child) => getHeadingText(child)).join(' ');
   }
 
-  if (isValidElement(node)) {
+  if (isValidElement<{ children?: ReactNode }>(node)) {
     return getHeadingText(node.props.children);
   }
 
