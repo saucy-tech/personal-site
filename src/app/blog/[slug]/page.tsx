@@ -38,6 +38,17 @@ function getHeadingText(node: ReactNode): string {
   return '';
 }
 
+function createHeadingIdResolver(headings: Array<{ id: string }>) {
+  let headingIndex = 0;
+  const fallbackId = createHeadingIdGenerator();
+
+  return (text: string): string => {
+    const headingId = headings[headingIndex]?.id;
+    headingIndex += 1;
+    return headingId ?? fallbackId(text);
+  };
+}
+
 export async function generateStaticParams() {
   return getAllPostsMeta().map((post) => ({ slug: post.slug }));
 }
@@ -67,7 +78,7 @@ export default async function PostPage({ params }: PostPageProps) {
   }
   const relatedPosts = getRelatedPosts(post, 3);
   const showTableOfContents = post.headings.length >= 3;
-  const getHeadingId = createHeadingIdGenerator();
+  const getHeadingId = createHeadingIdResolver(post.headings);
   const mdxComponents = {
     h2: ({ children, ...props }: ComponentPropsWithoutRef<'h2'>) => {
       const id = getHeadingId(getHeadingText(children));
