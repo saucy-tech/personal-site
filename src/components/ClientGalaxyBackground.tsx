@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useSyncExternalStore } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import { usePathname } from 'next/navigation';
 
 const GalaxyBackground = dynamic(() => import('@/components/GalaxyBackground'), {
@@ -30,6 +30,7 @@ function getServerLightSnapshot(): boolean {
 export default function ClientGalaxyBackground() {
   const pathname = usePathname();
   const isLight = useSyncExternalStore(subscribeAppearance, isLightMode, getServerLightSnapshot);
+  const [canMountGalaxy, setCanMountGalaxy] = useState(false);
   const themeEpoch = useSyncExternalStore(
     subscribeAppearance,
     () =>
@@ -37,13 +38,56 @@ export default function ClientGalaxyBackground() {
     () => '0'
   );
 
-  if (pathname !== '/') {
-    return null;
-  }
+  useEffect(() => {
+    if (pathname !== '/' || isLight) {
+      setCanMountGalaxy(false);
+      return;
+    }
 
-  if (isLight) {
-    return null;
-  }
+    let cancelled = false;
+    let idleCallbackId: number | null = null;
+    let timeoutId: number | null = null;
 
-  return <GalaxyBackground key={themeEpoch} />;
+    const mountWhenIdle = () => {
+      if (typeof window.requestIdleCallback === 'function') {
+        idleCallbackId = window.requestIdleCallback(
+          () => {
+            if (!cancelled) {
+              setCanMountGalaxy(true);
+            }
+          },
+          { timeout: 1200 }
+        );
+        return;
+      }
+
+      timeoutId = window.setTimeout(() => {
+        if (!cancelled) {
+          setCanMountGalaxy(true);
+        }
+      }, 250);
+    };
+
+    mountWhenIdle();
+
+    return () => {
+      cancelled = true;
+
+      if (idleCallbackId !== null && typeof window.cancelIdleCallback === 'function') {
+        window.cancelIdleCallback(idleCallbackId);
+      }
+
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId);
+      }
+    };
+  }, [isLight, pathname]);
+
+  if (pathname !== '/') return null;
+
+  return (
+    <div className="fixed inset-0 pointer-events-none" aria-hidden="true">
+      {!isLight && canMountGalaxy ? <GalaxyBackground key={themeEpoch} /> : null}
+    </div>
+  );
 }

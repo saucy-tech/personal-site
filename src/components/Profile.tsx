@@ -1,7 +1,4 @@
-'use client';
-
 import Image from 'next/image';
-import { useState } from 'react';
 
 interface ProfileProps {
   name: string;
@@ -10,41 +7,18 @@ interface ProfileProps {
 }
 
 const Profile: React.FC<ProfileProps> = ({ name, bio, imageSrc }) => {
-  const [imageError, setImageError] = useState(false);
-  const [imageLoading, setImageLoading] = useState(true);
-
-  const handleImageError = () => {
-    setImageError(true);
-    setImageLoading(false);
-  };
-
-  const handleImageLoad = () => {
-    setImageLoading(false);
-  };
-
   return (
     <div className="flex flex-col items-center space-y-4 w-full mx-auto px-2 mb-4">
       <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-[var(--accent)] shadow-xl transition-transform duration-200 hover:scale-105 active:scale-95">
-        {imageLoading && (
-          <div className="absolute inset-0 bg-gray-200 animate-pulse rounded-full" />
-        )}
-        {imageError ? (
-          <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center">
-            <span className="text-white text-4xl font-bold">{name.charAt(0).toUpperCase()}</span>
-          </div>
-        ) : (
-          <Image
-            src={imageSrc}
-            alt={`${name}'s profile photo`}
-            fill
-            className="object-cover"
-            priority
-            sizes="128px"
-            onLoad={handleImageLoad}
-            onError={handleImageError}
-            quality={85}
-          />
-        )}
+        <Image
+          src={imageSrc}
+          alt={`${name}'s profile photo`}
+          fill
+          className="object-cover"
+          priority
+          sizes="128px"
+          quality={75}
+        />
       </div>
 
       <div className="text-center w-full">
