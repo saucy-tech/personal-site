@@ -34,6 +34,9 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  alternates: {
+    canonical: '/',
+  },
   title: {
     default: SITE_NAME,
     template: `%s | ${SITE_NAME}`,
@@ -56,7 +59,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: SITE_URL,
+    url: '/',
     siteName: SITE_NAME,
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
@@ -73,7 +76,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    images: [`${SITE_URL}/family-photo.jpeg`],
+    images: ['/family-photo.jpeg'],
     creator: '@Saucy_Tech',
   },
   icons: {
@@ -99,7 +102,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             __html: `(function(){try{var t=${JSON.stringify(THEME_STORAGE_KEY)};var a=${JSON.stringify(APPEARANCE_STORAGE_KEY)};if(localStorage.getItem(t)==='green')document.documentElement.setAttribute('data-theme','green');if(localStorage.getItem(a)==='light')document.documentElement.setAttribute('data-appearance','light');}catch(e){}})();`,
           }}
         />
-        <link rel="apple-touch-icon" sizes="180x180" href={`${SITE_URL}/apple-touch-icon.png`} />
       </head>
       <body className={`${ibmSans.variable} ${ibmMono.variable} font-sans antialiased`}>
         {/* Background canvas and content wrapper */}

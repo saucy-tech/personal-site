@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { headers } from 'next/headers';
+import type { Metadata } from 'next';
 
 import LinkCard from '@/components/LinkCard';
 import Profile from '@/components/Profile';
@@ -9,7 +10,16 @@ import SocialBar from '@/components/SocialBar';
 import SubscribeForm from '@/components/SubscribeForm';
 import { formatPostDate } from '@/utils/helpers';
 import { getAllPostsMeta } from '@/utils/posts';
-import { SITE_NAME, SITE_URL, SITE_DESCRIPTION } from '@/utils/constants';
+import { SITE_NAME, SITE_URL, SITE_DESCRIPTION, absoluteUrl } from '@/utils/constants';
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    url: '/',
+  },
+};
 
 /** Inline JSON-LD uses CSP nonce from middleware; avoid static prerender without that header. */
 export const dynamic = 'force-dynamic';
@@ -82,10 +92,25 @@ export default async function Home() {
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'WebSite',
-    name: SITE_NAME,
-    url: SITE_URL,
-    description: SITE_DESCRIPTION,
+    '@graph': [
+      {
+        '@type': 'Person',
+        name: 'Brandon',
+        url: SITE_URL,
+        image: absoluteUrl('/family-photo.jpeg'),
+        sameAs: [
+          'https://x.com/Saucy_Tech',
+          'https://github.com/saucy-tech',
+          'https://primal.net/p/nprofile1qqsvzs8gfntzjs2wg8670nrfy64h44zy69kc3r8rp5wd7kw6t6njsassf62c7',
+        ],
+      },
+      {
+        '@type': 'WebSite',
+        name: SITE_NAME,
+        url: SITE_URL,
+        description: SITE_DESCRIPTION,
+      },
+    ],
   };
 
   return (

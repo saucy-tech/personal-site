@@ -8,6 +8,12 @@ import { getAllSeries } from '@/utils/posts';
 export const metadata: Metadata = {
   title: 'Blog Series',
   description: "Browse all multi-part series from Brandon's blog, organized by topic.",
+  alternates: {
+    canonical: '/blog/series',
+  },
+  openGraph: {
+    url: '/blog/series',
+  },
 };
 
 export default function SeriesIndexPage() {

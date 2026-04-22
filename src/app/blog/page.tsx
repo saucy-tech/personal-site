@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import type { Metadata } from 'next';
 
 import BlogArchive from '@/components/BlogArchive';
 import PageLayout from '@/components/PageLayout';
@@ -8,9 +9,15 @@ import { formatPostDate } from '@/utils/helpers';
 import { getAllPostsMeta } from '@/utils/posts';
 import { POST_CATEGORIES } from '@/utils/post-taxonomy';
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Articles & Reflections',
   description: 'Daily Word posts, biblical reflections, and essays.',
+  alternates: {
+    canonical: '/blog',
+  },
+  openGraph: {
+    url: '/blog',
+  },
 };
 
 export default function BlogIndex() {

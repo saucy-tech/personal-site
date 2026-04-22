@@ -4,10 +4,9 @@ import { LNURL_CONFIG } from '@/utils/lnurl-config';
 
 export async function GET() {
   const username = 'brandon';
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || SITE_URL;
 
   const responseData = {
-    callback: `${appUrl}/api/lnurlp/${username}/callback`,
+    callback: `${SITE_URL}/api/lnurlp/${username}/callback`,
     maxSendable: LNURL_CONFIG.maxSendable,
     minSendable: LNURL_CONFIG.minSendable,
     metadata: LNURL_CONFIG.metadata,

@@ -7,7 +7,7 @@ import yaml from 'js-yaml';
 
 import { Post, PostMeta, toPostMeta } from '@/utils/post-taxonomy';
 import { frontmatterSchema } from '@/utils/frontmatter-schema';
-import { SITE_URL } from '@/utils/constants';
+import { absoluteUrl } from '@/utils/constants';
 
 export interface SeriesMeta {
   name: string;
@@ -204,7 +204,7 @@ export async function getPostBySlug(
 }
 
 export function getPostOgImageUrl(slug: string): string {
-  return `${SITE_URL}/blog/${slug}/opengraph-image`;
+  return absoluteUrl(`/blog/${slug}/opengraph-image`);
 }
 
 export async function getPostOgMeta(slug: string): Promise<Metadata | null> {
@@ -215,16 +215,20 @@ export async function getPostOgMeta(slug: string): Promise<Metadata | null> {
 
   const { title, excerpt } = post;
   const imageUrl = getPostOgImageUrl(slug);
-  const url = `${SITE_URL}/blog/${slug}`;
+  const url = absoluteUrl(`/blog/${slug}`);
 
   return {
     title,
     description: excerpt,
+    alternates: {
+      canonical: `/blog/${slug}`,
+    },
     openGraph: {
       title,
       description: excerpt,
       type: 'article',
       url,
+      publishedTime: post.date,
       images: [
         {
           url: imageUrl,

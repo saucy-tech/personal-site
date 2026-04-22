@@ -1,14 +1,17 @@
 import PageLayout from '@/components/PageLayout';
 import { Metadata } from 'next';
-import { SITE_NAME, SITE_URL } from '@/utils/constants';
+import { SITE_NAME } from '@/utils/constants';
 
 export const metadata: Metadata = {
   title: 'Talks & Sermons',
   description: `Archive of faith-based messages and technical talks by Brandon.`,
+  alternates: {
+    canonical: '/talks',
+  },
   openGraph: {
     title: 'Talks & Sermons',
     description: `Archive of faith-based messages and technical talks by Brandon.`,
-    url: `${SITE_URL}/talks`,
+    url: '/talks',
     type: 'website',
     images: [
       {

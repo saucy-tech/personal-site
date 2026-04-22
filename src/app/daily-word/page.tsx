@@ -5,17 +5,19 @@ import PageLayout from '@/components/PageLayout';
 import SubscribeForm from '@/components/SubscribeForm';
 import { formatPostDate } from '@/utils/helpers';
 import { getAllPostsMeta } from '@/utils/posts';
-import { SITE_URL } from '@/utils/constants';
 
 export const metadata: Metadata = {
   title: 'The Daily Word',
   description:
     "Free weekday scripture reflections and notes from Brandon's Sunday School series. Subscribe to get each post by email.",
+  alternates: {
+    canonical: '/daily-word',
+  },
   openGraph: {
     title: 'The Daily Word',
     description:
       "Free weekday scripture reflections and notes from Brandon's Sunday School series. Subscribe to get each post by email.",
-    url: `${SITE_URL}/daily-word`,
+    url: '/daily-word',
   },
 };
 
