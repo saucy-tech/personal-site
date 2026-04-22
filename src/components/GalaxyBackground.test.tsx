@@ -19,6 +19,7 @@ describe('GalaxyBackground', () => {
 
   beforeEach(() => {
     let nextFrameId = 1;
+    let nextIdleId = 1;
 
     Object.defineProperty(window, 'requestAnimationFrame', {
       configurable: true,
@@ -27,6 +28,24 @@ describe('GalaxyBackground', () => {
     });
 
     Object.defineProperty(window, 'cancelAnimationFrame', {
+      configurable: true,
+      writable: true,
+      value: jest.fn(),
+    });
+
+    Object.defineProperty(window, 'requestIdleCallback', {
+      configurable: true,
+      writable: true,
+      value: jest.fn((cb: IdleRequestCallback) => {
+        cb({
+          didTimeout: false,
+          timeRemaining: () => 10,
+        } as IdleDeadline);
+        return nextIdleId++;
+      }),
+    });
+
+    Object.defineProperty(window, 'cancelIdleCallback', {
       configurable: true,
       writable: true,
       value: jest.fn(),

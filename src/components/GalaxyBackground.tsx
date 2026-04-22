@@ -34,176 +34,203 @@ const GalaxyBackground: React.FC<GalaxyBackgroundProps> = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    // Retrieve CSS variables or fallback to defaults
-    const computedStyle = getComputedStyle(document.documentElement);
-    const rawBg = computedStyle.getPropertyValue('--background').trim();
-    const rawAccent = computedStyle.getPropertyValue('--accent').trim();
-    const background = rawBg || '#07251F';
-    const accent = rawAccent || '#f7931a';
+    let cancelled = false;
+    let idleCallbackId: number | null = null;
+    let timeoutId: number | null = null;
+    let cleanupAnimation: (() => void) | null = null;
 
-    // Helper to convert hex color to RGB
-    const hexToRgb = (hex: string) => {
-      let sanitizedHex = hex.replace('#', '');
-      if (sanitizedHex.length === 3) {
-        sanitizedHex = sanitizedHex
-          .split('')
-          .map((c) => c + c)
-          .join('');
-      }
-      const intVal = parseInt(sanitizedHex, 16);
-      return {
-        r: (intVal >> 16) & 255,
-        g: (intVal >> 8) & 255,
-        b: intVal & 255,
-      };
-    };
-    const bgRgb = hexToRgb(background);
-    const accentRgb = hexToRgb(accent);
+    const initializeGalaxy = () => {
+      const canvas = canvasRef.current;
+      if (!canvas || cancelled) return;
 
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+      // Retrieve CSS variables or fallback to defaults
+      const computedStyle = getComputedStyle(document.documentElement);
+      const rawBg = computedStyle.getPropertyValue('--background').trim();
+      const rawAccent = computedStyle.getPropertyValue('--accent').trim();
+      const background = rawBg || '#07251F';
+      const accent = rawAccent || '#f7931a';
 
-    const ctx = canvas.getContext('2d', { alpha: true });
-    if (!ctx) return;
-
-    // Star properties
-    const stars: {
-      x: number;
-      y: number;
-      size: number;
-      brightness: number;
-      speed: number;
-      color: number; // 0-1 for color variation
-    }[] = [];
-    const numStars = 150; // Reduced star count for better performance
-
-    const populateStars = () => {
-      stars.length = 0;
-
-      for (let i = 0; i < numStars; i++) {
-        stars.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          size: Math.random() * 2,
-          brightness: Math.random(),
-          speed: 0.005 + Math.random() * 0.02,
-          color: Math.random(),
-        });
-      }
-    };
-
-    const setCanvasSize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    const drawBackground = (opacity = 1) => {
-      ctx.fillStyle =
-        opacity === 1
-          ? `rgb(${bgRgb.r}, ${bgRgb.g}, ${bgRgb.b})`
-          : `rgba(${bgRgb.r}, ${bgRgb.g}, ${bgRgb.b}, ${opacity})`;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    };
-
-    const drawStars = () => {
-      stars.forEach((star) => {
-        const opacity = 0.2 + Math.sin(time * 2 + star.brightness * 10) * 0.2;
-
-        ctx.fillStyle = `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, ${opacity})`;
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-        ctx.fill();
-
-        if (star.size > 1.5) {
-          ctx.beginPath();
-          ctx.arc(star.x, star.y, star.size * 2, 0, Math.PI * 2);
-          const gradient = ctx.createRadialGradient(
-            star.x,
-            star.y,
-            0,
-            star.x,
-            star.y,
-            star.size * 3
-          );
-          gradient.addColorStop(0, `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, 0.125)`);
-          gradient.addColorStop(1, `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, 0)`);
-          ctx.fillStyle = gradient;
-          ctx.fill();
+      // Helper to convert hex color to RGB
+      const hexToRgb = (hex: string) => {
+        let sanitizedHex = hex.replace('#', '');
+        if (sanitizedHex.length === 3) {
+          sanitizedHex = sanitizedHex
+            .split('')
+            .map((c) => c + c)
+            .join('');
         }
-      });
-    };
+        const intVal = parseInt(sanitizedHex, 16);
+        return {
+          r: (intVal >> 16) & 255,
+          g: (intVal >> 8) & 255,
+          b: intVal & 255,
+        };
+      };
+      const bgRgb = hexToRgb(background);
+      const accentRgb = hexToRgb(accent);
 
-    const updateStars = () => {
-      stars.forEach((star) => {
-        star.y = (star.y + star.speed) % canvas.height;
-        star.x += Math.sin(time + star.brightness) * 0.1;
-        star.x = (star.x + canvas.width) % canvas.width;
-      });
-    };
+      const ctx = canvas.getContext('2d', { alpha: true });
+      if (!ctx) return;
 
-    const drawStaticFrame = () => {
-      drawBackground();
-      drawStars();
-    };
+      // Star properties
+      const stars: {
+        x: number;
+        y: number;
+        size: number;
+        brightness: number;
+        speed: number;
+        color: number; // 0-1 for color variation
+      }[] = [];
+      const numStars = 150; // Reduced star count for better performance
 
-    const handleResize = () => {
+      const populateStars = () => {
+        stars.length = 0;
+
+        for (let i = 0; i < numStars; i++) {
+          stars.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            size: Math.random() * 2,
+            brightness: Math.random(),
+            speed: 0.005 + Math.random() * 0.02,
+            color: Math.random(),
+          });
+        }
+      };
+
+      const setCanvasSize = () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      };
+
+      const drawBackground = (opacity = 1) => {
+        ctx.fillStyle =
+          opacity === 1
+            ? `rgb(${bgRgb.r}, ${bgRgb.g}, ${bgRgb.b})`
+            : `rgba(${bgRgb.r}, ${bgRgb.g}, ${bgRgb.b}, ${opacity})`;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      };
+
+      const drawStars = () => {
+        stars.forEach((star) => {
+          const opacity = 0.2 + Math.sin(time * 2 + star.brightness * 10) * 0.2;
+
+          ctx.fillStyle = `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, ${opacity})`;
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+          ctx.fill();
+
+          if (star.size > 1.5) {
+            ctx.beginPath();
+            ctx.arc(star.x, star.y, star.size * 2, 0, Math.PI * 2);
+            const gradient = ctx.createRadialGradient(
+              star.x,
+              star.y,
+              0,
+              star.x,
+              star.y,
+              star.size * 3
+            );
+            gradient.addColorStop(0, `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, 0.125)`);
+            gradient.addColorStop(1, `rgba(${accentRgb.r}, ${accentRgb.g}, ${accentRgb.b}, 0)`);
+            ctx.fillStyle = gradient;
+            ctx.fill();
+          }
+        });
+      };
+
+      const updateStars = () => {
+        stars.forEach((star) => {
+          star.y = (star.y + star.speed) % canvas.height;
+          star.x += Math.sin(time + star.brightness) * 0.1;
+          star.x = (star.x + canvas.width) % canvas.width;
+        });
+      };
+
+      const drawStaticFrame = () => {
+        drawBackground();
+        drawStars();
+      };
+
+      const handleResize = () => {
+        setCanvasSize();
+        populateStars();
+
+        if (reducedMotion) {
+          drawStaticFrame();
+          return;
+        }
+
+        drawBackground();
+        drawStars();
+      };
+
       setCanvasSize();
       populateStars();
+      window.addEventListener('resize', handleResize);
 
-      if (reducedMotion) {
-        drawStaticFrame();
-        return;
-      }
+      let animationFrameId: number | null = null;
+      let time = 0;
+      let isPageVisible = !document.hidden;
+
+      const animate = () => {
+        if (!isPageVisible) {
+          animationFrameId = window.requestAnimationFrame(animate);
+          return;
+        }
+
+        time += 0.002; // Slower time increment for smoother animation
+
+        drawBackground(0.5);
+        drawStars();
+        updateStars();
+
+        animationFrameId = window.requestAnimationFrame(animate);
+      };
 
       drawBackground();
       drawStars();
-    };
 
-    setCanvasSize();
-    populateStars();
-    window.addEventListener('resize', handleResize);
+      const handleVisibilityChange = () => {
+        isPageVisible = !document.hidden;
+        if (isPageVisible && reducedMotion) {
+          drawStaticFrame();
+        }
+      };
+      document.addEventListener('visibilitychange', handleVisibilityChange);
 
-    let animationFrameId: number | null = null;
-    let time = 0;
-    let isPageVisible = !document.hidden;
-
-    const animate = () => {
-      if (!isPageVisible) {
+      if (!reducedMotion) {
         animationFrameId = window.requestAnimationFrame(animate);
-        return;
       }
 
-      time += 0.002; // Slower time increment for smoother animation
+      cleanupAnimation = () => {
+        window.removeEventListener('resize', handleResize);
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
 
-      drawBackground(0.5);
-      drawStars();
-      updateStars();
-
-      animationFrameId = window.requestAnimationFrame(animate);
+        if (animationFrameId !== null) {
+          window.cancelAnimationFrame(animationFrameId);
+        }
+      };
     };
 
-    drawBackground();
-    drawStars();
-
-    const handleVisibilityChange = () => {
-      isPageVisible = !document.hidden;
-      if (isPageVisible && reducedMotion) {
-        drawStaticFrame();
-      }
-    };
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-
-    if (!reducedMotion) {
-      animationFrameId = window.requestAnimationFrame(animate);
+    if (typeof window.requestIdleCallback === 'function') {
+      idleCallbackId = window.requestIdleCallback(initializeGalaxy, { timeout: 1200 });
+    } else {
+      timeoutId = window.setTimeout(initializeGalaxy, 250);
     }
 
     return () => {
-      window.removeEventListener('resize', handleResize);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      cancelled = true;
 
-      if (animationFrameId !== null) {
-        window.cancelAnimationFrame(animationFrameId);
+      if (idleCallbackId !== null && typeof window.cancelIdleCallback === 'function') {
+        window.cancelIdleCallback(idleCallbackId);
       }
+
+      if (timeoutId !== null) {
+        window.clearTimeout(timeoutId);
+      }
+
+      cleanupAnimation?.();
     };
   }, [reducedMotion]);
 
