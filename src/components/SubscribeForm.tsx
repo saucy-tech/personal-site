@@ -4,8 +4,10 @@ import { useState } from 'react';
 
 export default function SubscribeForm() {
   const [email, setEmail] = useState('');
+  const [honeypot, setHoneypot] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [serverMessage, setServerMessage] = useState<string | null>(null);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -16,15 +18,44 @@ export default function SubscribeForm() {
     }
 
     setValidationError(null);
+    setServerMessage(null);
     setStatus('loading');
     try {
       const res = await fetch('/api/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, company: honeypot }),
       });
-      setStatus(res.ok ? 'success' : 'error');
-      if (res.ok) setEmail('');
+      let already = false;
+      if (res.ok) {
+        try {
+          const data = (await res.json()) as { success?: boolean; alreadySubscribed?: boolean };
+          already = Boolean(data.alreadySubscribed);
+        } catch {
+          // ignore
+        }
+      }
+      if (res.ok) {
+        setStatus('success');
+        setEmail('');
+        if (already) {
+          setServerMessage("You're already on the list — no need to sign up again.");
+        } else {
+          setServerMessage(null);
+        }
+      } else {
+        let message: string | null = null;
+        try {
+          const data = (await res.json()) as { error?: string };
+          if (data.error) {
+            message = data.error;
+          }
+        } catch {
+          // ignore
+        }
+        setServerMessage(message);
+        setStatus('error');
+      }
     } catch {
       setStatus('error');
     }
@@ -35,7 +66,17 @@ export default function SubscribeForm() {
   const helperMessageId = 'subscribe-helper-message';
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto space-y-3">
+    <form onSubmit={handleSubmit} className="relative w-full max-w-md mx-auto space-y-3">
+      <input
+        type="text"
+        name="company"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        value={honeypot}
+        onChange={(e) => setHoneypot(e.target.value)}
+        className="absolute -left-[9999px] h-px w-px overflow-hidden opacity-0"
+      />
       <label htmlFor="subscribe-email" className="sr-only">
         Email address
       </label>
@@ -71,12 +112,16 @@ export default function SubscribeForm() {
       </p>
       {status === 'success' && (
         <p className="text-center font-medium text-[var(--status-success)]">
-          Check your inbox for confirmation! 🎉
+          {serverMessage ?? 'Check your inbox for confirmation! 🎉'}
         </p>
       )}
       {(validationError || status === 'error') && (
-        <p id={errorMessageId} role="alert" className="text-center font-medium text-[var(--status-error)]">
-          {validationError ?? 'Something went wrong. Try again.'}
+        <p
+          id={errorMessageId}
+          role="alert"
+          className="text-center font-medium text-[var(--status-error)]"
+        >
+          {validationError ?? serverMessage ?? 'Something went wrong. Try again.'}
         </p>
       )}
     </form>

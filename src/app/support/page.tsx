@@ -3,6 +3,7 @@ import { Metadata } from 'next';
 import { SITE_NAME } from '@/utils/constants';
 import ClientTipJar from '@/components/ClientTipJar';
 import Section from '@/components/Section';
+import { validators } from '@/utils/security';
 
 export const metadata: Metadata = {
   title: 'Support Me',
@@ -26,7 +27,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Support() {
+interface SupportPageProps {
+  searchParams: Promise<{ memo?: string }>;
+}
+
+export default async function Support({ searchParams }: SupportPageProps) {
+  const { memo: rawMemo } = await searchParams;
+  const memoCheck = validators.text(rawMemo ?? '', 500);
+  const initialMemo =
+    memoCheck.valid && memoCheck.sanitized && memoCheck.sanitized.length > 0
+      ? memoCheck.sanitized
+      : undefined;
+
   return (
     <PageLayout title="Support Me">
       <p className="text-lg text-gray-300 mb-10 text-center">
@@ -36,7 +48,7 @@ export default function Support() {
       <div id="lightning-tip-jar">
         <Section emoji="⚡" title="Lightning Tip Jar">
           {/* TipJar is client-only: placeholder shown during SSR */}
-          <ClientTipJar />
+          <ClientTipJar key={initialMemo ?? 'default'} initialMemo={initialMemo} />
         </Section>
       </div>
 

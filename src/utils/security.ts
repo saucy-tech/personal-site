@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { getSiteUrl } from '@/utils/constants';
+import { logStructured } from '@/utils/logger';
+
 // Security constants
 export const SECURITY_CONSTANTS = {
   // Rate limiting
@@ -409,7 +412,21 @@ export function getSecurityHeaders(options: { nonce?: string } = {}): Record<str
     ...(isVercelProduction ? ['upgrade-insecure-requests'] : []),
   ];
 
-  headers['Content-Security-Policy'] = cspDirectives.join('; ');
+  if (process.env.ENABLE_CSP_VIOLATION_REPORTS === '1') {
+    try {
+      const reportTo = new URL('/api/csp-report', getSiteUrl()).toString();
+      cspDirectives.push(`report-uri ${reportTo}`);
+    } catch {
+      // ignore invalid SITE_URL at build time
+    }
+  }
+
+  const cspValue = cspDirectives.join('; ');
+  headers['Content-Security-Policy'] = cspValue;
+
+  if (process.env.CSP_REPORT_ONLY === '1') {
+    headers['Content-Security-Policy-Report-Only'] = cspValue;
+  }
 
   return headers;
 }
@@ -513,6 +530,5 @@ export function logSecurityEvent(
     reason?: string;
   }
 ): void {
-  const timestamp = new Date().toISOString();
-  console.warn(`SECURITY EVENT [${timestamp}] ${event}:`, details);
+  logStructured('warn', `security_${event}`, details);
 }

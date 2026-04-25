@@ -1,12 +1,19 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useState, useEffect, useRef } from 'react';
-import ReactConfetti from 'react-confetti';
-import QRCode from 'react-qr-code';
+
 import { PRESET_AMOUNTS } from '@/utils/tipjar';
+
+const ReactConfetti = dynamic(() => import('react-confetti'), { ssr: false });
+const QRCode = dynamic(() => import('react-qr-code'), { ssr: false });
 
 type TipJarState = 'select' | 'pay' | 'success';
 type AmountOption = (typeof PRESET_AMOUNTS)[number] | 'custom';
+
+interface TipJarProps {
+  initialMemo?: string;
+}
 
 function getViewportSize() {
   if (typeof window === 'undefined') {
@@ -16,11 +23,11 @@ function getViewportSize() {
   return { width: window.innerWidth, height: window.innerHeight };
 }
 
-export default function TipJar() {
+export default function TipJar({ initialMemo }: TipJarProps) {
   const [state, setState] = useState<TipJarState>('select');
   const [selectedAmount, setSelectedAmount] = useState<AmountOption>(PRESET_AMOUNTS[0]);
   const [customAmount, setCustomAmount] = useState<string>('');
-  const [message, setMessage] = useState<string>('');
+  const [message, setMessage] = useState(() => initialMemo ?? '');
   const [invoice, setInvoice] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
@@ -29,7 +36,9 @@ export default function TipJar() {
   const [copyButtonText, setCopyButtonText] = useState<string>('Copy');
   const [usdRate, setUsdRate] = useState<number | null>(null);
   const [confettiAccent, setConfettiAccent] = useState('#f7931a');
-  const pollTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const pollTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const pollAttemptsRef = useRef(0);
+  const maxPollAttempts = 80;
 
   useEffect(() => {
     const syncAccent = () => {
@@ -136,7 +145,15 @@ export default function TipJar() {
     if (pollTimerRef.current) {
       clearInterval(pollTimerRef.current);
     }
+    pollAttemptsRef.current = 0;
+    const baseMs = 3000;
     pollTimerRef.current = setInterval(async () => {
+      pollAttemptsRef.current += 1;
+      if (pollAttemptsRef.current > maxPollAttempts) {
+        if (pollTimerRef.current) clearInterval(pollTimerRef.current);
+        setError('Still waiting on the network—check your wallet or try again in a moment.');
+        return;
+      }
       try {
         const res = await fetch(`/api/invoice?paymentHash=${hash}`);
         if (!res.ok) return; // continue polling silently
@@ -150,7 +167,7 @@ export default function TipJar() {
       } catch (err) {
         console.error('Error checking payment status:', err);
       }
-    }, 3000);
+    }, baseMs);
   };
 
   const resetForm = () => {
@@ -197,10 +214,17 @@ export default function TipJar() {
                 Select Amount (sats)
               </label>
               <div>
-                <div className="grid grid-cols-2 gap-3">
+                <div
+                  className="grid grid-cols-2 gap-3"
+                  role="radiogroup"
+                  aria-label="Tip amount in satoshis"
+                >
                   {PRESET_AMOUNTS.map((amount) => (
                     <button
                       key={amount}
+                      type="button"
+                      role="radio"
+                      aria-checked={selectedAmount === amount}
                       onClick={() => handleAmountSelect(amount as AmountOption)}
                       className={`py-2 px-4 rounded-md transition-colors duration-200 ${
                         selectedAmount === amount

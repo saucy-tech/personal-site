@@ -364,6 +364,13 @@ describe('getSecurityHeaders', () => {
     expect(headers['Content-Security-Policy']).toContain("'nonce-testnonce'");
     expect(headers['Strict-Transport-Security']).toContain('max-age=');
   });
+
+  it('duplicates policy to Report-Only when CSP_REPORT_ONLY is set', () => {
+    process.env.CSP_REPORT_ONLY = '1';
+    const headers = getSecurityHeaders({ nonce: 'n' });
+    expect(headers['Content-Security-Policy-Report-Only']).toBe(headers['Content-Security-Policy']);
+    delete process.env.CSP_REPORT_ONLY;
+  });
 });
 
 // ---------------------------------------------------------------------------

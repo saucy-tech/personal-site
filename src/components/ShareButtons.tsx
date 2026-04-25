@@ -1,7 +1,13 @@
 'use client';
 
 import { useState } from 'react';
-import { Check, Link, Mail, X as XIcon } from 'lucide-react';
+import {
+  CheckIcon,
+  EnvelopeIcon,
+  LinkIcon,
+  ShareIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline';
 
 interface ShareButtonsProps {
   title: string;
@@ -23,7 +29,6 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      // Fallback for browsers without clipboard API
       const textarea = document.createElement('textarea');
       textarea.value = url;
       textarea.style.position = 'fixed';
@@ -64,33 +69,16 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
       </p>
 
       <div className="mt-4 flex flex-wrap gap-3">
-        {/* Native share (mobile) — shown only on supporting devices via JS, but we render a fallback set always */}
         <button
+          type="button"
           onClick={handleMobileShare}
           className="flex min-h-[44px] min-w-[44px] items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-2.5 text-sm font-medium text-[var(--text-secondary)] transition hover:border-[var(--accent-border)] hover:bg-[var(--accent-transparent)] hover:text-[var(--text-primary)] sm:hidden"
           aria-label="Share this post or copy the link"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="h-4 w-4"
-            aria-hidden="true"
-          >
-            <circle cx="18" cy="5" r="3" />
-            <circle cx="6" cy="12" r="3" />
-            <circle cx="18" cy="19" r="3" />
-            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-          </svg>
+          <ShareIcon className="h-4 w-4" aria-hidden="true" />
           Share
         </button>
 
-        {/* Twitter / X */}
         <a
           href={twitterUrl}
           target="_blank"
@@ -98,10 +86,9 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
           className="hidden min-h-[44px] min-w-[44px] items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-2.5 text-sm font-medium text-[var(--text-secondary)] transition hover:border-[var(--accent-border)] hover:bg-[var(--accent-transparent)] hover:text-[var(--text-primary)] sm:flex"
           aria-label="Share on X (Twitter)"
         >
-          <XIcon className="h-4 w-4" aria-hidden="true" />X / Twitter
+          <XMarkIcon className="h-4 w-4" aria-hidden="true" />X / Twitter
         </a>
 
-        {/* Facebook */}
         <a
           href={facebookUrl}
           target="_blank"
@@ -121,26 +108,25 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
           Facebook
         </a>
 
-        {/* Email */}
         <a
           href={emailUrl}
           className="hidden min-h-[44px] min-w-[44px] items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-2.5 text-sm font-medium text-[var(--text-secondary)] transition hover:border-[var(--accent-border)] hover:bg-[var(--accent-transparent)] hover:text-[var(--text-primary)] sm:flex"
           aria-label="Share via email"
         >
-          <Mail className="h-4 w-4" aria-hidden="true" />
+          <EnvelopeIcon className="h-4 w-4" aria-hidden="true" />
           Email
         </a>
 
-        {/* Copy Link */}
         <button
+          type="button"
           onClick={handleCopy}
           className="flex min-h-[44px] min-w-[44px] items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.05] px-4 py-2.5 text-sm font-medium text-[var(--text-secondary)] transition hover:border-[var(--accent-border)] hover:bg-[var(--accent-transparent)] hover:text-[var(--text-primary)]"
           aria-label={copied ? 'Link copied!' : 'Copy link to clipboard'}
         >
           {copied ? (
-            <Check className="h-4 w-4 text-green-400" aria-hidden="true" />
+            <CheckIcon className="h-4 w-4 text-green-400" aria-hidden="true" />
           ) : (
-            <Link className="h-4 w-4" aria-hidden="true" />
+            <LinkIcon className="h-4 w-4" aria-hidden="true" />
           )}
           {copied ? 'Copied!' : 'Copy Link'}
         </button>

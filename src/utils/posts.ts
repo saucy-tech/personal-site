@@ -2,10 +2,18 @@ import type { Metadata } from 'next';
 import fs from 'fs';
 import path from 'path';
 
+import GithubSlugger from 'github-slugger';
 import matter from 'gray-matter';
 import yaml from 'js-yaml';
 
-import { Post, PostHeading, PostMeta, toPostMeta } from '@/utils/post-taxonomy';
+import {
+  Post,
+  PostHeading,
+  PostMeta,
+  slugifyTag,
+  toPostMeta,
+  type PostCategory,
+} from '@/utils/post-taxonomy';
 import { frontmatterSchema } from '@/utils/frontmatter-schema';
 import { absoluteUrl } from '@/utils/constants';
 
@@ -121,34 +129,12 @@ function normalizeHeadingText(value: string): string {
     .trim();
 }
 
-export function slugifyHeading(value: string): string {
-  const slug = value
-    .toLowerCase()
-    .normalize('NFKD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9\s-]/g, '')
-    .trim()
-    .replace(/\s+/g, '-');
-  return slug || 'section';
-}
-
-export function createHeadingIdGenerator() {
-  const slugCount = new Map<string, number>();
-
-  return (value: string): string => {
-    const baseId = slugifyHeading(value);
-    const count = (slugCount.get(baseId) ?? 0) + 1;
-    slugCount.set(baseId, count);
-    return count === 1 ? baseId : `${baseId}-${count}`;
-  };
-}
-
 export function extractPostHeadings(content: string): PostHeading[] {
   const withoutFrontmatter = stripMdxFrontmatter(content);
   const withoutCodeBlocks = stripMdxCodeFences(withoutFrontmatter);
   const lines = withoutCodeBlocks.split('\n');
   const headings: PostHeading[] = [];
-  const getHeadingId = createHeadingIdGenerator();
+  const slugger = new GithubSlugger();
 
   for (const line of lines) {
     const match = /^(#{2,3})\s+(.+?)\s*#*\s*$/.exec(line);
@@ -163,13 +149,93 @@ export function extractPostHeadings(content: string): PostHeading[] {
     }
 
     headings.push({
-      id: getHeadingId(text),
+      id: slugger.slug(text),
       text,
       level,
     });
   }
 
   return headings;
+}
+
+export function getAllTagSlugEntries(): { slug: string; displayTag: string }[] {
+  const bySlug = new Map<string, string>();
+  for (const post of getAllPostsMeta()) {
+    for (const tag of post.tags) {
+      const slug = slugifyTag(tag);
+      if (!bySlug.has(slug)) {
+        bySlug.set(slug, tag);
+      }
+    }
+  }
+  return Array.from(bySlug.entries())
+    .map(([slug, displayTag]) => ({ slug, displayTag }))
+    .sort((a, b) => a.slug.localeCompare(b.slug));
+}
+
+export function getPostsByTagSlug(tagSlug: string): PostMeta[] {
+  return getAllPostsMeta().filter((post) => post.tags.some((tag) => slugifyTag(tag) === tagSlug));
+}
+
+export function getPostsByCategory(category: PostCategory): PostMeta[] {
+  return getAllPostsMeta().filter((post) => post.category === category);
+}
+
+export function getPostsByYearMonth(year: number, month: number): PostMeta[] {
+  const prefix = `${year}-${String(month).padStart(2, '0')}`;
+  return getAllPostsMeta().filter((post) => post.date.startsWith(prefix));
+}
+
+/** `getAllPostsMeta()` is newest-first; older = next index, newer = previous index. */
+export function getAdjacentPosts(slug: string): { older: PostMeta | null; newer: PostMeta | null } {
+  const posts = getAllPostsMeta();
+  const idx = posts.findIndex((post) => post.slug === slug);
+  if (idx === -1) {
+    return { older: null, newer: null };
+  }
+  return {
+    older: posts[idx + 1] ?? null,
+    newer: posts[idx - 1] ?? null,
+  };
+}
+
+/** Same-series neighbors in chronological reading order (oldest → newest). */
+export function getAllYearMonthArchiveParams(): { year: string; month: string }[] {
+  const keys = new Set<string>();
+  for (const post of getAllPostsMeta()) {
+    const parts = post.date.split('-');
+    const y = parts[0];
+    const m = parts[1];
+    if (y && m) {
+      keys.add(`${y}-${m}`);
+    }
+  }
+  return Array.from(keys)
+    .sort((a, b) => b.localeCompare(a))
+    .map((key) => {
+      const [year, month] = key.split('-');
+      return { year: year!, month: month! };
+    });
+}
+
+export function getSeriesChronoNeighbors(post: Pick<PostMeta, 'slug' | 'series' | 'date'>): {
+  previous: PostMeta | null;
+  next: PostMeta | null;
+} {
+  if (!post.series) {
+    return { previous: null, next: null };
+  }
+  const inSeries = getAllPostsMeta()
+    .filter((p) => p.series === post.series)
+    .sort((a, b) => a.date.localeCompare(b.date) || a.slug.localeCompare(b.slug));
+  const idx = inSeries.findIndex((p) => p.slug === post.slug);
+  if (idx === -1) {
+    return { previous: null, next: null };
+  }
+  return {
+    previous: inSeries[idx - 1] ?? null,
+    next: inSeries[idx + 1] ?? null,
+  };
 }
 
 export function getReadingTimeFromContent(content: string): number {

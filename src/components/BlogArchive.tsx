@@ -8,10 +8,16 @@ import {
   SparklesIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import { useDeferredValue, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { startTransition, useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 
 import { cn, formatPostDate } from '@/utils/helpers';
-import { POST_CATEGORIES, type PostCategory, type PostMeta } from '@/utils/post-taxonomy';
+import {
+  POST_CATEGORIES,
+  slugifyTag,
+  type PostCategory,
+  type PostMeta,
+} from '@/utils/post-taxonomy';
 
 type CategoryFilter = 'all' | PostCategory;
 
@@ -55,31 +61,82 @@ function matchesQuery(post: PostMeta, query: string) {
 }
 
 export default function BlogArchive({ posts }: BlogArchiveProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>('all');
-  const [activeTag, setActiveTag] = useState<string>('all');
+  const [activeTagSlug, setActiveTagSlug] = useState<string>('all');
   const [query, setQuery] = useState('');
   const deferredQuery = useDeferredValue(query.trim().toLowerCase());
+  const hydratedFromUrl = useRef(false);
+
+  useEffect(() => {
+    const q = searchParams.get('q') ?? '';
+    const cat = searchParams.get('category');
+    const tag = searchParams.get('tag');
+    startTransition(() => {
+      setQuery(q);
+      if (cat && cat in POST_CATEGORIES) {
+        setActiveCategory(cat as PostCategory);
+      } else {
+        setActiveCategory('all');
+      }
+      if (tag) {
+        setActiveTagSlug(tag);
+      } else {
+        setActiveTagSlug('all');
+      }
+    });
+    hydratedFromUrl.current = true;
+  }, [searchParams]);
 
   const categoryScopedPosts =
     activeCategory === 'all' ? posts : posts.filter((post) => post.category === activeCategory);
 
-  const visibleTags = Array.from(
-    categoryScopedPosts.reduce((tagMap, post) => {
-      post.tags.forEach((tag) => {
-        tagMap.set(tag, (tagMap.get(tag) ?? 0) + 1);
-      });
+  const visibleTags = useMemo(
+    () =>
+      Array.from(
+        categoryScopedPosts.reduce((tagMap, post) => {
+          post.tags.forEach((tag) => {
+            tagMap.set(tag, (tagMap.get(tag) ?? 0) + 1);
+          });
 
-      return tagMap;
-    }, new Map<string, number>())
-  )
-    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
-    .slice(0, 8)
-    .map(([tag]) => tag);
+          return tagMap;
+        }, new Map<string, number>())
+      )
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .slice(0, 8)
+        .map(([tag]) => ({ label: tag, slug: slugifyTag(tag) })),
+    [categoryScopedPosts]
+  );
 
   const filteredPosts = categoryScopedPosts.filter((post) => {
-    const matchesTag = activeTag === 'all' || post.tags.includes(activeTag);
+    const matchesTag =
+      activeTagSlug === 'all' || post.tags.some((tag) => slugifyTag(tag) === activeTagSlug);
     return matchesTag && matchesQuery(post, deferredQuery);
   });
+
+  useEffect(() => {
+    if (!hydratedFromUrl.current) {
+      return;
+    }
+    const nextParams = new URLSearchParams();
+    if (activeCategory !== 'all') {
+      nextParams.set('category', activeCategory);
+    }
+    if (activeTagSlug !== 'all') {
+      nextParams.set('tag', activeTagSlug);
+    }
+    if (query.trim()) {
+      nextParams.set('q', query.trim());
+    }
+    const nextQs = nextParams.toString();
+    const currentQs = searchParams.toString();
+    if (nextQs === currentQs) {
+      return;
+    }
+    router.replace(nextQs ? `${pathname}?${nextQs}` : pathname, { scroll: false });
+  }, [activeCategory, activeTagSlug, query, pathname, router, searchParams]);
 
   return (
     <div className="space-y-6">
@@ -108,7 +165,7 @@ export default function BlogArchive({ posts }: BlogArchiveProps) {
               type="button"
               onClick={() => {
                 setActiveCategory('all');
-                setActiveTag('all');
+                setActiveTagSlug('all');
               }}
               className={cn(
                 'rounded-full border px-4 py-2 text-sm transition',
@@ -131,7 +188,7 @@ export default function BlogArchive({ posts }: BlogArchiveProps) {
                   type="button"
                   onClick={() => {
                     setActiveCategory(categoryKey);
-                    setActiveTag('all');
+                    setActiveTagSlug('all');
                   }}
                   className={cn(
                     'inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition',
@@ -154,10 +211,10 @@ export default function BlogArchive({ posts }: BlogArchiveProps) {
             <div className="flex flex-wrap gap-2">
               <button
                 type="button"
-                onClick={() => setActiveTag('all')}
+                onClick={() => setActiveTagSlug('all')}
                 className={cn(
                   'rounded-full border px-3 py-1.5 text-xs uppercase tracking-[0.18em] transition',
-                  activeTag === 'all'
+                  activeTagSlug === 'all'
                     ? 'border-[var(--accent)] bg-[var(--accent-transparent)] text-[var(--text-primary)]'
                     : 'border-white/10 bg-white/[0.03] text-[var(--text-secondary)] hover:border-[var(--accent-border)] hover:text-[var(--text-primary)]'
                 )}
@@ -165,19 +222,19 @@ export default function BlogArchive({ posts }: BlogArchiveProps) {
                 All Topics
               </button>
 
-              {visibleTags.map((tag) => (
+              {visibleTags.map(({ label, slug }) => (
                 <button
-                  key={tag}
+                  key={slug}
                   type="button"
-                  onClick={() => setActiveTag(tag)}
+                  onClick={() => setActiveTagSlug(slug)}
                   className={cn(
                     'rounded-full border px-3 py-1.5 text-xs uppercase tracking-[0.18em] transition',
-                    activeTag === tag
+                    activeTagSlug === slug
                       ? 'border-[var(--accent)] bg-[var(--accent-transparent)] text-[var(--text-primary)]'
                       : 'border-white/10 bg-white/[0.03] text-[var(--text-secondary)] hover:border-[var(--accent-border)] hover:text-[var(--text-primary)]'
                   )}
                 >
-                  {tag}
+                  {label}
                 </button>
               ))}
             </div>
@@ -190,13 +247,14 @@ export default function BlogArchive({ posts }: BlogArchiveProps) {
           Showing <span className="text-[var(--text-primary)]">{filteredPosts.length}</span> of{' '}
           <span className="text-[var(--text-primary)]">{posts.length}</span> posts
         </p>
-        {(activeCategory !== 'all' || activeTag !== 'all' || query) && (
+        {(activeCategory !== 'all' || activeTagSlug !== 'all' || query) && (
           <button
             type="button"
             onClick={() => {
               setActiveCategory('all');
-              setActiveTag('all');
+              setActiveTagSlug('all');
               setQuery('');
+              router.replace(pathname, { scroll: false });
             }}
             className="text-[var(--accent)] transition hover:text-[var(--text-primary)]"
           >

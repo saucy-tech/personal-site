@@ -13,7 +13,7 @@ const customJestConfig = {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   modulePathIgnorePatterns: ['<rootDir>/.claude/'],
-  testPathIgnorePatterns: ['/node_modules/', '/.next/', '/.claude/'],
+  testPathIgnorePatterns: ['/node_modules/', '/.next/', '/.claude/', '<rootDir>/tests/e2e/'],
 };
 
 module.exports = createJestConfig(customJestConfig);
