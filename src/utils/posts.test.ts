@@ -122,8 +122,8 @@ const hidden = "code block should not count";
 
     expect(extractPostHeadings(content)).toEqual([
       { id: 'takeaway', text: 'Takeaway', level: 2 },
-      { id: 'takeaway-2', text: 'Takeaway', level: 3 },
-      { id: 'takeaway-3', text: 'Takeaway', level: 2 },
+      { id: 'takeaway-1', text: 'Takeaway', level: 3 },
+      { id: 'takeaway-2', text: 'Takeaway', level: 2 },
     ]);
   });
 

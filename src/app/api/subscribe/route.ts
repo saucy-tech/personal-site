@@ -8,10 +8,50 @@ import {
   logSecurityEvent,
   SECURITY_CONSTANTS,
 } from '@/utils/security';
+import { logStructured } from '@/utils/logger';
+
+type SubscribeBody = {
+  email?: unknown;
+  /** Honeypot — must stay empty */
+  company?: unknown;
+  website?: unknown;
+};
+
+function extractConvertKitMessage(data: unknown): string {
+  if (!data || typeof data !== 'object') {
+    return '';
+  }
+  const rec = data as Record<string, unknown>;
+  if (typeof rec.message === 'string') {
+    return rec.message;
+  }
+  const err = rec.error;
+  if (typeof err === 'string') {
+    return err;
+  }
+  if (
+    err &&
+    typeof err === 'object' &&
+    'message' in err &&
+    typeof (err as { message: unknown }).message === 'string'
+  ) {
+    return (err as { message: string }).message;
+  }
+  return '';
+}
+
+function isAlreadySubscribedMessage(message: string): boolean {
+  const m = message.toLowerCase();
+  return (
+    m.includes('already subscribed') ||
+    m.includes('already a subscriber') ||
+    m.includes('subscriber already') ||
+    m.includes('already exists')
+  );
+}
 
 export async function POST(req: NextRequest) {
   try {
-    // Apply rate limiting - strict for subscription requests
     const rateLimitResult = await rateLimit(
       req,
       SECURITY_CONSTANTS.RATE_LIMIT_SUBSCRIBE,
@@ -27,7 +67,7 @@ export async function POST(req: NextRequest) {
       return createRateLimitResponse(rateLimitResult.resetTime);
     }
 
-    const bodyResult = await parseJsonBody<{ email?: unknown }>(req);
+    const bodyResult = await parseJsonBody<SubscribeBody>(req);
     if (!bodyResult.valid) {
       return createSecureErrorResponse(
         bodyResult.error?.includes('too large') ? 'Request too large' : 'Invalid request body',
@@ -35,9 +75,18 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { email } = bodyResult.data ?? {};
+    const { email, company, website } = bodyResult.data ?? {};
+    const honeypot =
+      (typeof company === 'string' && company.trim()) ||
+      (typeof website === 'string' && website.trim());
+    if (honeypot) {
+      logStructured('warn', 'subscribe_honeypot_triggered', {
+        endpoint: '/api/subscribe',
+        ip: req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown',
+      });
+      return NextResponse.json({ success: true });
+    }
 
-    // Validate email using security utilities
     const emailValidation = validators.email(email);
     if (!emailValidation.valid) {
       logSecurityEvent('invalid_input', {
@@ -58,7 +107,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Add timeout to external API call
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), SECURITY_CONSTANTS.REQUEST_TIMEOUT);
 
@@ -79,9 +127,17 @@ export async function POST(req: NextRequest) {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
+        const data: unknown = await response.json().catch(() => ({}));
+        const message = extractConvertKitMessage(data);
+        if (isAlreadySubscribedMessage(message)) {
+          return NextResponse.json({ success: true, alreadySubscribed: true });
+        }
         console.error('ConvertKit API error:', response.status, data);
-        return createSecureErrorResponse('Failed to subscribe', 502);
+        const clientMessage =
+          response.status === 400 && message
+            ? 'Please check your email address and try again.'
+            : 'Failed to subscribe';
+        return createSecureErrorResponse(clientMessage, 502);
       }
 
       return NextResponse.json({ success: true });

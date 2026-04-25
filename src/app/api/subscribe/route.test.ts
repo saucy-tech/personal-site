@@ -68,6 +68,25 @@ describe('POST /api/subscribe', () => {
     await expect(response.json()).resolves.toEqual({ success: true });
   });
 
+  it('returns 200 when honeypot company field is filled (silent drop)', async () => {
+    const response = await POST(makeRequest({ email: 'user@example.com', company: 'Evil Corp' }));
+
+    expect(response.status).toBe(200);
+    await expect(response.json()).resolves.toEqual({ success: true });
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
+  it('returns 200 when ConvertKit reports already subscribed', async () => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce(
+      new Response(JSON.stringify({ message: 'Subscriber already subscribed' }), { status: 400 })
+    );
+
+    const response = await POST(makeRequest({ email: 'user@example.com' }));
+
+    expect(response.status).toBe(200);
+    await expect(response.json()).resolves.toEqual({ success: true, alreadySubscribed: true });
+  });
+
   it('returns 400 for an invalid email', async () => {
     const response = await POST(makeRequest({ email: 'not-an-email' }));
     const data = await response.json();

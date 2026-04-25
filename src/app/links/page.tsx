@@ -1,5 +1,12 @@
+import {
+  ArrowTrendingUpIcon,
+  BoltIcon,
+  BuildingOffice2Icon,
+  CalculatorIcon,
+  ChartBarIcon,
+  CircleStackIcon,
+} from '@heroicons/react/24/outline';
 import { Metadata } from 'next';
-import { Activity, BarChart2, Building2, Calculator, Database, TrendingUp } from 'lucide-react';
 
 import LinkCard from '@/components/LinkCard';
 import PageLayout from '@/components/PageLayout';
@@ -25,37 +32,37 @@ const links = [
     title: 'Strategy Tracker',
     description: "Charts and analytics for MicroStrategy's Bitcoin acquisitions",
     href: 'https://www.saylortracker.com/?tab=charts',
-    icon: <BarChart2 size={20} />,
+    icon: <ChartBarIcon className="h-5 w-5" aria-hidden />,
   },
   {
     title: 'Strive Tracker',
     description: "Monitor Strive's corporate Bitcoin treasury holdings",
     href: 'https://treasury.strive.com/',
-    icon: <TrendingUp size={20} />,
+    icon: <ArrowTrendingUpIcon className="h-5 w-5" aria-hidden />,
   },
   {
     title: 'FBTC Calculator',
     description: "Calculate BTC exposure through Fidelity's FBTC ETF",
     href: 'https://bitbo.io/buy/fbtc-btc-calculator/',
-    icon: <Calculator size={20} />,
+    icon: <CalculatorIcon className="h-5 w-5" aria-hidden />,
   },
   {
     title: 'STRC.Live',
     description: 'Live dashboard for Strive Bitcoin treasury data',
     href: 'https://strc.live/',
-    icon: <Activity size={20} />,
+    icon: <BoltIcon className="h-5 w-5" aria-hidden />,
   },
   {
     title: 'HodlBase',
     description: 'Bitcoin accumulation tracker and portfolio insights',
     href: 'https://www.hodlbase.io/',
-    icon: <Database size={20} />,
+    icon: <CircleStackIcon className="h-5 w-5" aria-hidden />,
   },
   {
     title: 'Strategy Dashboard',
     description: "MicroStrategy's official Bitcoin treasury dashboard",
     href: 'https://www.strategy.com/',
-    icon: <Building2 size={20} />,
+    icon: <BuildingOffice2Icon className="h-5 w-5" aria-hidden />,
   },
 ];
 

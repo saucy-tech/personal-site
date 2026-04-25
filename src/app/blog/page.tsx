@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 
 import BlogArchive from '@/components/BlogArchive';
 import PageLayout from '@/components/PageLayout';
@@ -168,7 +169,11 @@ export default function BlogIndex() {
             Search by topic, filter by category, and browse recent writing without digging through a
             long archive.
           </p>
-          <BlogArchive posts={posts} />
+          <Suspense
+            fallback={<p className="text-sm text-[var(--text-secondary)]">Loading filters…</p>}
+          >
+            <BlogArchive posts={posts} />
+          </Suspense>
         </Section>
       </div>
 

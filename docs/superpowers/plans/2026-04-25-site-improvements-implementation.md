@@ -1,0 +1,22 @@
+# Implementation checklist (executed)
+
+- [x] `src/middleware.ts` → default export `proxy` from `./proxy`
+- [x] `package.json` / lockfile: deps add/remove; scripts `analyze`, `check`
+- [x] `next.config.js`: bundle analyzer wrapper, `remotePatterns`
+- [x] `src/utils/posts.ts` + tests: `github-slugger` for `extractPostHeadings`
+- [x] `src/app/blog/[slug]/page.tsx`: MDX plugins; remove custom h2/h3 id wrappers; prev/next; tip CTA; `ReadingProgress`
+- [x] `src/app/page.tsx`: drop redundant `force-dynamic`
+- [x] `src/app/rss.xml/route.ts`: atom:link, language, lastBuildDate, guid
+- [x] New routes: `blog/tag/[tag]`, `blog/category/[category]`, `blog/archive/[year]/[month]`
+- [x] `src/app/sitemap.ts` + test: new URLs
+- [x] `BlogArchive.tsx`: URL query sync
+- [x] Subscribe API + form: honeypot, CK message handling
+- [x] `invoice/route.ts`: singleton client; TipJar dynamic imports + polling limits
+- [x] `btcusd`: shorten in-process cache to 60s (plan alignment)
+- [x] `security.ts` + `logger.ts`: structured logs; CSP-Report-Only env
+- [x] `instrumentation.ts` + optional Sentry
+- [x] `api/webmention/route.ts` stub
+- [x] `SocialBar.tsx`: `rel="me"` on profile links
+- [x] `ShareButtons.tsx`: Heroicons instead of Lucide (remove `lucide-react` if unused)
+- [x] Playwright + Lighthouse CI workflows
+- [x] `.env.example` updates for new env vars

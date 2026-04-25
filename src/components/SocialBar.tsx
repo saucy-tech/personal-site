@@ -22,7 +22,7 @@ const SocialBar: React.FC<SocialBarProps> = ({ socials }) => {
           key={index}
           href={social.href}
           target="_blank"
-          rel="noopener noreferrer"
+          rel="noopener noreferrer me"
           className="inline-flex size-12 shrink-0 items-center justify-center rounded-full border border-[var(--accent-border)] bg-[var(--accent-transparent)] p-0 transition-all duration-200 hover:bg-[var(--accent-hover)] hover:scale-105 active:scale-95"
           aria-label={social.label}
         >

@@ -2,41 +2,29 @@ import Link from 'next/link';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { isValidElement } from 'react';
-import type { ComponentPropsWithoutRef, ReactNode } from 'react';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeSlug from 'rehype-slug';
+import remarkGfm from 'remark-gfm';
 
 import PageLayout from '@/components/PageLayout';
 import PostTableOfContents from '@/components/PostTableOfContents';
+import ReadingProgress from '@/components/ReadingProgress';
 import Section from '@/components/Section';
 import ShareButtons from '@/components/ShareButtons';
 import SubscribeForm from '@/components/SubscribeForm';
 import { formatPostDate } from '@/utils/helpers';
+import { slugifyTag } from '@/utils/post-taxonomy';
 import {
+  getAdjacentPosts,
   getAllPostsMeta,
   getPostBySlug,
   getPostOgImageUrl,
   getPostOgMeta,
   getRelatedPosts,
+  getSeriesChronoNeighbors,
   seriesSlug,
-  createHeadingIdGenerator,
 } from '@/utils/posts';
 import { SITE_NAME, SITE_URL, absoluteUrl } from '@/utils/constants';
-
-function getHeadingText(node: ReactNode): string {
-  if (typeof node === 'string' || typeof node === 'number') {
-    return String(node);
-  }
-
-  if (Array.isArray(node)) {
-    return node.map((child) => getHeadingText(child)).join(' ');
-  }
-
-  if (isValidElement<{ children?: ReactNode }>(node)) {
-    return getHeadingText(node.props.children);
-  }
-
-  return '';
-}
 
 export async function generateStaticParams() {
   return getAllPostsMeta().map((post) => ({ slug: post.slug }));
@@ -66,26 +54,9 @@ export default async function PostPage({ params }: PostPageProps) {
     notFound();
   }
   const relatedPosts = getRelatedPosts(post, 3);
+  const { older, newer } = getAdjacentPosts(slug);
+  const seriesNeighbors = getSeriesChronoNeighbors(post);
   const showTableOfContents = post.headings.length >= 3;
-  const getHeadingId = createHeadingIdGenerator();
-  const mdxComponents = {
-    h2: ({ children, ...props }: ComponentPropsWithoutRef<'h2'>) => {
-      const id = getHeadingId(getHeadingText(children));
-      return (
-        <h2 {...props} id={id}>
-          {children}
-        </h2>
-      );
-    },
-    h3: ({ children, ...props }: ComponentPropsWithoutRef<'h3'>) => {
-      const id = getHeadingId(getHeadingText(children));
-      return (
-        <h3 {...props} id={id}>
-          {children}
-        </h3>
-      );
-    },
-  };
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -115,8 +86,12 @@ export default async function PostPage({ params }: PostPageProps) {
     keywords: post.tags,
   };
 
+  const tipMemo = `read:${post.slug}`;
+  const tipHref = `/support?memo=${encodeURIComponent(tipMemo)}`;
+
   return (
     <PageLayout title={post.title} backHref="/blog" backLabel="Back to Blog">
+      <ReadingProgress />
       <script
         suppressHydrationWarning
         type="application/ld+json"
@@ -127,9 +102,12 @@ export default async function PostPage({ params }: PostPageProps) {
         <div id="post-top" className="space-y-10">
           <section className="overflow-hidden rounded-[2rem] border border-[var(--accent-border)] bg-[radial-gradient(circle_at_top_right,rgb(var(--accent-rgb)/0.18),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-6 sm:p-8">
             <div className="flex flex-wrap gap-2">
-              <span className="rounded-full border border-[var(--accent-border)] bg-[var(--accent-transparent)] px-3 py-1 text-xs uppercase tracking-[0.18em] text-[var(--accent)]">
+              <Link
+                href={`/blog/category/${post.category}`}
+                className="a11y-focus-ring rounded-full border border-[var(--accent-border)] bg-[var(--accent-transparent)] px-3 py-1 text-xs uppercase tracking-[0.18em] text-[var(--accent)] transition hover:brightness-110"
+              >
                 {post.categoryLabel}
-              </span>
+              </Link>
               <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">
                 {formatPostDate(post.date)}
               </span>
@@ -155,16 +133,99 @@ export default async function PostPage({ params }: PostPageProps) {
             {post.tags.length > 0 && (
               <div className="mt-6 flex flex-wrap gap-2">
                 {post.tags.map((tag) => (
-                  <span
+                  <Link
                     key={tag}
-                    className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]"
+                    href={`/blog/tag/${slugifyTag(tag)}`}
+                    className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)] transition hover:border-[var(--accent-border)] hover:text-[var(--accent)]"
                   >
                     {tag}
-                  </span>
+                  </Link>
                 ))}
               </div>
             )}
+
+            <p className="mt-6 text-sm text-[var(--text-secondary)]">
+              If this encouraged you, you can{' '}
+              <Link
+                href={tipHref}
+                className="a11y-focus-ring font-medium text-[var(--accent)] hover:text-[var(--text-primary)]"
+              >
+                send a Lightning tip
+              </Link>{' '}
+              (memo will reference this post).
+            </p>
           </section>
+
+          {(older || newer) && (
+            <nav
+              aria-label="Adjacent posts"
+              className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm"
+            >
+              <div className="min-w-0 flex-1">
+                {older ? (
+                  <Link
+                    href={`/blog/${older.slug}`}
+                    className="a11y-focus-ring block truncate text-[var(--text-secondary)] transition hover:text-[var(--accent)]"
+                  >
+                    <span className="text-xs uppercase tracking-wider text-[var(--accent)]">
+                      Older
+                    </span>
+                    <span className="mt-0.5 block truncate font-medium text-[var(--text-primary)]">
+                      {older.title}
+                    </span>
+                  </Link>
+                ) : (
+                  <span />
+                )}
+              </div>
+              <div className="min-w-0 flex-1 text-right">
+                {newer ? (
+                  <Link
+                    href={`/blog/${newer.slug}`}
+                    className="a11y-focus-ring block truncate text-[var(--text-secondary)] transition hover:text-[var(--accent)]"
+                  >
+                    <span className="text-xs uppercase tracking-wider text-[var(--accent)]">
+                      Newer
+                    </span>
+                    <span className="mt-0.5 block truncate font-medium text-[var(--text-primary)]">
+                      {newer.title}
+                    </span>
+                  </Link>
+                ) : (
+                  <span />
+                )}
+              </div>
+            </nav>
+          )}
+
+          {(seriesNeighbors.previous || seriesNeighbors.next) && (
+            <section
+              aria-label="Series navigation"
+              className="rounded-2xl border border-[var(--accent-border)] bg-[var(--accent-transparent)] px-4 py-3 text-sm"
+            >
+              <p className="text-xs uppercase tracking-[0.18em] text-[var(--accent)]">
+                In this series
+              </p>
+              <div className="mt-2 flex flex-wrap gap-4">
+                {seriesNeighbors.previous && (
+                  <Link
+                    href={`/blog/${seriesNeighbors.previous.slug}`}
+                    className="a11y-focus-ring font-medium text-[var(--text-primary)] hover:text-[var(--accent)]"
+                  >
+                    ← {seriesNeighbors.previous.title}
+                  </Link>
+                )}
+                {seriesNeighbors.next && (
+                  <Link
+                    href={`/blog/${seriesNeighbors.next.slug}`}
+                    className="a11y-focus-ring font-medium text-[var(--text-primary)] hover:text-[var(--accent)]"
+                  >
+                    {seriesNeighbors.next.title} →
+                  </Link>
+                )}
+              </div>
+            </section>
+          )}
 
           {showTableOfContents && (
             <div className="xl:hidden">
@@ -172,8 +233,16 @@ export default async function PostPage({ params }: PostPageProps) {
             </div>
           )}
 
-          <article className="prose prose-invert prose-p:text-[1.05rem] prose-p:leading-8 prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:text-[var(--text-primary)] prose-h2:mt-12 prose-h2:border-t prose-h2:border-white/10 prose-h2:pt-8 prose-h2:text-2xl prose-h3:mt-10 prose-h3:text-xl prose-a:text-[var(--accent)] prose-a:no-underline prose-a:decoration-[0.1em] prose-a:underline-offset-[0.2em] hover:prose-a:text-[var(--text-primary)] prose-a:focus-visible:rounded-sm prose-a:focus-visible:outline-none prose-a:focus-visible:ring-2 prose-a:focus-visible:ring-[var(--focus-ring)] prose-a:focus-visible:ring-offset-2 prose-a:focus-visible:ring-offset-[var(--background)] prose-strong:text-[var(--text-primary)] prose-blockquote:rounded-2xl prose-blockquote:border-l-4 prose-blockquote:border-[var(--accent)] prose-blockquote:bg-white/[0.04] prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:text-[var(--text-primary)] prose-hr:border-white/10 prose-img:rounded-3xl prose-img:border prose-img:border-white/10 prose-img:shadow-[0_18px_40px_rgba(0,0,0,0.25)] prose-figcaption:text-sm prose-figcaption:text-[var(--text-secondary)] max-w-none">
-            <MDXRemote source={post.content} components={mdxComponents} />
+          <article className="prose prose-invert prose-p:text-[1.05rem] prose-p:leading-8 prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:text-[var(--text-primary)] prose-h2:mt-12 prose-h2:border-t prose-h2:border-white/10 prose-h2:pt-8 prose-h2:text-2xl prose-h3:mt-10 prose-h3:text-xl prose-a:text-[var(--accent)] prose-a:no-underline prose-a:decoration-[0.1em] prose-a:underline-offset-[0.2em] hover:prose-a:text-[var(--text-primary)] prose-a:focus-visible:rounded-sm prose-a:focus-visible:outline-none prose-a:focus-visible:ring-2 prose-a:focus-visible:ring-[var(--focus-ring)] prose-a:focus-visible:ring-offset-2 prose-a:focus-visible:ring-offset-[var(--background)] prose-headings:[&_a]:no-underline prose-headings:[&_a]:text-[var(--accent)] hover:prose-headings:[&_a]:text-[var(--text-primary)] prose-strong:text-[var(--text-primary)] prose-blockquote:rounded-2xl prose-blockquote:border-l-4 prose-blockquote:border-[var(--accent)] prose-blockquote:bg-white/[0.04] prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:text-[var(--text-primary)] prose-hr:border-white/10 prose-img:rounded-3xl prose-img:border prose-img:border-white/10 prose-img:shadow-[0_18px_40px_rgba(0,0,0,0.25)] prose-figcaption:text-sm prose-figcaption:text-[var(--text-secondary)] max-w-none">
+            <MDXRemote
+              source={post.content}
+              options={{
+                mdxOptions: {
+                  remarkPlugins: [remarkGfm],
+                  rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: 'append' }]],
+                },
+              }}
+            />
           </article>
 
           <ShareButtons

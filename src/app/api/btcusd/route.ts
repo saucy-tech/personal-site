@@ -9,7 +9,7 @@ import {
 
 let cachedRate: number | null = null;
 let lastFetchTime: number | null = null;
-const CACHE_DURATION_MS = 10 * 60 * 1000; // 10 minutes
+const CACHE_DURATION_MS = 60 * 1000; // 1 minute in-process (CDN cache headers still apply)
 const EDGE_CACHE_CONTROL =
   'public, max-age=60, s-maxage=300, stale-while-revalidate=600, stale-if-error=1800';
 

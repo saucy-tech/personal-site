@@ -4,7 +4,7 @@ import { BaseProps } from '@/types';
 import { cn } from '@/utils/helpers';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
 
 interface CardProps extends BaseProps {
   href?: string;
@@ -37,7 +37,7 @@ export default function Card({
               whileTap={{ scale: 0.95 }}
               className="flex items-center text-[var(--accent)] hover:opacity-80 transition-opacity"
             >
-              <ArrowLeft size={18} className="mr-1" />
+              <ArrowLeftIcon className="mr-1 h-[18px] w-[18px]" aria-hidden />
               <span className="text-sm">Back</span>
             </motion.div>
           </Link>

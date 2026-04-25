@@ -21,9 +21,6 @@ export const metadata: Metadata = {
   },
 };
 
-/** Inline JSON-LD uses CSP nonce from middleware; avoid static prerender without that header. */
-export const dynamic = 'force-dynamic';
-
 export default async function Home() {
   const nonce = (await headers()).get('x-nonce') ?? undefined;
   const profileData = {
