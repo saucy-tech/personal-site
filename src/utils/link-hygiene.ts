@@ -7,13 +7,12 @@ export interface ParsedMarkdownLink {
   target: string;
 }
 
-const MARKDOWN_LINK_REGEX = /!?\[[^\]]*]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
-
 export function extractMarkdownLinkTargets(content: string): ParsedMarkdownLink[] {
+  const regex = /!?\[[^\]]*]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
   const matches: ParsedMarkdownLink[] = [];
   let match: RegExpExecArray | null;
 
-  while ((match = MARKDOWN_LINK_REGEX.exec(content)) !== null) {
+  while ((match = regex.exec(content)) !== null) {
     const target = match[1];
     if (!target) {
       continue;

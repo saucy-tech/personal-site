@@ -5,13 +5,12 @@ export interface MarkdownImage {
 
 type ImageSizeStatus = 'ok' | 'warn' | 'error';
 
-const MARKDOWN_IMAGE_REGEX = /!\[([^\]]*)]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
-
 export function extractMarkdownImages(content: string): MarkdownImage[] {
+  const regex = /!\[([^\]]*)]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
   const images: MarkdownImage[] = [];
   let match: RegExpExecArray | null;
 
-  while ((match = MARKDOWN_IMAGE_REGEX.exec(content)) !== null) {
+  while ((match = regex.exec(content)) !== null) {
     const alt = match[1] ?? '';
     const src = match[2] ?? '';
     if (!src) {

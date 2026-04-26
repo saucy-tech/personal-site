@@ -96,6 +96,7 @@ function checkInternalLinks(): number {
 
   for (const [slug, inboundCount] of inboundBySlug.entries()) {
     if (inboundCount === 0) {
+      // orphan age check only applies to date-prefixed slugs (YYYY-MM-DD-*)
       const slugDate = slug.match(/^(\d{4})-(\d{2})-(\d{2})-/);
       if (!slugDate) {
         continue;
