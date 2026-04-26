@@ -150,6 +150,19 @@ describe('POST /api/invoice', () => {
     await expect(response.json()).resolves.toEqual({ error: 'Unable to process payment request' });
   });
 
+  it('returns 429 when rapid payment-attempt tracking rejects the hash', async () => {
+    mockMakeInvoice.mockResolvedValueOnce({
+      invoice: 'lnbc1000n1...',
+      payment_hash: validHash,
+    });
+    mockTrackPaymentAttempt.mockReturnValueOnce(false);
+
+    const { POST } = await loadRoute();
+    const response = await POST(makePostRequest({ amount: 1000, memo: 'burst test' }));
+
+    expect(response.status).toBe(429);
+    await expect(response.json()).resolves.toEqual({ error: 'Too many rapid attempts' });
+  });
 });
 
 describe('GET /api/invoice', () => {
