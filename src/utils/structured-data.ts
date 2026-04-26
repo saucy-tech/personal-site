@@ -17,6 +17,20 @@ interface PostJsonLdInput {
   authorName: string;
 }
 
+interface ListingPostInput {
+  slug: string;
+  title: string;
+  excerpt: string;
+  date: string;
+}
+
+interface BlogListingJsonLdInput {
+  path: `/blog${string}`;
+  title: string;
+  description: string;
+  posts: ListingPostInput[];
+}
+
 type JsonLdGraphNode = {
   '@type': string;
   [key: string]: unknown;
@@ -86,6 +100,52 @@ export function getPostJsonLd(input: PostJsonLdInput): Record<string, unknown> {
         { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
         { '@type': 'ListItem', position: 2, name: 'Blog', item: absoluteUrl('/blog') },
         { '@type': 'ListItem', position: 3, name: input.title, item: postUrl },
+      ],
+    },
+  };
+}
+
+export function getBlogListingJsonLd(input: BlogListingJsonLdInput): Record<string, unknown> {
+  const listingUrl = absoluteUrl(input.path);
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: input.title,
+    description: input.description,
+    url: listingUrl,
+    isPartOf: {
+      '@type': 'Blog',
+      name: SITE_NAME,
+      url: absoluteUrl('/blog'),
+    },
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListOrder: 'https://schema.org/ItemListOrderDescending',
+      numberOfItems: input.posts.length,
+      itemListElement: input.posts.map((post, index) => {
+        const postUrl = absoluteUrl(`/blog/${post.slug}`);
+
+        return {
+          '@type': 'ListItem',
+          position: index + 1,
+          url: postUrl,
+          item: {
+            '@type': 'BlogPosting',
+            headline: post.title,
+            description: post.excerpt,
+            datePublished: post.date,
+            url: postUrl,
+          },
+        };
+      }),
+    },
+    breadcrumb: {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: absoluteUrl('/') },
+        { '@type': 'ListItem', position: 2, name: 'Blog', item: absoluteUrl('/blog') },
+        { '@type': 'ListItem', position: 3, name: input.title, item: listingUrl },
       ],
     },
   };

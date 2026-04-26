@@ -57,6 +57,15 @@ describe('POST /api/subscribe', () => {
     expect(response.status).toBe(400);
   });
 
+  it('returns 413 when payload exceeds request-size limit', async () => {
+    const response = await POST(
+      makeRequest({ email: 'user@example.com', notes: 'x'.repeat(1_200_000) })
+    );
+
+    expect(response.status).toBe(413);
+    await expect(response.json()).resolves.toEqual({ error: 'Request too large' });
+  });
+
   it('returns 200 with success=true on the happy path', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce(
       new Response(JSON.stringify({ subscriber: {} }), { status: 200 })

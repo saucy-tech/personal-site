@@ -79,4 +79,15 @@ describe('GET /api/btcusd', () => {
 
     expect(response.status).toBe(429);
   });
+
+  it('returns 502 when upstream payload shape is invalid', async () => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce(
+      new Response(JSON.stringify({ bitcoin: { usd: 'not-a-number' } }), { status: 200 })
+    );
+    const { GET } = await import('@/app/api/btcusd/route');
+    const response = await GET(makeRequest());
+
+    expect(response.status).toBe(502);
+    await expect(response.json()).resolves.toEqual({ error: 'Failed to parse price data' });
+  });
 });

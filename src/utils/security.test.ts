@@ -7,6 +7,7 @@ import {
   SECURITY_CONSTANTS,
   parseJsonBody,
   getSecurityHeaders,
+  assertSecurityHeadersHaveRequiredDirectives,
 } from '@/utils/security';
 import { NextRequest } from 'next/server';
 
@@ -370,6 +371,24 @@ describe('getSecurityHeaders', () => {
     const headers = getSecurityHeaders({ nonce: 'n' });
     expect(headers['Content-Security-Policy-Report-Only']).toBe(headers['Content-Security-Policy']);
     delete process.env.CSP_REPORT_ONLY;
+  });
+
+  it('passes drift assertion for generated security headers', () => {
+    const headers = getSecurityHeaders({ nonce: 'testnonce' });
+    expect(() => assertSecurityHeadersHaveRequiredDirectives(headers)).not.toThrow();
+  });
+
+  it('fails drift assertion when required directives are missing', () => {
+    const headers = getSecurityHeaders({ nonce: 'testnonce' });
+    const driftedHeaders = {
+      ...headers,
+      'X-Frame-Options': '',
+      'Content-Security-Policy': "default-src 'self'; script-src 'self'",
+    };
+
+    expect(() => assertSecurityHeadersHaveRequiredDirectives(driftedHeaders)).toThrow(
+      /security drift detected/i
+    );
   });
 });
 

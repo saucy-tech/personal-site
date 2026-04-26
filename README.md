@@ -194,6 +194,19 @@ This check:
 
 Run `pnpm docs:architecture` to regenerate `docs/architecture-map.md` after adding routes, API endpoints, or major utility/component files.
 
+Run `pnpm quality:gate` as the local "definition of done" check before pushing. It runs:
+- `pnpm lint`
+- `pnpm test`
+- `pnpm content:validate`
+- `pnpm content:check-links`
+- `pnpm content:check-images`
+- `pnpm security:drift`
+
+CI now uses this same `quality:gate` command before build and E2E smoke checks.
+
+For framework/runtime modernization work, use the upgrade contract matrix:
+- `docs/testing/framework-upgrade-test-matrix.md`
+
 Operational runbooks:
 - `docs/runbooks/api-incident-response.md`
 - `docs/runbooks/content-guardrails.md`

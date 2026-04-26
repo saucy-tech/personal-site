@@ -18,6 +18,8 @@
     "content:validate": "ts-node --project tsconfig.scripts.json scripts/validate-content.ts",
     "content:check-links": "ts-node --project tsconfig.scripts.json scripts/check-internal-links.ts",
     "content:check-images": "ts-node --project tsconfig.scripts.json scripts/check-image-hygiene.ts",
+    "security:drift": "ts-node -r tsconfig-paths/register --project tsconfig.scripts.json scripts/check-security-drift.ts",
+    "quality:gate": "pnpm lint && pnpm test && pnpm content:validate && pnpm content:check-links && pnpm content:check-images && pnpm security:drift",
     "docs:architecture": "ts-node --project tsconfig.scripts.json scripts/generate-architecture-docs.ts"
   },
   "lint-staged": {
@@ -29,10 +31,10 @@
   "dependencies": {
     "@getalby/sdk": "^7.0.0",
     "@heroicons/react": "^2.1.1",
+    "@sentry/nextjs": "^10.27.0",
     "@tailwindcss/typography": "^0.5.13",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
-    "@sentry/nextjs": "^10.27.0",
     "clsx": "^2.1.1",
     "framer-motion": "^12.38.0",
     "github-slugger": "^1.5.0",
@@ -71,9 +73,9 @@
     }
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.5",
     "@next/bundle-analyzer": "^16.2.4",
     "@playwright/test": "^1.57.0",
-    "@eslint/eslintrc": "^3.3.5",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@types/jest": "^30.0.0",
@@ -99,6 +101,7 @@
     "prettier": "^3.8.3",
     "tailwindcss": "^3.4.1",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.59.0",
     "zod": "^4.3.6"

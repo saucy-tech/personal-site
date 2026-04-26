@@ -41,25 +41,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Validate content quality
-        run: pnpm content:validate
-
-      - name: Check internal-link hygiene
-        run: pnpm content:check-links
-
-      - name: Check image hygiene
-        run: pnpm content:check-images
+      - name: Run quality gate
+        run: pnpm quality:gate
 
       - name: Type check & build
         run: pnpm build
         env:
           NEXT_PUBLIC_APP_URL: https://example.com
-
-      - name: Lint
-        run: pnpm lint
-
-      - name: Test
-        run: pnpm test
 
       - name: Install Playwright (Chromium)
         run: pnpm exec playwright install --with-deps chromium

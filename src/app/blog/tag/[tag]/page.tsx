@@ -1,10 +1,13 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 
 import PageLayout from '@/components/PageLayout';
+import SubscribeCard from '@/components/SubscribeCard';
 import { formatPostDate } from '@/utils/helpers';
 import { getAllTagSlugEntries, getPostsByTagSlug } from '@/utils/posts';
+import { getBlogListingJsonLd } from '@/utils/structured-data';
 
 export async function generateStaticParams() {
   return getAllTagSlugEntries().map(({ slug }) => ({ tag: slug }));
@@ -39,15 +42,35 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function TagArchivePage({ params }: PageProps) {
   const { tag } = await params;
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
   const posts = getPostsByTagSlug(tag);
   if (posts.length === 0) {
     notFound();
   }
   const entries = getAllTagSlugEntries();
   const label = entries.find((e) => e.slug === tag)?.displayTag ?? tag;
+  const title = `Tag: ${label}`;
+  const description = `Posts tagged “${label}”.`;
+  const jsonLd = getBlogListingJsonLd({
+    path: `/blog/tag/${tag}`,
+    title,
+    description,
+    posts: posts.map((post) => ({
+      slug: post.slug,
+      title: post.title,
+      excerpt: post.excerpt,
+      date: post.date,
+    })),
+  });
 
   return (
-    <PageLayout title={`Tag: ${label}`} backHref="/blog" backLabel="Back to Blog">
+    <PageLayout title={title} backHref="/blog" backLabel="Back to Blog">
+      <script
+        suppressHydrationWarning
+        type="application/ld+json"
+        {...(nonce ? { nonce } : {})}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <p className="mb-6 text-sm text-[var(--text-secondary)]">
         {posts.length} post{posts.length === 1 ? '' : 's'} tagged{' '}
         <span className="font-medium text-[var(--text-primary)]">{label}</span>.
@@ -69,6 +92,9 @@ export default async function TagArchivePage({ params }: PageProps) {
           </li>
         ))}
       </ul>
+      <div className="mt-6">
+        <SubscribeCard context="tag-archive" contextLabel={label} contextCount={posts.length} />
+      </div>
     </PageLayout>
   );
 }
