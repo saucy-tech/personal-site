@@ -321,6 +321,54 @@ export const validators = {
   },
 };
 
+const REQUIRED_SECURITY_HEADERS = [
+  'Content-Security-Policy',
+  'Strict-Transport-Security',
+  'X-Frame-Options',
+  'X-Content-Type-Options',
+  'Referrer-Policy',
+  'Permissions-Policy',
+] as const;
+
+const REQUIRED_CSP_SUBSTRINGS = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "object-src 'none'",
+  "frame-ancestors 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+] as const;
+
+export function getSecurityHeaderDriftIssues(headers: Record<string, string>): string[] {
+  const issues: string[] = [];
+
+  for (const headerName of REQUIRED_SECURITY_HEADERS) {
+    if (!headers[headerName]) {
+      issues.push(`Missing required header: ${headerName}`);
+    }
+  }
+
+  const csp = headers['Content-Security-Policy'];
+  if (!csp) {
+    return issues;
+  }
+
+  for (const requiredPart of REQUIRED_CSP_SUBSTRINGS) {
+    if (!csp.includes(requiredPart)) {
+      issues.push(`CSP is missing required directive fragment: ${requiredPart}`);
+    }
+  }
+
+  return issues;
+}
+
+export function assertSecurityHeadersHaveRequiredDirectives(headers: Record<string, string>): void {
+  const issues = getSecurityHeaderDriftIssues(headers);
+  if (issues.length > 0) {
+    throw new Error(`Security drift detected:\n- ${issues.join('\n- ')}`);
+  }
+}
+
 /**
  * Security headers configuration with production canvas support
  * Optimized for Vercel deployment environment

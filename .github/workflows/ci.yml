@@ -61,6 +61,9 @@ jobs:
       - name: Test
         run: pnpm test
 
+      - name: Check security drift
+        run: pnpm security:drift
+
       - name: Install Playwright (Chromium)
         run: pnpm exec playwright install --with-deps chromium
 
