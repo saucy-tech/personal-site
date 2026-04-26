@@ -1,4 +1,13 @@
-import { evaluatePostContentQuality } from '@/utils/content-quality';
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
+
+import {
+  collectPostFiles,
+  evaluatePostContentQuality,
+  formatAuditReport,
+  toExitCode,
+} from '@/utils/content-quality';
 
 describe('evaluatePostContentQuality', () => {
   it('returns no issues for well-formed quality inputs', () => {
@@ -48,5 +57,65 @@ describe('evaluatePostContentQuality', () => {
     expect(duplicateTags.warnings).toEqual(
       expect.arrayContaining([expect.stringContaining('duplicate tags')])
     );
+  });
+});
+
+describe('collectPostFiles', () => {
+  it('returns md and mdx posts sorted by file name', () => {
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'content-quality-'));
+    const postsDir = path.join(tempDir, 'src', 'posts');
+    fs.mkdirSync(postsDir, { recursive: true });
+    fs.writeFileSync(path.join(postsDir, 'b-post.mdx'), '---\n---');
+    fs.writeFileSync(path.join(postsDir, 'a-post.md'), '---\n---');
+    fs.writeFileSync(path.join(postsDir, 'ignore.txt'), 'ignore');
+
+    const files = collectPostFiles(tempDir);
+
+    expect(files).toEqual(['a-post.md', 'b-post.mdx']);
+
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  });
+});
+
+describe('audit report helpers', () => {
+  it('formats report output including warning and error sections', () => {
+    const report = formatAuditReport({
+      checkedCount: 2,
+      checkedLabel: 'posts',
+      findings: [
+        { level: 'warning', source: 'a-post', message: 'warning message' },
+        { level: 'error', source: 'b-post', message: 'error message' },
+      ],
+      headers: {
+        intro: 'Checked 2 posts.',
+        warning: 'Warnings',
+        error: 'Errors',
+        pass: 'Passed',
+        fail: 'Failed',
+      },
+    });
+
+    expect(report.introLine).toBe('Checked 2 posts.');
+    expect(report.warningLines).toEqual(['', 'Warnings (1):', '- [a-post] warning message']);
+    expect(report.errorLines).toEqual(['', 'Errors (1):', '- [b-post] error message']);
+    expect(report.finalLine).toBe('Failed');
+  });
+
+  it('returns success output and exit code when only warnings are present', () => {
+    const report = formatAuditReport({
+      checkedCount: 1,
+      checkedLabel: 'posts',
+      findings: [{ level: 'warning', source: 'only-post', message: 'warning only' }],
+      headers: {
+        intro: 'Checked 1 post.',
+        warning: 'Warnings',
+        error: 'Errors',
+        pass: 'Passed',
+        fail: 'Failed',
+      },
+    });
+
+    expect(report.finalLine).toBe('Passed');
+    expect(toExitCode(report.findings)).toBe(0);
   });
 });
