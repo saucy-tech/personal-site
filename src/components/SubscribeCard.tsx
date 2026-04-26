@@ -15,17 +15,70 @@ interface SubscribeCardProps {
   meta?: string;
   description?: string;
   align?: 'center' | 'left';
+  context?: 'default' | 'post' | 'tag-archive' | 'category-archive';
+  contextLabel?: string;
+  contextCount?: number;
 }
 
 export default function SubscribeCard({
   className,
-  eyebrow = 'Newsletter',
-  title = 'The Daily Word',
+  eyebrow,
+  title,
   meta,
-  description = 'Weekday scripture reflections, the occasional weekend note, and future article updates. Free.',
+  description,
   align = 'left',
+  context = 'default',
+  contextLabel,
+  contextCount,
 }: SubscribeCardProps) {
   const [open, setOpen] = useState(false);
+  const normalizedCount =
+    typeof contextCount === 'number' && Number.isFinite(contextCount) ? contextCount : undefined;
+
+  const defaultsByContext = {
+    default: {
+      eyebrow: 'Newsletter',
+      title: 'The Daily Word',
+      meta: undefined,
+      description:
+        'Weekday scripture reflections, the occasional weekend note, and future article updates. Free.',
+    },
+    post: {
+      eyebrow: 'Keep Reading',
+      title: 'Enjoyed this post?',
+      meta: 'Get the next reflection in your inbox.',
+      description:
+        'Weekday scripture reflections, the occasional weekend note, and future article updates. Free.',
+    },
+    'tag-archive': {
+      eyebrow: 'Tag Updates',
+      title: contextLabel ? `More on ${contextLabel}` : 'More tagged reflections',
+      meta:
+        normalizedCount !== undefined
+          ? `${normalizedCount} post${normalizedCount === 1 ? '' : 's'} in this archive.`
+          : undefined,
+      description: contextLabel
+        ? `Follow along for new posts connected to ${contextLabel} and related topics.`
+        : 'Follow along for new tagged posts and related topics.',
+    },
+    'category-archive': {
+      eyebrow: 'Category Updates',
+      title: contextLabel ? `${contextLabel} delivered to your inbox` : 'Category updates',
+      meta:
+        normalizedCount !== undefined
+          ? `${normalizedCount} post${normalizedCount === 1 ? '' : 's'} in this category.`
+          : undefined,
+      description: contextLabel
+        ? `Subscribe for future ${contextLabel.toLowerCase()} posts, plus the occasional weekend note.`
+        : 'Subscribe for future posts in this category, plus the occasional weekend note.',
+    },
+  } as const;
+
+  const contextDefaults = defaultsByContext[context];
+  const resolvedEyebrow = eyebrow ?? contextDefaults.eyebrow;
+  const resolvedTitle = title ?? contextDefaults.title;
+  const resolvedMeta = meta ?? contextDefaults.meta;
+  const resolvedDescription = description ?? contextDefaults.description;
 
   return (
     <>
@@ -51,15 +104,17 @@ export default function SubscribeCard({
           </div>
           <div className={cn('min-w-0 flex-1', align === 'left' ? 'text-left' : 'text-center')}>
             <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--accent)] sm:text-xs">
-              {eyebrow}
+              {resolvedEyebrow}
             </p>
             <h3 className="mt-2 break-words text-sm font-semibold leading-snug text-[var(--text-primary)] sm:text-base">
-              {title}
+              {resolvedTitle}
             </h3>
-            {meta ? <p className="mt-2 text-xs text-[var(--text-secondary)]">{meta}</p> : null}
-            {description ? (
+            {resolvedMeta ? (
+              <p className="mt-2 text-xs text-[var(--text-secondary)]">{resolvedMeta}</p>
+            ) : null}
+            {resolvedDescription ? (
               <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
-                {description}
+                {resolvedDescription}
               </p>
             ) : null}
           </div>
@@ -90,11 +145,13 @@ export default function SubscribeCard({
             >
               ×
             </button>
-            <h2 className="text-xl font-semibold mb-2 text-center">The Daily Word</h2>
-            <p className="text-sm text-gray-400 text-center mb-4">
-              Faith, ideas, and whatever&apos;s on my mind — Monday through Friday, with the
-              occasional weekend thought. Free.
-            </p>
+            <h2 className="text-xl font-semibold mb-2 text-center">
+              {resolvedTitle === 'The Daily Word' ? resolvedTitle : `Subscribe: ${resolvedTitle}`}
+            </h2>
+            {resolvedMeta ? (
+              <p className="text-sm text-gray-400 text-center">{resolvedMeta}</p>
+            ) : null}
+            <p className="text-sm text-gray-400 text-center mb-4">{resolvedDescription}</p>
             <SubscribeForm />
           </div>
         </div>

@@ -9,9 +9,8 @@ import remarkGfm from 'remark-gfm';
 import PageLayout from '@/components/PageLayout';
 import PostTableOfContents from '@/components/PostTableOfContents';
 import ReadingProgress from '@/components/ReadingProgress';
-import Section from '@/components/Section';
 import ShareButtons from '@/components/ShareButtons';
-import SubscribeForm from '@/components/SubscribeForm';
+import SubscribeCard from '@/components/SubscribeCard';
 import { formatPostDate } from '@/utils/helpers';
 import { slugifyTag } from '@/utils/post-taxonomy';
 import {
@@ -276,12 +275,9 @@ export default async function PostPage({ params }: PostPageProps) {
             </section>
           )}
 
-          <Section title="Subscribe to The Daily Word" emoji="✉️">
-            <p className="text-sm leading-relaxed text-[var(--text-secondary)]">
-              Enjoyed this? Get The Daily Word in your inbox every weekday morning. Free, always.
-            </p>
-            <SubscribeForm />
-          </Section>
+          <section aria-label="Subscribe">
+            <SubscribeCard context="post" />
+          </section>
         </div>
 
         {showTableOfContents && (

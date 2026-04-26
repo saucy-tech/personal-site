@@ -1,11 +1,14 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 
 import PageLayout from '@/components/PageLayout';
+import SubscribeCard from '@/components/SubscribeCard';
 import { formatPostDate } from '@/utils/helpers';
 import { POST_CATEGORIES, type PostCategory } from '@/utils/post-taxonomy';
 import { getPostsByCategory } from '@/utils/posts';
+import { getBlogListingJsonLd } from '@/utils/structured-data';
 
 const CATEGORY_KEYS = Object.keys(POST_CATEGORIES) as PostCategory[];
 
@@ -42,15 +45,33 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function CategoryArchivePage({ params }: PageProps) {
   const { category } = await params;
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
   if (!CATEGORY_KEYS.includes(category as PostCategory)) {
     notFound();
   }
   const c = category as PostCategory;
   const details = POST_CATEGORIES[c];
   const posts = getPostsByCategory(c);
+  const jsonLd = getBlogListingJsonLd({
+    path: `/blog/category/${category}`,
+    title: `${details.label} — Archive`,
+    description: details.description,
+    posts: posts.map((post) => ({
+      slug: post.slug,
+      title: post.title,
+      excerpt: post.excerpt,
+      date: post.date,
+    })),
+  });
 
   return (
     <PageLayout title={details.label} backHref="/blog" backLabel="Back to Blog">
+      <script
+        suppressHydrationWarning
+        type="application/ld+json"
+        {...(nonce ? { nonce } : {})}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <p className="mb-2 text-sm text-[var(--text-secondary)]">{details.description}</p>
       <p className="mb-6 text-sm text-[var(--text-secondary)]">
         {posts.length} post{posts.length === 1 ? '' : 's'}.
@@ -72,6 +93,13 @@ export default async function CategoryArchivePage({ params }: PageProps) {
           </li>
         ))}
       </ul>
+      <div className="mt-6">
+        <SubscribeCard
+          context="category-archive"
+          contextLabel={details.label}
+          contextCount={posts.length}
+        />
+      </div>
     </PageLayout>
   );
 }
