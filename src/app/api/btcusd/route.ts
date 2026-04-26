@@ -6,6 +6,7 @@ import {
   logSecurityEvent,
   SECURITY_CONSTANTS,
 } from '@/utils/security';
+import { logApiEvent } from '@/utils/logger';
 
 let cachedRate: number | null = null;
 let lastFetchTime: number | null = null;
@@ -63,7 +64,10 @@ export async function GET(request: NextRequest) {
       clearTimeout(timeoutId);
 
       if (!response.ok) {
-        console.error('CoinGecko API error:', response.status, response.statusText);
+        logApiEvent('error', '/api/btcusd', 'coingecko_error_response', {
+          status: response.status,
+          statusText: response.statusText,
+        });
         return createSecureErrorResponse('Failed to fetch price data', 502);
       }
 
@@ -85,7 +89,9 @@ export async function GET(request: NextRequest) {
         );
       } else {
         // If CoinGecko's response format is unexpected, return an error
-        console.error('Unexpected response format from CoinGecko:', data);
+        logApiEvent('error', '/api/btcusd', 'coingecko_invalid_payload', {
+          responseData: data,
+        });
         return createSecureErrorResponse(
           'Failed to parse price data',
           502,
@@ -96,15 +102,19 @@ export async function GET(request: NextRequest) {
       clearTimeout(timeoutId);
 
       if (fetchError instanceof Error && fetchError.name === 'AbortError') {
-        console.error('CoinGecko API timeout');
+        logApiEvent('error', '/api/btcusd', 'coingecko_timeout');
         return createSecureErrorResponse('Price data request timeout', 504);
       }
 
-      console.error('Error fetching from CoinGecko:', fetchError);
+      logApiEvent('error', '/api/btcusd', 'coingecko_request_failed', {
+        message: fetchError instanceof Error ? fetchError.message : 'unknown',
+      });
       return createSecureErrorResponse('Failed to fetch price data', 502);
     }
   } catch (err) {
-    console.error('Error in BTC/USD endpoint:', err);
+    logApiEvent('error', '/api/btcusd', 'btcusd_unhandled_error', {
+      message: err instanceof Error ? err.message : 'unknown',
+    });
     return createSecureErrorResponse('Service temporarily unavailable', 500);
   }
 }

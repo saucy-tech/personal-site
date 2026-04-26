@@ -166,6 +166,38 @@ The component files are preserved at:
 5. **Images**: Place images in the `public` directory and reference them in components
 6. **Spacing**: Use the built-in spacing utilities for consistent layout
 
+### Content Quality Validation
+
+Run `pnpm content:validate` before opening a PR that adds or updates posts.
+
+This command validates all MDX post metadata and quality constraints:
+- title length target (`20-72` chars)
+- excerpt length target (`90-180` chars)
+- duplicate tag detection (warning)
+- missing tags detection (warning)
+
+The command exits non-zero for quality errors and is enforced in CI.
+
+Run `pnpm content:check-links` to verify internal blog links and static image/icon references from MDX content.
+
+This check:
+- fails for broken `/blog/<slug>` links
+- fails for missing `/images/*` or `/icons/*` assets
+- warns on relative links and posts with no inbound links from other posts
+
+Run `pnpm content:check-images` to validate MDX image hygiene.
+
+This check:
+- fails on missing alt text in markdown image syntax
+- fails when a local image reference is missing in `public/`
+- warns on large images and fails for oversized images
+
+Run `pnpm docs:architecture` to regenerate `docs/architecture-map.md` after adding routes, API endpoints, or major utility/component files.
+
+Operational runbooks:
+- `docs/runbooks/api-incident-response.md`
+- `docs/runbooks/content-guardrails.md`
+
 ## Deployment
 
 The easiest way to deploy your app is to use the [Vercel Platform](https://vercel.com/new).

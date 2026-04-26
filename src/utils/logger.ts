@@ -23,3 +23,15 @@ export function logStructured(
     console.log(line);
   }
 }
+
+export function logApiEvent(
+  level: LogLevel,
+  endpoint: string,
+  event: string,
+  fields?: Record<string, unknown>
+): void {
+  logStructured(level, event, {
+    endpoint,
+    ...fields,
+  });
+}

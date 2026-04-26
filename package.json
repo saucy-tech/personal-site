@@ -14,7 +14,11 @@
     "test:e2e": "playwright test",
     "test:watch": "jest --watch",
     "prepare": "husky",
-    "broadcast": "ts-node --project tsconfig.scripts.json scripts/auto-broadcast.ts"
+    "broadcast": "ts-node --project tsconfig.scripts.json scripts/auto-broadcast.ts",
+    "content:validate": "ts-node --project tsconfig.scripts.json scripts/validate-content.ts",
+    "content:check-links": "ts-node --project tsconfig.scripts.json scripts/check-internal-links.ts",
+    "content:check-images": "ts-node --project tsconfig.scripts.json scripts/check-image-hygiene.ts",
+    "docs:architecture": "ts-node --project tsconfig.scripts.json scripts/generate-architecture-docs.ts"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [

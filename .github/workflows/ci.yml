@@ -41,6 +41,15 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Validate content quality
+        run: pnpm content:validate
+
+      - name: Check internal-link hygiene
+        run: pnpm content:check-links
+
+      - name: Check image hygiene
+        run: pnpm content:check-images
+
       - name: Type check & build
         run: pnpm build
         env:
