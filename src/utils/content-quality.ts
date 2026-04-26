@@ -147,17 +147,9 @@ export function formatAuditReport(input: FormatAuditReportInput): FormattedAudit
 export function emitAuditReport(report: FormattedAuditReport): void {
   console.log(report.introLine);
   for (const line of report.warningLines) {
-    if (line.startsWith('- ')) {
-      console.warn(line);
-      continue;
-    }
     console.warn(line);
   }
   for (const line of report.errorLines) {
-    if (line.startsWith('- ')) {
-      console.error(line);
-      continue;
-    }
     console.error(line);
   }
   if (report.finalLine) {

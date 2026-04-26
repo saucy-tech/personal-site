@@ -39,6 +39,7 @@ export default function SubscribeCard({
     default: {
       eyebrow: 'Newsletter',
       title: 'The Daily Word',
+      modalTitle: 'The Daily Word',
       meta: undefined,
       description:
         'Weekday scripture reflections, the occasional weekend note, and future article updates. Free.',
@@ -46,6 +47,7 @@ export default function SubscribeCard({
     post: {
       eyebrow: 'Keep Reading',
       title: 'Enjoyed this post?',
+      modalTitle: 'Subscribe — The Daily Word',
       meta: 'Get the next reflection in your inbox.',
       description:
         'Weekday scripture reflections, the occasional weekend note, and future article updates. Free.',
@@ -53,6 +55,7 @@ export default function SubscribeCard({
     'tag-archive': {
       eyebrow: 'Tag Updates',
       title: contextLabel ? `More on ${contextLabel}` : 'More tagged reflections',
+      modalTitle: contextLabel ? `Subscribe: ${contextLabel} updates` : 'Subscribe for tag updates',
       meta:
         normalizedCount !== undefined
           ? `${normalizedCount} post${normalizedCount === 1 ? '' : 's'} in this archive.`
@@ -64,6 +67,7 @@ export default function SubscribeCard({
     'category-archive': {
       eyebrow: 'Category Updates',
       title: contextLabel ? `${contextLabel} delivered to your inbox` : 'Category updates',
+      modalTitle: contextLabel ? `Subscribe: ${contextLabel}` : 'Subscribe for category updates',
       meta:
         normalizedCount !== undefined
           ? `${normalizedCount} post${normalizedCount === 1 ? '' : 's'} in this category.`
@@ -77,6 +81,7 @@ export default function SubscribeCard({
   const contextDefaults = defaultsByContext[context];
   const resolvedEyebrow = eyebrow ?? contextDefaults.eyebrow;
   const resolvedTitle = title ?? contextDefaults.title;
+  const resolvedModalTitle = contextDefaults.modalTitle;
   const resolvedMeta = meta ?? contextDefaults.meta;
   const resolvedDescription = description ?? contextDefaults.description;
 
@@ -145,9 +150,7 @@ export default function SubscribeCard({
             >
               ×
             </button>
-            <h2 className="text-xl font-semibold mb-2 text-center">
-              {resolvedTitle === 'The Daily Word' ? resolvedTitle : `Subscribe: ${resolvedTitle}`}
-            </h2>
+            <h2 className="text-xl font-semibold mb-2 text-center">{resolvedModalTitle}</h2>
             {resolvedMeta ? (
               <p className="text-sm text-gray-400 text-center">{resolvedMeta}</p>
             ) : null}

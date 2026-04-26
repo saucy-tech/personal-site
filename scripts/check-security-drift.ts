@@ -1,8 +1,4 @@
-import {
-  assertSecurityHeadersHaveRequiredDirectives,
-  getSecurityHeaders,
-  getSecurityHeaderDriftIssues,
-} from '../src/utils/security';
+import { getSecurityHeaders, getSecurityHeaderDriftIssues } from '../src/utils/security';
 
 function main(): void {
   const headers = getSecurityHeaders();
@@ -18,13 +14,6 @@ function main(): void {
     console.error(`- ${issue}`);
   }
   console.error('Fix `src/utils/security.ts` or update drift requirements intentionally.');
-
-  try {
-    assertSecurityHeadersHaveRequiredDirectives(headers);
-  } catch {
-    // keep this script's output concise and actionable
-  }
-
   process.exitCode = 1;
 }
 

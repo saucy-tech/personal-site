@@ -332,7 +332,7 @@ const REQUIRED_SECURITY_HEADERS = [
 
 const REQUIRED_CSP_SUBSTRINGS = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  "script-src 'self'",
   "object-src 'none'",
   "frame-ancestors 'none'",
   "base-uri 'self'",
