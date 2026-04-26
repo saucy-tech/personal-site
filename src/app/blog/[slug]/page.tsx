@@ -24,7 +24,8 @@ import {
   getSeriesChronoNeighbors,
   seriesSlug,
 } from '@/utils/posts';
-import { SITE_NAME, SITE_URL, absoluteUrl } from '@/utils/constants';
+import { absoluteUrl } from '@/utils/constants';
+import { getPostJsonLd } from '@/utils/structured-data';
 
 export async function generateStaticParams() {
   return getAllPostsMeta().map((post) => ({ slug: post.slug }));
@@ -58,33 +59,16 @@ export default async function PostPage({ params }: PostPageProps) {
   const seriesNeighbors = getSeriesChronoNeighbors(post);
   const showTableOfContents = post.headings.length >= 3;
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: post.title,
-    description: post.excerpt,
-    datePublished: post.date,
-    dateModified: post.date,
-    url: absoluteUrl(`/blog/${post.slug}`),
-    mainEntityOfPage: absoluteUrl(`/blog/${post.slug}`),
-    image: getPostOgImageUrl(post.slug),
-    author: {
-      '@type': 'Person',
-      name: 'Brandon',
-      url: SITE_URL,
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: SITE_NAME,
-      url: SITE_URL,
-      logo: {
-        '@type': 'ImageObject',
-        url: absoluteUrl('/favicon.ico'),
-      },
-    },
-    articleSection: post.category,
-    keywords: post.tags,
-  };
+  const jsonLd = getPostJsonLd({
+    slug: post.slug,
+    title: post.title,
+    excerpt: post.excerpt,
+    date: post.date,
+    category: post.category,
+    tags: post.tags,
+    imageUrl: getPostOgImageUrl(post.slug),
+    authorName: 'Brandon',
+  });
 
   const tipMemo = `read:${post.slug}`;
   const tipHref = `/support?memo=${encodeURIComponent(tipMemo)}`;

@@ -10,7 +10,16 @@
 ## Verification checklist
 
 - Run `pnpm lint`, `pnpm test`, and `pnpm build` before release.
+- Run guardrails: `pnpm content:validate`, `pnpm content:check-links`, `pnpm content:check-images`.
 - Exercise all public API routes with valid and invalid payloads.
 - Validate CSP is present once and includes per-request nonce in `script-src`.
 - Validate proxy excludes static assets (`.*\\..*` matcher path).
 - Confirm `/api/btcusd` responds with `Cache-Control` and `X-Cache-Status` headers.
+
+## Structured events
+
+Primary API observability events:
+- Subscribe: `convertkit_error_response`, `convertkit_timeout`, `convertkit_request_failed`, `subscribe_unhandled_error`
+- BTC/USD: `coingecko_error_response`, `coingecko_invalid_payload`, `coingecko_timeout`, `coingecko_request_failed`, `btcusd_unhandled_error`
+
+See `docs/runbooks/api-incident-response.md` for triage flow.

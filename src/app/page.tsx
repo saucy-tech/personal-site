@@ -10,7 +10,7 @@ import SocialBar from '@/components/SocialBar';
 import SubscribeForm from '@/components/SubscribeForm';
 import { formatPostDate } from '@/utils/helpers';
 import { getAllPostsMeta } from '@/utils/posts';
-import { SITE_NAME, SITE_URL, SITE_DESCRIPTION, absoluteUrl } from '@/utils/constants';
+import { getSiteJsonLd } from '@/utils/structured-data';
 
 export const metadata: Metadata = {
   alternates: {
@@ -87,28 +87,15 @@ export default async function Home() {
   const posts = getAllPostsMeta();
   const latest = posts[0];
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@graph': [
-      {
-        '@type': 'Person',
-        name: 'Brandon',
-        url: SITE_URL,
-        image: absoluteUrl('/family-photo.jpeg'),
-        sameAs: [
-          'https://x.com/Saucy_Tech',
-          'https://github.com/saucy-tech',
-          'https://primal.net/p/nprofile1qqsvzs8gfntzjs2wg8670nrfy64h44zy69kc3r8rp5wd7kw6t6njsassf62c7',
-        ],
-      },
-      {
-        '@type': 'WebSite',
-        name: SITE_NAME,
-        url: SITE_URL,
-        description: SITE_DESCRIPTION,
-      },
+  const jsonLd = getSiteJsonLd({
+    authorName: 'Brandon',
+    authorImagePath: '/family-photo.jpeg',
+    sameAs: [
+      'https://x.com/Saucy_Tech',
+      'https://github.com/saucy-tech',
+      'https://primal.net/p/nprofile1qqsvzs8gfntzjs2wg8670nrfy64h44zy69kc3r8rp5wd7kw6t6njsassf62c7',
     ],
-  };
+  });
 
   return (
     <div className="pt-4 pb-6 px-4 md:px-8 flex flex-col items-center">

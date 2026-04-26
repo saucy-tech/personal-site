@@ -8,7 +8,7 @@ import {
   logSecurityEvent,
   SECURITY_CONSTANTS,
 } from '@/utils/security';
-import { logStructured } from '@/utils/logger';
+import { logApiEvent, logStructured } from '@/utils/logger';
 
 type SubscribeBody = {
   email?: unknown;
@@ -132,7 +132,10 @@ export async function POST(req: NextRequest) {
         if (isAlreadySubscribedMessage(message)) {
           return NextResponse.json({ success: true, alreadySubscribed: true });
         }
-        console.error('ConvertKit API error:', response.status, data);
+        logApiEvent('error', '/api/subscribe', 'convertkit_error_response', {
+          status: response.status,
+          responseData: data,
+        });
         const clientMessage =
           response.status === 400 && message
             ? 'Please check your email address and try again.'
@@ -145,15 +148,19 @@ export async function POST(req: NextRequest) {
       clearTimeout(timeoutId);
 
       if (fetchError instanceof Error && fetchError.name === 'AbortError') {
-        console.error('ConvertKit API timeout');
+        logApiEvent('error', '/api/subscribe', 'convertkit_timeout');
         return createSecureErrorResponse('Request timeout', 504);
       }
 
-      console.error('Error calling ConvertKit API:', fetchError);
+      logApiEvent('error', '/api/subscribe', 'convertkit_request_failed', {
+        message: fetchError instanceof Error ? fetchError.message : 'unknown',
+      });
       return createSecureErrorResponse('Failed to subscribe', 502);
     }
   } catch (error) {
-    console.error('Error in subscribe endpoint:', error);
+    logApiEvent('error', '/api/subscribe', 'subscribe_unhandled_error', {
+      message: error instanceof Error ? error.message : 'unknown',
+    });
     return createSecureErrorResponse('Service temporarily unavailable', 500);
   }
 }
