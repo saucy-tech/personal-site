@@ -5,7 +5,7 @@
  */
 
 /** ISO date — bump when you revise items or copy. Shown on `/field-notes`. */
-export const fieldNotesLastUpdated = '2026-04-18';
+export const fieldNotesLastUpdated = '2026-04-27';
 
 export type FieldNoteStatus = 'using' | 'trying';
 
@@ -34,13 +34,13 @@ export const fieldNotesSections: FieldNoteSection[] = [
     items: [
       {
         title: 'Claude (desktop)',
-        tags: ['anthropic', 'Pro $20/mo'],
+        tags: ['anthropic', 'Max 5x $100/mo'],
         badge: 'daily',
-        note: 'Cowork and Claude Code inside the desktop app. On Pro; I use it heavily.',
+        note: 'Cowork and Claude Code inside the desktop app. On Max; I use it heavily.',
       },
       {
         title: 'Warp',
-        tags: ['terminal', 'Builder $20/mo'],
+        tags: ['terminal', 'Build $20/mo'],
         badge: 'daily',
         note: 'My terminal. Oz, Codex sessions, and the occasional Claude Code CLI run all happen here.',
         link: { href: 'https://app.warp.dev/referral/3MJVPD', label: 'my referral' },
