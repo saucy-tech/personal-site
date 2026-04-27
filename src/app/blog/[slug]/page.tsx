@@ -15,7 +15,6 @@ import SubscribeForm from '@/components/SubscribeForm';
 import { formatPostDate } from '@/utils/helpers';
 import { slugifyTag } from '@/utils/post-taxonomy';
 import {
-  getAdjacentPosts,
   getAllPostsMeta,
   getPostBySlug,
   getPostOgImageUrl,
@@ -55,7 +54,6 @@ export default async function PostPage({ params }: PostPageProps) {
     notFound();
   }
   const relatedPosts = getRelatedPosts(post, 3);
-  const { older, newer } = getAdjacentPosts(slug);
   const seriesNeighbors = getSeriesChronoNeighbors(post);
   const showTableOfContents = post.headings.length >= 3;
 
@@ -69,9 +67,6 @@ export default async function PostPage({ params }: PostPageProps) {
     imageUrl: getPostOgImageUrl(post.slug),
     authorName: 'Brandon',
   });
-
-  const tipMemo = `read:${post.slug}`;
-  const tipHref = `/support?memo=${encodeURIComponent(tipMemo)}`;
 
   return (
     <PageLayout title={post.title} backHref="/blog" backLabel="Back to Blog">
@@ -127,60 +122,7 @@ export default async function PostPage({ params }: PostPageProps) {
                 ))}
               </div>
             )}
-
-            <p className="mt-6 text-sm text-[var(--text-secondary)]">
-              If this encouraged you, you can{' '}
-              <Link
-                href={tipHref}
-                className="a11y-focus-ring font-medium text-[var(--accent)] hover:text-[var(--text-primary)]"
-              >
-                send a Lightning tip
-              </Link>{' '}
-              (memo will reference this post).
-            </p>
           </section>
-
-          {(older || newer) && (
-            <nav
-              aria-label="Adjacent posts"
-              className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-sm"
-            >
-              <div className="min-w-0 flex-1">
-                {older ? (
-                  <Link
-                    href={`/blog/${older.slug}`}
-                    className="a11y-focus-ring block truncate text-[var(--text-secondary)] transition hover:text-[var(--accent)]"
-                  >
-                    <span className="text-xs uppercase tracking-wider text-[var(--accent)]">
-                      Older
-                    </span>
-                    <span className="mt-0.5 block truncate font-medium text-[var(--text-primary)]">
-                      {older.title}
-                    </span>
-                  </Link>
-                ) : (
-                  <span />
-                )}
-              </div>
-              <div className="min-w-0 flex-1 text-right">
-                {newer ? (
-                  <Link
-                    href={`/blog/${newer.slug}`}
-                    className="a11y-focus-ring block truncate text-[var(--text-secondary)] transition hover:text-[var(--accent)]"
-                  >
-                    <span className="text-xs uppercase tracking-wider text-[var(--accent)]">
-                      Newer
-                    </span>
-                    <span className="mt-0.5 block truncate font-medium text-[var(--text-primary)]">
-                      {newer.title}
-                    </span>
-                  </Link>
-                ) : (
-                  <span />
-                )}
-              </div>
-            </nav>
-          )}
 
           {(seriesNeighbors.previous || seriesNeighbors.next) && (
             <section
