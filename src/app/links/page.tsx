@@ -69,14 +69,14 @@ const links = [
 export default function Links() {
   return (
     <PageLayout title="₿ Bitcoin Links">
-      <p className="text-[var(--text-secondary)] text-center mb-8 max-w-sm mx-auto text-sm">
+      <p className="text-(--text-secondary) text-center mb-8 max-w-sm mx-auto text-sm">
         Favorite trackers, calculators, and dashboards.
       </p>
 
       <section className="w-full max-w-2xl mx-auto space-y-4">
         {links.map((link) => (
           <LinkCard key={link.href} title={link.title} href={link.href} icon={link.icon}>
-            <p className="px-4 pb-3 text-xs text-[var(--text-secondary)] text-center leading-relaxed">
+            <p className="px-4 pb-3 text-xs text-(--text-secondary) text-center leading-relaxed">
               {link.description}
             </p>
           </LinkCard>

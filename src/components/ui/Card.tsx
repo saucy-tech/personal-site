@@ -24,7 +24,7 @@ export default function Card({
   backUrl = '/',
 }: CardProps) {
   const baseStyles =
-    'bg-opacity-20 bg-[var(--background)] backdrop-blur-sm border border-[var(--accent)] border-opacity-30 rounded-lg shadow-md overflow-hidden transition-all duration-300';
+    'bg-opacity-20 bg-(--background) backdrop-blur-xs border border-(--accent) border-opacity-30 rounded-lg shadow-md overflow-hidden transition-all duration-300';
   const hoverStyles = 'hover:shadow-[0_0_15px_rgb(var(--accent-rgb)/0.18)] hover:border-opacity-50';
 
   const cardContent = (
@@ -35,7 +35,7 @@ export default function Card({
             <motion.div
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
-              className="flex items-center text-[var(--accent)] hover:opacity-80 transition-opacity"
+              className="flex items-center text-(--accent) hover:opacity-80 transition-opacity"
             >
               <ArrowLeftIcon className="mr-1 h-[18px] w-[18px]" aria-hidden />
               <span className="text-sm">Back</span>

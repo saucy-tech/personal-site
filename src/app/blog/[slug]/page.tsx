@@ -78,24 +78,24 @@ export default async function PostPage({ params }: PostPageProps) {
       />
       <div className="mx-auto grid max-w-6xl gap-8 xl:grid-cols-[minmax(0,1fr)_18rem]">
         <div id="post-top" className="space-y-10">
-          <section className="overflow-hidden rounded-[2rem] border border-[var(--accent-border)] bg-[radial-gradient(circle_at_top_right,rgb(var(--accent-rgb)/0.18),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-6 sm:p-8">
+          <section className="overflow-hidden rounded-4xl border border-(--accent-border) bg-[radial-gradient(circle_at_top_right,rgb(var(--accent-rgb)/0.18),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-6 sm:p-8">
             <div className="flex flex-wrap gap-2">
               <Link
                 href={`/blog/category/${post.category}`}
-                className="a11y-focus-ring rounded-full border border-[var(--accent-border)] bg-[var(--accent-transparent)] px-3 py-1 text-xs uppercase tracking-[0.18em] text-[var(--accent)] transition hover:brightness-110"
+                className="a11y-focus-ring rounded-full border border-(--accent-border) bg-(--accent-transparent) px-3 py-1 text-xs uppercase tracking-[0.18em] text-(--accent) transition hover:brightness-110"
               >
                 {post.categoryLabel}
               </Link>
-              <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">
+              <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary)">
                 {formatPostDate(post.date)}
               </span>
-              <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">
+              <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary)">
                 {post.readingTimeMinutes} min read
               </span>
               {post.series && (
                 <Link
                   href={`/blog/series/${seriesSlug(post.series)}`}
-                  className="a11y-focus-ring rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)] transition hover:border-[var(--accent-border)] hover:text-[var(--accent)]"
+                  className="a11y-focus-ring rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary) transition hover:border-(--accent-border) hover:text-(--accent)"
                 >
                   {post.series}
                 </Link>
@@ -103,7 +103,7 @@ export default async function PostPage({ params }: PostPageProps) {
             </div>
 
             {post.excerpt && (
-              <p className="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--text-secondary)] sm:text-xl">
+              <p className="mt-6 max-w-2xl text-lg leading-relaxed text-(--text-secondary) sm:text-xl">
                 {post.excerpt}
               </p>
             )}
@@ -114,7 +114,7 @@ export default async function PostPage({ params }: PostPageProps) {
                   <Link
                     key={tag}
                     href={`/blog/tag/${slugifyTag(tag)}`}
-                    className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)] transition hover:border-[var(--accent-border)] hover:text-[var(--accent)]"
+                    className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary) transition hover:border-(--accent-border) hover:text-(--accent)"
                   >
                     {tag}
                   </Link>
@@ -126,16 +126,14 @@ export default async function PostPage({ params }: PostPageProps) {
           {(seriesNeighbors.previous || seriesNeighbors.next) && (
             <section
               aria-label="Series navigation"
-              className="rounded-2xl border border-[var(--accent-border)] bg-[var(--accent-transparent)] px-4 py-3 text-sm"
+              className="rounded-2xl border border-(--accent-border) bg-(--accent-transparent) px-4 py-3 text-sm"
             >
-              <p className="text-xs uppercase tracking-[0.18em] text-[var(--accent)]">
-                In this series
-              </p>
+              <p className="text-xs uppercase tracking-[0.18em] text-(--accent)">In this series</p>
               <div className="mt-2 flex flex-wrap gap-4">
                 {seriesNeighbors.previous && (
                   <Link
                     href={`/blog/${seriesNeighbors.previous.slug}`}
-                    className="a11y-focus-ring font-medium text-[var(--text-primary)] hover:text-[var(--accent)]"
+                    className="a11y-focus-ring font-medium text-(--text-primary) hover:text-(--accent)"
                   >
                     ← {seriesNeighbors.previous.title}
                   </Link>
@@ -143,7 +141,7 @@ export default async function PostPage({ params }: PostPageProps) {
                 {seriesNeighbors.next && (
                   <Link
                     href={`/blog/${seriesNeighbors.next.slug}`}
-                    className="a11y-focus-ring font-medium text-[var(--text-primary)] hover:text-[var(--accent)]"
+                    className="a11y-focus-ring font-medium text-(--text-primary) hover:text-(--accent)"
                   >
                     {seriesNeighbors.next.title} →
                   </Link>
@@ -158,7 +156,7 @@ export default async function PostPage({ params }: PostPageProps) {
             </div>
           )}
 
-          <article className="prose prose-invert prose-p:text-[1.05rem] prose-p:leading-8 prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:text-[var(--text-primary)] prose-h2:mt-12 prose-h2:border-t prose-h2:border-white/10 prose-h2:pt-8 prose-h2:text-2xl prose-h3:mt-10 prose-h3:text-xl prose-a:text-[var(--accent)] prose-a:no-underline prose-a:decoration-[0.1em] prose-a:underline-offset-[0.2em] hover:prose-a:text-[var(--text-primary)] prose-a:focus-visible:rounded-sm prose-a:focus-visible:outline-none prose-a:focus-visible:ring-2 prose-a:focus-visible:ring-[var(--focus-ring)] prose-a:focus-visible:ring-offset-2 prose-a:focus-visible:ring-offset-[var(--background)] prose-headings:[&_a]:no-underline prose-headings:[&_a]:text-[var(--accent)] hover:prose-headings:[&_a]:text-[var(--text-primary)] prose-strong:text-[var(--text-primary)] prose-blockquote:rounded-2xl prose-blockquote:border-l-4 prose-blockquote:border-[var(--accent)] prose-blockquote:bg-white/[0.04] prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:text-[var(--text-primary)] prose-hr:border-white/10 prose-img:rounded-3xl prose-img:border prose-img:border-white/10 prose-img:shadow-[0_18px_40px_rgba(0,0,0,0.25)] prose-figcaption:text-sm prose-figcaption:text-[var(--text-secondary)] max-w-none">
+          <article className="prose prose-invert prose-p:text-[1.05rem] prose-p:leading-8 prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:text-(--text-primary) prose-h2:mt-12 prose-h2:border-t prose-h2:border-white/10 prose-h2:pt-8 prose-h2:text-2xl prose-h3:mt-10 prose-h3:text-xl prose-a:text-(--accent) prose-a:no-underline prose-a:decoration-[0.1em] prose-a:underline-offset-[0.2em] prose-a:hover:text-(--text-primary) focus-visible:prose-a:rounded-xs focus-visible:prose-a:outline-hidden focus-visible:prose-a:ring-2 focus-visible:prose-a:ring-(--focus-ring) focus-visible:prose-a:ring-offset-2 focus-visible:prose-a:ring-offset-(--background) [&_a]:prose-headings:no-underline [&_a]:prose-headings:text-(--accent) [&_a]:prose-headings:hover:text-(--text-primary) prose-strong:text-(--text-primary) prose-blockquote:rounded-2xl prose-blockquote:border-l-4 prose-blockquote:border-(--accent) prose-blockquote:bg-white/4 prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:text-(--text-primary) prose-hr:border-white/10 prose-img:rounded-3xl prose-img:border prose-img:border-white/10 prose-img:shadow-[0_18px_40px_rgba(0,0,0,0.25)] prose-figcaption:text-sm prose-figcaption:text-(--text-secondary) max-w-none">
             <MDXRemote
               source={post.content}
               options={{
@@ -177,19 +175,19 @@ export default async function PostPage({ params }: PostPageProps) {
           />
 
           {relatedPosts.length > 0 && (
-            <section className="rounded-[2rem] border border-white/10 bg-white/[0.03] p-6 sm:p-8">
+            <section className="rounded-4xl border border-white/10 bg-white/3 p-6 sm:p-8">
               <div className="flex items-center justify-between gap-4">
                 <div>
-                  <p className="text-sm uppercase tracking-[0.18em] text-[var(--accent)]">
+                  <p className="text-sm uppercase tracking-[0.18em] text-(--accent)">
                     Related Posts
                   </p>
-                  <h2 className="mt-2 text-2xl font-semibold text-[var(--text-primary)]">
+                  <h2 className="mt-2 text-2xl font-semibold text-(--text-primary)">
                     Keep reading
                   </h2>
                 </div>
                 <Link
                   href="/blog"
-                  className="a11y-focus-ring rounded-sm text-sm font-medium text-[var(--accent)] transition hover:text-[var(--text-primary)]"
+                  className="a11y-focus-ring rounded-xs text-sm font-medium text-(--accent) transition hover:text-(--text-primary)"
                 >
                   Browse all posts
                 </Link>
@@ -200,15 +198,15 @@ export default async function PostPage({ params }: PostPageProps) {
                   <Link
                     key={relatedPost.slug}
                     href={`/blog/${relatedPost.slug}`}
-                    className="a11y-focus-ring group rounded-3xl border border-[var(--accent-border)] bg-black/10 p-5 transition hover:border-[var(--accent)] hover:bg-[var(--accent-transparent)]"
+                    className="a11y-focus-ring group rounded-3xl border border-(--accent-border) bg-black/10 p-5 transition hover:border-(--accent) hover:bg-(--accent-transparent)"
                   >
-                    <p className="text-xs uppercase tracking-[0.18em] text-[var(--accent)]">
+                    <p className="text-xs uppercase tracking-[0.18em] text-(--accent)">
                       {formatPostDate(relatedPost.date)}
                     </p>
-                    <h3 className="mt-3 text-xl font-semibold leading-tight text-[var(--text-primary)] transition group-hover:text-[var(--accent)]">
+                    <h3 className="mt-3 text-xl font-semibold leading-tight text-(--text-primary) transition group-hover:text-(--accent)">
                       {relatedPost.title}
                     </h3>
-                    <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
+                    <p className="mt-3 text-sm leading-relaxed text-(--text-secondary)">
                       {relatedPost.excerpt}
                     </p>
                   </Link>

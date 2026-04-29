@@ -7,7 +7,7 @@ export default function NotFound() {
       <p className="text-gray-400 max-w-md">
         Sorry, the page you’re looking for doesn’t exist or has been moved.
       </p>
-      <Link href="/" className="text-[var(--accent)] hover:underline text-lg">
+      <Link href="/" className="text-(--accent) hover:underline text-lg">
         ← Back to Home
       </Link>
     </main>

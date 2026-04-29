@@ -54,15 +54,15 @@ export default async function Support({ searchParams }: SupportPageProps) {
 
       <Section emoji="🎓" title={"Gift to My Son's 529 Plan"}>
         <div className="w-full max-w-md mx-auto p-6">
-          <div className="border border-[var(--accent-border)] rounded-lg p-6">
-            <p className="text-[var(--text-secondary)] mb-3">
+          <div className="border border-(--accent-border) rounded-lg p-6">
+            <p className="text-(--text-secondary) mb-3">
               Invest in my son&apos;s future through our Ugift code:
             </p>
             <a
               href="https://www.ugift529.com/gifttpl/ugift/create/viewGiftCodeDetails.cs?ugiftcode=21W-40K"
               target="_blank"
               rel="noopener noreferrer"
-              className="block text-sm break-words bg-black/40 p-3 rounded underline hover:bg-[var(--accent-transparent)]"
+              className="block text-sm wrap-break-word bg-black/40 p-3 rounded-sm underline hover:bg-(--accent-transparent)"
             >
               21W-40K
             </a>

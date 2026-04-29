@@ -105,12 +105,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body className={`${ibmSans.variable} ${ibmMono.variable} font-sans antialiased`}>
         {/* Background canvas and content wrapper */}
-        <div className="shell-backdrop relative min-h-screen bg-[var(--background)]">
+        <div className="shell-backdrop relative min-h-screen bg-(--background)">
           {/* Client-only animated background */}
           <ClientGalaxyBackground />
           <div className="relative z-10 flex flex-col min-h-screen">
             <Header navItems={navItems} />
-            <main id="main-content" className="flex-grow">
+            <main id="main-content" className="grow">
               <div className="container mx-auto max-w-[min(100%,80rem)] px-4 sm:px-6">
                 {children}
               </div>

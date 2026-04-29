@@ -76,7 +76,7 @@ const ClientSnowflakes: React.FC = () => {
       {snowflakesVisible && <Snowflakes />}
       <button
         onClick={toggleSnowflakes}
-        className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-all shadow-lg"
+        className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-white/10 backdrop-blur-xs hover:bg-white/20 transition-all shadow-lg"
         aria-label={toggleLabel}
         title={toggleLabel}
       >

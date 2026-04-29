@@ -31,33 +31,35 @@ export default function RankedItem({
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className="text-[var(--text-primary)] underline decoration-white/20 underline-offset-4 transition hover:decoration-[var(--accent)]"
+        className="text-(--text-primary) underline decoration-white/20 underline-offset-4 transition hover:decoration-(--accent)"
       >
         {title}
       </a>
     ) : href ? (
       <Link
         href={href}
-        className="text-[var(--text-primary)] underline decoration-white/20 underline-offset-4 transition hover:decoration-[var(--accent)]"
+        className="text-(--text-primary) underline decoration-white/20 underline-offset-4 transition hover:decoration-(--accent)"
       >
         {title}
       </Link>
     ) : (
-      <span className="text-[var(--text-primary)]">{title}</span>
+      <span className="text-(--text-primary)">{title}</span>
     );
 
   return (
-    <article className="border-b border-white/[0.06] pb-8 last:border-b-0 last:pb-0">
+    <article className="border-b border-white/6 pb-8 last:border-b-0 last:pb-0">
       <div className="flex flex-wrap items-baseline gap-x-3 gap-y-2">
-        <span className="font-mono text-sm tabular-nums text-[var(--text-muted)]">{index}</span>
-        <h3 className="text-base font-semibold text-[var(--text-primary)] sm:text-lg">{titleEl}</h3>
+        <span className="font-mono text-sm tabular-nums text-(--text-muted)">{index}</span>
+        <h3 className="text-base font-semibold text-(--text-primary) sm:text-lg">{titleEl}</h3>
       </div>
       {tags.length > 0 && (
-        <p className="mt-2 font-mono text-xs leading-relaxed text-[var(--text-muted)]">
+        <p className="mt-2 font-mono text-xs leading-relaxed text-(--text-muted)">
           {tags.join(' · ')}
         </p>
       )}
-      {children && <div className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">{children}</div>}
+      {children && (
+        <div className="mt-3 text-sm leading-relaxed text-(--text-secondary)">{children}</div>
+      )}
       <TradeoffList pros={pros} cons={cons} />
     </article>
   );

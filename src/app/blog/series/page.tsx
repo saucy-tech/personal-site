@@ -22,13 +22,13 @@ export default function SeriesIndexPage() {
   return (
     <PageLayout title="Series" backHref="/blog" backLabel="Back to Blog">
       <div className="mx-auto max-w-3xl space-y-10">
-        <p className="text-lg leading-relaxed text-[var(--text-secondary)]">
+        <p className="text-lg leading-relaxed text-(--text-secondary)">
           These posts are organized into series that follow a sustained study or theme — typically
           aligned with Sunday School lesson quarters.
         </p>
 
         {allSeries.length === 0 ? (
-          <p className="text-[var(--text-secondary)]">No series found.</p>
+          <p className="text-(--text-secondary)">No series found.</p>
         ) : (
           <div className="grid gap-6">
             {allSeries.map((series) => {
@@ -45,26 +45,26 @@ export default function SeriesIndexPage() {
                 <Link
                   key={series.slug}
                   href={`/blog/series/${series.slug}`}
-                  className="group block overflow-hidden rounded-[2rem] border border-[var(--accent-border)] bg-[radial-gradient(circle_at_top_right,rgb(var(--accent-rgb)/0.1),transparent_60%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01))] p-6 transition hover:border-[var(--accent)] hover:bg-[var(--accent-transparent)] sm:p-8"
+                  className="group block overflow-hidden rounded-4xl border border-(--accent-border) bg-[radial-gradient(circle_at_top_right,rgb(var(--accent-rgb)/0.1),transparent_60%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01))] p-6 transition hover:border-(--accent) hover:bg-(--accent-transparent) sm:p-8"
                 >
-                  <p className="text-xs uppercase tracking-[0.18em] text-[var(--accent)]">Series</p>
-                  <h2 className="mt-2 text-2xl font-semibold text-[var(--text-primary)] transition group-hover:text-[var(--accent)]">
+                  <p className="text-xs uppercase tracking-[0.18em] text-(--accent)">Series</p>
+                  <h2 className="mt-2 text-2xl font-semibold text-(--text-primary) transition group-hover:text-(--accent)">
                     {series.name}
                   </h2>
                   <div className="mt-3 flex flex-wrap gap-3">
-                    <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">
+                    <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary)">
                       {series.weekCount} {series.weekCount === 1 ? 'week' : 'weeks'}
                     </span>
-                    <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">
+                    <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary)">
                       {series.count} {series.count === 1 ? 'post' : 'posts'}
                     </span>
                     {dateRange && (
-                      <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">
+                      <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary)">
                         {dateRange}
                       </span>
                     )}
                   </div>
-                  <p className="mt-4 text-sm font-medium text-[var(--accent)] transition group-hover:text-[var(--text-primary)]">
+                  <p className="mt-4 text-sm font-medium text-(--accent) transition group-hover:text-(--text-primary)">
                     Browse series &rarr;
                   </p>
                 </Link>

@@ -21,7 +21,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorBoundary
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="max-w-lg w-full bg-[var(--card-background)] backdrop-blur-sm p-8 rounded-lg border border-[var(--card-border)] shadow-xl"
+          className="max-w-lg w-full bg-(--card-background) backdrop-blur-xs p-8 rounded-lg border border-(--card-border) shadow-xl"
         >
           <motion.div
             initial={{ scale: 0.9 }}
@@ -32,14 +32,14 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorBoundary
               damping: 10,
             }}
           >
-            <ExclamationTriangleIcon className="w-16 h-16 mx-auto text-[var(--accent)]" />
+            <ExclamationTriangleIcon className="w-16 h-16 mx-auto text-(--accent)" />
           </motion.div>
 
           <motion.h2
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-2xl font-bold mt-6 mb-2 text-[var(--accent)]"
+            className="text-2xl font-bold mt-6 mb-2 text-(--accent)"
           >
             Something went wrong
           </motion.h2>
@@ -48,7 +48,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorBoundary
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
-            className="text-[var(--text-secondary)] mb-6"
+            className="text-(--text-secondary) mb-6"
           >
             {isDev
               ? error.message
@@ -63,10 +63,10 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorBoundary
               className="mb-6 text-left"
             >
               <details className="bg-[rgba(0,0,0,0.3)] p-4 rounded-md overflow-auto text-sm font-mono">
-                <summary className="cursor-pointer text-[var(--accent)] mb-2">
+                <summary className="cursor-pointer text-(--accent) mb-2">
                   View Error Details
                 </summary>
-                <pre className="p-2 overflow-auto whitespace-pre-wrap text-[var(--text-secondary)] text-xs">
+                <pre className="p-2 overflow-auto whitespace-pre-wrap text-(--text-secondary) text-xs">
                   {error.stack}
                 </pre>
               </details>
@@ -81,14 +81,14 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({ error, resetErrorBoundary
           >
             <Button
               onClick={resetErrorBoundary}
-              className="flex items-center justify-center gap-2 bg-[var(--accent)] text-[var(--on-accent)] hover:bg-[var(--accent-hover)]"
+              className="flex items-center justify-center gap-2 bg-(--accent) text-(--on-accent) hover:bg-(--accent-hover)"
             >
               <ArrowPathIcon className="w-4 h-4" />
               Try Again
             </Button>
 
             <Link href="/" passHref>
-              <Button className="flex items-center justify-center gap-2 bg-transparent border-2 border-[var(--accent)] text-[var(--accent)] hover:bg-[rgb(var(--accent-rgb)/0.12)]">
+              <Button className="flex items-center justify-center gap-2 bg-transparent border-2 border-(--accent) text-(--accent) hover:bg-[rgb(var(--accent-rgb)/0.12)]">
                 <HomeIcon className="w-4 h-4" />
                 Return Home
               </Button>

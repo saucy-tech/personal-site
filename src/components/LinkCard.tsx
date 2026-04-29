@@ -36,7 +36,7 @@ const LinkCard: React.FC<LinkCardProps> = ({
   const cardContent = (
     <div
       className={cn(
-        'group h-full w-full rounded-2xl border border-[var(--accent-border)] bg-[linear-gradient(180deg,rgb(var(--accent-rgb)/0.16),rgba(255,255,255,0.04))] shadow-[0_10px_30px_rgba(0,0,0,0.16)] backdrop-blur-sm transition-all duration-300 hover:border-[var(--accent)] hover:bg-[linear-gradient(180deg,rgb(var(--accent-rgb)/0.26),rgba(255,255,255,0.06))] hover:shadow-[0_20px_40px_rgba(0,0,0,0.24)] hover:-translate-y-0.5 active:scale-[0.985]',
+        'group h-full w-full rounded-2xl border border-(--accent-border) bg-[linear-gradient(180deg,rgb(var(--accent-rgb)/0.16),rgba(255,255,255,0.04))] shadow-[0_10px_30px_rgba(0,0,0,0.16)] backdrop-blur-xs transition-all duration-300 hover:border-(--accent) hover:bg-[linear-gradient(180deg,rgb(var(--accent-rgb)/0.26),rgba(255,255,255,0.06))] hover:shadow-[0_20px_40px_rgba(0,0,0,0.24)] hover:-translate-y-0.5 active:scale-[0.985]',
         className
       )}
     >
@@ -47,12 +47,12 @@ const LinkCard: React.FC<LinkCardProps> = ({
         )}
       >
         {imageSrc ? (
-          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5">
             <Image src={imageSrc} alt={title} width={32} height={32} className="rounded-full" />
           </div>
         ) : (
           icon && (
-            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-[var(--accent)]">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-(--accent)">
               {icon}
             </div>
           )
@@ -60,29 +60,27 @@ const LinkCard: React.FC<LinkCardProps> = ({
 
         <div className={cn('min-w-0 flex-1', align === 'left' ? 'text-left' : 'text-center')}>
           {eyebrow && (
-            <p className="text-[10px] uppercase tracking-[0.22em] text-[var(--accent)] sm:text-xs">
+            <p className="text-[10px] uppercase tracking-[0.22em] text-(--accent) sm:text-xs">
               {eyebrow}
             </p>
           )}
           <h2
             className={cn(
-              'break-words text-sm font-semibold leading-snug text-[var(--text-primary)] sm:text-base',
+              'wrap-break-word text-sm font-semibold leading-snug text-(--text-primary) sm:text-base',
               eyebrow ? 'mt-2' : ''
             )}
           >
             {cardTitle || title}
           </h2>
-          {meta && <p className="mt-2 text-xs text-[var(--text-secondary)]">{meta}</p>}
+          {meta && <p className="mt-2 text-xs text-(--text-secondary)">{meta}</p>}
           {description && (
-            <p className="mt-3 text-sm leading-relaxed text-[var(--text-secondary)]">
-              {description}
-            </p>
+            <p className="mt-3 text-sm leading-relaxed text-(--text-secondary)">{description}</p>
           )}
         </div>
 
         <div
           className={cn(
-            'flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-[var(--accent)] transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5',
+            'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-(--accent) transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5',
             align === 'left' ? 'self-start' : 'self-center'
           )}
         >

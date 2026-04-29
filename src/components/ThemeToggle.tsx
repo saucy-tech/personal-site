@@ -33,7 +33,7 @@ export default function ThemeToggle({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        'inline-flex items-center rounded-full border border-[var(--accent-border)] bg-[var(--accent-transparent)] p-0.5 font-mono text-[10px] uppercase tracking-wider sm:text-xs',
+        'inline-flex items-center rounded-full border border-(--accent-border) bg-(--accent-transparent) p-0.5 font-mono text-[10px] uppercase tracking-wider sm:text-xs',
         className
       )}
       role="group"
@@ -46,8 +46,8 @@ export default function ThemeToggle({ className }: { className?: string }) {
         className={cn(
           'rounded-full px-2.5 py-1 transition sm:px-3',
           mode === 'orange'
-            ? 'bg-[var(--accent)] text-[var(--on-accent)] shadow-sm'
-            : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+            ? 'bg-(--accent) text-(--on-accent) shadow-xs'
+            : 'text-(--text-secondary) hover:text-(--text-primary)'
         )}
       >
         Orange
@@ -58,8 +58,8 @@ export default function ThemeToggle({ className }: { className?: string }) {
         className={cn(
           'rounded-full px-2.5 py-1 transition sm:px-3',
           mode === 'green'
-            ? 'bg-[var(--accent)] text-[var(--on-accent)] shadow-sm'
-            : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+            ? 'bg-(--accent) text-(--on-accent) shadow-xs'
+            : 'text-(--text-secondary) hover:text-(--text-primary)'
         )}
       >
         Green

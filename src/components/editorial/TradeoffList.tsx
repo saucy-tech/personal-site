@@ -11,14 +11,14 @@ export default function TradeoffList({ pros, cons }: TradeoffListProps) {
   return (
     <div className="mt-4 grid gap-6 sm:grid-cols-2 sm:gap-8">
       {pros && pros.length > 0 && (
-        <ul className="tradeoff-list tradeoff-list-pro space-y-2 text-sm leading-relaxed text-[var(--text-secondary)]">
+        <ul className="tradeoff-list tradeoff-list-pro space-y-2 text-sm leading-relaxed text-(--text-secondary)">
           {pros.map((line) => (
             <li key={line}>{line}</li>
           ))}
         </ul>
       )}
       {cons && cons.length > 0 && (
-        <ul className="tradeoff-list tradeoff-list-con space-y-2 text-sm leading-relaxed text-[var(--text-secondary)]">
+        <ul className="tradeoff-list tradeoff-list-con space-y-2 text-sm leading-relaxed text-(--text-secondary)">
           {cons.map((line) => (
             <li key={line}>{line}</li>
           ))}
