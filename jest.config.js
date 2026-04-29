@@ -16,4 +16,12 @@ const customJestConfig = {
   testPathIgnorePatterns: ['/node_modules/', '/.next/', '/.claude/', '<rootDir>/tests/e2e/'],
 };
 
-module.exports = createJestConfig(customJestConfig);
+module.exports = async () => {
+  const config = await createJestConfig(customJestConfig)();
+  // github-slugger@2 is ESM-only; allow Jest to transform it (pnpm-aware path).
+  config.transformIgnorePatterns = [
+    'node_modules/(?!\\.pnpm/github-slugger|github-slugger/)',
+    '^.+\\.module\\.(css|sass|scss)$',
+  ];
+  return config;
+};
