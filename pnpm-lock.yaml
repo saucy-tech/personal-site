@@ -71,8 +71,8 @@ importers:
         specifier: ^19.2.5
         version: 19.2.5(react@19.2.5)
       react-qr-code:
-        specifier: ^2.0.15
-        version: 2.0.18(react@19.2.5)
+        specifier: ^2.0.20
+        version: 2.0.20(react@19.2.5)
       rehype-autolink-headings:
         specifier: ^7.1.0
         version: 7.1.0
@@ -4078,8 +4078,8 @@ packages:
   react-is@18.3.1:
     resolution: {integrity: sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==}
 
-  react-qr-code@2.0.18:
-    resolution: {integrity: sha512-v1Jqz7urLMhkO6jkgJuBYhnqvXagzceg3qJUWayuCK/c6LTIonpWbwxR1f1APGd4xrW/QcQEovNrAojbUz65Tg==}
+  react-qr-code@2.0.20:
+    resolution: {integrity: sha512-I7hTe6LBRMU35gQ2Ypsk2LIXZN6iq6Ad9axDj2cuHO+mtbtGIMC1gl2mhwDtPYUX/a7zHrGhsAt6Kifil2ujsA==}
     peerDependencies:
       react: '*'
 
@@ -9692,7 +9692,7 @@ snapshots:
 
   react-is@18.3.1: {}
 
-  react-qr-code@2.0.18(react@19.2.5):
+  react-qr-code@2.0.20(react@19.2.5):
     dependencies:
       prop-types: 15.8.1
       qr.js: 0.0.0
