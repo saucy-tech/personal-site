@@ -29,9 +29,9 @@ export default function Talks() {
     <PageLayout title="Talks & Sermons">
       <section>
         <div className="overflow-x-auto w-full max-w-2xl mx-auto mt-6">
-          <table className="w-full min-w-[350px] bg-white/10 rounded-lg shadow-lg border border-[var(--accent-border)] backdrop-blur-sm">
+          <table className="w-full min-w-[350px] bg-white/10 rounded-lg shadow-lg border border-(--accent-border) backdrop-blur-xs">
             <thead>
-              <tr className="text-left text-[var(--accent)] text-sm">
+              <tr className="text-left text-(--accent) text-sm">
                 <th className="py-3 px-4 font-semibold">Date</th>
                 <th className="py-3 px-4 font-semibold">Title</th>
                 <th className="py-3 px-4 font-semibold">Venue</th>
@@ -39,7 +39,7 @@ export default function Talks() {
               </tr>
             </thead>
             <tbody>
-              <tr className="text-[var(--text-primary)] text-base">
+              <tr className="text-(--text-primary) text-base">
                 <td className="py-3 px-4 whitespace-nowrap font-mono text-xs md:text-sm opacity-80">
                   2025-03-26
                 </td>

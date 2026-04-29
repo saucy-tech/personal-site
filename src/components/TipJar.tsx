@@ -206,11 +206,11 @@ export default function TipJar({ initialMemo }: TipJarProps) {
         />
       )}
 
-      <div className="border border-[var(--accent-border)] rounded-lg p-6">
+      <div className="border border-(--accent-border) rounded-lg p-6">
         {state === 'select' && (
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium mb-1 text-[var(--text-primary)]">
+              <label className="block text-sm font-medium mb-1 text-(--text-primary)">
                 Select Amount (sats)
               </label>
               <div>
@@ -228,8 +228,8 @@ export default function TipJar({ initialMemo }: TipJarProps) {
                       onClick={() => handleAmountSelect(amount as AmountOption)}
                       className={`py-2 px-4 rounded-md transition-colors duration-200 ${
                         selectedAmount === amount
-                          ? 'bg-[var(--accent)] text-[var(--on-accent)]'
-                          : 'bg-[var(--accent-transparent)] text-[var(--text-primary)] hover:bg-[var(--accent-hover)]'
+                          ? 'bg-(--accent) text-(--on-accent)'
+                          : 'bg-(--accent-transparent) text-(--text-primary) hover:bg-(--accent-hover)'
                       }`}
                     >
                       {amount} sats
@@ -240,10 +240,10 @@ export default function TipJar({ initialMemo }: TipJarProps) {
                   <button
                     type="button"
                     onClick={() => handleAmountSelect('custom')}
-                    className={`px-3 py-1 rounded-md text-sm border border-[var(--accent-border)] transition-colors duration-200 ${
+                    className={`px-3 py-1 rounded-md text-sm border border-(--accent-border) transition-colors duration-200 ${
                       selectedAmount === 'custom'
-                        ? 'bg-[var(--accent)] text-[var(--on-accent)] border-[var(--accent)]'
-                        : 'bg-[var(--accent-transparent)] text-[var(--text-primary)] hover:bg-[var(--accent-hover)]'
+                        ? 'bg-(--accent) text-(--on-accent) border-(--accent)'
+                        : 'bg-(--accent-transparent) text-(--text-primary) hover:bg-(--accent-hover)'
                     }`}
                   >
                     Custom
@@ -254,17 +254,17 @@ export default function TipJar({ initialMemo }: TipJarProps) {
                       value={customAmount}
                       onChange={handleCustomAmountChange}
                       placeholder="Enter sats"
-                      className="w-40 border border-[var(--accent-border)] p-2 rounded-md bg-transparent text-[var(--text-primary)]"
+                      className="w-40 border border-(--accent-border) p-2 rounded-md bg-transparent text-(--text-primary)"
                     />
                   )}
                 </div>
                 {selectedAmount !== 'custom' && usdRate !== null && getAmount() > 0 && (
-                  <p className="mt-2 text-sm text-[var(--text-secondary)]">
+                  <p className="mt-2 text-sm text-(--text-secondary)">
                     ≈ ${((getAmount() / 1e8) * usdRate).toFixed(2)} USD
                   </p>
                 )}
                 {selectedAmount === 'custom' && usdRate !== null && getAmount() > 0 && (
-                  <p className="mt-2 text-sm text-[var(--text-secondary)]">
+                  <p className="mt-2 text-sm text-(--text-secondary)">
                     ≈ ${((getAmount() / 1e8) * usdRate).toFixed(2)} USD
                   </p>
                 )}
@@ -272,7 +272,7 @@ export default function TipJar({ initialMemo }: TipJarProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2 text-[var(--text-primary)]">
+              <label className="block text-sm font-medium mb-2 text-(--text-primary)">
                 Message (optional)
               </label>
               <textarea
@@ -280,14 +280,14 @@ export default function TipJar({ initialMemo }: TipJarProps) {
                 onChange={(e) => setMessage(e.target.value)}
                 rows={2}
                 placeholder="Add a note"
-                className="w-full border border-[var(--accent-border)] p-2 rounded-md bg-transparent text-[var(--text-primary)]"
+                className="w-full border border-(--accent-border) p-2 rounded-md bg-transparent text-(--text-primary)"
               />
             </div>
 
             <button
               onClick={generateInvoice}
               disabled={isGeneratingInvoice}
-              className="w-full py-2 rounded-md transition-colors duration-200 bg-[var(--accent)] text-[var(--on-accent)] disabled:opacity-50"
+              className="w-full py-2 rounded-md transition-colors duration-200 bg-(--accent) text-(--on-accent) disabled:opacity-50"
             >
               {isGeneratingInvoice ? 'Generating...' : 'Tip me'}
             </button>
@@ -301,12 +301,12 @@ export default function TipJar({ initialMemo }: TipJarProps) {
             <div className="mb-4 flex justify-center">
               <QRCode value={invoice} size={200} />
             </div>
-            <code className="block text-sm break-words bg-black/40 p-3 rounded text-[var(--text-primary)]">
+            <code className="block text-sm wrap-break-word bg-black/40 p-3 rounded-sm text-(--text-primary)">
               {invoice}
             </code>
             <button
               onClick={copyToClipboard}
-              className="mt-4 py-2 px-4 rounded-md transition-colors duration-200 bg-[var(--accent)] text-[var(--on-accent)]"
+              className="mt-4 py-2 px-4 rounded-md transition-colors duration-200 bg-(--accent) text-(--on-accent)"
             >
               {copyButtonText}
             </button>
@@ -315,10 +315,10 @@ export default function TipJar({ initialMemo }: TipJarProps) {
 
         {state === 'success' && (
           <div className="text-center space-y-4">
-            <p className="text-[var(--accent)] text-lg font-semibold">Thank you for your tip!</p>
+            <p className="text-(--accent) text-lg font-semibold">Thank you for your tip!</p>
             <button
               onClick={resetForm}
-              className="mt-2 py-2 px-4 rounded-md transition-colors duration-200 bg-[var(--accent)] text-[var(--on-accent)]"
+              className="mt-2 py-2 px-4 rounded-md transition-colors duration-200 bg-(--accent) text-(--on-accent)"
             >
               Send another
             </button>

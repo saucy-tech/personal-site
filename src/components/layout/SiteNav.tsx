@@ -7,9 +7,9 @@ import { type SiteNavItem, isNavActive } from '@/config/site-nav';
 import { cn } from '@/utils/helpers';
 
 const linkClass =
-  'a11y-focus-ring rounded-sm text-[var(--text-secondary)] transition-colors hover:text-[var(--accent)]';
+  'a11y-focus-ring rounded-xs text-(--text-secondary) transition-colors hover:text-(--accent)';
 
-const activeClass = 'text-[var(--accent)] font-medium';
+const activeClass = 'text-(--accent) font-medium';
 
 type SiteNavProps = {
   items: SiteNavItem[];

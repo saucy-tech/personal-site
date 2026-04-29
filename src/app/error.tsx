@@ -16,10 +16,10 @@ export default function Error({
   return (
     <div className="min-h-screen flex items-center justify-center">
       <div className="text-center space-y-4">
-        <h2 className="text-2xl font-bold text-[var(--foreground)]">Something went wrong!</h2>
+        <h2 className="text-2xl font-bold text-(--foreground)">Something went wrong!</h2>
         <button
           onClick={reset}
-          className="px-4 py-2 bg-[var(--accent)] text-[var(--on-accent)] rounded-md hover:opacity-90 transition-opacity"
+          className="px-4 py-2 bg-(--accent) text-(--on-accent) rounded-md hover:opacity-90 transition-opacity"
         >
           Try again
         </button>

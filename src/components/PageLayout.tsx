@@ -16,10 +16,10 @@ export default function PageLayout({
 }: PageLayoutProps) {
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="container mx-auto px-4 py-8 flex-grow">
+      <div className="container mx-auto px-4 py-8 grow">
         <Link
           href={backHref}
-          className="a11y-focus-ring mb-8 inline-flex items-center rounded-sm text-[var(--accent)] transition-opacity hover:opacity-80"
+          className="a11y-focus-ring mb-8 inline-flex items-center rounded-xs text-(--accent) transition-opacity hover:opacity-80"
         >
           <ArrowLeftIcon className="h-5 w-5 mr-2" />
           {backLabel}

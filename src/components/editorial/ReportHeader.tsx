@@ -9,13 +9,10 @@ export default function ReportHeader({ title, periodLabel, kicker }: ReportHeade
   return (
     <header className="space-y-3">
       {kicker && (
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-[var(--text-muted)]">
-          {kicker}
-        </p>
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-(--text-muted)">{kicker}</p>
       )}
-      <h1 className="text-2xl font-semibold leading-tight tracking-tight text-[var(--text-primary)] sm:text-3xl">
-        {title}{' '}
-        <span className="font-normal text-[var(--text-secondary)]">— {periodLabel}</span>
+      <h1 className="text-2xl font-semibold leading-tight tracking-tight text-(--text-primary) sm:text-3xl">
+        {title} <span className="font-normal text-(--text-secondary)">— {periodLabel}</span>
       </h1>
     </header>
   );

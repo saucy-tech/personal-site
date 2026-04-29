@@ -58,8 +58,8 @@ export default function PostTableOfContents({ headings }: PostTableOfContentsPro
   const resolvedActiveId = activeId ?? headingIds[0] ?? null;
 
   return (
-    <div className="space-y-3 rounded-3xl border border-white/10 bg-white/[0.03] p-5 xl:sticky xl:top-24">
-      <p className="text-xs uppercase tracking-[0.18em] text-[var(--accent)]">On this page</p>
+    <div className="space-y-3 rounded-3xl border border-white/10 bg-white/3 p-5 xl:sticky xl:top-24">
+      <p className="text-xs uppercase tracking-[0.18em] text-(--accent)">On this page</p>
       <nav aria-label="Table of contents">
         <ul className="space-y-2">
           {headings.map((heading, index) => (
@@ -67,11 +67,11 @@ export default function PostTableOfContents({ headings }: PostTableOfContentsPro
               <a
                 href={`#${heading.id}`}
                 className={cn(
-                  'a11y-focus-ring block rounded px-2 py-1 text-sm transition',
+                  'a11y-focus-ring block rounded-sm px-2 py-1 text-sm transition',
                   heading.level === 3 && 'pl-5',
                   resolvedActiveId === heading.id
-                    ? 'bg-[var(--accent-transparent)] text-[var(--text-primary)]'
-                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                    ? 'bg-(--accent-transparent) text-(--text-primary)'
+                    : 'text-(--text-secondary) hover:text-(--text-primary)'
                 )}
               >
                 {heading.text}
@@ -83,7 +83,7 @@ export default function PostTableOfContents({ headings }: PostTableOfContentsPro
       <button
         type="button"
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className="a11y-focus-ring text-sm font-medium text-[var(--accent)] transition hover:text-[var(--text-primary)]"
+        className="a11y-focus-ring text-sm font-medium text-(--accent) transition hover:text-(--text-primary)"
       >
         Back to top
       </button>

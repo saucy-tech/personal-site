@@ -51,7 +51,7 @@ export default async function MonthArchivePage({ params }: PageProps) {
 
   return (
     <PageLayout title={`${year} · ${month}`} backHref="/blog" backLabel="Back to Blog">
-      <p className="mb-6 text-sm text-[var(--text-secondary)]">
+      <p className="mb-6 text-sm text-(--text-secondary)">
         {posts.length} post{posts.length === 1 ? '' : 's'} this month.
       </p>
       <ul className="space-y-3">
@@ -59,14 +59,10 @@ export default async function MonthArchivePage({ params }: PageProps) {
           <li key={post.slug}>
             <Link
               href={`/blog/${post.slug}`}
-              className="a11y-focus-ring block rounded-2xl border border-[var(--accent-border)] bg-white/[0.03] p-4 transition hover:border-[var(--accent)] hover:bg-[var(--accent-transparent)]"
+              className="a11y-focus-ring block rounded-2xl border border-(--accent-border) bg-white/3 p-4 transition hover:border-(--accent) hover:bg-(--accent-transparent)"
             >
-              <span className="text-xs text-[var(--text-secondary)]">
-                {formatPostDate(post.date)}
-              </span>
-              <span className="mt-1 block font-semibold text-[var(--text-primary)]">
-                {post.title}
-              </span>
+              <span className="text-xs text-(--text-secondary)">{formatPostDate(post.date)}</span>
+              <span className="mt-1 block font-semibold text-(--text-primary)">{post.title}</span>
             </Link>
           </li>
         ))}

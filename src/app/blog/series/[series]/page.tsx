@@ -100,23 +100,23 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
     <PageLayout title={series.name} backHref="/blog/series" backLabel="All Series">
       <div className="mx-auto max-w-3xl space-y-10">
         {/* Series header */}
-        <section className="overflow-hidden rounded-[2rem] border border-[var(--accent-border)] bg-[radial-gradient(circle_at_top_right,rgb(var(--accent-rgb)/0.18),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-6 sm:p-8">
-          <p className="text-xs uppercase tracking-[0.18em] text-[var(--accent)]">Series</p>
-          <h1 className="mt-2 text-3xl font-bold text-[var(--text-primary)]">{series.name}</h1>
+        <section className="overflow-hidden rounded-4xl border border-(--accent-border) bg-[radial-gradient(circle_at_top_right,rgb(var(--accent-rgb)/0.18),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-6 sm:p-8">
+          <p className="text-xs uppercase tracking-[0.18em] text-(--accent)">Series</p>
+          <h1 className="mt-2 text-3xl font-bold text-(--text-primary)">{series.name}</h1>
           <div className="mt-4 flex flex-wrap gap-3">
-            <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">
+            <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary)">
               {weeks.length} {weeks.length === 1 ? 'week' : 'weeks'}
             </span>
-            <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">
+            <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary)">
               {series.count} {series.count === 1 ? 'post' : 'posts'}
             </span>
             {dateRange && (
-              <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-[var(--text-secondary)]">
+              <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary)">
                 {dateRange}
               </span>
             )}
           </div>
-          <p className="mt-4 text-sm text-[var(--text-secondary)]">
+          <p className="mt-4 text-sm text-(--text-secondary)">
             Posts are listed oldest first so you can follow the series in order.
           </p>
         </section>
@@ -127,13 +127,11 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
             <div key={week.key}>
               {/* Week header */}
               <div className="mb-4 flex items-baseline gap-3">
-                <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
+                <h2 className="text-sm font-semibold uppercase tracking-[0.18em] text-(--accent)">
                   Week {week.weekNum}
                 </h2>
-                <span className="text-xs text-[var(--text-secondary)]">
-                  {weekDateRange(week.posts)}
-                </span>
-                <span className="text-xs text-[var(--text-secondary)] opacity-60">{week.year}</span>
+                <span className="text-xs text-(--text-secondary)">{weekDateRange(week.posts)}</span>
+                <span className="text-xs text-(--text-secondary) opacity-60">{week.year}</span>
               </div>
 
               {/* Posts in this week */}
@@ -142,20 +140,20 @@ export default async function SeriesPage({ params }: SeriesPageProps) {
                   <Link
                     key={post.slug}
                     href={`/blog/${post.slug}`}
-                    className="group flex gap-5 overflow-hidden rounded-[2rem] border border-white/10 bg-white/[0.03] p-5 transition hover:border-[var(--accent)] hover:bg-[var(--accent-transparent)] sm:p-6"
+                    className="group flex gap-5 overflow-hidden rounded-4xl border border-white/10 bg-white/3 p-5 transition hover:border-(--accent) hover:bg-(--accent-transparent) sm:p-6"
                   >
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[var(--accent-border)] bg-[var(--accent-transparent)] text-xs font-semibold text-[var(--accent)]">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-(--accent-border) bg-(--accent-transparent) text-xs font-semibold text-(--accent)">
                       {week.startNum + i + 1}
                     </div>
                     <div className="min-w-0">
-                      <p className="text-xs uppercase tracking-[0.18em] text-[var(--accent)]">
+                      <p className="text-xs uppercase tracking-[0.18em] text-(--accent)">
                         {formatPostDate(post.date)}
                       </p>
-                      <h3 className="mt-1 text-lg font-semibold leading-snug text-[var(--text-primary)] transition group-hover:text-[var(--accent)]">
+                      <h3 className="mt-1 text-lg font-semibold leading-snug text-(--text-primary) transition group-hover:text-(--accent)">
                         {post.title}
                       </h3>
                       {post.excerpt && (
-                        <p className="mt-2 text-sm leading-relaxed text-[var(--text-secondary)]">
+                        <p className="mt-2 text-sm leading-relaxed text-(--text-secondary)">
                           {post.excerpt}
                         </p>
                       )}
