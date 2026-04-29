@@ -45,7 +45,7 @@
     "react": "^19.2.5",
     "react-confetti": "^6.4.0",
     "react-dom": "^19.2.5",
-    "react-qr-code": "^2.0.15",
+    "react-qr-code": "^2.0.20",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-slug": "^6.0.0",
     "remark-gfm": "^4.0.0",

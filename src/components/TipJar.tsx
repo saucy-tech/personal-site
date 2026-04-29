@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 import { PRESET_AMOUNTS } from '@/utils/tipjar';
 
 const ReactConfetti = dynamic(() => import('react-confetti'), { ssr: false });
-const QRCode = dynamic(() => import('react-qr-code'), { ssr: false });
+const QRCode = dynamic(() => import('react-qr-code').then((mod) => mod.QRCode), { ssr: false });
 
 type TipJarState = 'select' | 'pay' | 'success';
 type AmountOption = (typeof PRESET_AMOUNTS)[number] | 'custom';
