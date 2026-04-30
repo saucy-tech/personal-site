@@ -5,7 +5,7 @@
  */
 
 /** ISO date — bump when you revise items or copy. Shown on `/field-notes`. */
-export const fieldNotesLastUpdated = '2026-04-27';
+export const fieldNotesLastUpdated = '2026-04-30';
 
 export type FieldNoteStatus = 'using' | 'trying';
 
@@ -34,26 +34,33 @@ export const fieldNotesSections: FieldNoteSection[] = [
     items: [
       {
         title: 'Claude (desktop)',
-        tags: ['anthropic', 'Max 5x $100/mo'],
+        tags: ['anthropic', 'Max — 7.1M tokens'],
         badge: 'daily',
-        note: 'Cowork and Claude Code inside the desktop app. On Max; I use it heavily.',
+        note: 'Cowork and Claude Code inside the desktop app. On the new Max plan with 7.1M tokens — I use it heavily.',
+      },
+      {
+        title: 'Claude Opus 4',
+        tags: ['anthropic'],
+        badge: 'daily',
+        note: 'Daily driver model. The combination of Opus quality and the new long-context window changes how I structure long sessions.',
+      },
+      {
+        title: 'GPT-5.5',
+        tags: ['openai'],
+        note: 'My default on the OpenAI side. Strong second opinion alongside Opus when the answer matters.',
+      },
+      {
+        title: 'Codex CLI',
+        tags: ['openai', 'cli'],
+        badge: 'daily',
+        note: "OpenAI's coding CLI. I run it next to Claude Code CLI when I want a different planning style or a sanity check.",
       },
       {
         title: 'Warp',
         tags: ['terminal', 'Build $20/mo'],
         badge: 'daily',
-        note: 'My terminal. Oz, Codex sessions, and the occasional Claude Code CLI run all happen here.',
+        note: 'My terminal. Both Claude Code CLI and Codex CLI run here daily — and I made an open source contribution to Warp itself.',
         link: { href: 'https://app.warp.dev/referral/3MJVPD', label: 'my referral' },
-      },
-      {
-        title: 'Sonnet 4.6',
-        tags: ['anthropic'],
-        note: 'The model I end up on most. Fast enough to live with, smart enough for day-to-day work.',
-      },
-      {
-        title: 'GPT 5.4',
-        tags: ['openai'],
-        note: 'My default on the OpenAI side. 5.4 Mini for when I want something stupid-fast and cheap.',
       },
       {
         title: 'M1 MacBook Pro 16"',
