@@ -42,7 +42,7 @@ export default function DailyWordPage() {
 
         {currentSeries && (
           <div className="mt-5">
-            <span className="rounded-full border border-(--accent-border) bg-(--accent-transparent) px-4 py-1.5 text-xs uppercase tracking-[0.18em] text-(--accent)">
+            <span className="inline-block rounded-2xl border border-(--accent-border) bg-(--accent-transparent) px-4 py-1.5 text-xs uppercase tracking-[0.18em] text-(--accent)">
               Current Series: {currentSeries}
             </span>
           </div>
