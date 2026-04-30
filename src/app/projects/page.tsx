@@ -1,5 +1,15 @@
-import PageLayout from '@/components/PageLayout';
 import { Metadata } from 'next';
+
+import LinkCard from '@/components/LinkCard';
+import PageLayout from '@/components/PageLayout';
+import {
+  Project,
+  ProjectGroup,
+  ProjectStatus,
+  projectGroupLabels,
+  projects,
+  talks,
+} from '@/data/projects';
 import { SITE_NAME } from '@/utils/constants';
 
 export const metadata: Metadata = {
@@ -24,6 +34,13 @@ export const metadata: Metadata = {
   },
 };
 
+const GROUP_ORDER: ProjectGroup[] = ['apps', 'tools', 'open-source'];
+
+const STATUS_PILL: Record<ProjectStatus, { label: string; className: string }> = {
+  launched: { label: 'Launched', className: 'bg-green-500/80 text-white' },
+  contributor: { label: 'Contributor', className: 'bg-purple-500/80 text-white' },
+};
+
 function Tag({ label }: { label: string }) {
   return (
     <span className="text-xs bg-white/10 text-(--text-secondary) border border-(--accent-border) px-2 py-0.5 rounded-full">
@@ -32,226 +49,131 @@ function Tag({ label }: { label: string }) {
   );
 }
 
+function ProjectCard({ project }: { project: Project }) {
+  const pill = STATUS_PILL[project.status];
+  return (
+    <div className="bg-white/10 rounded-lg shadow-lg border border-(--accent-border) p-6">
+      <div className="flex items-center gap-2 flex-wrap mb-2">
+        <h3 className="text-xl font-semibold">{project.title}</h3>
+        <span className={`text-xs ${pill.className} px-2 py-0.5 rounded-full`}>{pill.label}</span>
+      </div>
+      <div className="flex flex-wrap gap-2 mb-3">
+        {project.tags.map((tag) => (
+          <Tag key={tag} label={tag} />
+        ))}
+      </div>
+      <p className="mb-4 text-base text-(--text-secondary)">{project.blurb}</p>
+      <div className="flex flex-wrap gap-3">
+        {project.links.map((link) => {
+          const isExternal = /^https?:\/\//.test(link.href);
+          return (
+            <a
+              key={link.href}
+              href={link.href}
+              {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              className="inline-block px-4 py-2 bg-(--accent) text-(--on-accent) rounded-sm hover:bg-(--accent-dark) transition"
+            >
+              {link.label}
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export default function Projects() {
+  const grouped = GROUP_ORDER.map((group) => ({
+    group,
+    label: projectGroupLabels[group],
+    items: projects.filter((p) => p.group === group),
+  })).filter((g) => g.items.length > 0);
+
   return (
     <PageLayout title="Projects & Contributions">
       <section className="flex flex-col gap-10 items-center min-h-[40vh]">
-        {/* --- My Projects --- */}
-        <div className="w-full max-w-xl">
-          <h2 className="text-sm uppercase tracking-widest text-(--text-secondary) mb-4 pl-1">
-            My Projects
-          </h2>
-          <div className="flex flex-col gap-6">
-            {/* Portfolio Site */}
-            <div className="bg-white/10 rounded-lg shadow-lg border border-(--accent-border) p-6">
-              <div className="flex items-center gap-2 flex-wrap mb-2">
-                <h3 className="text-xl font-semibold">This Portfolio Site</h3>
-                <span className="text-xs bg-green-500/80 text-white px-2 py-0.5 rounded-full">
-                  Launched
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-2 mb-3">
-                <Tag label="Next.js" />
-                <Tag label="React" />
-                <Tag label="Tailwind CSS" />
-                <Tag label="MDX" />
-                <Tag label="Lightning" />
-              </div>
-              <p className="mb-4 text-base text-(--text-secondary)">
-                Built with Next.js (App Router), React, and Tailwind CSS, integrating the
-                @getalby/sdk Nostr Wallet Connect for native Lightning payments. Features a custom
-                blog with MDX support, responsive design, dark mode, and subtle UI animations. All
-                content and components are managed locally—no external CMS or templates.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <a
-                  href="https://github.com/saucy-tech/personal-site"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block px-4 py-2 bg-(--accent) text-(--on-accent) rounded-sm hover:bg-(--accent-dark) transition"
-                >
-                  GitHub Repo
-                </a>
-                <a
-                  href="/support#lightning-tip-jar"
-                  className="inline-block px-4 py-2 bg-(--accent) text-(--on-accent) rounded-sm hover:bg-(--accent-hover) transition"
-                >
-                  Try Lightning Tip Jar
-                </a>
-              </div>
-            </div>
-
-            {/* Work Time Visualizer */}
-            <div className="bg-white/10 rounded-lg shadow-lg border border-(--accent-border) p-6">
-              <div className="flex items-center gap-2 flex-wrap mb-2">
-                <h3 className="text-xl font-semibold">Work Time Visualizer</h3>
-                <span className="text-xs bg-green-500/80 text-white px-2 py-0.5 rounded-full">
-                  Launched
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-2 mb-3">
-                <Tag label="Rust" />
-                <Tag label="Win32" />
-                <Tag label="Windows" />
-              </div>
-              <p className="mb-4 text-base text-(--text-secondary)">
-                A lightweight Windows taskbar widget built in Rust using the Win32 API. Displays
-                daily and weekly work-time progress as colored block bars, updating every 15
-                seconds. Features configurable work hours, 7 customizable colors, dark/light mode
-                detection via the Windows registry, weekend auto-detection, and a single-instance
-                guard.
-              </p>
-              <a
-                href="https://github.com/saucy-tech/work-time-visualizer-rust"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block px-4 py-2 bg-(--accent) text-(--on-accent) rounded-sm hover:bg-(--accent-dark) transition"
-              >
-                GitHub Repo
-              </a>
-            </div>
-
-            {/* Lightning Tip Jar */}
-            <div className="bg-white/10 rounded-lg shadow-lg border border-(--accent-border) p-6">
-              <div className="flex items-center gap-2 flex-wrap mb-2">
-                <h3 className="text-xl font-semibold">Lightning Tip Jar</h3>
-                <span className="text-xs bg-green-500/80 text-white px-2 py-0.5 rounded-full">
-                  Launched
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-2 mb-3">
-                <Tag label="React" />
-                <Tag label="Lightning" />
-                <Tag label="NWC" />
-              </div>
-              <p className="mb-4 text-base text-(--text-secondary)">
-                A Lightning tipping interface template from ATL BitLab&apos;s workshop, enhanced
-                with @getalby/sdk integration for seamless NWC support. Users can select sats,
-                generate invoices, and tip via Lightning.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <a
-                  href="https://github.com/saucy-tech/lntipjar"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block px-4 py-2 bg-(--accent) text-(--on-accent) rounded-sm hover:bg-(--accent-dark) transition"
-                >
-                  GitHub Repo
-                </a>
-                <a
-                  href="/support"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block px-4 py-2 bg-(--accent) text-(--on-accent) rounded-sm hover:bg-(--accent-dark) transition"
-                >
-                  Live Demo
-                </a>
-              </div>
-            </div>
-
-            {/* Roll to Eat */}
-            <div className="bg-white/10 rounded-lg shadow-lg border border-(--accent-border) p-6">
-              <div className="flex items-center gap-2 flex-wrap mb-2">
-                <h3 className="text-xl font-semibold">Roll to Eat</h3>
-                <span className="text-xs bg-green-500/80 text-white px-2 py-0.5 rounded-full">
-                  Launched
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-2 mb-3">
-                <Tag label="Next.js" />
-                <Tag label="React" />
-                <Tag label="TypeScript" />
-                <Tag label="Tailwind CSS" />
-              </div>
-              <p className="mb-4 text-base text-(--text-secondary)">
-                A playful dinner-decision app that rolls two d20s to pair a cuisine with a main
-                ingredient. Built with Next.js and React, it supports custom tables saved in the
-                browser, reroll workflows with lockable dice, local roll history, and shareable
-                result pages.
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <a
-                  href="https://github.com/saucy-tech/roll-to-eat"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block px-4 py-2 bg-(--accent) text-(--on-accent) rounded-sm hover:bg-(--accent-dark) transition"
-                >
-                  GitHub Repo
-                </a>
-                <a
-                  href="https://roll-to-eat.vercel.app/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block px-4 py-2 bg-(--accent) text-(--on-accent) rounded-sm hover:bg-(--accent-dark) transition"
-                >
-                  Live Demo
-                </a>
-              </div>
+        {grouped.map(({ group, label, items }) => (
+          <div key={group} className="w-full max-w-xl">
+            <h2 className="text-sm uppercase tracking-widest text-(--text-secondary) mb-4 pl-1">
+              {label}
+            </h2>
+            <div className="flex flex-col gap-6">
+              {items.map((project) => (
+                <ProjectCard key={project.id} project={project} />
+              ))}
             </div>
           </div>
-        </div>
+        ))}
 
-        {/* --- Open Source Contributions --- */}
+        {talks.length > 0 && (
+          <div className="w-full max-w-xl">
+            <h2 className="text-sm uppercase tracking-widest text-(--text-secondary) mb-4 pl-1">
+              Talks
+            </h2>
+            <div className="overflow-x-auto">
+              <table className="w-full bg-white/10 rounded-lg shadow-lg border border-(--accent-border) backdrop-blur-xs">
+                <thead>
+                  <tr className="text-left text-(--accent) text-sm">
+                    <th className="py-3 px-4 font-semibold">Date</th>
+                    <th className="py-3 px-4 font-semibold">Title</th>
+                    <th className="py-3 px-4 font-semibold">Venue</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {talks.map((talk) => (
+                    <tr
+                      key={`${talk.date}-${talk.title}`}
+                      className="text-(--text-primary) text-base"
+                    >
+                      <td className="py-3 px-4 whitespace-nowrap font-mono text-xs md:text-sm opacity-80">
+                        {talk.date}
+                      </td>
+                      <td className="py-3 px-4 font-medium">
+                        {talk.link ? (
+                          <a
+                            href={talk.link.href}
+                            target={/^https?:\/\//.test(talk.link.href) ? '_blank' : undefined}
+                            rel={
+                              /^https?:\/\//.test(talk.link.href)
+                                ? 'noopener noreferrer'
+                                : undefined
+                            }
+                            className="text-(--accent) underline underline-offset-2 hover:opacity-80"
+                          >
+                            {talk.title}
+                          </a>
+                        ) : (
+                          talk.title
+                        )}
+                      </td>
+                      <td className="py-3 px-4">{talk.venue}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
         <div className="w-full max-w-xl">
           <h2 className="text-sm uppercase tracking-widest text-(--text-secondary) mb-4 pl-1">
-            Open Source Contributions
+            See also
           </h2>
-          <div className="flex flex-col gap-6">
-            {/* Abbot */}
-            <div className="bg-white/10 rounded-lg shadow-lg border border-(--accent-border) p-6">
-              <div className="flex items-center gap-2 flex-wrap mb-2">
-                <h3 className="text-xl font-semibold">Abbot</h3>
-                <span className="text-xs bg-purple-500/80 text-white px-2 py-0.5 rounded-full">
-                  Contributor
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-2 mb-3">
-                <Tag label="Python" />
-                <Tag label="Bitcoin" />
-                <Tag label="Lightning" />
-                <Tag label="Nostr" />
-                <Tag label="Telegram" />
-              </div>
-              <p className="mb-4 text-base text-(--text-secondary)">
-                Open-source Bitcoin/Lightning automation bot for Nostr and Telegram. Contributed to
-                core features and improvements.
-              </p>
-              <a
-                href="https://github.com/ATLBitLab/abbot"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block px-4 py-2 bg-(--accent) text-(--on-accent) rounded-sm hover:bg-(--accent-dark) transition"
-              >
-                GitHub Repo
-              </a>
-            </div>
-
-            {/* Plebnet Website */}
-            <div className="bg-white/10 rounded-lg shadow-lg border border-(--accent-border) p-6">
-              <div className="flex items-center gap-2 flex-wrap mb-2">
-                <h3 className="text-xl font-semibold">Plebnet Website</h3>
-                <span className="text-xs bg-purple-500/80 text-white px-2 py-0.5 rounded-full">
-                  Contributor
-                </span>
-              </div>
-              <div className="flex flex-wrap gap-2 mb-3">
-                <Tag label="Next.js" />
-                <Tag label="Lightning" />
-              </div>
-              <p className="mb-4 text-base text-(--text-secondary)">
-                Contributor to the Plebnet website, an open-source project for the Plebnet
-                community. Helped improve site features and content for the broader Lightning
-                Network community.
-              </p>
-              <a
-                href="https://github.com/plebnet-dev/website"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block px-4 py-2 bg-(--accent) text-(--on-accent) rounded-sm hover:bg-(--accent-dark) transition"
-              >
-                GitHub Repo
-              </a>
-            </div>
+          <div className="flex flex-col gap-3">
+            <LinkCard
+              title="What I'm Into Right Now"
+              href="/field-notes"
+              icon={<span className="text-2xl">📓</span>}
+              eyebrow="Field notes"
+              meta="Tools, tech, and gear I'm using this season"
+            />
+            <LinkCard
+              title="The Daily Word"
+              href="/daily-word"
+              icon={<span className="text-2xl">✉️</span>}
+              eyebrow="Devotion"
+              meta="Weekday scripture reflections"
+            />
           </div>
         </div>
       </section>
