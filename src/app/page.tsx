@@ -26,7 +26,7 @@ export default async function Home() {
   const profileData = {
     name: 'Brandon',
     bio: 'Love Jesus, Explore Ideas, Create Things, Save in Bitcoin',
-    imageSrc: '/family-photo.jpeg',
+    imageSrc: '/brandon-headshot-2026.jpg',
   };
 
   const socialLinks = [
