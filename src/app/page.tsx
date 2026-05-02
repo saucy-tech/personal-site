@@ -139,8 +139,8 @@ export default async function Home() {
           />
           <LinkCard
             key="my-projects"
-            title="Projects & Contributions"
-            href="/projects"
+            title="Portfolio"
+            href="/portfolio"
             icon={<span className="text-2xl">🚀</span>}
             eyebrow="Portfolio"
             meta="Software and experiments"

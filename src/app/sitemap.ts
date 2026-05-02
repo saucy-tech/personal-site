@@ -83,7 +83,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.5,
     },
     {
-      url: absoluteUrl('/projects'),
+      url: absoluteUrl('/portfolio'),
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.55,

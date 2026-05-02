@@ -13,22 +13,22 @@ import {
 import { SITE_NAME } from '@/utils/constants';
 
 export const metadata: Metadata = {
-  title: 'Projects & Contributions',
+  title: 'Portfolio',
   description: `Explore Brandon's projects and open-source contributions.`,
   alternates: {
-    canonical: '/projects',
+    canonical: '/portfolio',
   },
   openGraph: {
-    title: 'Projects',
+    title: 'Portfolio',
     description: `Explore Brandon's projects, apps, and experiments.`,
-    url: '/projects',
+    url: '/portfolio',
     type: 'website',
     images: [
       {
         url: '/family-photo.jpeg',
         width: 1024,
         height: 1024,
-        alt: `${SITE_NAME} - Projects`,
+        alt: `${SITE_NAME} - Portfolio`,
       },
     ],
   },
@@ -82,7 +82,7 @@ function ProjectCard({ project }: { project: Project }) {
   );
 }
 
-export default function Projects() {
+export default function Portfolio() {
   const grouped = GROUP_ORDER.map((group) => ({
     group,
     label: projectGroupLabels[group],
@@ -90,7 +90,7 @@ export default function Projects() {
   })).filter((g) => g.items.length > 0);
 
   return (
-    <PageLayout title="Projects & Contributions">
+    <PageLayout title="Portfolio">
       <section className="flex flex-col gap-10 items-center min-h-[40vh]">
         {grouped.map(({ group, label, items }) => (
           <div key={group} className="w-full max-w-xl">
