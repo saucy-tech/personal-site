@@ -29,7 +29,7 @@ export function getSiteNavItems({ latestSlug }: { latestSlug: string | null }): 
     items.push({ href: `/blog/${latestSlug}`, label: 'Latest', match: 'exact' });
   }
   items.push(
-    { href: '/projects', label: 'Projects', match: 'exact' },
+    { href: '/portfolio', label: 'Portfolio', match: 'exact' },
     { href: '/field-notes', label: 'Field notes', match: 'exact' },
     { href: '/bitcoin', label: 'Bitcoin', match: 'exact' },
     { href: '/daily-word', label: 'Daily Word', match: 'exact' },

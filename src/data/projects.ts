@@ -1,5 +1,5 @@
 /**
- * Portfolio data (`/projects`) — apps, tools, OSS contributions, and talks.
+ * Portfolio data (`/portfolio`) — apps, tools, OSS contributions, and talks.
  * Edit here to update copy. Bump `projectsLastUpdated` when you revise.
  */
 

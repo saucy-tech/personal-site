@@ -9,6 +9,7 @@ const nextConfig = {
     return [
       { source: '/notebook', destination: '/field-notes', permanent: true },
       { source: '/state-of-ai', destination: '/field-notes', permanent: true },
+      { source: '/projects', destination: '/portfolio', permanent: true },
     ];
   },
   async headers() {

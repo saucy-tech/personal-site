@@ -8,7 +8,7 @@ This repo uses pnpm pinned via Corepack (see package.json "packageManager").
 
 - ⚡ Built with Next.js 14+ (App Router), React, and Tailwind CSS
 - 📝 Custom blog with MDX support and syntax highlighting
-- 💻 Projects page with detailed tech stack and features
+- 💻 Portfolio page (`/portfolio`) with detailed tech stack and features
 - 🎤 Talks & sermons archive
 - ⚡ Lightning Network integration for tips and donations
 - 🌗 Responsive design with dark mode support
@@ -30,7 +30,7 @@ personal-site/
 │   │   ├── api/                # API routes
 │   │   ├── blog/               # Blog post pages
 │   │   ├── bitcoin/            # Bitcoin resources
-│   │   ├── projects/           # Projects showcase
+│   │   ├── portfolio/          # Portfolio showcase (was /projects)
 │   │   ├── support/            # Support/tipping page
 │   │   ├── talks/              # Talks and sermons
 │   │   └── ...                 # Other routes and configs
