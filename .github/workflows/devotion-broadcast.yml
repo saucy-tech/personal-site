@@ -119,19 +119,89 @@ jobs:
                   verse = stripped.lstrip('> ').strip()
                   break
 
-          # Build summary: collect first 3 non-empty prose paragraphs
-          # (skip headings, blockquotes, blank lines)
-          prose_lines = []
-          for line in body.splitlines():
+          # Render the post body to inline-styled HTML for the email.
+          # Skips the opening blockquote (the KJV core verse) so it is not
+          # duplicated under the title block, where it is already rendered
+          # with prominent gold styling.
+          import re
+
+          P_STYLE  = ('font-family:Georgia,serif;font-size:16px;'
+                      'line-height:1.7;color:#3a3a3a;margin:0 0 18px 0;')
+          H2_STYLE = ('font-family:Georgia,serif;font-size:20px;'
+                      'font-weight:bold;color:#1a1a1a;'
+                      'margin:32px 0 14px 0;line-height:1.3;')
+          BQ_STYLE   = ('border-left:3px solid #e0d6b8;margin:0 0 22px 0;'
+                        'padding:8px 0 8px 16px;')
+          BQ_P_STYLE = ('font-family:Georgia,serif;font-size:16px;'
+                        'line-height:1.7;font-style:italic;'
+                        'color:#5a5a5a;margin:0;')
+
+          def md_inline(s):
+              s = re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', s)
+              s = re.sub(r'(?<!\*)\*([^*\n]+?)\*(?!\*)', r'<em>\1</em>', s)
+              s = re.sub(r'(?<!_)_([^_\n]+?)_(?!_)', r'<em>\1</em>', s)
+              return s
+
+          # Drop the opening verse blockquote from the body lines so the
+          # KJV verse is rendered exactly once (above, in the header block).
+          body_lines = body.splitlines()
+          for i, line in enumerate(body_lines):
               stripped = line.strip()
-              if (stripped
-                  and not stripped.startswith('#')
-                  and not stripped.startswith('>')
-                  and not stripped.startswith('---')):
-                  prose_lines.append(stripped)
-              if len(prose_lines) >= 3:
+              if stripped.startswith('> ') or stripped == '>':
+                  cut = i + 1
+                  while cut < len(body_lines) and not body_lines[cut].strip():
+                      cut += 1
+                  body_lines = body_lines[cut:]
                   break
-          summary = ' '.join(prose_lines)
+              if stripped:
+                  break
+
+          html_blocks = []
+          buf = []
+          state = {'mode': 'p'}  # dict so flush() can mutate without `global`
+
+          def flush():
+              if not buf:
+                  return
+              text = ' '.join(s.strip() for s in buf).strip()
+              buf.clear()
+              if not text:
+                  return
+              text = md_inline(text)
+              if state['mode'] == 'p':
+                  html_blocks.append(f'<p style="{P_STYLE}">{text}</p>')
+              else:
+                  html_blocks.append(
+                      f'<blockquote style="{BQ_STYLE}">'
+                      f'<p style="{BQ_P_STYLE}">{text}</p>'
+                      '</blockquote>'
+                  )
+
+          for raw in body_lines:
+              stripped = raw.strip()
+              if not stripped:
+                  flush()
+                  state['mode'] = 'p'
+                  continue
+              if stripped.startswith('## '):
+                  flush()
+                  heading = md_inline(stripped[3:].strip())
+                  html_blocks.append(f'<h2 style="{H2_STYLE}">{heading}</h2>')
+                  state['mode'] = 'p'
+                  continue
+              if stripped.startswith('> ') or stripped == '>':
+                  if state['mode'] != 'bq':
+                      flush()
+                      state['mode'] = 'bq'
+                  buf.append(stripped[1:].lstrip())
+                  continue
+              if state['mode'] != 'p':
+                  flush()
+                  state['mode'] = 'p'
+              buf.append(stripped)
+
+          flush()
+          body_html = '\n'.join(html_blocks)
 
           print(f'Title:          {title}')
           print(f'Formatted date: {formatted_date}')
@@ -139,6 +209,7 @@ jobs:
           print(f'Verse:          {verse[:80]}{"..." if len(verse) > 80 else ""}')
           print(f'Date:           {date}')
           print(f'Slug:           {slug}')
+          print(f'Body HTML:      {len(body_html)} chars, {len(html_blocks)} blocks')
 
           def write_output(out, name, value):
               delimiter = f'EOF_{name}_{uuid4().hex}'
@@ -151,7 +222,7 @@ jobs:
               write_output(out, 'excerpt', excerpt)
               write_output(out, 'formatted_date', formatted_date)
               write_output(out, 'verse', verse)
-              write_output(out, 'summary', summary)
+              write_output(out, 'body_html', body_html)
               write_output(out, 'date', date)
               write_output(out, 'slug', slug)
           PYEOF
@@ -166,7 +237,7 @@ jobs:
           POST_EXCERPT: ${{ steps.meta.outputs.excerpt }}
           POST_FORMATTED_DATE: ${{ steps.meta.outputs.formatted_date }}
           POST_VERSE: ${{ steps.meta.outputs.verse }}
-          POST_SUMMARY: ${{ steps.meta.outputs.summary }}
+          POST_BODY_HTML: ${{ steps.meta.outputs.body_html }}
           POST_SLUG: ${{ steps.meta.outputs.slug }}
         run: |
           # Validate required secrets/vars up front with clear error messages
@@ -187,13 +258,13 @@ jobs:
           SEND_AT=$(date -u -d '+2 minutes' +%Y-%m-%dT%H:%M:%SZ)
 
           # Build a clean, inbox-safe HTML email via jq.
-          # Layout: preheader → banner → date header → title → verse blockquote → excerpt → summary → CTA → footer
+          # Layout: preheader → banner → date header → title → verse blockquote → full devotion body → "read on the web" link → footer
           HTML_CONTENT=$(jq -rn \
             --arg date          "$POST_FORMATTED_DATE" \
             --arg title         "$POST_TITLE" \
             --arg verse         "$POST_VERSE" \
             --arg excerpt       "$POST_EXCERPT" \
-            --arg summary       "$POST_SUMMARY" \
+            --arg body_html     "$POST_BODY_HTML" \
             --arg url           "$POST_URL" \
             --arg daily_word_url "${NEXT_PUBLIC_APP_URL}/daily-word" \
             '
@@ -206,13 +277,12 @@ jobs:
             + "</p>"
             + "<p style=\"font-size: 13px; color: #888888; letter-spacing: 0.05em; text-transform: uppercase; margin: 0 0 24px 0;\">" + $date + "</p>"
             + "<h1 style=\"font-family: Georgia, serif; font-size: 24px; font-weight: bold; color: #1a1a1a; margin: 0 0 20px 0; line-height: 1.3;\">" + $title + "</h1>"
-            + "<blockquote style=\"border-left: 3px solid #c9a84c; margin: 0 0 24px 0; padding: 12px 0 12px 20px;\">"
+            + "<blockquote style=\"border-left: 3px solid #c9a84c; margin: 0 0 28px 0; padding: 12px 0 12px 20px;\">"
             +   "<p style=\"font-size: 18px; line-height: 1.6; font-style: italic; color: #2c2c2c; margin: 0;\">" + $verse + "</p>"
             + "</blockquote>"
-            + "<p style=\"font-size: 16px; line-height: 1.7; color: #3a3a3a; margin: 0 0 16px 0;\">" + $excerpt + "</p>"
-            + "<p style=\"font-size: 16px; line-height: 1.7; color: #3a3a3a; margin: 0 0 28px 0;\">" + $summary + "</p>"
-            + "<p style=\"margin: 0 0 24px 0;\">"
-            +   "<a href=\"" + $url + "\" style=\"background: #c9a84c; color: #ffffff; padding: 12px 24px; font-family: sans-serif; border-radius: 0; display: inline-block; text-decoration: none;\">Continue reading &rarr;</a>"
+            + $body_html
+            + "<p style=\"margin: 8px 0 0 0; font-size: 14px;\">"
+            +   "<a href=\"" + $url + "\" style=\"color: #c9a84c; text-decoration: underline;\">Read on the web &rarr;</a>"
             + "</p>"
             + "<hr style=\"border: none; border-top: 1px solid #e0e0e0; margin: 32px 0 16px 0;\" />"
             + "<p style=\"font-size: 13px; line-height: 1.6; color: #888888; text-align: center; margin: 0 0 8px 0;\">Know someone who would enjoy this? <a href=\"" + $daily_word_url + "\" style=\"color: #c9a84c; text-decoration: underline;\">Share The Daily Word</a></p>"
