@@ -33,8 +33,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# claude code
+# claude code / agent docs (local-only)
 CLAUDE.md
+AGENTS.md
 .claude/
 
 # generated docs (regenerate with pnpm docs:architecture)
