@@ -35,6 +35,8 @@ personal-site/
 │   ├── utils/                 # posts.ts, security.ts, constants.ts
 │   └── proxy.ts               # CSP/security headers (Next.js file convention)
 ├── tests/                     # Playwright E2E specs
+├── AGENTS.md                  # Codebase facts (canonical agent doc)
+├── CLAUDE.md                  # Claude-specific guide (writing rules, gotchas)
 ├── next.config.js
 ├── package.json
 └── README.md
@@ -90,27 +92,9 @@ Daily Word devotions are the primary content pipeline. The lifecycle:
    `KIT_API_KEY`.
 4. Vercel deploys the post to production.
 
-Frontmatter schema (Daily Word posts):
-
-```yaml
----
-title: 'The Weight of a Meal'
-date: '2026-05-04'                  # YYYY-MM-DD, must match filename prefix
-excerpt: '90–180 chars. Hooks the reader. No spoilers of the punchline.'
-category: 'Daily Word'              # currently the only category in active use
-series: 'When He Chose the Table Over Everything'
-tags:
-  - 'John 13'
-  - 'Communion'
-  - 'Servant Leadership'
----
-```
-
-`shortTitle` is **deprecated**; use `series` for grouping. `pnpm content:validate`
-enforces title length (20–72 chars) and excerpt length (90–180 chars).
-
-Devotion branches use `devotion/YYYY-MM-DD-slug`, PR title `feat(devotion): <Title>`,
-and the `devotion` label on the PR triggers the broadcast workflow on merge.
+Writing rules, frontmatter schema, and agent gotchas live in
+[CLAUDE.md](./CLAUDE.md). Codebase architecture, security, and full env var
+reference live in [AGENTS.md](./AGENTS.md).
 
 `pnpm broadcast` is retained as a **manual fallback only** and is not the
 primary publishing path.
