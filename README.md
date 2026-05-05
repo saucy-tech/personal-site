@@ -6,7 +6,7 @@ This repo uses pnpm pinned via Corepack (see package.json "packageManager").
 
 ## Features
 
-- ⚡ Built with Next.js 14+ (App Router), React, and Tailwind CSS
+- ⚡ Built with Next.js 16 (App Router), React 19, and Tailwind CSS
 - 📝 Custom blog with MDX support and syntax highlighting
 - 💻 Portfolio page (`/portfolio`) with detailed tech stack and features
 - 🎤 Talks & sermons archive
@@ -22,42 +22,38 @@ This repo uses pnpm pinned via Corepack (see package.json "packageManager").
 
 ```
 personal-site/
-├── public/                     # Static assets
-│   └── images/                 # Image assets
-│       └── blog/               # Blog post images
+├── .github/workflows/         # CI, devotion broadcast, lighthouse
+├── docs/                      # Architecture map, runbooks, upgrade matrices
+├── public/                    # Static assets
+│   └── images/blog/           # Blog post images
+├── scripts/                   # Content validators, broadcast, doc gen
 ├── src/
-│   ├── app/                   # Next.js App Router
-│   │   ├── api/                # API routes
-│   │   ├── blog/               # Blog post pages
-│   │   ├── bitcoin/            # Bitcoin resources
-│   │   ├── portfolio/          # Portfolio showcase (was /projects)
-│   │   ├── support/            # Support/tipping page
-│   │   ├── talks/              # Talks and sermons
-│   │   └── ...                 # Other routes and configs
-│   │
-│   ├── components/            # Reusable UI components
-│   ├── posts/                  # Blog post content (MDX)
-│   ├── types/                  # TypeScript type definitions
-│   └── utils/                  # Utility functions
-│
-├── .env.example              # Environment variables example
-├── next.config.js             # Next.js configuration
-├── package.json               # Project dependencies and scripts
-├── tailwind.config.js         # Tailwind CSS configuration
-└── README.md                  # Project documentation
+│   ├── app/                   # Next.js App Router (api, blog, portfolio, ...)
+│   ├── components/            # Reusable UI (LinkCard, Section, SocialBar, ...)
+│   ├── posts/                 # MDX blog posts (frontmatter parsed by gray-matter)
+│   ├── types/                 # Shared TypeScript types
+│   ├── utils/                 # posts.ts, security.ts, constants.ts
+│   └── proxy.ts               # CSP/security headers (Next.js file convention)
+├── tests/                     # Playwright E2E specs
+├── AGENTS.md                  # Codebase facts (canonical agent doc)
+├── CLAUDE.md                  # Claude-specific guide (writing rules, gotchas)
+├── next.config.js
+├── package.json
+└── README.md
 ```
 
 ## Tech Stack
 
-- **Framework**: Next.js 14+ (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS with CSS Modules
-- **Content**: MDX for blog posts
+- **Framework**: Next.js 16 (App Router, Turbopack)
+- **Language**: TypeScript 6
+- **UI**: React 19, Tailwind CSS 4, `@tailwindcss/typography`
+- **Content**: MDX for blog posts (`next-mdx-remote`, `gray-matter`)
 - **Animations**: Framer Motion
 - **Icons**: Heroicons
-- **Payments**: Lightning Network integration
+- **Payments**: Lightning Network integration (Alby SDK / NWC)
+- **Testing**: Jest + React Testing Library, Playwright (E2E)
 - **Deployment**: Vercel
-- **Linting**: ESLint + Prettier
+- **Linting**: ESLint 9 + Prettier (Husky + lint-staged pre-commit)
 
 ## Getting Started
 
@@ -83,11 +79,30 @@ personal-site/
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+## Daily Devotion Workflow
+
+Daily Word devotions are the primary content pipeline. The lifecycle:
+
+1. Brandon drafts the lesson in his Sunday School Obsidian vault.
+2. The `the-daily-word` Cowork skill reads today's entry, generates an MDX post
+   under `src/posts/YYYY-MM-DD-slug.mdx`, and opens a draft PR on this repo
+   labeled `devotion`.
+3. On merge to `main`, `.github/workflows/devotion-broadcast.yml` fires and
+   sends the post to ConvertKit (the "The Daily Word" email list) using
+   `KIT_API_KEY`.
+4. Vercel deploys the post to production.
+
+Writing rules, frontmatter schema, and agent gotchas live in
+[CLAUDE.md](./CLAUDE.md). Codebase architecture, security, and full env var
+reference live in [AGENTS.md](./AGENTS.md).
+
+`pnpm broadcast` is retained as a **manual fallback only** and is not the
+primary publishing path.
+
 ## Contributing
 
-Contributions are welcome! Please open an issue or submit a pull request.
-
-## License
+Contributions are welcome — open an issue or PR. Run `pnpm quality:gate` before
+pushing; CI runs the same gate plus build and E2E smoke tests.
 
 ## Development
 
