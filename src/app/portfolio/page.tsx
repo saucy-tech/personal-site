@@ -161,6 +161,20 @@ export default function Portfolio() {
           </h2>
           <div className="flex flex-col gap-3">
             <LinkCard
+              title="Awards & Recognition"
+              href="/awards"
+              icon={<span className="text-2xl">🏆</span>}
+              eyebrow="Awards"
+              meta="National, state, and chapter-level honors"
+            />
+            <LinkCard
+              title="About / Experience"
+              href="/about"
+              icon={<span className="text-2xl">👤</span>}
+              eyebrow="About"
+              meta="Career narrative and résumé"
+            />
+            <LinkCard
               title="What I'm Into Right Now"
               href="/field-notes"
               icon={<span className="text-2xl">📓</span>}
