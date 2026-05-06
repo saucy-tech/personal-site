@@ -1,6 +1,9 @@
 /**
  * Awards & recognitions surfaced on /portfolio.
  * Edit here to update copy. Bump `awardsLastUpdated` when you revise.
+ *
+ * Order: international scope first, then national, then state / chapter.
+ * Within scope: most recent year, then alphabetical by name.
  */
 
 export const awardsLastUpdated = '2026-05-06';
@@ -8,14 +11,14 @@ export const awardsLastUpdated = '2026-05-06';
 export interface Award {
   id: string;
   name: string;
-  issuer: string; // kept for data integrity; not rendered on the card
+  issuer: string;
   years: string[];
   impact?: string;
-  issuerLink?: string;
   photo?: string;
 }
 
 export const awards: Award[] = [
+  // International scope
   {
     id: 'esri-sag',
     name: 'Esri Special Achievement in GIS (SAG) Award',
@@ -23,9 +26,17 @@ export const awards: Award[] = [
     years: ['2020'],
     impact:
       'International recognition for innovative use of GIS in service of the State of Georgia.',
-    issuerLink:
-      'https://www.esri.com/about/newsroom/announcements/special-achievement-in-gis-awards',
   },
+  {
+    id: 'gmis-g2b',
+    name: 'GMIS G2B Award — Government to Business',
+    issuer: 'GMIS International + GMIS Georgia Chapter',
+    years: ['2019'],
+    impact:
+      'Won at GMIS International and Georgia Chapter levels for software that improves how the State serves Georgia businesses.',
+  },
+
+  // National scope
   {
     id: 'nascio-finalist',
     name: 'NASCIO State IT Recognition Award — Finalist (ICT Innovations)',
@@ -33,16 +44,9 @@ export const awards: Award[] = [
     years: ['2019'],
     impact:
       'Selected as a national finalist for innovative use of information and communications technology in state government.',
-    issuerLink: 'https://www.nascio.org/resource-center/awards/',
   },
-  {
-    id: 'gmis-g2g',
-    name: 'Georgia GMIS G2G Award — Government to Government',
-    issuer: 'GMIS Georgia Chapter',
-    years: ['2026'],
-    impact:
-      'Recognized for cross-agency software collaboration delivering services between governmental entities.',
-  },
+
+  // State / chapter scope
   {
     id: 'gmis-g2c',
     name: 'Georgia GMIS G2C Award — Government to Citizens',
@@ -52,12 +56,12 @@ export const awards: Award[] = [
       'Recognized for software delivering public-facing services directly to Georgia citizens.',
   },
   {
-    id: 'gmis-g2b',
-    name: 'GMIS G2B Award — Government to Business',
-    issuer: 'GMIS International + GMIS Georgia Chapter',
-    years: ['2019'],
+    id: 'gmis-g2g',
+    name: 'Georgia GMIS G2G Award — Government to Government',
+    issuer: 'GMIS Georgia Chapter',
+    years: ['2026'],
     impact:
-      'Won at GMIS International and Georgia Chapter levels for software that improves how the State serves Georgia businesses.',
+      'Recognized for cross-agency software collaboration delivering services between governmental entities.',
   },
   {
     id: 'gta-innovation-showcase',

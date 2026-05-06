@@ -109,17 +109,7 @@ function AwardCard({ award }: { award: Award }) {
           </span>
         ))}
       </div>
-      {award.impact && <p className="mb-3 text-base text-(--text-secondary)">{award.impact}</p>}
-      {award.issuerLink && (
-        <a
-          href={award.issuerLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block text-sm text-(--accent) underline underline-offset-2 hover:opacity-80"
-        >
-          Verify with issuer →
-        </a>
-      )}
+      {award.impact && <p className="text-base text-(--text-secondary)">{award.impact}</p>}
     </div>
   );
 }
