@@ -25,7 +25,7 @@ export const awards: Award[] = [
     issuer: 'Esri',
     years: ['2020'],
     impact:
-      'International recognition for innovative use of GIS in service of the State of Georgia.',
+      'International recognition for innovative use of GIS (Geographic Information Systems) in service of the State of Georgia.',
   },
   {
     id: 'gmis-g2b',
@@ -33,7 +33,7 @@ export const awards: Award[] = [
     issuer: 'GMIS International + GMIS Georgia Chapter',
     years: ['2019'],
     impact:
-      'Won at GMIS International and Georgia Chapter levels for software that improves how the State serves Georgia businesses.',
+      'GMIS (Government Management Information Sciences) International and Georgia Chapter recognition for software that improves how the State serves Georgia businesses.',
   },
 
   // National scope
@@ -43,7 +43,7 @@ export const awards: Award[] = [
     issuer: 'National Association of State CIOs',
     years: ['2019'],
     impact:
-      'Selected as a national finalist for innovative use of information and communications technology in state government.',
+      'NASCIO (National Association of State CIOs) national finalist for innovative use of information and communications technology in state government.',
   },
 
   // State / chapter scope
@@ -53,7 +53,7 @@ export const awards: Award[] = [
     issuer: 'GMIS Georgia Chapter',
     years: ['2026', '2025'],
     impact:
-      'Recognized for software delivering public-facing services directly to Georgia citizens.',
+      'GMIS Georgia Chapter recognition for software delivering public-facing services directly to Georgia citizens.',
   },
   {
     id: 'gmis-g2g',
@@ -61,13 +61,14 @@ export const awards: Award[] = [
     issuer: 'GMIS Georgia Chapter',
     years: ['2026'],
     impact:
-      'Recognized for cross-agency software collaboration delivering services between governmental entities.',
+      'GMIS Georgia Chapter recognition for cross-agency software collaboration delivering services between governmental entities.',
   },
   {
     id: 'gta-innovation-showcase',
     name: 'Georgia Technology Innovation Showcase Award',
     issuer: 'Georgia Technology Authority',
     years: ['2021', '2019'],
-    impact: 'Recognized for technology innovation in service of the State of Georgia.',
+    impact:
+      'Georgia Technology Authority recognition for technology innovation in service of the State of Georgia.',
   },
 ];
