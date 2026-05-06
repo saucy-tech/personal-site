@@ -156,26 +156,6 @@ export default function Portfolio() {
   return (
     <PageLayout title="Portfolio">
       <section className="flex flex-col gap-12 items-center">
-        {/* Bio */}
-        <div className="w-full max-w-xl space-y-4 text-(--text-secondary)">
-          <p>
-            IT Development &amp; GIS Manager at the Georgia Department of Agriculture, based in
-            Atlanta. The week splits across setting IT dev strategy, managing people, writing and
-            reviewing code, product and project work, scoping requirements, triaging bugs, and
-            managing vendor relationships.
-          </p>
-          <p>
-            The team builds gov-tech, GIS, and mobile field tools that state regulators rely on.
-            Most of what we ship solves an operational problem for someone doing real work in the
-            field, often on a phone, often offline. Recognition has followed: NASCIO national
-            finalist, Esri SAG, and multiple GMIS and GTA awards.
-          </p>
-          <p>
-            Outside of work I write The Daily Word devotion, ship side projects, and contribute to
-            open source in the Bitcoin and Lightning ecosystem.
-          </p>
-        </div>
-
         {/* Now */}
         <div className="w-full max-w-xl">
           <SectionHeading id="now" label="Now" />
