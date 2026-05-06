@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 import PageLayout from '@/components/PageLayout';
-import { Award, AwardTier, awardTierLabels, awards } from '@/data/awards';
+import { Award, awards } from '@/data/awards';
 import {
   Project,
   ProjectGroup,
@@ -36,23 +36,7 @@ export const metadata: Metadata = {
   },
 };
 
-const STACK = [
-  'TypeScript',
-  'JavaScript',
-  'React',
-  'Next.js',
-  'Node.js',
-  'Python',
-  'Rust',
-  'MS SQL',
-  'PostgreSQL',
-  'ArcGIS Pro',
-  'ArcGIS Online',
-  'Lightning Network',
-];
-
 const GROUP_ORDER: ProjectGroup[] = ['apps', 'tools', 'open-source'];
-const TIER_ORDER: AwardTier[] = ['headline', 'body'];
 
 const STATUS_PILL: Record<ProjectStatus, { label: string; className: string }> = {
   launched: { label: 'Launched', className: 'bg-green-500/80 text-white' },
@@ -147,42 +131,9 @@ export default function Portfolio() {
     items: projects.filter((p) => p.group === group),
   })).filter((g) => g.items.length > 0);
 
-  const awardGroups = TIER_ORDER.map((tier) => ({
-    tier,
-    label: awardTierLabels[tier],
-    items: awards.filter((a) => a.tier === tier),
-  })).filter((g) => g.items.length > 0);
-
   return (
     <PageLayout title="Portfolio">
       <section className="flex flex-col gap-12 items-center">
-        {/* Now */}
-        <div className="w-full max-w-xl">
-          <SectionHeading id="now" label="Now" />
-          <div className="bg-white/10 rounded-lg shadow-lg border border-(--accent-border) p-6 space-y-4">
-            <div>
-              <p className="text-base text-(--text-primary) font-medium">
-                IT Development &amp; GIS Manager &middot; Georgia Department of Agriculture
-              </p>
-              <p className="text-sm text-(--text-secondary)">Atlanta, GA</p>
-              <p className="mt-2 text-sm text-(--text-secondary)">
-                Strategy, people management, hands-on engineering, product/project, requirements,
-                vendor contracts, and code review.
-              </p>
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-widest text-(--text-secondary) mb-2">
-                Stack
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {STACK.map((s) => (
-                  <Tag key={s} label={s} />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Projects */}
         {projectGroups.map(({ group, label, items }) => (
           <div key={group} className="w-full max-w-xl">
@@ -245,19 +196,16 @@ export default function Portfolio() {
         )}
 
         {/* Awards */}
-        {awardGroups.map(({ tier, label, items }) => (
-          <div key={tier} className="w-full max-w-xl">
-            <SectionHeading
-              id={tier === 'headline' ? 'awards' : `awards-${tier}`}
-              label={`Awards · ${label}`}
-            />
+        {awards.length > 0 && (
+          <div className="w-full max-w-xl">
+            <SectionHeading id="awards" label="Awards" />
             <div className="flex flex-col gap-6">
-              {items.map((award) => (
+              {awards.map((award) => (
                 <AwardCard key={award.id} award={award} />
               ))}
             </div>
           </div>
-        ))}
+        )}
       </section>
     </PageLayout>
   );
