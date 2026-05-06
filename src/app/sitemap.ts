@@ -86,7 +86,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: absoluteUrl('/portfolio'),
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.55,
+      priority: 0.7,
     },
     {
       url: absoluteUrl('/bitcoin'),

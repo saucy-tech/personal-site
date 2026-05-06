@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
-import LinkCard from '@/components/LinkCard';
 import PageLayout from '@/components/PageLayout';
+import { Award, awards } from '@/data/awards';
 import {
   Project,
   ProjectGroup,
@@ -14,15 +14,17 @@ import { SITE_NAME } from '@/utils/constants';
 
 export const metadata: Metadata = {
   title: 'Portfolio',
-  description: `Explore Brandon's projects and open-source contributions.`,
+  description:
+    'Brandon Sauceda — IT Development & GIS Manager at the Georgia Department of Agriculture. Gov-tech, GIS, mobile field tools, indie projects, and open-source work.',
   alternates: {
     canonical: '/portfolio',
   },
   openGraph: {
     title: 'Portfolio',
-    description: `Explore Brandon's projects, apps, and experiments.`,
+    description:
+      'Brandon Sauceda — IT Development & GIS Manager at the Georgia Department of Agriculture. Gov-tech, GIS, mobile field tools, indie projects, and open-source work.',
     url: '/portfolio',
-    type: 'website',
+    type: 'profile',
     images: [
       {
         url: '/family-photo.jpeg',
@@ -46,6 +48,17 @@ function Tag({ label }: { label: string }) {
     <span className="text-xs bg-white/10 text-(--text-secondary) border border-(--accent-border) px-2 py-0.5 rounded-full">
       {label}
     </span>
+  );
+}
+
+function SectionHeading({ id, label }: { id: string; label: string }) {
+  return (
+    <h2
+      id={id}
+      className="text-sm uppercase tracking-widest text-(--text-secondary) mb-4 pl-1 scroll-mt-24"
+    >
+      {label}
+    </h2>
   );
 }
 
@@ -82,8 +95,27 @@ function ProjectCard({ project }: { project: Project }) {
   );
 }
 
+function AwardCard({ award }: { award: Award }) {
+  return (
+    <div className="bg-white/10 rounded-lg shadow-lg border border-(--accent-border) p-6">
+      <h3 className="text-xl font-semibold mb-3">{award.name}</h3>
+      <div className="flex flex-wrap gap-2 mb-3">
+        {award.years.map((y) => (
+          <span
+            key={y}
+            className="text-xs bg-white/10 text-(--text-secondary) border border-(--accent-border) px-2 py-0.5 rounded-full"
+          >
+            {y}
+          </span>
+        ))}
+      </div>
+      {award.impact && <p className="text-base text-(--text-secondary)">{award.impact}</p>}
+    </div>
+  );
+}
+
 export default function Portfolio() {
-  const grouped = GROUP_ORDER.map((group) => ({
+  const projectGroups = GROUP_ORDER.map((group) => ({
     group,
     label: projectGroupLabels[group],
     items: projects.filter((p) => p.group === group),
@@ -91,12 +123,11 @@ export default function Portfolio() {
 
   return (
     <PageLayout title="Portfolio">
-      <section className="flex flex-col gap-10 items-center min-h-[40vh]">
-        {grouped.map(({ group, label, items }) => (
+      <section className="flex flex-col gap-12 items-center">
+        {/* Projects */}
+        {projectGroups.map(({ group, label, items }) => (
           <div key={group} className="w-full max-w-xl">
-            <h2 className="text-sm uppercase tracking-widest text-(--text-secondary) mb-4 pl-1">
-              {label}
-            </h2>
+            <SectionHeading id={`projects-${group}`} label={label} />
             <div className="flex flex-col gap-6">
               {items.map((project) => (
                 <ProjectCard key={project.id} project={project} />
@@ -105,11 +136,10 @@ export default function Portfolio() {
           </div>
         ))}
 
+        {/* Talks */}
         {talks.length > 0 && (
           <div className="w-full max-w-xl">
-            <h2 className="text-sm uppercase tracking-widest text-(--text-secondary) mb-4 pl-1">
-              Talks
-            </h2>
+            <SectionHeading id="talks" label="Talks" />
             <div className="overflow-x-auto">
               <table className="w-full bg-white/10 rounded-lg shadow-lg border border-(--accent-border) backdrop-blur-xs">
                 <thead>
@@ -155,27 +185,17 @@ export default function Portfolio() {
           </div>
         )}
 
-        <div className="w-full max-w-xl">
-          <h2 className="text-sm uppercase tracking-widest text-(--text-secondary) mb-4 pl-1">
-            See also
-          </h2>
-          <div className="flex flex-col gap-3">
-            <LinkCard
-              title="What I'm Into Right Now"
-              href="/field-notes"
-              icon={<span className="text-2xl">📓</span>}
-              eyebrow="Field notes"
-              meta="Tools, tech, and gear I'm using this season"
-            />
-            <LinkCard
-              title="The Daily Word"
-              href="/daily-word"
-              icon={<span className="text-2xl">✉️</span>}
-              eyebrow="Devotion"
-              meta="Weekday scripture reflections"
-            />
+        {/* Awards */}
+        {awards.length > 0 && (
+          <div className="w-full max-w-xl">
+            <SectionHeading id="awards" label="Awards" />
+            <div className="flex flex-col gap-6">
+              {awards.map((award) => (
+                <AwardCard key={award.id} award={award} />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </section>
     </PageLayout>
   );
