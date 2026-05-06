@@ -1,6 +1,5 @@
 /**
- * Awards & recognitions (`/awards`) — public-sector tech awards from work
- * delivering software at the Georgia Department of Agriculture.
+ * Awards & recognitions surfaced on /portfolio.
  * Edit here to update copy. Bump `awardsLastUpdated` when you revise.
  */
 
@@ -11,9 +10,8 @@ export type AwardTier = 'headline' | 'body';
 export interface Award {
   id: string;
   name: string;
-  issuer: string;
-  year: string;
-  project?: string;
+  issuer: string; // kept for data integrity; not rendered on the card
+  years: string[]; // most recent first; supports formatted strings like "2024 (date obscured)"
   impact?: string;
   issuerLink?: string;
   photo?: string;
@@ -21,90 +19,64 @@ export interface Award {
 }
 
 export const awards: Award[] = [
-  // --- Headline (lead with these) ---
+  // --- Headline ---
   {
-    id: 'esri-sag-2020',
+    id: 'esri-sag',
     tier: 'headline',
-    name: 'Special Achievement in GIS (SAG) Award',
+    name: 'Esri Special Achievement in GIS (SAG) Award',
     issuer: 'Esri',
-    year: '2020',
-    project: 'Georgia Department of Agriculture',
+    years: ['2020'],
     impact:
       'International recognition for innovative use of GIS in service of the State of Georgia.',
     issuerLink:
       'https://www.esri.com/about/newsroom/announcements/special-achievement-in-gis-awards',
   },
   {
-    id: 'nascio-2019-finalist',
+    id: 'nascio-finalist',
     tier: 'headline',
     name: 'NASCIO State IT Recognition Award — Finalist (ICT Innovations)',
-    issuer: 'National Association of State CIOs (NASCIO)',
-    year: '2019',
-    project: 'Mobile Field Data Collection for Food Emergency Response',
+    issuer: 'National Association of State CIOs',
+    years: ['2019'],
     impact:
       'Selected as a national finalist for innovative use of information and communications technology in state government.',
     issuerLink: 'https://www.nascio.org/resource-center/awards/',
   },
-  // --- Sustained recognition (body of work) ---
+
+  // --- Sustained recognition ---
   {
-    id: 'gmis-g2b-2019',
+    id: 'gmis-g2b',
     tier: 'body',
     name: 'Georgia GMIS G2B Award — Government to Business',
     issuer: 'GMIS Georgia Chapter',
-    year: '2019',
-    project: 'Georgia Rapid Response Team (RRT) Emergency Assessment, GDA',
+    years: ['2026', '2019'],
     impact:
-      'Recognized at the chapter level for delivering business-facing software to state regulators (rectangular and Georgia-shaped plaques).',
+      'Recognized for innovative software that improves how the State serves Georgia businesses.',
+  },
+  {
+    id: 'gmis-g2c',
+    tier: 'body',
+    name: 'Georgia GMIS G2C Award — Government to Citizens',
+    issuer: 'GMIS Georgia Chapter',
+    years: ['2026'],
+    impact:
+      'Recognized for software delivering public-facing services directly to Georgia citizens.',
   },
   {
     id: 'gmis-g2g',
     tier: 'body',
     name: 'Georgia GMIS G2G Award — Government to Government',
     issuer: 'GMIS Georgia Chapter',
-    year: '2024 (date obscured on plaque)',
-    project: 'Georgia Department of Agriculture',
+    years: ['2024 (date obscured on plaque)'],
     impact:
       'Recognized for cross-agency software collaboration delivering services between governmental entities.',
   },
   {
-    id: 'gmis-g2c-2026',
-    tier: 'body',
-    name: 'Georgia GMIS G2C Award — Government to Citizens',
-    issuer: 'GMIS Georgia Chapter',
-    year: '2026',
-    project: 'Georgia Department of Agriculture',
-    impact:
-      'Recognized for software delivering public-facing services directly to Georgia citizens.',
-  },
-  {
-    id: 'gmis-g2b-2026',
-    tier: 'body',
-    name: 'Georgia GMIS G2B Award — Outstanding Achievement Supporting Business',
-    issuer: 'GMIS Georgia Chapter',
-    year: '2026',
-    project: 'Georgia Department of Agriculture',
-    impact:
-      'Recognized for innovative government solutions that improve how the State serves Georgia businesses.',
-  },
-  {
-    id: 'gta-animal-inspection',
+    id: 'gta-innovation-showcase',
     tier: 'body',
     name: 'Georgia Technology Innovation Showcase Award',
-    issuer: 'Georgia Technology Authority (GTA)',
-    year: '2023 (date obscured on plaque)',
-    project: 'Animal Industry Electronic Inspection Platform, GDA',
-    impact:
-      'Recognized for innovation in modernizing the inspection workflows used by Georgia regulators.',
-  },
-  {
-    id: 'gta-mobile-field-2019',
-    tier: 'body',
-    name: 'Georgia Technology Innovation Showcase Award',
-    issuer: 'Georgia Technology Authority (GTA)',
-    year: '2019',
-    project: 'Mobile Field Data Collection for Food Emergency Response, GDA',
-    impact:
-      'Recognized for the same mobile field data collection work that earned the NASCIO national finalist nod.',
+    issuer: 'Georgia Technology Authority',
+    years: ['2023 (date obscured on plaque)', '2019'],
+    impact: 'Recognized for technology innovation in service of the State of Georgia.',
   },
 ];
 

@@ -36,10 +36,6 @@ export const metadata: Metadata = {
   },
 };
 
-// Set to a real path under /public when the sanitized résumé PDF is uploaded.
-// Example: '/resume/brandon-sauceda-resume.pdf'
-const RESUME_PDF_PATH: string | null = null;
-
 const STACK = [
   'TypeScript',
   'JavaScript',
@@ -118,20 +114,17 @@ function ProjectCard({ project }: { project: Project }) {
 function AwardCard({ award }: { award: Award }) {
   return (
     <div className="bg-white/10 rounded-lg shadow-lg border border-(--accent-border) p-6">
-      <div className="flex flex-wrap items-center gap-2 mb-2">
-        <h3 className="text-xl font-semibold">{award.name}</h3>
-        <span className="text-xs bg-white/10 text-(--text-secondary) border border-(--accent-border) px-2 py-0.5 rounded-full">
-          {award.year}
-        </span>
+      <h3 className="text-xl font-semibold mb-3">{award.name}</h3>
+      <div className="flex flex-wrap gap-2 mb-3">
+        {award.years.map((y) => (
+          <span
+            key={y}
+            className="text-xs bg-white/10 text-(--text-secondary) border border-(--accent-border) px-2 py-0.5 rounded-full"
+          >
+            {y}
+          </span>
+        ))}
       </div>
-      <p className="text-sm text-(--text-secondary) mb-1">
-        <span className="font-medium text-(--text-primary)">Issuer:</span> {award.issuer}
-      </p>
-      {award.project && (
-        <p className="text-sm text-(--text-secondary) mb-3">
-          <span className="font-medium text-(--text-primary)">Project:</span> {award.project}
-        </p>
-      )}
       {award.impact && <p className="mb-3 text-base text-(--text-secondary)">{award.impact}</p>}
       {award.issuerLink && (
         <a
@@ -285,30 +278,6 @@ export default function Portfolio() {
             </div>
           </div>
         ))}
-
-        {/* Résumé */}
-        <div className="w-full max-w-xl">
-          <SectionHeading id="resume" label="Résumé" />
-          <div className="bg-white/10 rounded-lg shadow-lg border border-(--accent-border) p-6 space-y-4">
-            <p className="text-(--text-secondary) text-sm">
-              Full work history, dates, and accomplishments live in the PDF. References, salary
-              history, and details on non-public projects are available on request.
-            </p>
-            {RESUME_PDF_PATH ? (
-              <a
-                href={RESUME_PDF_PATH}
-                className="inline-block px-4 py-2 bg-(--accent) text-(--on-accent) rounded-sm hover:bg-(--accent-dark) transition"
-                download
-              >
-                Download résumé (PDF)
-              </a>
-            ) : (
-              <p className="text-xs text-(--text-secondary) italic">
-                Résumé PDF coming soon. Reach out via the social links on the home page.
-              </p>
-            )}
-          </div>
-        </div>
       </section>
     </PageLayout>
   );
