@@ -45,17 +45,6 @@ export const awards: Award[] = [
       'Selected as a national finalist for innovative use of information and communications technology in state government.',
     issuerLink: 'https://www.nascio.org/resource-center/awards/',
   },
-  {
-    id: 'commissioner-certificate-avian-influenza',
-    tier: 'headline',
-    name: "Commissioner's Certificate of Service",
-    issuer: 'Georgia Agriculture Commissioner Tyler J. Harper',
-    year: '2025',
-    project: 'Avian Influenza response, State of Georgia',
-    impact:
-      "Recognized by the Commissioner for technical efforts supporting Georgia's response to Avian Influenza.",
-  },
-
   // --- Sustained recognition (body of work) ---
   {
     id: 'gmis-g2b-2019',
@@ -78,11 +67,11 @@ export const awards: Award[] = [
       'Recognized for cross-agency software collaboration delivering services between governmental entities.',
   },
   {
-    id: 'gmis-g2c-2025',
+    id: 'gmis-g2c-2026',
     tier: 'body',
     name: 'Georgia GMIS G2C Award — Government to Citizens',
     issuer: 'GMIS Georgia Chapter',
-    year: '2025',
+    year: '2026',
     project: 'Georgia Department of Agriculture',
     impact:
       'Recognized for software delivering public-facing services directly to Georgia citizens.',
