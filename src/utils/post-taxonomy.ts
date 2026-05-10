@@ -28,6 +28,7 @@ export interface PostMeta {
   series?: string;
   tags: string[];
   readingTimeMinutes: number;
+  audio?: string;
 }
 
 export interface PostHeading {
@@ -152,5 +153,6 @@ export function toPostMeta(
     series: normalizePostSeries(data.series),
     tags: normalizePostTags(data.tags),
     readingTimeMinutes,
+    audio: normalizeText(data.audio),
   };
 }

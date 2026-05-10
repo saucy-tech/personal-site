@@ -6,6 +6,7 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
 
+import DevotionAudio from '@/components/DevotionAudio';
 import PageLayout from '@/components/PageLayout';
 import PostTableOfContents from '@/components/PostTableOfContents';
 import ReadingProgress from '@/components/ReadingProgress';
@@ -122,6 +123,8 @@ export default async function PostPage({ params }: PostPageProps) {
               </div>
             )}
           </section>
+
+          {post.audio && <DevotionAudio src={post.audio} title={post.title} />}
 
           {(seriesNeighbors.previous || seriesNeighbors.next) && (
             <section

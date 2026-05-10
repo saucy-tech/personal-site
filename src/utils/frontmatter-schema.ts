@@ -50,4 +50,5 @@ export const frontmatterSchema = z.object({
   series: z.string().optional(),
   cardTitle: z.string().optional(),
   shortTitle: z.string().optional(),
+  audio: z.string().optional(),
 });
