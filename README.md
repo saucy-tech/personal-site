@@ -35,8 +35,7 @@ personal-site/
 │   ├── utils/                 # posts.ts, security.ts, constants.ts
 │   └── proxy.ts               # CSP/security headers (Next.js file convention)
 ├── tests/                     # Playwright E2E specs
-├── AGENTS.md                  # Codebase facts (canonical agent doc)
-├── CLAUDE.md                  # Claude-specific guide (writing rules, gotchas)
+├── docs/agent-guide.md        # Tracked agent guide and site style notes
 ├── next.config.js
 ├── package.json
 └── README.md
@@ -92,9 +91,9 @@ Daily Word devotions are the primary content pipeline. The lifecycle:
    `KIT_API_KEY`.
 4. Vercel deploys the post to production.
 
-Writing rules, frontmatter schema, and agent gotchas live in
-[CLAUDE.md](./CLAUDE.md). Codebase architecture, security, and full env var
-reference live in [AGENTS.md](./AGENTS.md).
+Writing rules, frontmatter schema, and agent gotchas live in local-only agent
+notes when present. Tracked agent guidance and site style preferences live in
+[docs/agent-guide.md](./docs/agent-guide.md).
 
 `pnpm broadcast` is retained as a **manual fallback only** and is not the
 primary publishing path.
@@ -292,7 +291,7 @@ Verification steps:
      - In development only: script-src includes 'unsafe-eval'
 2. Vercel preview/prod:
    - Deploy to Vercel (preview)
-   - Open devtools Network tab on first load (not client-side navigated page)
+   - Open devtools Network tab on first load (not client-routed page)
    - Check Response Headers on the document:
      - content-security-policy is present (no duplicates)
      - script-src has no 'unsafe-eval' in prod
