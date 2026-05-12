@@ -103,6 +103,29 @@ export default function FieldNotesPage() {
                         </>
                       )}
                     </p>
+                    {((item.pros && item.pros.length > 0) ||
+                      (item.cons && item.cons.length > 0)) && (
+                      <div className="mt-3 grid gap-2 text-xs leading-relaxed text-(--text-secondary) sm:grid-cols-2">
+                        {item.pros && item.pros.length > 0 && (
+                          <ul className="space-y-1">
+                            {item.pros.map((pro) => (
+                              <li key={pro}>
+                                <span className="font-mono text-(--accent)">+</span> {pro}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                        {item.cons && item.cons.length > 0 && (
+                          <ul className="space-y-1">
+                            {item.cons.map((con) => (
+                              <li key={con}>
+                                <span className="font-mono text-(--text-secondary)">-</span> {con}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    )}
                   </article>
                 ))}
               </div>
