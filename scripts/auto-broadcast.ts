@@ -14,6 +14,7 @@ import fs from 'fs';
 import path from 'path';
 
 import matter from 'gray-matter';
+import yaml from 'js-yaml';
 
 interface BroadcastPost {
   content: string;
@@ -22,6 +23,15 @@ interface BroadcastPost {
   slug: string;
   title: string;
 }
+
+const SITE_TIME_ZONE = 'America/New_York';
+
+// Configure gray-matter to use js-yaml 4.x's load function.
+// @ts-expect-error - gray-matter's types don't include engines, but it exists at runtime
+matter.engines.yaml = {
+  parse: (str: string) => yaml.load(str) as Record<string, unknown>,
+  stringify: (obj: Record<string, unknown>) => yaml.dump(obj),
+};
 
 function getSummary(content: string) {
   const paragraphs = content
@@ -53,7 +63,20 @@ function escapeHtml(value: string) {
     .replace(/'/g, '&#39;');
 }
 
-function loadLatestPost(postsDir: string): BroadcastPost {
+function getTodayDateString(): string {
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: SITE_TIME_ZONE,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(new Date());
+}
+
+function isPublishedDate(date: string): boolean {
+  return !date || date <= getTodayDateString();
+}
+
+export function loadLatestPost(postsDir: string): BroadcastPost {
   const posts = fs
     .readdirSync(postsDir)
     .filter((file) => file.endsWith('.mdx'))
@@ -73,10 +96,11 @@ function loadLatestPost(postsDir: string): BroadcastPost {
         title,
       };
     })
-    .filter((post) => post.date);
+    .filter((post) => post.date)
+    .filter((post) => isPublishedDate(post.date));
 
   if (posts.length === 0) {
-    throw new Error('No dated posts found in src/posts');
+    throw new Error('No published dated posts found in src/posts');
   }
 
   posts.sort((a, b) => b.date.localeCompare(a.date) || b.slug.localeCompare(a.slug));
@@ -134,7 +158,9 @@ async function main() {
   console.log(`Draft broadcast created for ${slug}. Review and send from ConvertKit UI.`);
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });
+}
