@@ -6,6 +6,28 @@ import { fieldNotesLastUpdated, fieldNotesSections } from '@/data/field-notes';
 import { formatPostDate } from '@/utils/helpers';
 import { SITE_NAME } from '@/utils/constants';
 
+function ToolFavicon({ homepage }: { homepage: string }) {
+  let hostname: string;
+  try {
+    hostname = new URL(homepage).hostname;
+  } catch {
+    return null;
+  }
+  // 16px favicon — next/image optimization adds no benefit at this size and
+  // would force www.google.com into remotePatterns just for icon fetching.
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={`https://www.google.com/s2/favicons?domain=${hostname}&sz=64`}
+      alt=""
+      width={16}
+      height={16}
+      loading="lazy"
+      className="inline-block h-4 w-4 rounded-sm opacity-90"
+    />
+  );
+}
+
 export const metadata: Metadata = {
   title: `Field notes | ${SITE_NAME}`,
   description:
@@ -67,8 +89,9 @@ export default function FieldNotesPage() {
                   key={`${section.id}-${item.title}`}
                   className="border-l-2 border-(--accent-border) py-0.5 pl-4"
                 >
-                  <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                    <h3 className="text-base font-semibold leading-snug text-(--text-primary)">
+                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+                    <h3 className="flex items-center gap-2 text-base font-semibold leading-snug text-(--text-primary)">
+                      {item.homepage && <ToolFavicon homepage={item.homepage} />}
                       {item.title}
                     </h3>
                     {item.badge && (
