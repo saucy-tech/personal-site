@@ -5,7 +5,7 @@ import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { getFooterNavItems, getSiteNavItems } from '@/config/site-nav';
-import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from '@/utils/constants';
+import { SITE_NAME, SITE_DESCRIPTION_HIRING, SITE_URL } from '@/utils/constants';
 import { getAllPostsMeta } from '@/utils/posts';
 import { APPEARANCE_STORAGE_KEY, THEME_STORAGE_KEY } from '@/utils/theme';
 import ClientGalaxyBackground from '@/components/ClientGalaxyBackground';
@@ -41,8 +41,16 @@ export const metadata: Metadata = {
     default: SITE_NAME,
     template: `%s | ${SITE_NAME}`,
   },
-  description: SITE_DESCRIPTION,
-  keywords: ['developer', 'portfolio', 'bitcoin', 'software engineer', 'web development'],
+  description: SITE_DESCRIPTION_HIRING,
+  keywords: [
+    'software engineer',
+    'IT development manager',
+    'government technology',
+    'GIS',
+    'full-stack developer',
+    'Next.js',
+    'Brandon Sauceda',
+  ],
   authors: [{ name: 'Brandon' }],
   creator: 'Brandon',
   robots: {
@@ -62,7 +70,7 @@ export const metadata: Metadata = {
     url: '/',
     siteName: SITE_NAME,
     title: SITE_NAME,
-    description: SITE_DESCRIPTION,
+    description: SITE_DESCRIPTION_HIRING,
     images: [
       {
         url: '/family-photo.jpeg',
@@ -75,7 +83,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: SITE_NAME,
-    description: SITE_DESCRIPTION,
+    description: SITE_DESCRIPTION_HIRING,
     images: ['/family-photo.jpeg'],
     creator: '@Saucy_Tech',
   },

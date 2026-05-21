@@ -79,6 +79,16 @@ personal-site/
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+## Resume PDF
+
+The downloadable résumé at `/Brandon_Sauceda_Resume.pdf` is copied from Career-Dev:
+
+```bash
+cp ~/Documents/Career-Dev/01_Current_Packet/Resume/Brandon_Sauceda_Resume_ATS.pdf public/Brandon_Sauceda_Resume.pdf
+```
+
+Regenerate after editing `v2_Concise_ATS.md` in Career-Dev.
+
 ## Daily Devotion Workflow
 
 Daily Word devotions are the primary content pipeline. The lifecycle:

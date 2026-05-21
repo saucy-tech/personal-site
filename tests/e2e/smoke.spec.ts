@@ -38,4 +38,18 @@ test.describe('smoke', () => {
     await expect(subscribeButton).toBeVisible();
     await expect(page.getByText(/no spam, unsubscribe anytime/i)).toBeVisible();
   });
+
+  test('portfolio exposes resume and contact', async ({ page }) => {
+    await page.goto('/portfolio');
+    const main = page.locator('#main-content');
+    await expect(main.getByRole('link', { name: 'Download résumé (PDF)' })).toBeVisible();
+    await expect(main.getByRole('link', { name: 'brandon@saucy.tech' })).toBeVisible();
+    await expect(main.getByRole('link', { name: 'LinkedIn' })).toBeVisible();
+  });
+
+  test('resume PDF is served', async ({ request }) => {
+    const res = await request.get('/Brandon_Sauceda_Resume.pdf');
+    expect(res.status()).toBe(200);
+    expect(res.headers()['content-type']).toContain('pdf');
+  });
 });
