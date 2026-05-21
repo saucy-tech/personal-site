@@ -6,7 +6,7 @@
  * Within scope: most recent year, then alphabetical by name.
  */
 
-export const awardsLastUpdated = '2026-05-06';
+export const awardsLastUpdated = '2026-05-07';
 
 export interface Award {
   id: string;
@@ -19,6 +19,14 @@ export interface Award {
 
 export const awards: Award[] = [
   // International scope
+  {
+    id: 'legends-of-lightning-hackathon',
+    name: 'Legends of Lightning Vol. 2 Hackathon Winner',
+    issuer: 'Legends of Lightning',
+    years: ['2023'],
+    impact:
+      'Community & Education Award for innovation in Bitcoin and Lightning Network development.',
+  },
   {
     id: 'esri-sag',
     name: 'Esri Special Achievement in GIS (SAG) Award',

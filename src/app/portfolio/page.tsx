@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 
 import PageLayout from '@/components/PageLayout';
 import { Award, awards } from '@/data/awards';
+import { portfolioAbout, portfolioAboutLastUpdated } from '@/data/portfolio-about';
 import {
   Project,
   ProjectGroup,
@@ -9,20 +10,21 @@ import {
   projectGroupLabels,
   projects,
   talks,
+  publications,
 } from '@/data/projects';
 import { SITE_NAME } from '@/utils/constants';
 
 export const metadata: Metadata = {
   title: 'Portfolio',
   description:
-    'Brandon Sauceda — IT Development & GIS Manager at the Georgia Department of Agriculture. Gov-tech, GIS, mobile field tools, indie projects, and open-source work.',
+    'Brandon Sauceda — IT Development Manager and software engineer. Gov-tech, GIS, full-stack apps, open source, awards, and downloadable résumé.',
   alternates: {
     canonical: '/portfolio',
   },
   openGraph: {
     title: 'Portfolio',
     description:
-      'Brandon Sauceda — IT Development & GIS Manager at the Georgia Department of Agriculture. Gov-tech, GIS, mobile field tools, indie projects, and open-source work.',
+      'Brandon Sauceda — IT Development Manager and software engineer. Gov-tech, GIS, full-stack apps, open source, awards, and downloadable résumé.',
     url: '/portfolio',
     type: 'profile',
     images: [
@@ -124,6 +126,49 @@ export default function Portfolio() {
   return (
     <PageLayout title="Portfolio">
       <section className="flex flex-col gap-12 items-center">
+        <section className="w-full max-w-xl text-center space-y-4 mb-4">
+          <p className="text-sm uppercase tracking-widest text-(--text-secondary)">
+            {portfolioAbout.title}
+          </p>
+          <h2 className="text-2xl font-semibold">{portfolioAbout.headline}</h2>
+          <p className="text-base text-(--text-secondary) leading-relaxed">
+            {portfolioAbout.summary}
+          </p>
+          <div className="flex flex-wrap justify-center gap-3 text-sm">
+            <a
+              href={`mailto:${portfolioAbout.email}`}
+              className="inline-block px-4 py-2 bg-(--accent) text-(--on-accent) rounded-sm hover:bg-(--accent-dark) transition"
+            >
+              {portfolioAbout.email}
+            </a>
+            <a
+              href={portfolioAbout.linkedIn}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-4 py-2 border border-(--accent-border) rounded-sm hover:bg-white/10 transition"
+            >
+              LinkedIn
+            </a>
+            <a
+              href={portfolioAbout.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block px-4 py-2 border border-(--accent-border) rounded-sm hover:bg-white/10 transition"
+            >
+              GitHub
+            </a>
+            <a
+              href={portfolioAbout.resumeHref}
+              className="inline-block px-4 py-2 border border-(--accent-border) rounded-sm hover:bg-white/10 transition"
+            >
+              {portfolioAbout.resumeLabel}
+            </a>
+          </div>
+          <p className="text-xs text-(--text-secondary)">
+            Portfolio updated {portfolioAboutLastUpdated}
+          </p>
+        </section>
+
         {/* Projects */}
         {projectGroups.map(({ group, label, items }) => (
           <div key={group} className="w-full max-w-xl">
@@ -181,6 +226,42 @@ export default function Portfolio() {
                   ))}
                 </tbody>
               </table>
+            </div>
+          </div>
+        )}
+
+        {/* Publications */}
+        {publications.length > 0 && (
+          <div className="w-full max-w-xl">
+            <SectionHeading id="publications" label="Publications" />
+            <div className="flex flex-col gap-6">
+              {publications.map((pub) => (
+                <div
+                  key={`${pub.year}-${pub.title}`}
+                  className="bg-white/10 rounded-lg shadow-lg border border-(--accent-border) p-6"
+                >
+                  <div className="flex items-start gap-3 mb-2">
+                    <span className="text-xs bg-white/10 text-(--text-secondary) border border-(--accent-border) px-2 py-0.5 rounded-full whitespace-nowrap">
+                      {pub.year}
+                    </span>
+                    <h3 className="text-lg font-semibold">{pub.title}</h3>
+                  </div>
+                  <p className="text-sm text-(--text-secondary) mb-3">{pub.venue}</p>
+                  {pub.authors.length > 0 && (
+                    <p className="text-xs text-(--text-secondary) mb-3">{pub.authors.join(', ')}</p>
+                  )}
+                  {pub.link && (
+                    <a
+                      href={pub.link.href}
+                      target={/^https?:\/\//.test(pub.link.href) ? '_blank' : undefined}
+                      rel={/^https?:\/\//.test(pub.link.href) ? 'noopener noreferrer' : undefined}
+                      className="inline-block px-4 py-2 bg-(--accent) text-(--on-accent) rounded-sm hover:bg-(--accent-dark) transition"
+                    >
+                      {pub.link.label || 'View'}
+                    </a>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         )}

@@ -79,6 +79,23 @@ personal-site/
 
 4. Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+## Resume PDF
+
+The downloadable résumé at `/Brandon_Sauceda_Resume.pdf` is copied from Career-Dev:
+
+```bash
+cp ~/Documents/Career-Dev/01_Current_Packet/Resume/Brandon_Sauceda_Resume_ATS.pdf public/Brandon_Sauceda_Resume.pdf
+```
+
+Regenerate after editing `v2_Concise_ATS.md` in Career-Dev.
+
+For the styled export, generate the HTML with `pagetitle` metadata so the PDF/browser title is clean and no extra visible resume heading is inserted:
+
+```bash
+cd ~/Documents/Career-Dev/01_Current_Packet/Resume
+pandoc v2_Concise_ATS.md --standalone --css resume.css --metadata pagetitle='Brandon Sauceda' -o v2_Concise_ATS_STYLED.html
+```
+
 ## Daily Devotion Workflow
 
 Daily Word devotions are the primary content pipeline. The lifecycle:
