@@ -12,7 +12,7 @@ Running log of decisions, deviations, and tradeoffs made while implementing the 
 
 ### Resume PDF source — 2026-05-21
 **Spec section:** Task 1
-`Brandon_Sauceda_Resume_ATS.pdf` does not exist in Career-Dev yet. Copied `v2_Concise_ATS_PLAIN.pdf` to `public/Brandon_Sauceda_Resume.pdf` per plan fallback. Replace when Career-Dev resume plan Task 10 completes.
+Initial PR used `v2_Concise_ATS_PLAIN.pdf` (May 7 export) as fallback. Replaced with canonical `Brandon_Sauceda_Resume_ATS.pdf` from Career-Dev on 2026-05-21.
 
 ## Deviations from the spec
 
