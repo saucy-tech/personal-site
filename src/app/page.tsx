@@ -143,7 +143,7 @@ export default async function Home() {
             href="/portfolio"
             icon={<span className="text-2xl">🚀</span>}
             eyebrow="Portfolio"
-            meta="Work, projects, awards, and résumé"
+            meta="Gov-tech, projects, awards, résumé PDF"
           />
           <LinkCard
             key="bitcoin"

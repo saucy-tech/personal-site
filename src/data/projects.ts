@@ -3,7 +3,7 @@
  * Edit here to update copy. Bump `projectsLastUpdated` when you revise.
  */
 
-export const projectsLastUpdated = '2026-04-30';
+export const projectsLastUpdated = '2026-05-21';
 
 export type ProjectGroup = 'apps' | 'tools' | 'open-source';
 
@@ -33,6 +33,16 @@ export interface Talk {
 
 export const projects: Project[] = [
   // --- Apps ---
+  {
+    id: 'gda-public-systems',
+    group: 'apps',
+    title: 'Georgia DGA — Public Web & GIS Systems',
+    status: 'launched',
+    tags: ['Product leadership', 'GIS', 'Azure', 'C#', 'Public sector'],
+    blurb:
+      'IT Development Manager for state agency systems serving 50,000+ monthly users. Owned public-facing web roadmap, cut citizen wait times 40%, led enterprise ArcGIS program (Esri SAG award), and built cross-agency APIs for five partner organizations. Details available on request — no public repo.',
+    links: [{ href: '/Brandon_Sauceda_Resume.pdf', label: 'Résumé (PDF)' }],
+  },
   {
     id: 'portfolio-site',
     group: 'apps',
@@ -108,8 +118,11 @@ export const projects: Project[] = [
     status: 'contributor',
     tags: ['Terminal', 'AI', 'Open Source'],
     blurb:
-      'Contributed to Warp, the agentic terminal I use daily. It is where I run Claude Code CLI and Codex CLI side by side — and where my workflow lives.',
-    links: [{ href: 'https://www.warp.dev/', label: 'warp.dev' }],
+      'Contributed to Warp, the agentic terminal I use daily. Fixed repo-picker UX so multi-repo workflows are smoother — see PR #9451.',
+    links: [
+      { href: 'https://github.com/warpdotdev/warp/pull/9451', label: 'PR #9451' },
+      { href: 'https://github.com/warpdotdev/warp/issues/9439', label: 'Issue #9439' },
+    ],
   },
   {
     id: 'abbot',
@@ -133,11 +146,37 @@ export const projects: Project[] = [
   },
 ];
 
+export interface Publication {
+  year: string;
+  title: string;
+  venue: string;
+  authors: string[];
+  link?: ProjectLink;
+}
+
 export const talks: Talk[] = [
+  {
+    date: '2023-06-01',
+    title: 'GIS Innovation in State Government',
+    venue: 'Esri Southeast User Conference',
+  },
   {
     date: '2025-03-26',
     title: 'The Price of Tomorrow',
     venue: 'Atlanta BitPlebs',
+  },
+];
+
+export const publications: Publication[] = [
+  {
+    year: '2019',
+    title: 'GIS Technology Utilization for Rapid Response Teams',
+    venue: 'Centers for Disease Control and Prevention (CDC)',
+    authors: ['Brandon Sauceda', 'CDC Collaborators'],
+    link: {
+      href: 'https://www.cdc.gov/nceh/hsb/disaster/rrt.htm',
+      label: 'CDC Rapid Response Teams',
+    },
   },
 ];
 
