@@ -9,7 +9,7 @@ import { SITE_NAME, SITE_DESCRIPTION_HIRING, SITE_URL } from '@/utils/constants'
 import { getAllPostsMeta } from '@/utils/posts';
 import { APPEARANCE_STORAGE_KEY, THEME_STORAGE_KEY } from '@/utils/theme';
 import ClientGalaxyBackground from '@/components/ClientGalaxyBackground';
-import { Analytics } from '@vercel/analytics/react';
+import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const ibmSans = IBM_Plex_Sans({
