@@ -64,12 +64,21 @@ function escapeHtml(value: string) {
 }
 
 function getTodayDateString(): string {
-  return new Intl.DateTimeFormat('en-CA', {
+  const parts = new Intl.DateTimeFormat('en-US', {
     timeZone: SITE_TIME_ZONE,
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
-  }).format(new Date());
+  }).formatToParts(new Date());
+  const getPart = (type: 'year' | 'month' | 'day') => {
+    const value = parts.find((part) => part.type === type)?.value;
+    if (!value) {
+      throw new Error(`Unable to format current ${type} for ${SITE_TIME_ZONE}`);
+    }
+    return value;
+  };
+
+  return `${getPart('year')}-${getPart('month')}-${getPart('day')}`;
 }
 
 function isPublishedDate(date: string): boolean {
