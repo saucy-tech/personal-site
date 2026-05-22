@@ -66,7 +66,7 @@ export const projects: Project[] = [
       'A weekday scripture reflection series — a 2-minute read each morning, rooted in Sunday School lessons. Currently published as a section of this site; subscribe for the daily email.',
     links: [
       { href: '/daily-word', label: 'Read on site' },
-      { href: '/daily-word#subscribe', label: 'Subscribe' },
+      { href: '/blog#subscribe', label: 'Subscribe' },
     ],
   },
   {
