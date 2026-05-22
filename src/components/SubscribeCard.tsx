@@ -38,23 +38,21 @@ export default function SubscribeCard({
   const defaultsByContext = {
     default: {
       eyebrow: 'Newsletter',
-      title: 'The Daily Word',
-      modalTitle: 'The Daily Word',
+      title: 'Saucy.tech Updates',
+      modalTitle: 'Saucy.tech Updates',
       meta: undefined,
-      description:
-        'Weekday scripture reflections, the occasional weekend note, and future article updates. Free.',
+      description: 'New essays, field notes, and writing — straight to your inbox.',
     },
     post: {
       eyebrow: 'Keep Reading',
       title: 'Enjoyed this post?',
-      modalTitle: 'Subscribe — The Daily Word',
-      meta: 'Get the next reflection in your inbox.',
-      description:
-        'Weekday scripture reflections, the occasional weekend note, and future article updates. Free.',
+      modalTitle: 'Subscribe — Saucy.tech Updates',
+      meta: 'Get new posts in your inbox.',
+      description: 'New essays, field notes, and writing — straight to your inbox.',
     },
     'tag-archive': {
       eyebrow: 'Tag Updates',
-      title: contextLabel ? `More on ${contextLabel}` : 'More tagged reflections',
+      title: contextLabel ? `More on ${contextLabel}` : 'More tagged posts',
       modalTitle: contextLabel ? `Subscribe: ${contextLabel} updates` : 'Subscribe for tag updates',
       meta:
         normalizedCount !== undefined
@@ -73,8 +71,8 @@ export default function SubscribeCard({
           ? `${normalizedCount} post${normalizedCount === 1 ? '' : 's'} in this category.`
           : undefined,
       description: contextLabel
-        ? `Subscribe for future ${contextLabel.toLowerCase()} posts, plus the occasional weekend note.`
-        : 'Subscribe for future posts in this category, plus the occasional weekend note.',
+        ? `Subscribe for future ${contextLabel.toLowerCase()} posts.`
+        : 'Subscribe for future posts in this category.',
     },
   } as const;
 

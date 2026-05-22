@@ -34,7 +34,7 @@ export async function GET() {
   <channel>
     <title>${SITE_NAME} — Writing</title>
     <link>${absoluteUrl('/')}</link>
-    <description>Articles, reflections, and The Daily Word.</description>
+    <description>Essays, field notes, and biblical reflections.</description>
     <language>en-us</language>
     <lastBuildDate>${lastBuildDate}</lastBuildDate>
     <atom:link href="${selfUrl}" rel="self" type="application/rss+xml" />

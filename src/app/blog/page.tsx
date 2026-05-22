@@ -12,7 +12,7 @@ import { POST_CATEGORIES } from '@/utils/post-taxonomy';
 
 export const metadata: Metadata = {
   title: 'Articles & Reflections',
-  description: 'Daily Word posts, biblical reflections, and essays.',
+  description: 'Essays, field notes, and biblical reflections.',
   alternates: {
     canonical: '/blog',
   },
@@ -65,10 +65,10 @@ export default function BlogIndex() {
               Browse the library
             </a>
             <a
-              href="#daily-word"
+              href="#subscribe"
               className="a11y-focus-ring rounded-full border border-(--accent-border) px-5 py-2.5 text-sm font-medium text-(--text-primary) transition hover:border-(--accent) hover:bg-(--accent-transparent)"
             >
-              Subscribe to The Daily Word
+              Subscribe for updates
             </a>
           </div>
         </div>
@@ -171,12 +171,11 @@ export default function BlogIndex() {
         </Section>
       </div>
 
-      <div id="daily-word">
-        <Section title="The Daily Word" emoji="✉️">
+      <div id="subscribe">
+        <Section title="Subscribe" emoji="✉️">
           <p className="text-sm leading-relaxed text-(--text-secondary)">
-            Subscribe to The Daily Word for free weekday scripture reflections, delivered to your
-            inbox every weekday morning. Short, KJV-rooted reflections rooted in the Sunday School
-            lesson series.
+            New essays, field notes, and writing — straight to your inbox. No spam, unsubscribe
+            anytime.
           </p>
           <SubscribeForm />
         </Section>

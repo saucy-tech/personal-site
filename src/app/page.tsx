@@ -161,11 +161,10 @@ export default async function Home() {
             eyebrow="Faith"
             meta="Truth Chapel livestreams and teaching"
           />
-          <Section title="Subscribe to The Daily Word" emoji="✉️">
+          <Section title="Subscribe to Saucy.tech Updates" emoji="✉️">
             <p className="text-sm leading-relaxed text-(--text-secondary)">
-              The Daily Word delivers a short scripture reflection to your inbox every weekday
-              morning. Rooted in weekly Sunday School lessons, each post is a 2-minute read designed
-              to start your day in the Word. Free, always.
+              New essays, field notes, and writing — straight to your inbox. No spam, unsubscribe
+              anytime.
             </p>
             <SubscribeForm />
           </Section>
