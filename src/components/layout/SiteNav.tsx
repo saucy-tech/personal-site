@@ -37,12 +37,14 @@ export default function SiteNav({
       >
         {items.map((item) => {
           const active = isNavActive(pathname, item, items);
+          const isExternal = /^https?:\/\//.test(item.href);
           return (
             <li key={`${item.href}-${item.label}`}>
               <Link
                 href={item.href}
                 className={cn(linkClass, active && activeClass)}
                 aria-current={active ? 'page' : undefined}
+                {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
               >
                 {item.label}
               </Link>

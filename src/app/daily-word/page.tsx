@@ -2,21 +2,18 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import PageLayout from '@/components/PageLayout';
-import SubscribeForm from '@/components/SubscribeForm';
 import { formatPostDate } from '@/utils/helpers';
 import { getAllPostsMeta } from '@/utils/posts';
 
 export const metadata: Metadata = {
   title: 'The Daily Word',
-  description:
-    "Free weekday scripture reflections and notes from Brandon's Sunday School series. Subscribe to get each post by email.",
+  description: "Archive of weekday scripture reflections from Brandon's Sunday School series.",
   alternates: {
     canonical: '/daily-word',
   },
   openGraph: {
     title: 'The Daily Word',
-    description:
-      "Free weekday scripture reflections and notes from Brandon's Sunday School series. Subscribe to get each post by email.",
+    description: "Archive of weekday scripture reflections from Brandon's Sunday School series.",
     url: '/daily-word',
   },
 };
@@ -28,16 +25,15 @@ export default function DailyWordPage() {
 
   return (
     <PageLayout title="The Daily Word" backHref="/" backLabel="Back to Home">
-      {/* Hero + Subscribe */}
+      {/* Hero */}
       <section className="rounded-4xl border border-(--accent-border) bg-white/3 p-6 sm:p-8">
-        <p className="text-sm uppercase tracking-[0.22em] text-(--accent)">Free Weekday Email</p>
+        <p className="text-sm uppercase tracking-[0.22em] text-(--accent)">Archive</p>
         <h2 className="mt-4 max-w-2xl text-3xl font-semibold leading-tight text-(--text-primary) sm:text-4xl">
           The Daily Word
         </h2>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-(--text-secondary)">
-          The Daily Word is a free, weekday scripture reflection delivered straight to your inbox.
-          Each post is a 2-minute read rooted in the Sunday School lesson series — designed to start
-          your day in the Word.
+          A weekday scripture reflection series rooted in the Sunday School lessons. Each post is a
+          2-minute read.
         </p>
 
         {currentSeries && (
@@ -47,10 +43,6 @@ export default function DailyWordPage() {
             </span>
           </div>
         )}
-
-        <div className="mt-6 max-w-md">
-          <SubscribeForm />
-        </div>
       </section>
 
       {/* Post list */}
