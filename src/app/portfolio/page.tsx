@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 
 import PageLayout from '@/components/PageLayout';
 import { Award, awards } from '@/data/awards';
@@ -68,6 +69,17 @@ function ProjectCard({ project }: { project: Project }) {
   const pill = STATUS_PILL[project.status];
   return (
     <div className="bg-white/10 rounded-lg shadow-lg border border-(--accent-border) p-6">
+      {project.image && (
+        <div className="mb-4 flex items-center justify-center rounded-md bg-white/5 p-4">
+          <Image
+            src={project.image.src}
+            alt={project.image.alt}
+            width={project.image.width}
+            height={project.image.height}
+            className="h-24 w-auto"
+          />
+        </div>
+      )}
       <div className="flex items-center gap-2 flex-wrap mb-2">
         <h3 className="text-xl font-semibold">{project.title}</h3>
         <span className={`text-xs ${pill.className} px-2 py-0.5 rounded-full`}>{pill.label}</span>
