@@ -65,8 +65,8 @@ export const projects: Project[] = [
     blurb:
       'A standalone site I built to publish weekday scripture reflections. Next.js 16 App Router on Vercel with React 19, an MDX content pipeline (next-mdx-remote + gray-matter), Tailwind typography, and Vercel Analytics. New entries land here every weekday; the earlier archive (through May 2026) still lives on this site.',
     links: [
+      { href: 'https://github.com/saucy-tech/the-morning-portion', label: 'GitHub Repo' },
       { href: 'https://morningportion.com', label: 'Visit morningportion.com' },
-      { href: '/daily-word', label: 'Earlier Archive' },
     ],
   },
   {
