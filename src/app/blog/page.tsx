@@ -138,12 +138,22 @@ export default function BlogIndex() {
               {category.description}
             </p>
             <div className="mt-5 flex flex-col gap-2">
+              {category.key === 'daily-word' && (
+                <a
+                  href="https://morningportion.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="a11y-focus-ring inline-flex rounded-xs text-sm font-medium text-(--accent) transition hover:text-(--text-primary)"
+                >
+                  Read new entries at morningportion.com →
+                </a>
+              )}
               {category.href && (
                 <Link
                   href={category.href}
                   className="a11y-focus-ring inline-flex rounded-xs text-sm font-medium text-(--accent) transition hover:text-(--text-primary)"
                 >
-                  Visit the Daily Word →
+                  Browse the archive →
                 </Link>
               )}
               {category.latest && (

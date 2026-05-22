@@ -33,13 +33,25 @@ export default function DailyWordPage() {
         </h2>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-(--text-secondary)">
           A weekday scripture reflection series rooted in the Sunday School lessons. Each post is a
-          2-minute read.
+          2-minute read. This archive runs through May 2026. New entries now publish at The
+          Morning Portion.
         </p>
+
+        <div className="mt-6 flex flex-wrap gap-3">
+          <a
+            href="https://morningportion.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="a11y-focus-ring rounded-full bg-(--accent) px-5 py-2.5 text-sm font-medium text-(--on-accent) transition hover:brightness-110"
+          >
+            Read new entries at morningportion.com →
+          </a>
+        </div>
 
         {currentSeries && (
           <div className="mt-5">
             <span className="inline-block rounded-2xl border border-(--accent-border) bg-(--accent-transparent) px-4 py-1.5 text-xs uppercase tracking-[0.18em] text-(--accent)">
-              Current Series: {currentSeries}
+              Final Series on Archive: {currentSeries}
             </span>
           </div>
         )}
