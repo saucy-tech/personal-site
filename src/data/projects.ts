@@ -59,14 +59,14 @@ export const projects: Project[] = [
   {
     id: 'daily-word',
     group: 'apps',
-    title: 'The Daily Word',
+    title: 'The Morning Portion',
     status: 'launched',
-    tags: ['Devotion', 'MDX', 'Archive'],
+    tags: ['Next.js 16', 'React 19', 'MDX', 'Tailwind CSS', 'Vercel'],
     blurb:
-      'A weekday scripture reflection series — a 2-minute read each morning, rooted in Sunday School lessons. The on-site archive runs through May 2026; new entries now publish at The Morning Portion.',
+      'A standalone site I built to publish weekday scripture reflections. Next.js 16 App Router on Vercel with React 19, an MDX content pipeline (next-mdx-remote + gray-matter), Tailwind typography, and Vercel Analytics. New entries land here every weekday; the earlier archive (through May 2026) still lives on this site.',
     links: [
-      { href: '/daily-word', label: 'Browse Archive' },
-      { href: 'https://morningportion.com', label: 'Read New Entries' },
+      { href: 'https://morningportion.com', label: 'Visit morningportion.com' },
+      { href: '/daily-word', label: 'Earlier Archive' },
     ],
   },
   {
