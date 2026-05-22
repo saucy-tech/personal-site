@@ -174,8 +174,7 @@ export default function BlogIndex() {
       <div id="subscribe">
         <Section title="Subscribe" emoji="✉️">
           <p className="text-sm leading-relaxed text-(--text-secondary)">
-            New essays, field notes, and writing — straight to your inbox. No spam, unsubscribe
-            anytime.
+            New essays, field notes, and writing — straight to your inbox.
           </p>
           <SubscribeForm />
         </Section>

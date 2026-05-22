@@ -32,7 +32,7 @@ export function getSiteNavItems({ latestSlug }: { latestSlug: string | null }): 
     { href: '/portfolio', label: 'Portfolio', match: 'exact' },
     { href: '/field-notes', label: 'Field notes', match: 'exact' },
     { href: '/bitcoin', label: 'Bitcoin', match: 'exact' },
-    { href: '/daily-word', label: 'Daily Word', match: 'exact' },
+    { href: 'https://morningportion.com', label: 'Morning Portion', match: 'exact' },
     { href: '/support', label: 'Support', match: 'exact' }
   );
   return items;

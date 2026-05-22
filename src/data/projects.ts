@@ -3,7 +3,7 @@
  * Edit here to update copy. Bump `projectsLastUpdated` when you revise.
  */
 
-export const projectsLastUpdated = '2026-05-21';
+export const projectsLastUpdated = '2026-05-22';
 
 export type ProjectGroup = 'apps' | 'tools' | 'open-source';
 
@@ -61,12 +61,12 @@ export const projects: Project[] = [
     group: 'apps',
     title: 'The Daily Word',
     status: 'launched',
-    tags: ['Devotion', 'MDX', 'Email'],
+    tags: ['Devotion', 'MDX', 'Archive'],
     blurb:
-      'A weekday scripture reflection series — a 2-minute read each morning, rooted in Sunday School lessons. Currently published as a section of this site; subscribe for the daily email.',
+      'A weekday scripture reflection series — a 2-minute read each morning, rooted in Sunday School lessons. The on-site archive runs through May 2026; new entries now publish at The Morning Portion.',
     links: [
-      { href: '/daily-word', label: 'Read on site' },
-      { href: '/blog#subscribe', label: 'Subscribe' },
+      { href: '/daily-word', label: 'Browse Archive' },
+      { href: 'https://morningportion.com', label: 'Read New Entries' },
     ],
   },
   {
