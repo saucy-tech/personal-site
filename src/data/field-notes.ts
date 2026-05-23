@@ -5,9 +5,15 @@
  */
 
 /** ISO date — bump when you revise items or copy. Shown on `/field-notes`. */
-export const fieldNotesLastUpdated = '2026-05-19';
+export const fieldNotesLastUpdated = '2026-05-22';
 
-export type FieldNoteStatus = 'harnesses' | 'subscriptions' | 'agents' | 'paused';
+export type FieldNoteStatus =
+  | 'harnesses'
+  | 'subscriptions'
+  | 'agents'
+  | 'models'
+  | 'tools'
+  | 'paused';
 
 export type FieldNoteBadge = 'daily' | 'learning' | 'paused' | 'watching';
 
@@ -67,38 +73,37 @@ export const fieldNotesSections: FieldNoteSection[] = [
       {
         title: 'Codex desktop',
         tags: ['openai', 'desktop app'],
-        badge: 'learning',
+        badge: 'daily',
         homepage: 'https://openai.com',
-        note: 'Part of the active rotation now, but still something I am learning alongside CLI-based work.',
+        note: 'Part of the active rotation now and a preferred separate surface alongside Warp and the Codex CLI.',
         pros: ['Useful as a separate surface from the terminal'],
         cons: ['Still finding when I prefer it over the CLI'],
+      },
+      {
+        title: 'T3 Code',
+        tags: ['wrapper'],
+        badge: 'daily',
+        note: 'Useful as a wrapper that lets me switch between Claude Code, Codex, and Cursor as needed.',
+        pros: ['Convenient switcher for multiple CLIs and desktop apps'],
+        cons: ['Overlap with direct Warp+CLI workflows'],
       },
       {
         title: 'Claude desktop',
         tags: ['anthropic', 'desktop app'],
         badge: 'learning',
         homepage: 'https://claude.ai',
-        note: 'Useful for coworking and longer thinking sessions when I want a separate surface from the terminal.',
+        note: 'Useful for coworking and longer thinking sessions; I use it sometimes, but prefer the Codex app and Warp for most work.',
         pros: ['Good for conversation and high-context thinking'],
         cons: ['Not replacing Claude Code for repo work'],
       },
+      // Superwhisper moved to Tools section
       {
-        title: 'Superwhisper',
-        tags: ['voice', 'dictation', 'macOS'],
+        title: 'Cursor',
+        tags: ['editor'],
         badge: 'daily',
-        homepage: 'https://superwhisper.com',
-        note: 'My push-to-talk dictation surface. Hold the hotkey, talk, release — the audio gets transcribed and then run through an LLM mode of my choice before it lands in whatever app I am in.',
-        link: { href: 'https://superwhisper.com', label: 'superwhisper.com' },
-        pros: [
-          'Push-to-talk hotkey makes voice feel like a real input mode',
-          'I pick both the transcription model and the processing model (Sonnet is in the mix)',
-          'Modes for verbose dictation, summarized meeting notes, and clean prose',
-          'The newer super mode adapts the output to the app I am dictating into',
-          'Cheaper than the other dictation tools I have tried',
-        ],
-        cons: [
-          'Mode customization takes a beat to internalize when you build out more than a couple',
-        ],
+        homepage: 'https://cursor.com',
+        note: "Cursor Composer 2.5 surprised me — I'm using it more often.",
+        pros: ['Composer 2.5 is surprisingly useful for quick drafts and switching contexts'],
       },
     ],
   },
@@ -156,13 +161,87 @@ export const fieldNotesSections: FieldNoteSection[] = [
         pros: ['Fits the Warp-centered direction of the stack'],
         cons: ['Still early for me'],
       },
+      // T3 Code moved to Harnesses (now listed with daily usage)
+    ],
+  },
+  {
+    id: 'models',
+    title: 'Models',
+    blurb: 'The foundation models I prefer and reach for in different contexts.',
+    items: [
       {
-        title: 'T3 Code',
-        tags: ['wrapper'],
-        badge: 'watching',
-        note: 'Still interesting as a wrapper around Codex and Claude Code, but Warp plus direct CLIs wins most days.',
-        pros: ['Nice wrapper idea for the tools I already use'],
-        cons: ['Not beating Warp plus direct CLIs right now'],
+        title: 'Opus 4.7',
+        tags: ['opus', 'model'],
+        badge: 'daily',
+        note: 'High-quality specialist model I use when I need tight, deterministic outputs and strong reasoning in niche domains.',
+        pros: ['Strong specialist performance', 'Good for precise generation'],
+      },
+      {
+        title: 'GPT 5.5',
+        tags: ['openai', 'model'],
+        badge: 'daily',
+        note: 'My generalist go-to for broad tasks: coding help, summarization, and creative drafting.',
+        pros: ['Versatile across many tasks', 'Strong coding and synthesis ability'],
+      },
+      {
+        title: 'Composer 2.5',
+        tags: ['cursor', 'model'],
+        badge: 'daily',
+        note: 'Model behind Cursor Composer 2.5 — compact and fast for quick drafts and assistant-style interactions.',
+        pros: ['Low-latency drafting', 'Good for quick iterations'],
+      },
+    ],
+  },
+  {
+    id: 'tools',
+    title: 'Tools',
+    blurb: 'Companion utilities and helper surfaces that support my workflow.',
+    items: [
+      {
+        title: 'Superwhisper',
+        tags: ['voice', 'dictation', 'macOS'],
+        badge: 'daily',
+        homepage: 'https://superwhisper.com',
+        note: 'Push-to-talk dictation surface. Hold the hotkey, talk, release — audio is transcribed then processed by an LLM mode of my choice.',
+        link: { href: 'https://superwhisper.com', label: 'superwhisper.com' },
+        pros: [
+          'Push-to-talk hotkey makes voice feel like a real input mode',
+          'Choose transcription and processing models independently',
+          'Modes for verbose dictation, summarized meeting notes, and clean prose',
+        ],
+        cons: [
+          'Mode customization takes a beat to internalize when you build out more than a couple',
+        ],
+      },
+      {
+        title: 'Obsidian',
+        tags: ['notes', 'vault', 'editor'],
+        badge: 'daily',
+        homepage: 'https://obsidian.md',
+        note: 'My personal knowledge vault and note-taking surface; central to workflows and long-form drafting.',
+        pros: ['Local-first, extensible with plugins', 'Great for Zettelkasten-style linking'],
+      },
+      {
+        title: 'Tailscale',
+        tags: ['vpn', 'network'],
+        badge: 'daily',
+        homepage: 'https://tailscale.com',
+        note: 'Zero-config mesh VPN that keeps my machines and VPS reachable securely.',
+        pros: ['Simple secure networking across devices', 'Works well for remote agent access'],
+      },
+      {
+        title: 'Helium Browser',
+        tags: ['browser', 'privacy'],
+        badge: 'daily',
+        note: 'Lightweight browser I use for isolated browsing and testing; useful for quick checks.',
+        pros: ['Fast, minimal surface for quick browsing and testing'],
+      },
+      {
+        title: 'Codex Bar',
+        tags: ['menu bar', 'codex'],
+        badge: 'daily',
+        note: 'Menu-bar runner for quick Codex prompts and snippets without opening the full app.',
+        pros: ['Convenient for one-off prompts and small snippets'],
       },
     ],
   },
@@ -171,13 +250,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
     title: 'Paused',
     blurb: 'Good tools I am not reaching for much right now.',
     items: [
-      {
-        title: 'Cursor',
-        tags: ['editor'],
-        badge: 'paused',
-        homepage: 'https://cursor.com',
-        note: 'Paused for now. The bigger shift is that I do not want the editor to be the main agent surface.',
-      },
+      // Cursor moved to Harnesses (using Composer 2.5 more)
     ],
   },
 ];
