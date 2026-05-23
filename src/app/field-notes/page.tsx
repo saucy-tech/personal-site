@@ -46,6 +46,7 @@ export const metadata: Metadata = {
 
 export default function FieldNotesPage() {
   const lastUpdatedLabel = formatPostDate(fieldNotesLastUpdated);
+  const sections = fieldNotesSections.filter((section) => section.items.length > 0);
 
   return (
     <PageLayout title="Field notes" backHref="/" backLabel="Back to Home">
@@ -56,7 +57,7 @@ export default function FieldNotesPage() {
         </p>
         <p className="text-sm text-(--text-secondary)">
           <span className="uppercase tracking-[0.14em] text-xs">
-            {fieldNotesSections.map((section, i) => (
+            {sections.map((section, i) => (
               <span key={section.id}>
                 {i > 0 && <span className="text-(--accent-border)"> · </span>}
                 <a
@@ -74,7 +75,7 @@ export default function FieldNotesPage() {
       </div>
 
       <div className="mt-10 max-w-3xl space-y-12">
-        {fieldNotesSections.map((section) => (
+        {sections.map((section) => (
           <section key={section.id} id={section.id} className="scroll-mt-24">
             <header className="border-t border-(--accent-border) pt-5">
               <h2 className="text-lg font-semibold leading-tight text-(--text-primary)">
