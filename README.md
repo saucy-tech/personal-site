@@ -23,7 +23,7 @@ This repo uses pnpm pinned via Corepack (see package.json "packageManager").
 ```
 personal-site/
 ├── .github/workflows/         # CI, devotion broadcast, lighthouse
-├── docs/                      # Architecture map, runbooks, upgrade matrices
+├── docs/                      # Runbooks and generated architecture docs
 ├── public/                    # Static assets
 │   └── images/blog/           # Blog post images
 ├── scripts/                   # Content validators, broadcast, doc gen
@@ -35,8 +35,6 @@ personal-site/
 │   ├── utils/                 # posts.ts, security.ts, constants.ts
 │   └── proxy.ts               # CSP/security headers (Next.js file convention)
 ├── tests/                     # Playwright E2E specs
-├── AGENTS.md                  # Codebase facts (canonical agent doc)
-├── CLAUDE.md                  # Claude-specific guide (writing rules, gotchas)
 ├── next.config.js
 ├── package.json
 └── README.md
@@ -109,9 +107,8 @@ Daily Word devotions are the primary content pipeline. The lifecycle:
    `KIT_API_KEY`.
 4. Vercel deploys the post to production.
 
-Writing rules, frontmatter schema, and agent gotchas live in
-[CLAUDE.md](./CLAUDE.md). Codebase architecture, security, and full env var
-reference live in [AGENTS.md](./AGENTS.md).
+Writing rules and quality checks for published content live in the scripts and
+runbooks in [`docs/`](./docs).
 
 `pnpm broadcast` is retained as a **manual fallback only** and is not the
 primary publishing path.
@@ -141,6 +138,9 @@ LNURL_METADATA_DESC="Lightning tip jar for brandon"
 # Next.js App URL (for OpenGraph)
 NEXT_PUBLIC_APP_URL=https://your-domain.com
 
+# Optional canonical site URL override for metadata and absolute URLs
+SITE_URL=https://your-domain.com
+
 # ConvertKit API configuration for email subscriptions (optional)
 CONVERTKIT_API_KEY=
 CONVERTKIT_FORM_ID=
@@ -148,6 +148,17 @@ CONVERTKIT_FORM_ID=
 # ConvertKit v4 API — optional manual fallback for `pnpm broadcast`
 CK_SECRET_KEY=        # Settings → Advanced → API Secret
 CK_PUBLISHER_ID=      # numeric account ID from Settings → Advanced
+
+# Optional distributed rate limiting
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+
+# Optional CSP/reporting toggles
+ENABLE_CSP_VIOLATION_REPORTS=0
+CSP_REPORT_ONLY=0
+
+# Optional error monitoring
+SENTRY_DSN=
 ```
 
 ### GitHub Actions Secrets
@@ -224,7 +235,7 @@ This check:
 - fails when a local image reference is missing in `public/`
 - warns on large images and fails for oversized images
 
-Run `pnpm docs:architecture` to regenerate `docs/architecture-map.md` after adding routes, API endpoints, or major utility/component files.
+Run `pnpm docs:architecture` to regenerate the local `docs/architecture-map.md` report after adding routes, API endpoints, or major utility/component files. That report is gitignored.
 
 Run `pnpm quality:gate` as the local "definition of done" check before pushing. It runs:
 - `pnpm lint`
@@ -236,12 +247,10 @@ Run `pnpm quality:gate` as the local "definition of done" check before pushing. 
 
 CI now uses this same `quality:gate` command before build and E2E smoke checks.
 
-For framework/runtime modernization work, use the upgrade contract matrix:
-- `docs/testing/framework-upgrade-test-matrix.md`
-
 Operational runbooks:
 - `docs/runbooks/api-incident-response.md`
 - `docs/runbooks/content-guardrails.md`
+- `docs/security-performance-observability.md`
 
 ## Deployment
 
