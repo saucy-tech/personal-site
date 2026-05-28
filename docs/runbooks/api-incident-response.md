@@ -5,6 +5,8 @@
 - `/api/invoice`
 - `/api/btcusd`
 - `/api/lnurlp/brandon/callback`
+- `/api/csp-report`
+- `/api/webmention`
 
 ## Fast Triage (first 10 minutes)
 - Confirm deploy status and recent changes in Vercel.
@@ -24,6 +26,9 @@
   - `coingecko_timeout`
   - `coingecko_request_failed`
   - `btcusd_unhandled_error`
+- Reporting endpoints:
+  - `csp_violation_report`
+  - `webmention_received`
 
 ## Endpoint-Specific Playbooks
 
@@ -41,6 +46,14 @@
 - Validate `NOSTR_WALLET_CONNECT_URL` presence and freshness.
 - Confirm payment hash lookups still return parseable responses.
 - Watch for suspicious-request and invalid-input spikes (abuse vs. product issue).
+
+### `/api/csp-report`
+- Traffic should be low and only present when `ENABLE_CSP_VIOLATION_REPORTS=1`.
+- Confirm payloads are truncated and the route returns `204`.
+
+### `/api/webmention`
+- Expected responses are `202` for accepted requests, `400` for off-site or incomplete payloads, and `415` for unsupported content types.
+- Treat spikes as either abuse/noise or an intentional integration attempt; this route currently logs and accepts but does not persist mentions.
 
 ## Mitigation Checklist
 - Reduce blast radius: feature-flag or temporary fallback response if needed.
