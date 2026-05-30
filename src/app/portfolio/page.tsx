@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     type: 'profile',
     images: [
       {
-        url: '/family-photo.jpeg',
+        url: '/headshot.jpeg',
         width: 1024,
         height: 1024,
         alt: `${SITE_NAME} - Portfolio`,

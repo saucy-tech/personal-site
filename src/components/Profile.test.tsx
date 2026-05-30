@@ -40,7 +40,7 @@ describe('Profile', () => {
   it('renders the bio as wrapped centered text without overflow helpers', () => {
     const bio = 'Love Jesus, Explore Ideas, Create Things, Save in Bitcoin';
     const { container } = render(
-      <Profile name="Brandon" bio={bio} imageSrc="/family-photo.jpeg" />
+      <Profile name="Brandon" bio={bio} imageSrc="/headshot.jpeg" />
     );
 
     const bioElement = screen.getByText(bio);
