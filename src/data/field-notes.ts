@@ -5,17 +5,18 @@
  */
 
 /** ISO date — bump when you revise items or copy. Shown on `/field-notes`. */
-export const fieldNotesLastUpdated = '2026-05-22';
+export const fieldNotesLastUpdated = '2026-05-30';
 
 export type FieldNoteStatus =
   | 'harnesses'
   | 'subscriptions'
   | 'agents'
+  | 'infrastructure'
   | 'models'
   | 'tools'
   | 'paused';
 
-export type FieldNoteBadge = 'daily' | 'learning' | 'paused' | 'watching';
+export type FieldNoteBadge = 'daily' | 'experimenting' | 'learning' | 'paused' | 'watching';
 
 export interface FieldNoteItem {
   title: string;
@@ -53,6 +54,16 @@ export const fieldNotesSections: FieldNoteSection[] = [
         cons: ['I am still learning where Oz fits into the flow'],
       },
       {
+        title: 'Oz',
+        tags: ['warp', 'cloud agents'],
+        badge: 'experimenting',
+        homepage: 'https://warp.dev',
+        note: "Warp's cloud-agent orchestration platform. Sits next to Warp because it is the same family — I am actively trying it to see where cloud agents fit in my flow.",
+        pros: ['Fits the Warp-centered direction of the stack'],
+        cons: ['Still forming an opinion on when to reach for it'],
+      },
+      // Anthropic surfaces
+      {
         title: 'Claude Code',
         tags: ['anthropic', 'cli', 'coding harness'],
         badge: 'daily',
@@ -61,6 +72,16 @@ export const fieldNotesSections: FieldNoteSection[] = [
         pros: ['Strong for planning and repo-shaped work', 'Good fit for longer coding sessions'],
         cons: ['I still pair it with Codex when I want a second read'],
       },
+      {
+        title: 'Claude desktop',
+        tags: ['anthropic', 'desktop app'],
+        badge: 'learning',
+        homepage: 'https://claude.ai',
+        note: 'Useful for coworking and longer thinking sessions; I use it sometimes, but prefer the Codex app and Warp for most work.',
+        pros: ['Good for conversation and high-context thinking'],
+        cons: ['Not replacing Claude Code for repo work'],
+      },
+      // OpenAI surfaces
       {
         title: 'Codex CLI',
         tags: ['openai', 'cli', 'coding harness'],
@@ -79,32 +100,42 @@ export const fieldNotesSections: FieldNoteSection[] = [
         pros: ['Useful as a separate surface from the terminal'],
         cons: ['Still finding when I prefer it over the CLI'],
       },
+      // Microsoft / GitHub surfaces
+      {
+        title: 'VS Code',
+        tags: ['microsoft', 'editor', 'agent mode'],
+        badge: 'experimenting',
+        homepage: 'https://code.visualstudio.com',
+        note: 'Back in the rotation now that Agent mode brings Cursor-style autonomous edits into plain VS Code. Trying it as a lighter-weight alternative to a dedicated AI editor.',
+        pros: [
+          'Agent mode closes much of the gap with Cursor',
+          'Familiar editor I already know well',
+        ],
+        cons: ['Still deciding whether it replaces my other surfaces'],
+      },
+      {
+        title: 'Copilot CLI',
+        tags: ['github', 'cli', 'agent'],
+        badge: 'experimenting',
+        homepage: 'https://github.com/github/copilot-cli',
+        note: "GitHub's terminal agent. Have poked at it a bit to see how it compares with Claude Code and Codex CLI in the same Warp workflow.",
+        pros: [
+          'Lives in the terminal alongside my other CLIs',
+          'Tied into the GitHub ecosystem I already use',
+        ],
+        cons: ['Too early to say where it lands versus the CLIs I run daily'],
+      },
+      // Wrapper that ties the surfaces above together
       {
         title: 'T3 Code',
         tags: ['wrapper'],
         badge: 'daily',
-        note: 'Useful as a wrapper that lets me switch between Claude Code, Codex, and Cursor as needed.',
+        homepage: 'https://t3.codes',
+        note: 'Useful as a wrapper that lets me switch between Claude Code, Codex, and other agents as needed.',
         pros: ['Convenient switcher for multiple CLIs and desktop apps'],
         cons: ['Overlap with direct Warp+CLI workflows'],
       },
-      {
-        title: 'Claude desktop',
-        tags: ['anthropic', 'desktop app'],
-        badge: 'learning',
-        homepage: 'https://claude.ai',
-        note: 'Useful for coworking and longer thinking sessions; I use it sometimes, but prefer the Codex app and Warp for most work.',
-        pros: ['Good for conversation and high-context thinking'],
-        cons: ['Not replacing Claude Code for repo work'],
-      },
       // Superwhisper moved to Tools section
-      {
-        title: 'Cursor',
-        tags: ['editor'],
-        badge: 'daily',
-        homepage: 'https://cursor.com',
-        note: "Cursor Composer 2.5 surprised me — I'm using it more often.",
-        pros: ['Composer 2.5 is surprisingly useful for quick drafts and switching contexts'],
-      },
     ],
   },
   {
@@ -146,22 +177,68 @@ export const fieldNotesSections: FieldNoteSection[] = [
     title: 'Agents',
     blurb: 'Orchestration and cloud-agent workflows I am still learning.',
     items: [
-      {
-        title: 'Hermes Agent',
-        tags: ['orchestration', 'vps'],
-        badge: 'learning',
-        note: 'Running on my VPS, so it sits in the learning bucket for both agent orchestration and VPS operations.',
-      },
-      {
-        title: 'Oz',
-        tags: ['warp', 'cloud agents'],
-        badge: 'watching',
-        homepage: 'https://warp.dev',
-        note: "Warp's cloud-agent orchestration platform. This is the agent lane I mean when I talk about learning cloud agents.",
-        pros: ['Fits the Warp-centered direction of the stack'],
-        cons: ['Still early for me'],
-      },
+      // Hermes moved to Infrastructure (it lives on the VPS)
+      // Oz moved to Harnesses (grouped with Warp, its parent)
       // T3 Code moved to Harnesses (now listed with daily usage)
+    ],
+  },
+  {
+    id: 'infrastructure',
+    title: 'Infrastructure',
+    blurb: 'Where my sites and services actually live — hosting, DNS, and the always-on box.',
+    items: [
+      {
+        title: 'Hostinger VPS',
+        tags: ['hostinger', 'KVM 4', 'Ubuntu 24.04'],
+        badge: 'daily',
+        homepage: 'https://www.hostinger.com',
+        note: 'My always-on server — a Hostinger KVM 4 box on Ubuntu 24.04. It complements Vercel rather than replacing it: Vercel stays the default for public web apps, while this runs Docker workloads, private tools, background jobs, and Hermes. Access is private-first over Tailscale, with only SSH and HTTP/S exposed publicly.',
+        link: { href: 'https://www.hostinger.com?REFERRALCODE=62HBRANDOYK4', label: 'my referral' },
+        pros: [
+          'Always-on home for self-hosted services and agents',
+          'Private-first access over Tailscale keeps the surface small',
+          'Cheap, predictable place to run things Vercel is not meant for',
+        ],
+        cons: ['I own the patching, backups, and uptime myself'],
+      },
+      {
+        title: 'Hermes',
+        tags: ['nous research', 'orchestration', 'telegram'],
+        badge: 'learning',
+        homepage: 'https://hermes-agent.nousresearch.com',
+        note: 'Nous Research’s agent harness, self-hosted on my VPS. It coordinates Claude Code and Codex CLI as workers, exposes a dashboard, and accepts work through a Telegram gateway — all reachable over Tailscale rather than the public internet. Still a learning project and my main way into agent orchestration.',
+        pros: [
+          'One surface to coordinate Claude Code and Codex workers',
+          'Remote control from my phone via Telegram',
+          'Private by default — no public exposure',
+        ],
+        cons: ['Early days; I am still shaping how I use it day to day'],
+      },
+      {
+        title: 'Vercel',
+        tags: ['hosting', 'next.js', 'ci/cd'],
+        badge: 'daily',
+        homepage: 'https://vercel.com',
+        note: 'Where all my public sites live, including this one. Every push deploys with a preview URL, so the default path for anything GitHub-backed and web-facing is Vercel — the VPS only picks up what Vercel is not meant to run.',
+        pros: [
+          'Git push to production with zero server babysitting',
+          'Preview deploys on every branch make review easy',
+          'Pairs naturally with Next.js',
+        ],
+        cons: ['Less suited to always-on background jobs and stateful services'],
+      },
+      {
+        title: 'Cloudflare',
+        tags: ['dns', 'domains', 'registrar'],
+        badge: 'daily',
+        homepage: 'https://www.cloudflare.com',
+        note: 'My DNS and domain registrar — the layer that points every domain at Vercel, the VPS, and everything else. At-cost domain pricing and fast DNS make it the quiet foundation under the whole stack.',
+        pros: [
+          'At-cost domain registration with no markup',
+          'Fast, reliable DNS for every property',
+          'Single place to manage all my domains',
+        ],
+      },
     ],
   },
   {
@@ -170,9 +247,10 @@ export const fieldNotesSections: FieldNoteSection[] = [
     blurb: 'The foundation models I prefer and reach for in different contexts.',
     items: [
       {
-        title: 'Opus 4.7',
+        title: 'Opus 4.8',
         tags: ['opus', 'model'],
         badge: 'daily',
+        homepage: 'https://www.anthropic.com',
         note: 'High-quality specialist model I use when I need tight, deterministic outputs and strong reasoning in niche domains.',
         pros: ['Strong specialist performance', 'Good for precise generation'],
       },
@@ -180,6 +258,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         title: 'GPT 5.5',
         tags: ['openai', 'model'],
         badge: 'daily',
+        homepage: 'https://openai.com',
         note: 'My generalist go-to for broad tasks: coding help, summarization, and creative drafting.',
         pros: ['Versatile across many tasks', 'Strong coding and synthesis ability'],
       },
@@ -187,7 +266,8 @@ export const fieldNotesSections: FieldNoteSection[] = [
         title: 'Composer 2.5',
         tags: ['cursor', 'model'],
         badge: 'daily',
-        note: 'Model behind Cursor Composer 2.5 — compact and fast for quick drafts and assistant-style interactions.',
+        homepage: 'https://cursor.com',
+        note: 'Cursor’s in-house model — compact and fast for quick drafts and assistant-style edits. I still rate the model even though Cursor itself is out of my daily harness rotation.',
         pros: ['Low-latency drafting', 'Good for quick iterations'],
       },
     ],
@@ -233,6 +313,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         title: 'Helium Browser',
         tags: ['browser', 'privacy'],
         badge: 'daily',
+        homepage: 'https://helium.computer',
         note: 'Lightweight browser I use for isolated browsing and testing; useful for quick checks.',
         pros: ['Fast, minimal surface for quick browsing and testing'],
       },
@@ -240,6 +321,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         title: 'Codex Bar',
         tags: ['menu bar', 'codex'],
         badge: 'daily',
+        homepage: 'https://codexbar.app',
         note: 'Menu-bar runner for quick Codex prompts and snippets without opening the full app.',
         pros: ['Convenient for one-off prompts and small snippets'],
       },
@@ -250,7 +332,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
     title: 'Paused',
     blurb: 'Good tools I am not reaching for much right now.',
     items: [
-      // Cursor moved to Harnesses (using Composer 2.5 more)
+      // Cursor removed from rotation; experimenting with VS Code Agent mode instead
     ],
   },
 ];
