@@ -16,7 +16,7 @@ export type FieldNoteStatus =
   | 'tools'
   | 'paused';
 
-export type FieldNoteBadge = 'daily' | 'learning' | 'paused' | 'watching';
+export type FieldNoteBadge = 'daily' | 'experimenting' | 'learning' | 'paused' | 'watching';
 
 export interface FieldNoteItem {
   title: string;
@@ -54,6 +54,16 @@ export const fieldNotesSections: FieldNoteSection[] = [
         cons: ['I am still learning where Oz fits into the flow'],
       },
       {
+        title: 'Oz',
+        tags: ['warp', 'cloud agents'],
+        badge: 'experimenting',
+        homepage: 'https://warp.dev',
+        note: "Warp's cloud-agent orchestration platform. Sits next to Warp because it is the same family — I am actively trying it to see where cloud agents fit in my flow.",
+        pros: ['Fits the Warp-centered direction of the stack'],
+        cons: ['Still forming an opinion on when to reach for it'],
+      },
+      // Anthropic surfaces
+      {
         title: 'Claude Code',
         tags: ['anthropic', 'cli', 'coding harness'],
         badge: 'daily',
@@ -62,6 +72,16 @@ export const fieldNotesSections: FieldNoteSection[] = [
         pros: ['Strong for planning and repo-shaped work', 'Good fit for longer coding sessions'],
         cons: ['I still pair it with Codex when I want a second read'],
       },
+      {
+        title: 'Claude desktop',
+        tags: ['anthropic', 'desktop app'],
+        badge: 'learning',
+        homepage: 'https://claude.ai',
+        note: 'Useful for coworking and longer thinking sessions; I use it sometimes, but prefer the Codex app and Warp for most work.',
+        pros: ['Good for conversation and high-context thinking'],
+        cons: ['Not replacing Claude Code for repo work'],
+      },
+      // OpenAI surfaces
       {
         title: 'Codex CLI',
         tags: ['openai', 'cli', 'coding harness'],
@@ -80,33 +100,42 @@ export const fieldNotesSections: FieldNoteSection[] = [
         pros: ['Useful as a separate surface from the terminal'],
         cons: ['Still finding when I prefer it over the CLI'],
       },
+      // Microsoft / GitHub surfaces
+      {
+        title: 'VS Code',
+        tags: ['microsoft', 'editor', 'agent mode'],
+        badge: 'experimenting',
+        homepage: 'https://code.visualstudio.com',
+        note: 'Back in the rotation now that Agent mode brings Cursor-style autonomous edits into plain VS Code. Trying it as a lighter-weight alternative to a dedicated AI editor.',
+        pros: [
+          'Agent mode closes much of the gap with Cursor',
+          'Familiar editor I already know well',
+        ],
+        cons: ['Still deciding whether it replaces my other surfaces'],
+      },
+      {
+        title: 'Copilot CLI',
+        tags: ['github', 'cli', 'agent'],
+        badge: 'experimenting',
+        homepage: 'https://github.com/github/copilot-cli',
+        note: "GitHub's terminal agent. Have poked at it a bit to see how it compares with Claude Code and Codex CLI in the same Warp workflow.",
+        pros: [
+          'Lives in the terminal alongside my other CLIs',
+          'Tied into the GitHub ecosystem I already use',
+        ],
+        cons: ['Too early to say where it lands versus the CLIs I run daily'],
+      },
+      // Wrapper that ties the surfaces above together
       {
         title: 'T3 Code',
         tags: ['wrapper'],
         badge: 'daily',
         homepage: 'https://t3.codes',
-        note: 'Useful as a wrapper that lets me switch between Claude Code, Codex, and Cursor as needed.',
+        note: 'Useful as a wrapper that lets me switch between Claude Code, Codex, and other agents as needed.',
         pros: ['Convenient switcher for multiple CLIs and desktop apps'],
         cons: ['Overlap with direct Warp+CLI workflows'],
       },
-      {
-        title: 'Claude desktop',
-        tags: ['anthropic', 'desktop app'],
-        badge: 'learning',
-        homepage: 'https://claude.ai',
-        note: 'Useful for coworking and longer thinking sessions; I use it sometimes, but prefer the Codex app and Warp for most work.',
-        pros: ['Good for conversation and high-context thinking'],
-        cons: ['Not replacing Claude Code for repo work'],
-      },
       // Superwhisper moved to Tools section
-      {
-        title: 'Cursor',
-        tags: ['editor'],
-        badge: 'daily',
-        homepage: 'https://cursor.com',
-        note: "Cursor Composer 2.5 surprised me — I'm using it more often.",
-        pros: ['Composer 2.5 is surprisingly useful for quick drafts and switching contexts'],
-      },
     ],
   },
   {
@@ -149,15 +178,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
     blurb: 'Orchestration and cloud-agent workflows I am still learning.',
     items: [
       // Hermes moved to Infrastructure (it lives on the VPS)
-      {
-        title: 'Oz',
-        tags: ['warp', 'cloud agents'],
-        badge: 'watching',
-        homepage: 'https://warp.dev',
-        note: "Warp's cloud-agent orchestration platform. This is the agent lane I mean when I talk about learning cloud agents.",
-        pros: ['Fits the Warp-centered direction of the stack'],
-        cons: ['Still early for me'],
-      },
+      // Oz moved to Harnesses (grouped with Warp, its parent)
       // T3 Code moved to Harnesses (now listed with daily usage)
     ],
   },
@@ -246,7 +267,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['cursor', 'model'],
         badge: 'daily',
         homepage: 'https://cursor.com',
-        note: 'Model behind Cursor Composer 2.5 — compact and fast for quick drafts and assistant-style interactions.',
+        note: 'Cursor’s in-house model — compact and fast for quick drafts and assistant-style edits. I still rate the model even though Cursor itself is out of my daily harness rotation.',
         pros: ['Low-latency drafting', 'Good for quick iterations'],
       },
     ],
@@ -311,7 +332,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
     title: 'Paused',
     blurb: 'Good tools I am not reaching for much right now.',
     items: [
-      // Cursor moved to Harnesses (using Composer 2.5 more)
+      // Cursor removed from rotation; experimenting with VS Code Agent mode instead
     ],
   },
 ];
