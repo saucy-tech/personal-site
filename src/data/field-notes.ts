@@ -1,6 +1,13 @@
 /**
- * Field notes (`/field-notes`) — what I'm into in tech right now.
- * Sections: harnesses, subscriptions, agents, and paused.
+ * Field notes (`/field-notes`) — how I actually work with AI right now.
+ *
+ * Sections are workflow-native rather than a flat tool ranking: orchestration
+ * first (Current workflow), then the coding agents that operate inside a repo,
+ * the models I reach for, the interfaces I live in, and what I'm still
+ * evaluating — plus the subscriptions, infrastructure, and utilities
+ * underneath. The point is the loop, not the chat: give context, let an agent
+ * inspect the repo, make edits, run tests/checks, review the output, iterate.
+ *
  * Edit here to update copy; bump `fieldNotesLastUpdated` when you revise.
  */
 
@@ -8,13 +15,14 @@
 export const fieldNotesLastUpdated = '2026-05-30';
 
 export type FieldNoteStatus =
-  | 'harnesses'
-  | 'subscriptions'
-  | 'agents'
-  | 'infrastructure'
+  | 'workflow'
+  | 'coding-agents'
   | 'models'
-  | 'tools'
-  | 'paused';
+  | 'interfaces'
+  | 'evaluating'
+  | 'subscriptions'
+  | 'infrastructure'
+  | 'tools';
 
 export type FieldNoteBadge = 'daily' | 'experimenting' | 'learning' | 'paused' | 'watching';
 
@@ -39,117 +47,192 @@ export interface FieldNoteSection {
 
 export const fieldNotesSections: FieldNoteSection[] = [
   {
-    id: 'harnesses',
-    title: 'Harnesses',
-    blurb: 'The surfaces I actually work through.',
+    id: 'workflow',
+    title: 'Current workflow',
+    blurb:
+      'How I actually work with AI right now: orchestration first, coding agents second, models as interchangeable horsepower. The shift that matters is that AI coding is no longer just chatting with a model — it is a loop: give context, let an agent inspect the repo, make edits, run tests and checks, review the output, iterate.',
+    items: [
+      {
+        title: 'Hermes Agent',
+        tags: ['nous research', 'orchestration', 'command center'],
+        badge: 'learning',
+        homepage: 'https://hermes-agent.nousresearch.com',
+        note: 'My orchestration layer and command center — Nous Research’s agent harness, self-hosted on the VPS. It coordinates Claude Code and Codex CLI as workers, exposes a dashboard, and takes work over a Telegram gateway, all over Tailscale rather than the public internet. This is where the loop starts: I hand it context and a goal, and it routes the actual repo work to a coding agent.',
+        pros: [
+          'One surface to dispatch and coordinate coding agents',
+          'Remote control from my phone via Telegram',
+          'Private by default — no public exposure',
+        ],
+        cons: ['Early days; I am still shaping how I lean on it day to day'],
+      },
+      {
+        title: 'M1 MacBook Pro',
+        tags: ['apple silicon', 'local environment', 'hardware'],
+        badge: 'daily',
+        homepage: 'https://www.apple.com',
+        note: 'The local environment everything runs against — not an AI tool, but the machine the agents edit and the checks run on. Still plenty of headroom for the whole stack of CLIs, editors, and a browser at once.',
+        pros: ['Handles the full local toolchain comfortably', 'Quiet, cool, and always ready'],
+        cons: ['Heavier model and container work still belongs on the VPS'],
+      },
+    ],
+  },
+  {
+    id: 'coding-agents',
+    title: 'Coding agents & harnesses',
+    blurb: 'Tools that can operate inside a repo instead of just answering in chat.',
+    items: [
+      {
+        title: 'Claude Code',
+        tags: ['anthropic', 'cli', 'coding agent'],
+        badge: 'daily',
+        homepage: 'https://claude.ai',
+        note: 'My default coding agent for high-context, repo-shaped work — planning, larger edits, and longer sessions where keeping the whole repo in view matters.',
+        pros: ['Strong at planning and repo-shaped work', 'Holds context across longer sessions'],
+        cons: ['I still pair it with Codex when I want a second read'],
+      },
+      {
+        title: 'Codex CLI',
+        tags: ['openai', 'cli', 'coding agent'],
+        badge: 'daily',
+        homepage: 'https://openai.com',
+        note: 'My implementation-and-inspection agent: fast at reading the repo, making focused edits, and running the test/check loop. I drive it mostly through Warp, often as a second read against Claude Code.',
+        pros: ['Quick into implementation and repo inspection', 'Clean inside Warp'],
+        cons: ['I reach for Claude Code first on the largest, most context-heavy tasks'],
+      },
+      {
+        title: 'T3 Code',
+        tags: ['agent harness', 'coding interface'],
+        badge: 'daily',
+        homepage: 'https://t3.codes',
+        note: 'An agent harness, not just a wrapper — it lets me drive Claude Code, Codex, and other agents from one coding interface and switch between them without rebuilding context each time.',
+        pros: ['One harness over several coding agents', 'Switch agents without leaving the flow'],
+        cons: ['Overlaps with running the CLIs directly in Warp'],
+      },
+    ],
+  },
+  {
+    id: 'models',
+    title: 'Models',
+    blurb: 'The reasoning engines I reach for when I want a different read.',
+    items: [
+      {
+        title: 'GPT-5.5',
+        tags: ['openai', 'model', 'second opinion'],
+        badge: 'daily',
+        homepage: 'https://openai.com',
+        note: 'My generalist reasoning partner and go-to second opinion — broad coding help, synthesis, and a different angle when Claude and I keep circling the same answer.',
+        pros: [
+          'Versatile across many kinds of problems',
+          'Useful contrast to the Anthropic models',
+        ],
+      },
+      {
+        title: 'Opus 4.8',
+        tags: ['anthropic', 'model', 'reasoning partner'],
+        badge: 'daily',
+        homepage: 'https://www.anthropic.com',
+        note: 'The reasoning engine behind most of my Claude Code work, and the one I trust for tight, deterministic output and careful reasoning on niche problems.',
+        pros: ['Strong, precise reasoning', 'Reliable for high-stakes generation'],
+      },
+      {
+        title: 'Composer 2.5',
+        tags: ['cursor', 'model'],
+        badge: 'watching',
+        homepage: 'https://cursor.com',
+        note: 'Cursor’s in-house model — compact and fast for quick drafts and assistant-style edits. I still rate the model even though Cursor itself is out of my daily interface rotation.',
+        pros: ['Low-latency drafting', 'Good for quick iterations'],
+      },
+    ],
+  },
+  {
+    id: 'interfaces',
+    title: 'Interfaces',
+    blurb: 'Where the work happens day to day.',
     items: [
       {
         title: 'Warp',
-        tags: ['terminal', 'Build plan', 'daily driver'],
+        tags: ['terminal', 'interface', 'daily driver'],
         badge: 'daily',
         homepage: 'https://warp.dev',
-        note: 'Still the center of gravity for my coding setup. Most implementation work runs through Warp now, especially Claude Code and Codex CLI.',
+        note: 'The center of gravity for the whole setup. Most coding-agent work — Claude Code, Codex CLI — runs through Warp, so it is the surface I actually live in.',
         link: { href: 'https://app.warp.dev/referral/3MJVPD', label: 'my referral' },
-        pros: ['Keeps the terminal as the home base', 'Works naturally with both major CLIs'],
-        cons: ['I am still learning where Oz fits into the flow'],
-      },
-      {
-        title: 'Oz',
-        tags: ['warp', 'cloud agents'],
-        badge: 'experimenting',
-        homepage: 'https://warp.dev',
-        note: "Warp's cloud-agent orchestration platform. Sits next to Warp because it is the same family — I am actively trying it to see where cloud agents fit in my flow.",
-        pros: ['Fits the Warp-centered direction of the stack'],
-        cons: ['Still forming an opinion on when to reach for it'],
-      },
-      // Anthropic surfaces
-      {
-        title: 'Claude Code',
-        tags: ['anthropic', 'cli', 'coding harness'],
-        badge: 'daily',
-        homepage: 'https://claude.ai',
-        note: 'My default high-context coding partner for planning, writing, and longer repo-shaped sessions.',
-        pros: ['Strong for planning and repo-shaped work', 'Good fit for longer coding sessions'],
-        cons: ['I still pair it with Codex when I want a second read'],
+        pros: ['Keeps the terminal as home base', 'Works naturally with both major CLIs'],
+        cons: ['Still learning where Oz fits alongside it'],
       },
       {
         title: 'Claude desktop',
         tags: ['anthropic', 'desktop app'],
         badge: 'learning',
         homepage: 'https://claude.ai',
-        note: 'Useful for coworking and longer thinking sessions; I use it sometimes, but prefer the Codex app and Warp for most work.',
-        pros: ['Good for conversation and high-context thinking'],
-        cons: ['Not replacing Claude Code for repo work'],
-      },
-      // OpenAI surfaces
-      {
-        title: 'Codex CLI',
-        tags: ['openai', 'cli', 'coding harness'],
-        badge: 'daily',
-        homepage: 'https://openai.com',
-        note: "OpenAI's coding CLI is now a daily part of the workflow. I run it mostly through Warp.",
-        pros: ['Fast to bring into implementation work', 'Feels clean inside Warp'],
-        cons: ['Plan details may change as I confirm the exact subscription label'],
+        note: 'Where I go for coworking and longer thinking sessions — conversation and high-context drafting rather than repo edits, which stay in Claude Code.',
+        pros: ['Good for conversation and thinking out loud'],
+        cons: ['Not a replacement for Claude Code on repo work'],
       },
       {
         title: 'Codex desktop',
         tags: ['openai', 'desktop app'],
         badge: 'daily',
         homepage: 'https://openai.com',
-        note: 'Part of the active rotation now and a preferred separate surface alongside Warp and the Codex CLI.',
-        pros: ['Useful as a separate surface from the terminal'],
+        note: 'A separate surface from the terminal for Codex work; in the active rotation alongside Warp and the Codex CLI.',
+        pros: ['Useful as a non-terminal surface'],
         cons: ['Still finding when I prefer it over the CLI'],
       },
-      // Microsoft / GitHub surfaces
+    ],
+  },
+  {
+    id: 'evaluating',
+    title: 'Evaluating',
+    blurb:
+      'Tools I am testing against my real workflow before promoting them to daily-driver status.',
+    items: [
+      {
+        title: 'Oz',
+        tags: ['warp', 'cloud agents'],
+        badge: 'experimenting',
+        homepage: 'https://warp.dev',
+        note: "Warp's cloud-agent orchestration. Same family as my daily terminal, so I am testing where cloud agents fit next to Hermes and the local CLIs.",
+        pros: ['Fits the Warp-centered direction of the stack'],
+        cons: ['Still forming an opinion on when to reach for it'],
+      },
       {
         title: 'VS Code',
         tags: ['microsoft', 'editor', 'agent mode'],
         badge: 'experimenting',
         homepage: 'https://code.visualstudio.com',
-        note: 'Back in the rotation now that Agent mode brings Cursor-style autonomous edits into plain VS Code. Trying it as a lighter-weight alternative to a dedicated AI editor.',
+        note: 'Agent mode brings Cursor-style autonomous edits into plain VS Code, so it can now operate inside a repo. Trying it as a lighter-weight alternative to a dedicated AI editor.',
         pros: [
           'Agent mode closes much of the gap with Cursor',
           'Familiar editor I already know well',
         ],
-        cons: ['Still deciding whether it replaces my other surfaces'],
+        cons: ['Still deciding whether it earns a daily-driver slot'],
       },
       {
         title: 'Copilot CLI',
         tags: ['github', 'cli', 'agent'],
         badge: 'experimenting',
         homepage: 'https://github.com/github/copilot-cli',
-        note: "GitHub's terminal agent. Have poked at it a bit to see how it compares with Claude Code and Codex CLI in the same Warp workflow.",
+        note: "GitHub's terminal agent. Poking at it to see how it compares with Claude Code and Codex CLI in the same Warp workflow.",
         pros: [
           'Lives in the terminal alongside my other CLIs',
           'Tied into the GitHub ecosystem I already use',
         ],
         cons: ['Too early to say where it lands versus the CLIs I run daily'],
       },
-      // Wrapper that ties the surfaces above together
-      {
-        title: 'T3 Code',
-        tags: ['wrapper'],
-        badge: 'daily',
-        homepage: 'https://t3.codes',
-        note: 'Useful as a wrapper that lets me switch between Claude Code, Codex, and other agents as needed.',
-        pros: ['Convenient switcher for multiple CLIs and desktop apps'],
-        cons: ['Overlap with direct Warp+CLI workflows'],
-      },
-      // Superwhisper moved to Tools section
     ],
   },
   {
     id: 'subscriptions',
     title: 'Subscriptions',
-    blurb: 'The paid plans that make the stack work.',
+    blurb:
+      'The paid plans that make the stack work — a different kind of thing from the agents and models they unlock.',
     items: [
       {
         title: 'Claude Max',
         tags: ['anthropic', '$100 plan'],
         badge: 'daily',
         homepage: 'https://claude.ai',
-        note: 'The subscription behind my Claude Code and Claude desktop usage right now.',
-        pros: ['Enough room for heavier Claude sessions'],
+        note: 'The plan behind my Claude Code and Claude desktop usage — enough headroom for the heavier, repo-shaped sessions.',
+        pros: ['Room for longer Claude Code runs'],
         cons: ['Still deciding how much belongs in desktop vs. CLI'],
       },
       {
@@ -157,29 +240,19 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['openai', '$100 plan'],
         badge: 'daily',
         homepage: 'https://chatgpt.com',
-        note: 'The subscription behind my Codex work right now. I am still confirming the cleanest public-facing name for the exact Codex access.',
-        pros: ['Makes Codex a real daily tool instead of an occasional backup'],
-        cons: ['Naming around Codex plans is easy to make too messy'],
+        note: 'The plan behind my Codex work and GPT-5.5 access. I am still confirming the cleanest public-facing name for the exact Codex tier.',
+        pros: ['Makes Codex a real daily agent instead of an occasional backup'],
+        cons: ['Naming around the Codex tiers is easy to make too messy'],
       },
       {
         title: 'Warp Build',
         tags: ['warp', 'Build plan'],
         badge: 'daily',
         homepage: 'https://warp.dev',
-        note: 'The terminal plan that supports the place where most of the workflow happens.',
-        pros: ['Worth it because Warp is where the work actually happens'],
-        cons: ['Oz is still in the watching bucket for me'],
+        note: 'The terminal plan that supports the interface where most of the workflow actually happens.',
+        pros: ['Worth it because Warp is where the work happens'],
+        cons: ['Oz is still in the evaluating bucket for me'],
       },
-    ],
-  },
-  {
-    id: 'agents',
-    title: 'Agents',
-    blurb: 'Orchestration and cloud-agent workflows I am still learning.',
-    items: [
-      // Hermes moved to Infrastructure (it lives on the VPS)
-      // Oz moved to Harnesses (grouped with Warp, its parent)
-      // T3 Code moved to Harnesses (now listed with daily usage)
     ],
   },
   {
@@ -200,19 +273,6 @@ export const fieldNotesSections: FieldNoteSection[] = [
           'Cheap, predictable place to run things Vercel is not meant for',
         ],
         cons: ['I own the patching, backups, and uptime myself'],
-      },
-      {
-        title: 'Hermes',
-        tags: ['nous research', 'orchestration', 'telegram'],
-        badge: 'learning',
-        homepage: 'https://hermes-agent.nousresearch.com',
-        note: 'Nous Research’s agent harness, self-hosted on my VPS. It coordinates Claude Code and Codex CLI as workers, exposes a dashboard, and accepts work through a Telegram gateway — all reachable over Tailscale rather than the public internet. Still a learning project and my main way into agent orchestration.',
-        pros: [
-          'One surface to coordinate Claude Code and Codex workers',
-          'Remote control from my phone via Telegram',
-          'Private by default — no public exposure',
-        ],
-        cons: ['Early days; I am still shaping how I use it day to day'],
       },
       {
         title: 'Vercel',
@@ -238,37 +298,6 @@ export const fieldNotesSections: FieldNoteSection[] = [
           'Fast, reliable DNS for every property',
           'Single place to manage all my domains',
         ],
-      },
-    ],
-  },
-  {
-    id: 'models',
-    title: 'Models',
-    blurb: 'The foundation models I prefer and reach for in different contexts.',
-    items: [
-      {
-        title: 'Opus 4.8',
-        tags: ['opus', 'model'],
-        badge: 'daily',
-        homepage: 'https://www.anthropic.com',
-        note: 'High-quality specialist model I use when I need tight, deterministic outputs and strong reasoning in niche domains.',
-        pros: ['Strong specialist performance', 'Good for precise generation'],
-      },
-      {
-        title: 'GPT 5.5',
-        tags: ['openai', 'model'],
-        badge: 'daily',
-        homepage: 'https://openai.com',
-        note: 'My generalist go-to for broad tasks: coding help, summarization, and creative drafting.',
-        pros: ['Versatile across many tasks', 'Strong coding and synthesis ability'],
-      },
-      {
-        title: 'Composer 2.5',
-        tags: ['cursor', 'model'],
-        badge: 'daily',
-        homepage: 'https://cursor.com',
-        note: 'Cursor’s in-house model — compact and fast for quick drafts and assistant-style edits. I still rate the model even though Cursor itself is out of my daily harness rotation.',
-        pros: ['Low-latency drafting', 'Good for quick iterations'],
       },
     ],
   },
@@ -325,14 +354,6 @@ export const fieldNotesSections: FieldNoteSection[] = [
         note: 'Menu-bar runner for quick Codex prompts and snippets without opening the full app.',
         pros: ['Convenient for one-off prompts and small snippets'],
       },
-    ],
-  },
-  {
-    id: 'paused',
-    title: 'Paused',
-    blurb: 'Good tools I am not reaching for much right now.',
-    items: [
-      // Cursor removed from rotation; experimenting with VS Code Agent mode instead
     ],
   },
 ];
