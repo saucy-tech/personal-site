@@ -5,12 +5,13 @@
  */
 
 /** ISO date — bump when you revise items or copy. Shown on `/field-notes`. */
-export const fieldNotesLastUpdated = '2026-05-22';
+export const fieldNotesLastUpdated = '2026-05-30';
 
 export type FieldNoteStatus =
   | 'harnesses'
   | 'subscriptions'
   | 'agents'
+  | 'infrastructure'
   | 'models'
   | 'tools'
   | 'paused';
@@ -83,6 +84,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         title: 'T3 Code',
         tags: ['wrapper'],
         badge: 'daily',
+        homepage: 'https://t3.codes',
         note: 'Useful as a wrapper that lets me switch between Claude Code, Codex, and Cursor as needed.',
         pros: ['Convenient switcher for multiple CLIs and desktop apps'],
         cons: ['Overlap with direct Warp+CLI workflows'],
@@ -146,12 +148,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
     title: 'Agents',
     blurb: 'Orchestration and cloud-agent workflows I am still learning.',
     items: [
-      {
-        title: 'Hermes Agent',
-        tags: ['orchestration', 'vps'],
-        badge: 'learning',
-        note: 'Running on my VPS, so it sits in the learning bucket for both agent orchestration and VPS operations.',
-      },
+      // Hermes moved to Infrastructure (it lives on the VPS)
       {
         title: 'Oz',
         tags: ['warp', 'cloud agents'],
@@ -165,14 +162,74 @@ export const fieldNotesSections: FieldNoteSection[] = [
     ],
   },
   {
+    id: 'infrastructure',
+    title: 'Infrastructure',
+    blurb: 'Where my sites and services actually live — hosting, DNS, and the always-on box.',
+    items: [
+      {
+        title: 'Hostinger VPS',
+        tags: ['hostinger', 'KVM 4', 'Ubuntu 24.04'],
+        badge: 'daily',
+        homepage: 'https://www.hostinger.com',
+        note: 'My always-on server — a Hostinger KVM 4 box on Ubuntu 24.04. It complements Vercel rather than replacing it: Vercel stays the default for public web apps, while this runs Docker workloads, private tools, background jobs, and Hermes. Access is private-first over Tailscale, with only SSH and HTTP/S exposed publicly.',
+        link: { href: 'https://www.hostinger.com?REFERRALCODE=62HBRANDOYK4', label: 'my referral' },
+        pros: [
+          'Always-on home for self-hosted services and agents',
+          'Private-first access over Tailscale keeps the surface small',
+          'Cheap, predictable place to run things Vercel is not meant for',
+        ],
+        cons: ['I own the patching, backups, and uptime myself'],
+      },
+      {
+        title: 'Hermes',
+        tags: ['nous research', 'orchestration', 'telegram'],
+        badge: 'learning',
+        homepage: 'https://hermes-agent.nousresearch.com',
+        note: 'Nous Research’s agent harness, self-hosted on my VPS. It coordinates Claude Code and Codex CLI as workers, exposes a dashboard, and accepts work through a Telegram gateway — all reachable over Tailscale rather than the public internet. Still a learning project and my main way into agent orchestration.',
+        pros: [
+          'One surface to coordinate Claude Code and Codex workers',
+          'Remote control from my phone via Telegram',
+          'Private by default — no public exposure',
+        ],
+        cons: ['Early days; I am still shaping how I use it day to day'],
+      },
+      {
+        title: 'Vercel',
+        tags: ['hosting', 'next.js', 'ci/cd'],
+        badge: 'daily',
+        homepage: 'https://vercel.com',
+        note: 'Where all my public sites live, including this one. Every push deploys with a preview URL, so the default path for anything GitHub-backed and web-facing is Vercel — the VPS only picks up what Vercel is not meant to run.',
+        pros: [
+          'Git push to production with zero server babysitting',
+          'Preview deploys on every branch make review easy',
+          'Pairs naturally with Next.js',
+        ],
+        cons: ['Less suited to always-on background jobs and stateful services'],
+      },
+      {
+        title: 'Cloudflare',
+        tags: ['dns', 'domains', 'registrar'],
+        badge: 'daily',
+        homepage: 'https://www.cloudflare.com',
+        note: 'My DNS and domain registrar — the layer that points every domain at Vercel, the VPS, and everything else. At-cost domain pricing and fast DNS make it the quiet foundation under the whole stack.',
+        pros: [
+          'At-cost domain registration with no markup',
+          'Fast, reliable DNS for every property',
+          'Single place to manage all my domains',
+        ],
+      },
+    ],
+  },
+  {
     id: 'models',
     title: 'Models',
     blurb: 'The foundation models I prefer and reach for in different contexts.',
     items: [
       {
-        title: 'Opus 4.7',
+        title: 'Opus 4.8',
         tags: ['opus', 'model'],
         badge: 'daily',
+        homepage: 'https://www.anthropic.com',
         note: 'High-quality specialist model I use when I need tight, deterministic outputs and strong reasoning in niche domains.',
         pros: ['Strong specialist performance', 'Good for precise generation'],
       },
@@ -180,6 +237,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         title: 'GPT 5.5',
         tags: ['openai', 'model'],
         badge: 'daily',
+        homepage: 'https://openai.com',
         note: 'My generalist go-to for broad tasks: coding help, summarization, and creative drafting.',
         pros: ['Versatile across many tasks', 'Strong coding and synthesis ability'],
       },
@@ -187,6 +245,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         title: 'Composer 2.5',
         tags: ['cursor', 'model'],
         badge: 'daily',
+        homepage: 'https://cursor.com',
         note: 'Model behind Cursor Composer 2.5 — compact and fast for quick drafts and assistant-style interactions.',
         pros: ['Low-latency drafting', 'Good for quick iterations'],
       },
@@ -233,6 +292,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         title: 'Helium Browser',
         tags: ['browser', 'privacy'],
         badge: 'daily',
+        homepage: 'https://helium.computer',
         note: 'Lightweight browser I use for isolated browsing and testing; useful for quick checks.',
         pros: ['Fast, minimal surface for quick browsing and testing'],
       },
@@ -240,6 +300,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         title: 'Codex Bar',
         tags: ['menu bar', 'codex'],
         badge: 'daily',
+        homepage: 'https://codexbar.app',
         note: 'Menu-bar runner for quick Codex prompts and snippets without opening the full app.',
         pros: ['Convenient for one-off prompts and small snippets'],
       },
