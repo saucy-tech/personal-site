@@ -5,7 +5,7 @@ describe('structured data helpers', () => {
   it('adds SearchAction to the website graph node', () => {
     const jsonLd = getSiteJsonLd({
       authorName: 'Brandon',
-      authorImagePath: '/family-photo.jpeg',
+      authorImagePath: '/headshot.jpeg',
       sameAs: ['https://x.com/Saucy_Tech'],
     });
 

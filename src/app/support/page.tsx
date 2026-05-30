@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/family-photo.jpeg',
+        url: '/headshot.jpeg',
         width: 1024,
         height: 1024,
         alt: `${SITE_NAME} - Support Me`,

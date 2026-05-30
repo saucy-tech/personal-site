@@ -26,7 +26,7 @@ export default async function Home() {
   const profileData = {
     name: 'Brandon',
     bio: 'Love Jesus, Explore Ideas, Create Things, Save in Bitcoin',
-    imageSrc: '/family-photo.jpeg',
+    imageSrc: '/headshot.jpeg',
   };
 
   const socialLinks = [
@@ -89,7 +89,7 @@ export default async function Home() {
 
   const jsonLd = getSiteJsonLd({
     authorName: 'Brandon',
-    authorImagePath: '/family-photo.jpeg',
+    authorImagePath: '/headshot.jpeg',
     sameAs: [
       'https://x.com/Saucy_Tech',
       'https://github.com/saucy-tech',
