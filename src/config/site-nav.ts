@@ -8,6 +8,7 @@ export type SiteNavItem = {
 
 /** Shown in the footer after primary nav items (RSS, utility links). */
 export const FOOTER_EXTRA_NAV: SiteNavItem[] = [
+  { href: '/bitcoin', label: 'Bitcoin', match: 'exact' },
   { href: '/links', label: 'Links', match: 'exact' },
   { href: '/rss.xml', label: 'RSS', match: 'exact' },
 ];
@@ -23,21 +24,19 @@ export function isNavActive(pathname: string, item: SiteNavItem, allItems: SiteN
   return pathname === item.href || pathname.startsWith(`${item.href}/`);
 }
 
-export function getSiteNavItems({ latestSlug }: { latestSlug: string | null }): SiteNavItem[] {
+export function getSiteNavItems(): SiteNavItem[] {
   const items: SiteNavItem[] = [{ href: '/blog', label: 'Writing', match: 'prefix' }];
-  if (latestSlug) {
-    items.push({ href: `/blog/${latestSlug}`, label: 'Latest', match: 'exact' });
-  }
   items.push(
-    { href: '/portfolio', label: 'Portfolio', match: 'exact' },
+    { href: '/portfolio', label: 'Projects', match: 'exact' },
+    { href: '/about', label: 'About', match: 'exact' },
+    { href: '/about#work-with-me', label: 'Work with me', match: 'exact' },
     { href: '/field-notes', label: 'Field notes', match: 'exact' },
-    { href: '/bitcoin', label: 'Bitcoin', match: 'exact' },
     { href: 'https://morningportion.com', label: 'Morning Portion', match: 'exact' },
     { href: '/support', label: 'Support', match: 'exact' }
   );
   return items;
 }
 
-export function getFooterNavItems({ latestSlug }: { latestSlug: string | null }): SiteNavItem[] {
-  return [...getSiteNavItems({ latestSlug }), ...FOOTER_EXTRA_NAV];
+export function getFooterNavItems(): SiteNavItem[] {
+  return [...getSiteNavItems(), ...FOOTER_EXTRA_NAV];
 }

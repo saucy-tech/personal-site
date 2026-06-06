@@ -1,11 +1,11 @@
 /**
- * Portfolio data (`/portfolio`) — apps, tools, OSS contributions, and talks.
+ * Portfolio data (`/portfolio`): products, tools, OSS contributions, and talks.
  * Edit here to update copy. Bump `projectsLastUpdated` when you revise.
  */
 
 export const projectsLastUpdated = '2026-05-22';
 
-export type ProjectGroup = 'apps' | 'tools' | 'open-source';
+export type ProjectGroup = 'apps' | 'tools' | 'open-source' | 'track-record';
 
 export type ProjectStatus = 'launched' | 'contributor';
 
@@ -32,30 +32,7 @@ export interface Talk {
 }
 
 export const projects: Project[] = [
-  // --- Apps ---
-  {
-    id: 'gda-public-systems',
-    group: 'apps',
-    title: 'Georgia DGA — Public Web & GIS Systems',
-    status: 'launched',
-    tags: ['Product leadership', 'GIS', 'Azure', 'C#', 'Public sector'],
-    blurb:
-      'IT Development Manager for state agency systems serving 50,000+ monthly users. Owned public-facing web roadmap, cut citizen wait times 40%, led enterprise ArcGIS program (Esri SAG award), and built cross-agency APIs for five partner organizations. Details available on request — no public repo.',
-    links: [{ href: '/Brandon_Sauceda_Resume.pdf', label: 'Résumé (PDF)' }],
-  },
-  {
-    id: 'portfolio-site',
-    group: 'apps',
-    title: 'This Portfolio Site',
-    status: 'launched',
-    tags: ['Next.js', 'React', 'Tailwind CSS', 'MDX', 'Lightning'],
-    blurb:
-      'Built with Next.js (App Router), React, and Tailwind CSS, integrating @getalby/sdk Nostr Wallet Connect for native Lightning payments. Custom MDX blog, responsive design, dark mode, subtle animations. All content and components managed locally — no external CMS.',
-    links: [
-      { href: 'https://github.com/saucy-tech/personal-site', label: 'GitHub Repo' },
-      { href: '/support#lightning-tip-jar', label: 'Try Lightning Tip Jar' },
-    ],
-  },
+  // --- Products ---
   {
     id: 'daily-word',
     group: 'apps',
@@ -95,6 +72,19 @@ export const projects: Project[] = [
       { href: '/support', label: 'Live Demo' },
     ],
   },
+  {
+    id: 'portfolio-site',
+    group: 'apps',
+    title: 'This Portfolio Site',
+    status: 'launched',
+    tags: ['Next.js', 'React', 'Tailwind CSS', 'MDX', 'Lightning'],
+    blurb:
+      'Built with Next.js (App Router), React, and Tailwind CSS, integrating @getalby/sdk Nostr Wallet Connect for native Lightning payments. Custom MDX blog, responsive design, dark mode, subtle animations. All content and components managed locally, no external CMS.',
+    links: [
+      { href: 'https://github.com/saucy-tech/personal-site', label: 'GitHub Repo' },
+      { href: '/support#lightning-tip-jar', label: 'Try Lightning Tip Jar' },
+    ],
+  },
 
   // --- Tools ---
   {
@@ -118,7 +108,7 @@ export const projects: Project[] = [
     status: 'contributor',
     tags: ['Terminal', 'AI', 'Open Source'],
     blurb:
-      'Contributed to Warp, the agentic terminal I use daily. Fixed repo-picker UX so multi-repo workflows are smoother — see PR #9451.',
+      'Contributed to Warp, the agentic terminal I use daily. Fixed repo-picker UX so multi-repo workflows are smoother. See PR #9451.',
     links: [
       { href: 'https://github.com/warpdotdev/warp/pull/9451', label: 'PR #9451' },
       { href: 'https://github.com/warpdotdev/warp/issues/9439', label: 'Issue #9439' },
@@ -141,8 +131,20 @@ export const projects: Project[] = [
     status: 'contributor',
     tags: ['Next.js', 'Lightning'],
     blurb:
-      'Contributor to the Plebnet website — site features and content for the broader Lightning Network community.',
+      'Contributor to the Plebnet website, building site features and content for the broader Lightning Network community.',
     links: [{ href: 'https://github.com/plebnet-dev/website', label: 'GitHub Repo' }],
+  },
+
+  // --- Track Record ---
+  {
+    id: 'gda-public-systems',
+    group: 'track-record',
+    title: 'Georgia DGA: Public Web & GIS Systems',
+    status: 'launched',
+    tags: ['Product leadership', 'GIS', 'Azure', 'C#', 'Public sector'],
+    blurb:
+      'IT Development Manager for state agency systems serving 50,000+ monthly users. Owned public-facing web roadmap, cut citizen wait times 40%, led enterprise ArcGIS program (Esri SAG award), and built cross-agency APIs for five partner organizations. Details available on request, no public repo.',
+    links: [{ href: '/Brandon_Sauceda_Resume.pdf', label: 'Résumé (PDF)' }],
   },
 ];
 
@@ -181,7 +183,8 @@ export const publications: Publication[] = [
 ];
 
 export const projectGroupLabels: Record<ProjectGroup, string> = {
-  apps: 'My Apps',
+  apps: 'Products',
   tools: 'Tools',
   'open-source': 'Open Source Contributions',
+  'track-record': 'Track Record',
 };
