@@ -29,7 +29,7 @@ export function getSiteNavItems(): SiteNavItem[] {
   items.push(
     { href: '/portfolio', label: 'Projects', match: 'exact' },
     { href: '/about', label: 'About', match: 'exact' },
-    { href: '/about#work-with-me', label: 'Work with me', match: 'exact' },
+    { href: '/about#work-with-me', label: 'Client work', match: 'exact' },
     { href: '/field-notes', label: 'Field notes', match: 'exact' },
     { href: 'https://morningportion.com', label: 'Morning Portion', match: 'exact' },
     { href: '/support', label: 'Support', match: 'exact' }

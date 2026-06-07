@@ -109,8 +109,7 @@ export default async function Home() {
         <div className="space-y-2">
           <Profile {...profileData} />
           <p className="text-center text-sm leading-relaxed text-(--text-secondary)">
-            Saucy Tech is my one-person company: I build my own software products and take on select
-            client work.
+            Independent developer. My own products, plus a few client projects a year.
           </p>
         </div>
         <SocialBar socials={socialLinks} />
@@ -153,11 +152,11 @@ export default async function Home() {
           />
           <LinkCard
             key="work-with-me"
-            title="Work with me"
+            title="Client work"
             href="/about#work-with-me"
             icon={<span className="text-2xl">🤝</span>}
-            eyebrow="Work with me"
-            meta="Selective product and client work"
+            eyebrow="Client work"
+            meta="A few projects a year"
           />
           <LinkCard
             key="bitcoin"

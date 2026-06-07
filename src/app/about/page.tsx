@@ -7,14 +7,14 @@ import { SITE_NAME } from '@/utils/constants';
 export const metadata: Metadata = {
   title: 'About',
   description:
-    'Brandon Sauceda runs Saucy Tech, building his own software products and taking on select client work.',
+    'Brandon Sauceda is an independent developer building his own software products, plus a few client projects a year.',
   alternates: {
     canonical: '/about',
   },
   openGraph: {
     title: 'About',
     description:
-      'Brandon Sauceda runs Saucy Tech, building his own software products and taking on select client work.',
+      'Brandon Sauceda is an independent developer building his own software products, plus a few client projects a year.',
     url: '/about',
     type: 'profile',
     images: [

@@ -16,7 +16,7 @@ export const about = {
   shopOneLiner:
     'Saucy Tech is how I ship my own software and take on outside work. The products are things like The Morning Portion, a daily devotional site, plus a handful of smaller apps. The client work is a few projects a year, usually web apps and product builds.',
   trackRecord:
-    'For ten years I have built public software for the State of Georgia: web apps and GIS systems used by more than 50,000 people a month, with a few national awards along the way. That is the same care I bring to Saucy Tech work.',
+    'For ten years I have built public software for the State of Georgia: web apps and GIS systems used by more than 50,000 people a month, with a few national awards along the way.',
   products: [
     {
       name: 'The Morning Portion',
@@ -36,8 +36,8 @@ export const about = {
     },
   ] as AboutProduct[],
   workWithMe: {
-    heading: 'Work with me',
-    body: 'I take on a few client projects a year, usually web apps, product builds, or help getting something unstuck. If that sounds like what you need, send me a note and tell me what you are building.',
+    heading: 'Client work',
+    body: 'I take on a few client projects a year, usually web apps and product work. If that is a fit, email me.',
     email: 'brandon@saucy.tech',
   },
 } as const;
