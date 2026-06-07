@@ -6,6 +6,16 @@ interface SiteJsonLdInput {
   sameAs: string[];
 }
 
+interface ProfilePageJsonLdInput {
+  path: string;
+  name: string;
+  jobTitle: string;
+  description: string;
+  imagePath: string;
+  sameAs: string[];
+  dateModified?: string;
+}
+
 interface PostJsonLdInput {
   slug: string;
   title: string;
@@ -62,6 +72,27 @@ export function getSiteJsonLd(input: SiteJsonLdInput): {
         },
       },
     ],
+  };
+}
+
+export function getProfilePageJsonLd(input: ProfilePageJsonLdInput): Record<string, unknown> {
+  const pageUrl = absoluteUrl(input.path);
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ProfilePage',
+    url: pageUrl,
+    name: input.name,
+    ...(input.dateModified ? { dateModified: input.dateModified } : {}),
+    mainEntity: {
+      '@type': 'Person',
+      name: input.name,
+      url: SITE_URL,
+      image: absoluteUrl(input.imagePath),
+      jobTitle: input.jobTitle,
+      description: input.description,
+      sameAs: input.sameAs,
+    },
   };
 }
 

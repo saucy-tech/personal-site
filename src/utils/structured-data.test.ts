@@ -1,5 +1,10 @@
-import { getBlogListingJsonLd, getPostJsonLd, getSiteJsonLd } from '@/utils/structured-data';
-import { absoluteUrl } from '@/utils/constants';
+import {
+  getBlogListingJsonLd,
+  getPostJsonLd,
+  getProfilePageJsonLd,
+  getSiteJsonLd,
+} from '@/utils/structured-data';
+import { SITE_URL, absoluteUrl } from '@/utils/constants';
 
 describe('structured data helpers', () => {
   it('adds SearchAction to the website graph node', () => {
@@ -16,6 +21,44 @@ describe('structured data helpers', () => {
       target: absoluteUrl('/blog?query={search_term_string}'),
       'query-input': 'required name=search_term_string',
     });
+  });
+
+  it('builds ProfilePage JSON-LD with a Person mainEntity', () => {
+    const jsonLd = getProfilePageJsonLd({
+      path: '/portfolio',
+      name: 'Brandon Sauceda',
+      jobTitle: 'IT Development Manager · Software Engineer',
+      description: 'Ten years in Georgia government technology.',
+      imagePath: '/headshot.jpeg',
+      sameAs: ['https://github.com/saucy-tech'],
+      dateModified: '2026-05-21',
+    });
+
+    expect(jsonLd['@type']).toBe('ProfilePage');
+    expect(jsonLd.url).toBe(absoluteUrl('/portfolio'));
+    expect(jsonLd.dateModified).toBe('2026-05-21');
+    expect(jsonLd.mainEntity).toEqual({
+      '@type': 'Person',
+      name: 'Brandon Sauceda',
+      url: SITE_URL,
+      image: absoluteUrl('/headshot.jpeg'),
+      jobTitle: 'IT Development Manager · Software Engineer',
+      description: 'Ten years in Georgia government technology.',
+      sameAs: ['https://github.com/saucy-tech'],
+    });
+  });
+
+  it('omits dateModified from ProfilePage JSON-LD when not provided', () => {
+    const jsonLd = getProfilePageJsonLd({
+      path: '/portfolio',
+      name: 'Brandon Sauceda',
+      jobTitle: 'Software Engineer',
+      description: 'Builder.',
+      imagePath: '/headshot.jpeg',
+      sameAs: [],
+    });
+
+    expect(jsonLd).not.toHaveProperty('dateModified');
   });
 
   it('includes breadcrumb list for blog posts', () => {
