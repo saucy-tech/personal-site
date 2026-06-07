@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { headers } from 'next/headers';
 
 import PageLayout from '@/components/PageLayout';
 import { Award, awards } from '@/data/awards';
@@ -12,29 +13,39 @@ import {
   talks,
   publications,
 } from '@/data/projects';
-import { SITE_NAME } from '@/utils/constants';
+import { SITE_NAME, absoluteUrl } from '@/utils/constants';
+import { getProfilePageJsonLd } from '@/utils/structured-data';
+
+const PORTFOLIO_OG_IMAGE = absoluteUrl('/portfolio/opengraph-image');
+
+const PORTFOLIO_DESCRIPTION =
+  'Brandon Sauceda — IT Development Manager and software engineer. Gov-tech, GIS, full-stack apps, open source, awards, and downloadable résumé.';
 
 export const metadata: Metadata = {
   title: 'Portfolio',
-  description:
-    'Brandon Sauceda — IT Development Manager and software engineer. Gov-tech, GIS, full-stack apps, open source, awards, and downloadable résumé.',
+  description: PORTFOLIO_DESCRIPTION,
   alternates: {
     canonical: '/portfolio',
   },
   openGraph: {
     title: 'Portfolio',
-    description:
-      'Brandon Sauceda — IT Development Manager and software engineer. Gov-tech, GIS, full-stack apps, open source, awards, and downloadable résumé.',
+    description: PORTFOLIO_DESCRIPTION,
     url: '/portfolio',
     type: 'profile',
     images: [
       {
-        url: '/headshot.jpeg',
-        width: 1024,
-        height: 1024,
+        url: PORTFOLIO_OG_IMAGE,
+        width: 1200,
+        height: 630,
         alt: `${SITE_NAME} - Portfolio`,
       },
     ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Portfolio',
+    description: PORTFOLIO_DESCRIPTION,
+    images: [PORTFOLIO_OG_IMAGE],
   },
 };
 
@@ -116,15 +127,32 @@ function AwardCard({ award }: { award: Award }) {
   );
 }
 
-export default function Portfolio() {
+export default async function Portfolio() {
+  const nonce = (await headers()).get('x-nonce') ?? undefined;
   const projectGroups = GROUP_ORDER.map((group) => ({
     group,
     label: projectGroupLabels[group],
     items: projects.filter((p) => p.group === group),
   })).filter((g) => g.items.length > 0);
 
+  const jsonLd = getProfilePageJsonLd({
+    path: '/portfolio',
+    name: portfolioAbout.headline,
+    jobTitle: portfolioAbout.title,
+    description: portfolioAbout.summary,
+    imagePath: '/headshot.jpeg',
+    sameAs: [portfolioAbout.linkedIn, portfolioAbout.github, 'https://x.com/Saucy_Tech'],
+    dateModified: portfolioAboutLastUpdated,
+  });
+
   return (
     <PageLayout title="Portfolio">
+      <script
+        suppressHydrationWarning
+        type="application/ld+json"
+        {...(nonce ? { nonce } : {})}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <section className="flex flex-col gap-12 items-center">
         <section className="w-full max-w-xl text-center space-y-4 mb-4">
           <p className="text-sm uppercase tracking-widest text-(--text-secondary)">
