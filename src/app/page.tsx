@@ -131,11 +131,11 @@ export default async function Home() {
           />
           <LinkCard
             key="field-notes"
-            title="What I'm Into Right Now"
+            title="What I'm using now"
             href="/field-notes"
             icon={<span className="text-2xl">📓</span>}
             eyebrow="Field notes"
-            meta="Tools, tech, and gear I'm using this season"
+            meta="Tools, tech, and gear I'm using now"
           />
           <LinkCard
             key="my-projects"
@@ -147,15 +147,15 @@ export default async function Home() {
           />
           <LinkCard
             key="bitcoin"
-            title="Why Bitcoin Matters to Me"
+            title="Why I save in Bitcoin"
             href="/bitcoin"
             icon={<span className="text-2xl">₿</span>}
             eyebrow="Bitcoin"
-            meta="Where I would point someone who is curious"
+            meta="Where I'd point someone curious"
           />
           <LinkCard
             key="church"
-            title="Find Hope at My Church"
+            title="My church"
             href="https://www.youtube.com/@TruthChapelUPC/streams"
             icon={<span className="text-2xl">⛪</span>}
             eyebrow="Faith"

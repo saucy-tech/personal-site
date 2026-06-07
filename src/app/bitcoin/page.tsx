@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 
 export default function Bitcoin() {
   return (
-    <PageLayout title="Why Bitcoin Matters to Me">
+    <PageLayout title="Why I save in Bitcoin">
       {/* VISUAL HOOK */}
       <section>
         <Image
@@ -43,32 +43,31 @@ export default function Bitcoin() {
 
       {/* PERSONAL STORY */}
       <section>
-        <h2 className="text-2xl font-semibold mb-4">🧠 Why This Matters to Me</h2>
+        <h2 className="text-2xl font-semibold mb-4">Why this matters to me</h2>
         <div className="bg-white/10 p-6 rounded-lg space-y-4">
           <p>
-            As a Christian, I value truth, integrity, and caring for others. Over time, I realized
-            the way our money works often undermines those values—rewarding debt, punishing savers,
-            and quietly transferring wealth.
+            As a Christian, I care about truth, integrity, and other people. The longer I looked at
+            how the money system works, the more it cut against those things: it rewards debt,
+            punishes saving, and moves wealth quietly from one group to another.
           </p>
           <p>
-            Bitcoin opened my eyes. It&apos;s transparent, incorruptible, and rooted in honesty. It
-            aligns with values of stewardship, fairness, and long-term thinking.
+            Bitcoin changed how I think about money. It&apos;s transparent, hard to corrupt, and
+            runs on rules that don&apos;t bend. That fits how I try to handle money: stewardship,
+            fairness, a long time horizon.
           </p>
           <p>
-            I&apos;m still learning, but I believe this matters—not just financially, but
-            spiritually and socially. If you&apos;re curious, here&apos;s where to start.
+            I&apos;m still learning. But I think this matters beyond the financial side. If
+            you&apos;re curious, here&apos;s where I&apos;d start.
           </p>
         </div>
       </section>
 
       {/* START HERE SECTION */}
       <section>
-        <h2 className="text-2xl font-semibold mt-8 mb-4">🚀 Start Here</h2>
+        <h2 className="text-2xl font-semibold mt-8 mb-4">Start here</h2>
         <div className="bg-white/10 p-6 rounded-lg space-y-6">
           <div className="text-center mb-6">
-            <p className="text-lg mb-4">
-              New to Bitcoin? You&apos;re not alone. Start with this documentary.
-            </p>
+            <p className="text-lg mb-4">New to Bitcoin? Start with this documentary.</p>
             <div className="max-w-2xl mx-auto">
               <a
                 href="https://www.youtube.com/watch?v=oksraL7wN6Q"
@@ -128,7 +127,7 @@ export default function Bitcoin() {
 
       {/* GROWING RESOURCE LIST */}
       <section>
-        <h2 className="text-2xl font-semibold mb-4">📚 Growing Resource List</h2>
+        <h2 className="text-2xl font-semibold mb-4">Growing resource list</h2>
         <div className="bg-white/10 p-6 rounded-lg space-y-6">
           <p className="text-md mb-2">
             A curated list of resources that have shaped my understanding of Bitcoin - from
@@ -214,7 +213,7 @@ export default function Bitcoin() {
 
       {/* WHERE TO BUY */}
       <section>
-        <h2 className="text-2xl font-semibold mt-8 mb-4">🏦 How I Buy Bitcoin</h2>
+        <h2 className="text-2xl font-semibold mt-8 mb-4">How I buy Bitcoin</h2>
         <div className="bg-white/10 p-6 rounded-lg space-y-4">
           <p>
             I use{' '}
@@ -248,7 +247,7 @@ export default function Bitcoin() {
       </section>
 
       <section>
-        <h2 className="text-2xl font-semibold mt-8 mb-4">📓 Field notes</h2>
+        <h2 className="text-2xl font-semibold mt-8 mb-4">Field notes</h2>
         <div className="bg-white/10 p-6 rounded-lg space-y-3 text-sm leading-relaxed">
           <p>
             <Link href="/field-notes" className="text-blue-400 underline">
