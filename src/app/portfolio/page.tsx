@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   },
 };
 
-const GROUP_ORDER: ProjectGroup[] = ['apps', 'tools', 'open-source'];
+const GROUP_ORDER: ProjectGroup[] = ['apps', 'tools', 'open-source', 'track-record'];
 
 const STATUS_PILL: Record<ProjectStatus, { label: string; className: string }> = {
   launched: { label: 'Launched', className: 'bg-green-500/80 text-white' },

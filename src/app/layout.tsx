@@ -6,7 +6,6 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { getFooterNavItems, getSiteNavItems } from '@/config/site-nav';
 import { SITE_NAME, SITE_DESCRIPTION_HIRING, SITE_URL } from '@/utils/constants';
-import { getAllPostsMeta } from '@/utils/posts';
 import { APPEARANCE_STORAGE_KEY, THEME_STORAGE_KEY } from '@/utils/theme';
 import ClientGalaxyBackground from '@/components/ClientGalaxyBackground';
 import { Analytics } from '@vercel/analytics/next';
@@ -97,9 +96,8 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const nonce = (await headers()).get('x-nonce') ?? undefined;
-  const latestSlug = getAllPostsMeta()[0]?.slug ?? null;
-  const navItems = getSiteNavItems({ latestSlug });
-  const footerNavItems = getFooterNavItems({ latestSlug });
+  const navItems = getSiteNavItems();
+  const footerNavItems = getFooterNavItems();
   return (
     <html lang="en" suppressHydrationWarning>
       <head>

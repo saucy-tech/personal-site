@@ -106,7 +106,12 @@ export default async function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="space-y-6 w-full max-w-lg mx-auto">
-        <Profile {...profileData} />
+        <div className="space-y-2">
+          <Profile {...profileData} />
+          <p className="text-center text-sm leading-relaxed text-(--text-secondary)">
+            Independent developer. My own products, plus a few client projects a year.
+          </p>
+        </div>
         <SocialBar socials={socialLinks} />
 
         <div className="space-y-3">
@@ -139,11 +144,19 @@ export default async function Home() {
           />
           <LinkCard
             key="my-projects"
-            title="Portfolio"
+            title="Projects"
             href="/portfolio"
             icon={<span className="text-2xl">🚀</span>}
-            eyebrow="Portfolio"
-            meta="Gov-tech, projects, awards, résumé PDF"
+            eyebrow="Projects"
+            meta="Products, track record, talks, and résumé"
+          />
+          <LinkCard
+            key="work-with-me"
+            title="Client work"
+            href="/about#work-with-me"
+            icon={<span className="text-2xl">🤝</span>}
+            eyebrow="Client work"
+            meta="A few projects a year"
           />
           <LinkCard
             key="bitcoin"
@@ -163,7 +176,7 @@ export default async function Home() {
           />
           <Section title="Subscribe to Saucy.tech Updates" emoji="✉️">
             <p className="text-sm leading-relaxed text-(--text-secondary)">
-              New essays, field notes, and writing — straight to your inbox.
+              New essays, field notes, and writing, straight to your inbox.
             </p>
             <SubscribeForm />
           </Section>

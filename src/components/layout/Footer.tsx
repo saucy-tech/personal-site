@@ -1,7 +1,7 @@
 import SiteNav from '@/components/layout/SiteNav';
 import type { SiteNavItem } from '@/config/site-nav';
 import { BaseProps } from '@/types';
-import { SITE_NAME } from '@/utils/constants';
+import { LEGAL_ENTITY } from '@/utils/constants';
 import { cn } from '@/utils/helpers';
 
 type FooterProps = BaseProps & {
@@ -38,7 +38,7 @@ export default function Footer({ className, navItems }: FooterProps) {
           </a>
         </div>
         <p className="text-(--accent) text-sm opacity-80">
-          &copy; {currentYear} {SITE_NAME}
+          &copy; {currentYear} {LEGAL_ENTITY}
         </p>
       </div>
     </footer>
