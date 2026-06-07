@@ -253,7 +253,7 @@ export default function Bitcoin() {
             <Link href="/field-notes" className="text-blue-400 underline">
               Field notes
             </Link>{' '}
-            — how I use AI day to day (models, harnesses, subscriptions, gear).
+            covers how I use AI day to day (models, harnesses, subscriptions, gear).
           </p>
         </div>
       </section>
