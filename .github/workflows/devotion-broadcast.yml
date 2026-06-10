@@ -1,33 +1,32 @@
 name: Devotion Broadcast
 
-# Triggers when a PR with the "devotion" label is merged into main.
-# Can also be triggered manually via workflow_dispatch with a post slug.
+# Manual dispatch only. Devotion authoring moved to the-morning-portion repo;
+# the PR-label trigger was removed 2026-06-10 so a stray "devotion" label can
+# never email subscribers from this archive. Requires typing SEND to confirm.
 
 on:
-  pull_request:
-    types: [closed]
-    branches: [main]
   workflow_dispatch:
     inputs:
       slug:
         description: 'Post slug (e.g. 2026-03-18-the-word-that-mattered-most)'
         required: true
         type: string
+      confirm:
+        description: 'Type SEND to confirm emailing all Kit subscribers'
+        required: true
+        type: string
+
+concurrency:
+  group: devotion-broadcast
+  cancel-in-progress: false
 
 jobs:
   broadcast:
     name: Send Kit Broadcast
-    # On PR: only run when merged with the "devotion" label.
-    # On manual dispatch: always run.
-    if: >
-      github.event_name == 'workflow_dispatch' ||
-      (github.event.pull_request.merged == true &&
-       contains(github.event.pull_request.labels.*.name, 'devotion'))
+    if: github.event.inputs.confirm == 'SEND'
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      issues: write
-      pull-requests: write
 
     steps:
       - name: Checkout
@@ -35,34 +34,17 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Find new devotion post
+      - name: Find devotion post
         id: post
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            NEW_FILE="src/posts/${{ inputs.slug }}.mdx"
-            if [ ! -f "$NEW_FILE" ]; then
-              echo "::error::Post file not found: $NEW_FILE"
-              echo "skip=true" >> "$GITHUB_OUTPUT"
-            else
-              echo "file=$NEW_FILE" >> "$GITHUB_OUTPUT"
-              echo "skip=false" >> "$GITHUB_OUTPUT"
-              echo "Found post: $NEW_FILE"
-            fi
+          NEW_FILE="src/posts/${{ inputs.slug }}.mdx"
+          if [ ! -f "$NEW_FILE" ]; then
+            echo "::error::Post file not found: $NEW_FILE"
+            echo "skip=true" >> "$GITHUB_OUTPUT"
           else
-            BASE="${{ github.event.pull_request.base.sha }}"
-            HEAD="${{ github.event.pull_request.merge_commit_sha }}"
-            echo "Checking diff: $BASE → $HEAD"
-
-            NEW_FILE=$(git diff --name-only --diff-filter=A "$BASE" "$HEAD" -- 'src/posts/*.mdx' | sort -r | head -1)
-
-            if [ -z "$NEW_FILE" ]; then
-              echo "No new MDX post found in this PR — skipping broadcast."
-              echo "skip=true" >> "$GITHUB_OUTPUT"
-            else
-              echo "file=$NEW_FILE" >> "$GITHUB_OUTPUT"
-              echo "skip=false" >> "$GITHUB_OUTPUT"
-              echo "Found post: $NEW_FILE"
-            fi
+            echo "file=$NEW_FILE" >> "$GITHUB_OUTPUT"
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            echo "Found post: $NEW_FILE"
           fi
 
       - name: Extract post metadata
@@ -330,27 +312,3 @@ jobs:
             echo "post_url=${POST_URL}"
           } >> "$GITHUB_OUTPUT"
           echo "✓ Broadcast created (ID: ${BROADCAST_ID:-unknown}), scheduled for $SEND_AT"
-
-      - name: Comment on PR
-        if: steps.post.outputs.skip == 'false' && github.event_name == 'pull_request'
-        continue-on-error: true
-        env:
-          GH_TOKEN: ${{ github.token }}
-          POST_URL: ${{ steps.send_broadcast.outputs.post_url }}
-          BROADCAST_ID: ${{ steps.send_broadcast.outputs.broadcast_id }}
-        run: |
-          COMMENT_BODY=$(cat <<EOF
-          **The Daily Word broadcast sent!**
-
-          Post URL: ${POST_URL}
-          Broadcast ID: ${BROADCAST_ID:-unknown}
-
-          The broadcast has been scheduled to send to all Daily Word subscribers via Kit.
-          EOF
-          )
-
-          if gh pr comment ${{ github.event.pull_request.number }} --body "$COMMENT_BODY"; then
-            echo "Posted PR comment for broadcast ${BROADCAST_ID:-unknown}."
-          else
-            echo "::warning::Failed to post PR comment for broadcast ${BROADCAST_ID:-unknown}. The broadcast succeeded and the workflow will continue."
-          fi
