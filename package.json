@@ -22,7 +22,7 @@
     "quality:gate": "pnpm lint && pnpm test && pnpm content:validate && pnpm content:check-links && pnpm content:check-images && pnpm security:drift",
     "docs:architecture": "ts-node --project tsconfig.scripts.json scripts/generate-architecture-docs.ts",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy -- --keep-vars",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "lint-staged": {
@@ -34,7 +34,7 @@
   "dependencies": {
     "@getalby/sdk": "^7.0.0",
     "@heroicons/react": "^2.1.1",
-"@opennextjs/cloudflare": "^1.19.11",
+    "@opennextjs/cloudflare": "^1.19.11",
     "@sentry/nextjs": "^10.57.0",
     "@tailwindcss/typography": "^0.5.20",
     "@vercel/analytics": "^2.0.1",
@@ -111,7 +111,7 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^6.0.3",
-"typescript-eslint": "^8.61.0",
+    "typescript-eslint": "^8.61.0",
     "wrangler": "^4.100.0",
     "zod": "^4.4.3"
   }

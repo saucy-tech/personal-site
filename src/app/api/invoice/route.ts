@@ -12,13 +12,17 @@ import {
 } from '@/utils/security';
 import { trackPaymentAttempt } from '@/utils/lnurl-config';
 
-// Ensure global WebSocket is available for Nostr Wallet Connect
+// Ensure a global WebSocket is available for Nostr Wallet Connect.
+// Cloudflare Workers (and Node >= 22) ship a native client whose upgrade
+// path the ws package can't use there — only shim when nothing native exists.
 declare global {
   interface GlobalThis {
     WebSocket: any;
   }
 }
-globalThis.WebSocket = WebSocket as any;
+if (typeof globalThis.WebSocket === 'undefined') {
+  globalThis.WebSocket = WebSocket as any;
+}
 
 import { getOrCreateNWCClient } from '@/utils/nwc-client';
 
