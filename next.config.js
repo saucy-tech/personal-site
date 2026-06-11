@@ -46,8 +46,8 @@ const nextConfig = {
             key: 'Permissions-Policy',
             value: 'geolocation=(), microphone=(), camera=(), fullscreen=(self)',
           },
-          // CSP is handled by src/proxy.ts with dynamic nonces
-          // Removing duplicate CSP header that conflicts with proxy
+          // CSP is handled by src/middleware.ts with dynamic nonces
+          // Removing duplicate CSP header that conflicts with middleware
         ],
       },
     ];

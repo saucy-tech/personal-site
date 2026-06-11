@@ -47,3 +47,10 @@ cs50x-session-logs/
 SESSION-WRAP-UP-INDEX.txt
 session-wrap-up-activity-log.txt
 wrap-up-summary.txt
+
+# cloudflare
+.open-next/
+.wrangler/
+.dev.vars
+.dev.vars.*
+!.dev.vars.example

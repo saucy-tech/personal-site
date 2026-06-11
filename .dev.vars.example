@@ -1,0 +1,10 @@
+NEXTJS_ENV=development
+# Set real values via `wrangler secret put <NAME>` (prod) or untracked .dev.vars (local)
+NOSTR_WALLET_CONNECT_URL=
+CONVERTKIT_API_KEY=
+CONVERTKIT_FORM_ID=
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+SENTRY_DSN=
+NEXT_PUBLIC_APP_URL=
+SITE_URL=

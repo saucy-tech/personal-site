@@ -2,12 +2,12 @@
  * @jest-environment node
  */
 import { NextRequest } from 'next/server';
-import { config, proxy } from '@/proxy';
+import { config, middleware } from '@/middleware';
 
-describe('proxy', () => {
+describe('middleware', () => {
   it('sets CSP nonce and security headers', () => {
     const request = new NextRequest('http://localhost/blog');
-    const response = proxy(request);
+    const response = middleware(request);
 
     expect(response.headers.get('Content-Security-Policy')).toContain('script-src');
     expect(response.headers.get('x-nonce')).toBeTruthy();
