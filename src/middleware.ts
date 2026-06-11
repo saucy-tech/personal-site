@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { generateCSPNonce, getSecurityHeaders } from '@/utils/security';
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const nonce = generateCSPNonce();
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-nonce', nonce);
