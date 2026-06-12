@@ -50,7 +50,7 @@ personal-site/
 - **Icons**: Heroicons
 - **Payments**: Lightning Network integration (Alby SDK / NWC)
 - **Testing**: Jest + React Testing Library, Playwright (E2E)
-- **Deployment**: Vercel
+- **Deployment**: Cloudflare Workers (OpenNext adapter)
 - **Linting**: ESLint 9 + Prettier (Husky + lint-staged pre-commit)
 
 ## Getting Started
@@ -105,7 +105,8 @@ Daily Word devotions are the primary content pipeline. The lifecycle:
 3. On merge to `main`, `.github/workflows/devotion-broadcast.yml` fires and
    sends the post to ConvertKit (the "The Daily Word" email list) using
    `KIT_API_KEY`.
-4. Vercel deploys the post to production.
+4. The post goes live with the next production deploy (Cloudflare Workers via
+   OpenNext, `pnpm deploy`).
 
 Writing rules and quality checks for published content live in the scripts and
 runbooks in [`docs/`](./docs).
@@ -254,9 +255,14 @@ Operational runbooks:
 
 ## Deployment
 
-The easiest way to deploy your app is to use the [Vercel Platform](https://vercel.com/new).
+The site deploys to Cloudflare Workers via the
+[OpenNext Cloudflare adapter](https://opennext.js.org/cloudflare):
 
-Ensure all environment variables are configured in your deployment platform.
+```bash
+pnpm deploy   # opennextjs-cloudflare build + deploy (keeps existing Worker vars)
+```
+
+Ensure all environment variables and secrets are configured on the Worker.
 
 ## License
 

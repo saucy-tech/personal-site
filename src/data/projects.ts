@@ -3,9 +3,9 @@
  * Edit here to update copy. Bump `projectsLastUpdated` when you revise.
  */
 
-export const projectsLastUpdated = '2026-05-22';
+export const projectsLastUpdated = '2026-06-12';
 
-export type ProjectGroup = 'apps' | 'tools' | 'open-source' | 'track-record';
+export type ProjectGroup = 'apps' | 'tools' | 'open-source' | 'client-work' | 'track-record';
 
 export type ProjectStatus = 'launched' | 'contributor';
 
@@ -60,6 +60,19 @@ export const projects: Project[] = [
     ],
   },
   {
+    id: 'feed-eggs',
+    group: 'apps',
+    title: 'Feed Eggs',
+    status: 'launched',
+    tags: ['Vanilla JS', 'Browser game', 'Cloudflare Workers'],
+    blurb:
+      'A browser arcade game: pull back a slingshot and fling eggs at a moving egg-mouth target. Vanilla JavaScript with no framework and no build step. Streak multipliers, levels that speed up the target, a rare golden egg worth 5x, and synthesized WebAudio sound. Served as static assets on Cloudflare Workers.',
+    links: [
+      { href: 'https://github.com/saucy-tech/eggman', label: 'GitHub Repo' },
+      { href: 'https://eggman.brandonsauceda.workers.dev', label: 'Live Demo' },
+    ],
+  },
+  {
     id: 'lightning-tip-jar',
     group: 'apps',
     title: 'Lightning Tip Jar',
@@ -77,9 +90,9 @@ export const projects: Project[] = [
     group: 'apps',
     title: 'This Portfolio Site',
     status: 'launched',
-    tags: ['Next.js', 'React', 'Tailwind CSS', 'MDX', 'Lightning'],
+    tags: ['Next.js', 'React', 'Tailwind CSS', 'MDX', 'Lightning', 'Cloudflare Workers'],
     blurb:
-      'Built with Next.js (App Router), React, and Tailwind CSS, integrating @getalby/sdk Nostr Wallet Connect for native Lightning payments. Custom MDX blog, responsive design, dark mode, subtle animations. All content and components managed locally, no external CMS.',
+      'Built with Next.js (App Router), React, and Tailwind CSS, integrating @getalby/sdk Nostr Wallet Connect for native Lightning payments. Custom MDX blog, responsive design, dark mode, subtle animations. Runs on Cloudflare Workers via the OpenNext adapter. All content and components managed locally, no external CMS.',
     links: [
       { href: 'https://github.com/saucy-tech/personal-site', label: 'GitHub Repo' },
       { href: '/support#lightning-tip-jar', label: 'Try Lightning Tip Jar' },
@@ -87,6 +100,16 @@ export const projects: Project[] = [
   },
 
   // --- Tools ---
+  {
+    id: 'field-manual',
+    group: 'tools',
+    title: 'Field Manual',
+    status: 'launched',
+    tags: ['Claude Code', 'AI agents', 'Open Source'],
+    blurb:
+      'An open-source Claude Code skill that turns a project into a single HTML file that acts as your UI for the agent: researched decision sections, an owner-badged task board, copy-prompt chips for delegating any task to a fresh session, and a status-sync loop so you and the agent share state through one file. No server, no database, no extension.',
+    links: [{ href: 'https://github.com/saucy-tech/field-manual', label: 'GitHub Repo' }],
+  },
   {
     id: 'work-time-visualizer',
     group: 'tools',
@@ -133,6 +156,18 @@ export const projects: Project[] = [
     blurb:
       'Contributor to the Plebnet website, building site features and content for the broader Lightning Network community.',
     links: [{ href: 'https://github.com/plebnet-dev/website', label: 'GitHub Repo' }],
+  },
+
+  // --- Client Work ---
+  {
+    id: 'lawncare-site',
+    group: 'client-work',
+    title: 'Lawn Care Site',
+    status: 'launched',
+    tags: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Cloudflare Workers'],
+    blurb:
+      'A sample client build: conversion-focused marketing site for a local lawn mowing business. Quote-request lead capture, bill pay through hosted Stripe checkout, LocalBusiness SEO schema, and one config file for all business details. Deployed on Cloudflare Workers.',
+    links: [{ href: 'https://lawncare-site.brandonsauceda.workers.dev', label: 'Live Demo' }],
   },
 
   // --- Track Record ---
@@ -186,5 +221,6 @@ export const projectGroupLabels: Record<ProjectGroup, string> = {
   apps: 'Products',
   tools: 'Tools',
   'open-source': 'Open Source Contributions',
+  'client-work': 'Client Work',
   'track-record': 'Track Record',
 };
