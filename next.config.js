@@ -17,41 +17,8 @@ const nextConfig = {
       },
     ];
   },
-  async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'off',
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '0',
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
-          },
-          {
-            key: 'Permissions-Policy',
-            value: 'geolocation=(), microphone=(), camera=(), fullscreen=(self)',
-          },
-          // CSP is handled by src/middleware.ts with dynamic nonces
-          // Removing duplicate CSP header that conflicts with middleware
-        ],
-      },
-    ];
-  },
+  // Security headers (CSP, X-Frame-Options, etc.) are set by src/middleware.ts
+  // via getSecurityHeaders(); defining them here too doubled every header value.
   images: {
     remotePatterns: [],
     formats: ['image/avif', 'image/webp'],
