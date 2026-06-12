@@ -9,6 +9,7 @@ import {
   SECURITY_CONSTANTS,
 } from '@/utils/security';
 import { logApiEvent, logStructured } from '@/utils/logger';
+import { SITE_URL } from '@/utils/constants';
 
 type SubscribeBody = {
   email?: unknown;
@@ -127,13 +128,13 @@ export async function POST(req: NextRequest) {
         return createSecureErrorResponse('Failed to subscribe', 502);
       }
 
-      const referrer = req.headers.get('referer');
+      const referrer = req.headers.get('referer') || SITE_URL;
       const formResponse = await fetch(
         `https://api.kit.com/v4/forms/${formId}/subscribers/${subscriberId}`,
         {
           method: 'POST',
           headers: kitHeaders,
-          body: JSON.stringify(referrer ? { referrer } : {}),
+          body: JSON.stringify({ referrer }),
           signal: controller.signal,
         }
       );
