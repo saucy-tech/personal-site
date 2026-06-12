@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { headers } from 'next/headers';
 import type { Metadata } from 'next';
 
 import LinkCard from '@/components/LinkCard';
@@ -10,7 +9,6 @@ import SocialBar from '@/components/SocialBar';
 import SubscribeForm from '@/components/SubscribeForm';
 import { formatPostDate } from '@/utils/helpers';
 import { getAllPostsMeta } from '@/utils/posts';
-import { getSiteJsonLd } from '@/utils/structured-data';
 
 export const metadata: Metadata = {
   alternates: {
@@ -22,7 +20,6 @@ export const metadata: Metadata = {
 };
 
 export default async function Home() {
-  const nonce = (await headers()).get('x-nonce') ?? undefined;
   const profileData = {
     name: 'Brandon',
     bio: 'Love Jesus, Explore Ideas, Create Things, Save in Bitcoin',
@@ -87,24 +84,8 @@ export default async function Home() {
   const posts = getAllPostsMeta();
   const latest = posts[0];
 
-  const jsonLd = getSiteJsonLd({
-    authorName: 'Brandon',
-    authorImagePath: '/headshot.jpeg',
-    sameAs: [
-      'https://x.com/Saucy_Tech',
-      'https://github.com/saucy-tech',
-      'https://primal.net/p/nprofile1qqsvzs8gfntzjs2wg8670nrfy64h44zy69kc3r8rp5wd7kw6t6njsassf62c7',
-    ],
-  });
-
   return (
     <div className="pt-4 pb-6 px-4 md:px-8 flex flex-col items-center">
-      <script
-        suppressHydrationWarning
-        type="application/ld+json"
-        {...(nonce ? { nonce } : {})}
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
       <div className="space-y-6 w-full max-w-lg mx-auto">
         <div className="space-y-2">
           <Profile {...profileData} />
