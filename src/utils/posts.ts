@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
-import fs from 'fs';
-import path from 'path';
 
 import GithubSlugger from 'github-slugger';
 import matter from 'gray-matter';
 import yaml from 'js-yaml';
+
+import { RAW_POSTS } from '@/utils/posts-data.generated';
 
 import {
   Post,
@@ -96,7 +96,6 @@ matter.engines.yaml = {
   stringify: (obj: Record<string, unknown>) => yaml.dump(obj),
 };
 
-const POSTS_DIR = path.join(process.cwd(), 'src', 'posts');
 const SITE_TIME_ZONE = 'America/New_York';
 type ParsedPostEntry = {
   slug: string;
@@ -104,11 +103,9 @@ type ParsedPostEntry = {
   content: string;
   headings: PostHeading[];
 };
-type PostsCache = {
-  signature: string;
-  posts: ParsedPostEntry[];
-};
-let postsCache: PostsCache | null = null;
+// RAW_POSTS is bundled at build time and never changes within a running
+// process, so a single parse is memoized for the lifetime of the module.
+let postsCache: ParsedPostEntry[] | null = null;
 const WORDS_PER_MINUTE = 200;
 
 function stripMdxFrontmatter(value: string): string {
@@ -251,48 +248,19 @@ export function getReadingTimeFromContent(content: string): number {
   return Math.max(1, Math.ceil(wordCount / WORDS_PER_MINUTE));
 }
 
-function ensurePostsDir() {
-  if (!fs.existsSync(POSTS_DIR)) {
-    fs.mkdirSync(POSTS_DIR, { recursive: true });
-  }
-}
-function getPostPath(slug: string): string {
-  return path.join(POSTS_DIR, `${slug}.mdx`);
-}
-
 export function getPostSlugs(): string[] {
-  ensurePostsDir();
   return getParsedPosts().map((entry) => entry.slug);
 }
 
-function getPostsSignature(): string {
-  ensurePostsDir();
-  const files = fs
-    .readdirSync(POSTS_DIR)
-    .filter((file) => /\.mdx?$/.test(file))
-    .sort();
-  return files
-    .map((file) => {
-      const fullPath = path.join(POSTS_DIR, file);
-      const stat = fs.statSync(fullPath);
-      return `${file}:${stat.mtimeMs}`;
-    })
-    .join('|');
-}
-
 function getParsedPosts(): ParsedPostEntry[] {
-  const signature = getPostsSignature();
-  if (postsCache && postsCache.signature === signature) {
-    return postsCache.posts;
+  if (postsCache) {
+    return postsCache;
   }
 
-  const posts = fs
-    .readdirSync(POSTS_DIR)
-    .filter((file) => /\.mdx?$/.test(file))
-    .map((file) => {
-      const slug = file.replace(/\.mdx?$/, '');
-      const fileContent = fs.readFileSync(getPostPath(slug), 'utf-8');
-      const { data, content } = matter(fileContent);
+  const posts = Object.keys(RAW_POSTS)
+    .sort()
+    .map((slug) => {
+      const { data, content } = matter(RAW_POSTS[slug]!);
       const result = frontmatterSchema.safeParse(data);
       if (!result.success) {
         const issues = result.error.issues
@@ -312,7 +280,7 @@ function getParsedPosts(): ParsedPostEntry[] {
       };
     });
 
-  postsCache = { signature, posts };
+  postsCache = posts;
   return posts;
 }
 
