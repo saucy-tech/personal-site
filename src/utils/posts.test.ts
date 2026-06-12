@@ -89,6 +89,33 @@ describe('posts utilities', () => {
     expect(() => getAllPostsMeta({ includeFuture: true })).not.toThrow();
   });
 
+  it('serves build-compiled HTML for every post', async () => {
+    const posts = getAllPostsMeta({ includeFuture: true });
+    for (const meta of posts) {
+      const post = await getPostBySlug(meta.slug, { includeFuture: true });
+      expect(post).not.toBeNull();
+      expect(post!.html).toEqual(expect.stringContaining('<p>'));
+      // Compiled output starts with markup, not leaked frontmatter text.
+      expect(post!.html.startsWith('<')).toBe(true);
+    }
+  });
+
+  it('compiled HTML carries the same heading ids the table of contents links to', async () => {
+    const posts = getAllPostsMeta({ includeFuture: true });
+    const withHeadings = await getPostBySlug(posts.map((p) => p.slug).find((slug) => slug)!, {
+      includeFuture: true,
+    });
+    const candidates = await Promise.all(
+      posts.map((p) => getPostBySlug(p.slug, { includeFuture: true }))
+    );
+    const tocPost = candidates.find((p) => p && p.headings.length >= 3) ?? withHeadings;
+    expect(tocPost).not.toBeNull();
+    expect(tocPost!.headings.length).toBeGreaterThan(0);
+    for (const heading of tocPost!.headings) {
+      expect(tocPost!.html).toEqual(expect.stringContaining(`id="${heading.id}"`));
+    }
+  });
+
   it('extracts headings and reading time from mdx content', () => {
     const content = `---
 title: "Sample"

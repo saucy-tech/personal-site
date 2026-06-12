@@ -4,7 +4,7 @@ import GithubSlugger from 'github-slugger';
 import matter from 'gray-matter';
 import yaml from 'js-yaml';
 
-import { RAW_POSTS } from '@/utils/posts-data.generated';
+import { POST_HTML, RAW_POSTS } from '@/utils/posts-data.generated';
 
 import {
   Post,
@@ -306,7 +306,8 @@ export function getAllPostsMeta(options: PostQueryOptions = {}): PostMeta[] {
     .sort((a, b) => b.date.localeCompare(a.date) || b.slug.localeCompare(a.slug));
 }
 
-// Note: We will send raw MDX to the page and compile there with next-mdx-remote/rsc
+// Note: the post body is compiled to HTML at build time (gen:posts) because
+// Cloudflare Workers disallow the runtime code generation next-mdx-remote uses.
 export async function getPostBySlug(
   slug: string,
   options: PostQueryOptions = {}
@@ -319,6 +320,7 @@ export async function getPostBySlug(
   const post = {
     ...parsedPost.meta,
     content: parsedPost.content,
+    html: POST_HTML[slug] ?? '',
     headings: parsedPost.headings,
   };
 

@@ -1,10 +1,6 @@
 import Link from 'next/link';
-import { MDXRemote } from 'next-mdx-remote/rsc';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
-import rehypeSlug from 'rehype-slug';
-import remarkGfm from 'remark-gfm';
 
 import DevotionAudio from '@/components/DevotionAudio';
 import PageLayout from '@/components/PageLayout';
@@ -160,15 +156,9 @@ export default async function PostPage({ params }: PostPageProps) {
           )}
 
           <article className="prose prose-invert prose-p:text-[1.05rem] prose-p:leading-8 prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:text-(--text-primary) prose-h2:mt-12 prose-h2:border-t prose-h2:border-white/10 prose-h2:pt-8 prose-h2:text-2xl prose-h3:mt-10 prose-h3:text-xl prose-a:text-(--accent) prose-a:no-underline prose-a:decoration-[0.1em] prose-a:underline-offset-[0.2em] prose-a:hover:text-(--text-primary) focus-visible:prose-a:rounded-xs focus-visible:prose-a:outline-hidden focus-visible:prose-a:ring-2 focus-visible:prose-a:ring-(--focus-ring) focus-visible:prose-a:ring-offset-2 focus-visible:prose-a:ring-offset-(--background) [&_a]:prose-headings:no-underline [&_a]:prose-headings:text-(--accent) [&_a]:prose-headings:hover:text-(--text-primary) prose-strong:text-(--text-primary) prose-blockquote:rounded-2xl prose-blockquote:border-l-4 prose-blockquote:border-(--accent) prose-blockquote:bg-white/4 prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:text-(--text-primary) prose-hr:border-white/10 prose-img:rounded-3xl prose-img:border prose-img:border-white/10 prose-img:shadow-[0_18px_40px_rgba(0,0,0,0.25)] prose-figcaption:text-sm prose-figcaption:text-(--text-secondary) max-w-none">
-            <MDXRemote
-              source={post.content}
-              options={{
-                mdxOptions: {
-                  remarkPlugins: [remarkGfm],
-                  rehypePlugins: [rehypeSlug, [rehypeAutolinkHeadings, { behavior: 'append' }]],
-                },
-              }}
-            />
+            {/* Compiled from markdown at build time (gen:posts); Workers cannot
+                run next-mdx-remote's request-time compile (no dynamic codegen). */}
+            <div dangerouslySetInnerHTML={{ __html: post.html }} />
           </article>
 
           <ShareButtons
