@@ -4,7 +4,10 @@
   "private": true,
   "packageManager": "pnpm@10.15.0",
   "scripts": {
+    "gen:posts": "ts-node --project tsconfig.scripts.json scripts/generate-posts-data.ts",
+    "predev": "pnpm gen:posts",
     "dev": "WATCHPACK_POLLING=true next dev",
+    "prebuild": "pnpm gen:posts",
     "build": "next build",
     "start": "next start",
     "analyze": "ANALYZE=true next build",
