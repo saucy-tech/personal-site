@@ -280,28 +280,34 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Built with the Next.js framework
 - Lightning Network integration via Alby SDK
 
-## CSP on Vercel: Production-compatible configuration
+## Content Security Policy (Cloudflare Workers)
 
-This project uses a Content Security Policy (CSP) applied via Next.js [proxy](https://nextjs.org/docs/app/api-reference/file-conventions/proxy) (formerly middleware) to work consistently in both local development and Vercel production/preview deployments.
+The CSP is applied per-request by Next.js middleware so it behaves the same in
+local development and on Cloudflare Workers (OpenNext) in production.
 
 Key files:
 
-- [src/proxy.ts](src/proxy.ts)
-- [src/utils/security.ts](src/utils/security.ts)
-- [next.config.js](next.config.js)
+- [src/middleware.ts](src/middleware.ts) - generates a nonce and applies the headers
+- [src/utils/security.ts](src/utils/security.ts) - `getSecurityHeaders()` builds the policy
+- [scripts/check-security-drift.ts](scripts/check-security-drift.ts) - validates the production policy in `pnpm quality:gate`
+- [next.config.js](next.config.js) - non-CSP fallback headers and `poweredByHeader: false`
 
-What was fixed:
+Environment behavior:
 
-- Environment-aware CSP: production on Vercel vs local development are handled explicitly in [src/utils/security.ts](src/utils/security.ts).
-- Canvas-safe directives: allows 2D canvas animations and blobs for the animated galaxy background.
-- Worker allowances: permits blob/data workers sometimes needed for canvas ops.
-- Removed unsafe-eval in production, retained only where needed in development.
-- Removed X-Powered-By in Next.js config to avoid leaking server info via [next.config.js](next.config.js).
+- The policy branches on `NODE_ENV`, not on hosting-platform env vars. `next dev`
+  (`NODE_ENV=development`) allows `'unsafe-eval'` for HMR/React Refresh; every
+  other environment - production builds, the Worker runtime, anything
+  unrecognized - fails closed to the strict policy.
+- The strict policy drops `'unsafe-eval'` and adds `upgrade-insecure-requests`.
+- History: the original gate keyed on `VERCEL`/`VERCEL_ENV`, which do not exist
+  on Cloudflare Workers, so production served the development policy after the
+  migration (caught 2026-06-12). Platform-specific env detection is the failure
+  mode to avoid here.
 
 Effective CSP highlights (production):
 
 - default-src 'self'
-- script-src 'self' 'unsafe-inline' blob: (no 'unsafe-eval' in production)
+- script-src 'self' 'unsafe-inline' 'nonce-…' blob: (no 'unsafe-eval')
 - style-src 'self' 'unsafe-inline' data:
 - img-src 'self' data: blob: https: (required for canvas pixel operations and assets)
 - media-src 'self' data: blob:
@@ -311,56 +317,42 @@ Effective CSP highlights (production):
 - font-src 'self' data: https:
 - object-src 'none', frame-src 'none', frame-ancestors 'none'
 - base-uri 'self', form-action 'self'
-- upgrade-insecure-requests (production only)
+- upgrade-insecure-requests
 
-Why proxy (not meta tags):
+Drift enforcement:
 
-- Vercel's edge/runtime headers are stricter than local; setting CSP at the edge ensures consistent behavior across environments.
-- Proxy allows environment-aware CSP that differs between dev and production.
+- `pnpm security:drift` builds the headers with the production branch forced and
+  fails if `'unsafe-eval'` appears or `upgrade-insecure-requests` is missing,
+  alongside the baseline directive checks. It runs as part of `pnpm quality:gate`.
+- `src/utils/security.test.ts` pins both branches: development keeps eval,
+  production and unset environments do not.
 
 Verification steps:
 
-1. Local: verify headers
-   - curl -I http://localhost:3000
-   - Confirm presence of:
-     - content-security-policy header
-     - img-src includes data:, blob:, https:
-     - worker-src and child-src include blob: data:
-     - In development only: script-src includes 'unsafe-eval'
-2. Vercel preview/prod:
-   - Deploy to Vercel (preview)
-   - Open devtools Network tab on first load (not client-side navigated page)
-   - Check Response Headers on the document:
-     - content-security-policy is present (no duplicates)
-     - script-src has no 'unsafe-eval' in prod
-     - img-src has data: blob: https:
-     - worker-src/child-src allow blob: data:
-   - Confirm the animated galaxy background renders immediately on first load and interactive UI works.
+1. Local dev: `curl -I http://localhost:3000`
+   - content-security-policy present; script-src includes 'unsafe-eval' (dev only)
+2. Worker preview: `pnpm preview`, then `curl -I http://localhost:8787`
+   - script-src has no 'unsafe-eval'; upgrade-insecure-requests present
+3. Production: `curl -sI https://saucy.tech | grep -i content-security-policy`
+   - same strict policy as the preview
 
 Operational notes:
 
-- Do not add another CSP header via next.config.js; CSP is centralized in [src/proxy.ts](src/proxy.ts) using [src/utils/security.ts](src/utils/security.ts).
-- Avoid adding meta http-equiv="Content-Security-Policy" tags; headers beat meta and Vercel may enforce more strictly.
-- If adding new external APIs or CDNs, extend connect-src, font-src, img-src, etc., explicitly in [src/utils/security.ts](src/utils/security.ts).
-- If adding WebAssembly or specialized workers, ensure script-src and worker-src account for those needs without broadening to unsafe directives in production.
+- Do not add another CSP header via next.config.js or meta tags; CSP is
+  centralized in [src/middleware.ts](src/middleware.ts) using
+  [src/utils/security.ts](src/utils/security.ts).
+- If adding new external APIs or CDNs, extend connect-src, font-src, img-src,
+  etc., explicitly in [src/utils/security.ts](src/utils/security.ts).
+- If adding WebAssembly or specialized workers, ensure script-src and worker-src
+  account for those needs without broadening to unsafe directives in production.
 
 Troubleshooting:
 
-- If the galaxy canvas is blank only on first navigation in Vercel:
-  - Ensure the page load (not client-routed) response has the CSP header with the directives above.
-  - Check that no second CSP header is present (duplicates can override each other). Keep CSP only in proxy.
-- If fonts or images fail in Vercel but work locally, verify the corresponding src directives (font-src/img-src) include https: and data:/blob: as applicable.
-- If you see blocked scripts in production, verify that no 'unsafe-eval' is required.
-
-Security posture:
-
-- Production avoids 'unsafe-eval' (removed).
-- Uses 'unsafe-inline' for scripts/styles (required for Next.js compatibility).
-- No frames or objects allowed.
-- Permissions-Policy is set with conservative defaults in next.config.js headers; CSP and related security headers are set in proxy.
-
-Change log (CSP):
-
-- Centralized and hardened CSP in [src/utils/security.ts](src/utils/security.ts)
-- Ensured environment-aware behavior for Vercel deployments
-- Set poweredByHeader: false in [next.config.js](next.config.js) to remove X-Powered-By
+- If the galaxy canvas is blank on first load, check the document response has
+  the CSP header above and that no second CSP header is present (duplicates can
+  override each other). Keep CSP only in middleware.
+- If fonts or images fail in production but work locally, verify the
+  corresponding src directives (font-src/img-src) include https: and
+  data:/blob: as applicable.
+- If scripts are blocked in production, fix the script rather than reintroducing
+  'unsafe-eval'.

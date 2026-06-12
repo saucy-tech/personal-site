@@ -2,6 +2,8 @@ import nextConfig from 'eslint-config-next/core-web-vitals';
 import globals from 'globals';
 
 const eslintConfig = [
+  // Generated content bundle — not hand-edited, skip linting.
+  { ignores: ['src/utils/posts-data.generated.ts'] },
   ...nextConfig,
   // Node.js scripts: allow Node globals, relax browser-only rules
   {
