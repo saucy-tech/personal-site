@@ -105,8 +105,8 @@ Daily Word devotions are the primary content pipeline. The lifecycle:
 3. On merge to `main`, `.github/workflows/devotion-broadcast.yml` fires and
    sends the post to ConvertKit (the "The Daily Word" email list) using
    `KIT_API_KEY`.
-4. The post goes live with the next production deploy (Cloudflare Workers via
-   OpenNext, `pnpm deploy`).
+4. The merge is deployed to production automatically by Cloudflare Workers
+   Builds (Git integration).
 
 Writing rules and quality checks for published content live in the scripts and
 runbooks in [`docs/`](./docs).
@@ -256,7 +256,12 @@ Operational runbooks:
 ## Deployment
 
 The site deploys to Cloudflare Workers via the
-[OpenNext Cloudflare adapter](https://opennext.js.org/cloudflare):
+[OpenNext Cloudflare adapter](https://opennext.js.org/cloudflare).
+
+Pushes are built and deployed automatically by
+[Cloudflare Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/)
+(Git integration): branches get preview URLs, merges to `main` deploy
+production. For a manual deploy:
 
 ```bash
 pnpm deploy   # opennextjs-cloudflare build + deploy (keeps existing Worker vars)
