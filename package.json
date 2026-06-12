@@ -22,7 +22,8 @@
     "quality:gate": "pnpm lint && pnpm test && pnpm content:validate && pnpm content:check-links && pnpm content:check-images && pnpm security:drift",
     "docs:architecture": "ts-node --project tsconfig.scripts.json scripts/generate-architecture-docs.ts",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare build && node scripts/cf-slim-og.mjs && opennextjs-cloudflare deploy -- --keep-vars",
+    "build:worker": "opennextjs-cloudflare build && node scripts/cf-slim-og.mjs",
+    "deploy": "pnpm run build:worker && opennextjs-cloudflare deploy -- --keep-vars",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
   },
   "lint-staged": {

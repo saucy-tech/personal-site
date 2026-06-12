@@ -9,6 +9,7 @@ import {
   SECURITY_CONSTANTS,
 } from '@/utils/security';
 import { logApiEvent, logStructured } from '@/utils/logger';
+import { SITE_URL } from '@/utils/constants';
 
 type SubscribeBody = {
   email?: unknown;
@@ -17,37 +18,15 @@ type SubscribeBody = {
   website?: unknown;
 };
 
-function extractConvertKitMessage(data: unknown): string {
+function extractKitErrors(data: unknown): string {
   if (!data || typeof data !== 'object') {
     return '';
   }
-  const rec = data as Record<string, unknown>;
-  if (typeof rec.message === 'string') {
-    return rec.message;
-  }
-  const err = rec.error;
-  if (typeof err === 'string') {
-    return err;
-  }
-  if (
-    err &&
-    typeof err === 'object' &&
-    'message' in err &&
-    typeof (err as { message: unknown }).message === 'string'
-  ) {
-    return (err as { message: string }).message;
+  const errors = (data as Record<string, unknown>).errors;
+  if (Array.isArray(errors)) {
+    return errors.filter((e): e is string => typeof e === 'string').join('; ');
   }
   return '';
-}
-
-function isAlreadySubscribedMessage(message: string): boolean {
-  const m = message.toLowerCase();
-  return (
-    m.includes('already subscribed') ||
-    m.includes('already a subscriber') ||
-    m.includes('subscriber already') ||
-    m.includes('already exists')
-  );
 }
 
 export async function POST(req: NextRequest) {
@@ -111,36 +90,69 @@ export async function POST(req: NextRequest) {
     const timeoutId = setTimeout(() => controller.abort(), SECURITY_CONSTANTS.REQUEST_TIMEOUT);
 
     try {
-      const response = await fetch(`https://api.convertkit.com/v3/forms/${formId}/subscribe`, {
+      // Kit v4 API: upsert the subscriber, then attach them to the form.
+      const kitHeaders = {
+        'Content-Type': 'application/json',
+        'User-Agent': 'Personal-Site/1.0',
+        'X-Kit-Api-Key': apiKey,
+      };
+
+      const createResponse = await fetch('https://api.kit.com/v4/subscribers', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'User-Agent': 'Personal-Site/1.0',
-        },
-        body: JSON.stringify({
-          email: emailValidation.sanitized,
-          api_key: apiKey,
-        }),
+        headers: kitHeaders,
+        body: JSON.stringify({ email_address: emailValidation.sanitized }),
         signal: controller.signal,
       });
 
-      clearTimeout(timeoutId);
+      const createData: unknown = await createResponse.json().catch(() => ({}));
 
-      if (!response.ok) {
-        const data: unknown = await response.json().catch(() => ({}));
-        const message = extractConvertKitMessage(data);
-        if (isAlreadySubscribedMessage(message)) {
-          return NextResponse.json({ success: true, alreadySubscribed: true });
-        }
-        logApiEvent('error', '/api/subscribe', 'convertkit_error_response', {
-          status: response.status,
-          responseData: data,
+      if (!createResponse.ok) {
+        logApiEvent('error', '/api/subscribe', 'kit_create_subscriber_error', {
+          status: createResponse.status,
+          responseData: createData,
         });
         const clientMessage =
-          response.status === 400 && message
+          createResponse.status === 422 && extractKitErrors(createData)
             ? 'Please check your email address and try again.'
             : 'Failed to subscribe';
+        clearTimeout(timeoutId);
         return createSecureErrorResponse(clientMessage, 502);
+      }
+
+      const subscriberId = (createData as { subscriber?: { id?: unknown } })?.subscriber?.id;
+      if (typeof subscriberId !== 'number') {
+        clearTimeout(timeoutId);
+        logApiEvent('error', '/api/subscribe', 'kit_invalid_subscriber_payload', {
+          responseData: createData,
+        });
+        return createSecureErrorResponse('Failed to subscribe', 502);
+      }
+
+      const referrer = req.headers.get('referer') || SITE_URL;
+      const formResponse = await fetch(
+        `https://api.kit.com/v4/forms/${formId}/subscribers/${subscriberId}`,
+        {
+          method: 'POST',
+          headers: kitHeaders,
+          body: JSON.stringify({ referrer }),
+          signal: controller.signal,
+        }
+      );
+
+      clearTimeout(timeoutId);
+
+      if (!formResponse.ok) {
+        const formData: unknown = await formResponse.json().catch(() => ({}));
+        logApiEvent('error', '/api/subscribe', 'kit_add_to_form_error', {
+          status: formResponse.status,
+          responseData: formData,
+        });
+        return createSecureErrorResponse('Failed to subscribe', 502);
+      }
+
+      // 200 = was already on the form; 201 = newly added.
+      if (formResponse.status === 200) {
+        return NextResponse.json({ success: true, alreadySubscribed: true });
       }
 
       return NextResponse.json({ success: true });
