@@ -7,6 +7,7 @@ import {
   SECURITY_CONSTANTS,
   parseJsonBody,
   getSecurityHeaders,
+  getSecurityHeaderDriftIssues,
   assertSecurityHeadersHaveRequiredDirectives,
 } from '@/utils/security';
 import { NextRequest } from 'next/server';
@@ -389,6 +390,52 @@ describe('getSecurityHeaders', () => {
     expect(() => assertSecurityHeadersHaveRequiredDirectives(driftedHeaders)).toThrow(
       /security drift detected/i
     );
+  });
+});
+
+describe('getSecurityHeaders environment policy', () => {
+  const originalNodeEnv = process.env.NODE_ENV;
+
+  function setNodeEnv(value: string | undefined): void {
+    const env = process.env as Record<string, string | undefined>;
+    if (value === undefined) {
+      delete env.NODE_ENV;
+    } else {
+      env.NODE_ENV = value;
+    }
+  }
+
+  afterEach(() => {
+    setNodeEnv(originalNodeEnv);
+  });
+
+  it('serves the strict policy in production: no unsafe-eval, upgrades insecure requests', () => {
+    setNodeEnv('production');
+    const csp = getSecurityHeaders({ nonce: 'testnonce' })['Content-Security-Policy'];
+    expect(csp).not.toContain("'unsafe-eval'");
+    expect(csp).toContain('upgrade-insecure-requests');
+  });
+
+  it('allows unsafe-eval in development for HMR', () => {
+    setNodeEnv('development');
+    const csp = getSecurityHeaders({ nonce: 'testnonce' })['Content-Security-Policy'];
+    expect(csp).toContain("'unsafe-eval'");
+  });
+
+  it('fails closed to the strict policy when NODE_ENV is unset', () => {
+    setNodeEnv(undefined);
+    const csp = getSecurityHeaders({ nonce: 'testnonce' })['Content-Security-Policy'];
+    expect(csp).not.toContain("'unsafe-eval'");
+    expect(csp).toContain('upgrade-insecure-requests');
+  });
+
+  it('drift check rejects the development policy when production policy is expected', () => {
+    setNodeEnv('development');
+    const devHeaders = getSecurityHeaders({ nonce: 'testnonce' });
+    const issues = getSecurityHeaderDriftIssues(devHeaders, { expectProductionPolicy: true });
+
+    expect(issues.some((issue) => issue.includes("'unsafe-eval'"))).toBe(true);
+    expect(issues.some((issue) => issue.includes('upgrade-insecure-requests'))).toBe(true);
   });
 });
 
