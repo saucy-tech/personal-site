@@ -67,14 +67,23 @@ describe('POST /api/subscribe', () => {
   });
 
   it('returns 200 with success=true on the happy path', async () => {
-    (global.fetch as jest.Mock).mockResolvedValueOnce(
-      new Response(JSON.stringify({ subscriber: {} }), { status: 200 })
-    );
+    (global.fetch as jest.Mock)
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ subscriber: { id: 767 } }), { status: 201 })
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ subscriber: { id: 767 } }), { status: 201 })
+      );
 
     const response = await POST(makeRequest({ email: 'user@example.com' }));
 
     expect(response.status).toBe(200);
     await expect(response.json()).resolves.toEqual({ success: true });
+    expect(global.fetch).toHaveBeenCalledTimes(2);
+    expect((global.fetch as jest.Mock).mock.calls[0][0]).toBe('https://api.kit.com/v4/subscribers');
+    expect((global.fetch as jest.Mock).mock.calls[1][0]).toBe(
+      'https://api.kit.com/v4/forms/test-form-id/subscribers/767'
+    );
   });
 
   it('returns 200 when honeypot company field is filled (silent drop)', async () => {
@@ -85,10 +94,14 @@ describe('POST /api/subscribe', () => {
     expect(global.fetch).not.toHaveBeenCalled();
   });
 
-  it('returns 200 when ConvertKit reports already subscribed', async () => {
-    (global.fetch as jest.Mock).mockResolvedValueOnce(
-      new Response(JSON.stringify({ message: 'Subscriber already subscribed' }), { status: 400 })
-    );
+  it('returns 200 with alreadySubscribed when Kit reports the form membership exists', async () => {
+    (global.fetch as jest.Mock)
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ subscriber: { id: 767 } }), { status: 200 })
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ subscriber: { id: 767 } }), { status: 200 })
+      );
 
     const response = await POST(makeRequest({ email: 'user@example.com' }));
 
@@ -110,9 +123,9 @@ describe('POST /api/subscribe', () => {
     expect(response.status).toBe(400);
   });
 
-  it('returns 502 when ConvertKit returns a non-2xx status', async () => {
+  it('returns 502 when Kit returns a non-2xx status', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce(
-      new Response(JSON.stringify({ error: 'server error' }), { status: 500 })
+      new Response(JSON.stringify({ errors: ['server error'] }), { status: 500 })
     );
 
     const response = await POST(makeRequest({ email: 'user@example.com' }));
@@ -134,8 +147,8 @@ describe('POST /api/subscribe', () => {
   it('returns 429 after exceeding the rate limit for one IP', async () => {
     const ip = uniqueIP();
 
-    (global.fetch as jest.Mock).mockResolvedValue(
-      new Response(JSON.stringify({ subscriber: {} }), { status: 200 })
+    (global.fetch as jest.Mock).mockImplementation(() =>
+      Promise.resolve(new Response(JSON.stringify({ subscriber: { id: 767 } }), { status: 200 }))
     );
 
     for (let i = 0; i < 5; i += 1) {
