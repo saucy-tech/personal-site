@@ -6,6 +6,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { getFooterNavItems, getSiteNavItems } from '@/config/site-nav';
 import { SITE_NAME, SITE_DESCRIPTION_HIRING, SITE_URL } from '@/utils/constants';
+import { getSiteJsonLd } from '@/utils/structured-data';
 import { APPEARANCE_STORAGE_KEY, THEME_STORAGE_KEY } from '@/utils/theme';
 import ClientGalaxyBackground from '@/components/ClientGalaxyBackground';
 import { Analytics } from '@vercel/analytics/next';
@@ -98,6 +99,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const nonce = (await headers()).get('x-nonce') ?? undefined;
   const navItems = getSiteNavItems();
   const footerNavItems = getFooterNavItems();
+  // Site-level structured data (Person + WebSite). Rendered here, in the dynamic
+  // layout, so it carries the per-request nonce and stays CSP-compliant. The home
+  // page is statically prerendered and cannot emit a nonced inline script.
+  const siteJsonLd = getSiteJsonLd({
+    authorName: 'Brandon',
+    authorImagePath: '/headshot.jpeg',
+    sameAs: [
+      'https://x.com/Saucy_Tech',
+      'https://github.com/saucy-tech',
+      'https://primal.net/p/nprofile1qqsvzs8gfntzjs2wg8670nrfy64h44zy69kc3r8rp5wd7kw6t6njsassf62c7',
+    ],
+  });
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -107,6 +120,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=${JSON.stringify(THEME_STORAGE_KEY)};var a=${JSON.stringify(APPEARANCE_STORAGE_KEY)};if(localStorage.getItem(t)==='green')document.documentElement.setAttribute('data-theme','green');if(localStorage.getItem(a)==='light')document.documentElement.setAttribute('data-appearance','light');}catch(e){}})();`,
           }}
+        />
+        <script
+          suppressHydrationWarning
+          type="application/ld+json"
+          {...(nonce ? { nonce } : {})}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(siteJsonLd) }}
         />
       </head>
       <body className={`${ibmSans.variable} ${ibmMono.variable} font-sans antialiased`}>
