@@ -5,7 +5,7 @@
 
 export const projectsLastUpdated = '2026-06-12';
 
-export type ProjectGroup = 'apps' | 'tools' | 'open-source' | 'track-record';
+export type ProjectGroup = 'apps' | 'tools' | 'open-source' | 'client-work' | 'track-record';
 
 export type ProjectStatus = 'launched' | 'contributor';
 
@@ -158,6 +158,18 @@ export const projects: Project[] = [
     links: [{ href: 'https://github.com/plebnet-dev/website', label: 'GitHub Repo' }],
   },
 
+  // --- Client Work ---
+  {
+    id: 'lawncare-site',
+    group: 'client-work',
+    title: 'Lawn Care Site',
+    status: 'launched',
+    tags: ['Next.js', 'TypeScript', 'Tailwind CSS', 'Cloudflare Workers'],
+    blurb:
+      'A sample client build: conversion-focused marketing site for a local lawn mowing business. Quote-request lead capture, bill pay through hosted Stripe checkout, LocalBusiness SEO schema, and one config file for all business details. Deployed on Cloudflare Workers.',
+    links: [{ href: 'https://lawncare-site.brandonsauceda.workers.dev', label: 'Live Demo' }],
+  },
+
   // --- Track Record ---
   {
     id: 'gda-public-systems',
@@ -209,5 +221,6 @@ export const projectGroupLabels: Record<ProjectGroup, string> = {
   apps: 'Products',
   tools: 'Tools',
   'open-source': 'Open Source Contributions',
+  'client-work': 'Client Work',
   'track-record': 'Track Record',
 };
