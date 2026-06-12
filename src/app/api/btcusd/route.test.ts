@@ -42,7 +42,9 @@ describe('GET /api/btcusd', () => {
 
   it('returns MISS with cache-control header on first fetch', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce(
-      new Response(JSON.stringify({ bitcoin: { usd: 65000 } }), { status: 200 })
+      new Response(JSON.stringify({ data: { amount: '65000.00', base: 'BTC', currency: 'USD' } }), {
+        status: 200,
+      })
     );
     const { GET } = await import('@/app/api/btcusd/route');
     const response = await GET(makeRequest());
@@ -54,7 +56,9 @@ describe('GET /api/btcusd', () => {
 
   it('returns HIT when cached value exists', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce(
-      new Response(JSON.stringify({ bitcoin: { usd: 65000 } }), { status: 200 })
+      new Response(JSON.stringify({ data: { amount: '65000.00', base: 'BTC', currency: 'USD' } }), {
+        status: 200,
+      })
     );
     const { GET } = await import('@/app/api/btcusd/route');
     await GET(makeRequest());
@@ -82,7 +86,10 @@ describe('GET /api/btcusd', () => {
 
   it('returns 502 when upstream payload shape is invalid', async () => {
     (global.fetch as jest.Mock).mockResolvedValueOnce(
-      new Response(JSON.stringify({ bitcoin: { usd: 'not-a-number' } }), { status: 200 })
+      new Response(
+        JSON.stringify({ data: { amount: 'not-a-number', base: 'BTC', currency: 'USD' } }),
+        { status: 200 }
+      )
     );
     const { GET } = await import('@/app/api/btcusd/route');
     const response = await GET(makeRequest());
