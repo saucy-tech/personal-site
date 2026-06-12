@@ -39,6 +39,8 @@ export interface PostHeading {
 
 export interface Post extends PostMeta {
   content: string;
+  /** Post body pre-compiled to HTML at build time (see scripts/generate-posts-data.ts). */
+  html: string;
   headings: PostHeading[];
 }
 
