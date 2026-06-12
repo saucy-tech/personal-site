@@ -9,8 +9,6 @@ import { SITE_NAME, SITE_DESCRIPTION_HIRING, SITE_URL } from '@/utils/constants'
 import { getSiteJsonLd } from '@/utils/structured-data';
 import { APPEARANCE_STORAGE_KEY, THEME_STORAGE_KEY } from '@/utils/theme';
 import ClientGalaxyBackground from '@/components/ClientGalaxyBackground';
-import { Analytics } from '@vercel/analytics/next';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 
 const ibmSans = IBM_Plex_Sans({
   subsets: ['latin'],
@@ -143,8 +141,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             <Footer navItems={footerNavItems} />
           </div>
         </div>
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   );
