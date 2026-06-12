@@ -10,6 +10,13 @@
     "directory": ".open-next/assets",
     "binding": "ASSETS"
   },
+  "routes": [
+    { "pattern": "saucy.tech", "custom_domain": true },
+    { "pattern": "www.saucy.tech", "custom_domain": true }
+  ],
+  // Keep the workers.dev preview alive alongside the custom domains.
+  "workers_dev": true,
+  "preview_urls": true,
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
