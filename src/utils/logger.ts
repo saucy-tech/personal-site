@@ -1,7 +1,7 @@
 type LogLevel = 'info' | 'warn' | 'error';
 
 /**
- * Single-line JSON logs for Vercel log drains / grep-friendly monitoring.
+ * Single-line JSON logs for Cloudflare Workers Logs (`wrangler tail`) / grep-friendly monitoring.
  */
 export function logStructured(
   level: LogLevel,

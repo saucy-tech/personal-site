@@ -339,7 +339,16 @@ const REQUIRED_CSP_SUBSTRINGS = [
   "form-action 'self'",
 ] as const;
 
-export function getSecurityHeaderDriftIssues(headers: Record<string, string>): string[] {
+// The CSP branches on environment (development allows 'unsafe-eval' for HMR).
+// These pins define what the production branch must and must not serve, so the
+// drift check fails if a deployed environment ever gets the development policy.
+const PRODUCTION_REQUIRED_CSP_SUBSTRINGS = ['upgrade-insecure-requests'] as const;
+const PRODUCTION_FORBIDDEN_CSP_SUBSTRINGS = ["'unsafe-eval'"] as const;
+
+export function getSecurityHeaderDriftIssues(
+  headers: Record<string, string>,
+  options: { expectProductionPolicy?: boolean } = {}
+): string[] {
   const issues: string[] = [];
 
   for (const headerName of REQUIRED_SECURITY_HEADERS) {
@@ -359,6 +368,20 @@ export function getSecurityHeaderDriftIssues(headers: Record<string, string>): s
     }
   }
 
+  if (options.expectProductionPolicy) {
+    for (const requiredPart of PRODUCTION_REQUIRED_CSP_SUBSTRINGS) {
+      if (!csp.includes(requiredPart)) {
+        issues.push(`Production CSP is missing required directive: ${requiredPart}`);
+      }
+    }
+
+    for (const forbiddenPart of PRODUCTION_FORBIDDEN_CSP_SUBSTRINGS) {
+      if (csp.includes(forbiddenPart)) {
+        issues.push(`Production CSP must not include: ${forbiddenPart}`);
+      }
+    }
+  }
+
   return issues;
 }
 
@@ -371,15 +394,16 @@ export function assertSecurityHeadersHaveRequiredDirectives(headers: Record<stri
 
 /**
  * Security headers configuration with production canvas support
- * Optimized for Vercel deployment environment
+ * Platform-neutral: behaves the same on Cloudflare Workers (OpenNext), Node, and `next dev`
  */
 export function getSecurityHeaders(options: { nonce?: string } = {}): Record<string, string> {
   const { nonce } = options;
-  // Detect Vercel environment
-  const isVercel = process.env.VERCEL === '1';
-  const vercelEnv = process.env.VERCEL_ENV;
-  const isVercelProduction =
-    isVercel && (vercelEnv === 'production' || process.env.NODE_ENV === 'production');
+  // Loosen the CSP only for `next dev` (NODE_ENV=development), which needs
+  // 'unsafe-eval' for HMR/React Refresh. Everything else - including unset or
+  // unrecognized environments - fails closed to the strict production policy.
+  // (Detection used to key on Vercel env vars, which never exist on Cloudflare
+  // Workers, so production served the development policy after the migration.)
+  const isDevelopment = process.env.NODE_ENV === 'development';
   const headers: Record<string, string> = {
     // Prevent DNS prefetching for privacy
     'X-DNS-Prefetch-Control': 'off',
@@ -402,7 +426,7 @@ export function getSecurityHeaders(options: { nonce?: string } = {}): Record<str
     // Remove server information
     'X-Powered-By': '',
 
-    // Minimal, widely-supported Permissions-Policy (avoid unrecognized features on Vercel/browsers)
+    // Minimal, widely-supported Permissions-Policy (avoid features browsers do not recognize)
     'Permissions-Policy': [
       'geolocation=()',
       'microphone=()',
@@ -416,11 +440,11 @@ export function getSecurityHeaders(options: { nonce?: string } = {}): Record<str
     "default-src 'self'",
 
     // Script sources: 'unsafe-inline' is required for Next.js App Router chunks/scripts that
-    // do not receive per-request nonces from proxy. Nonce remains for tagged inline scripts.
-    // eval only in non-production (Vercel preview local dev / non-prod NODE_ENV).
-    isVercelProduction
-      ? `script-src 'self' 'unsafe-inline'${nonce ? ` 'nonce-${nonce}'` : ''} blob:`
-      : `script-src 'self' 'unsafe-inline'${nonce ? ` 'nonce-${nonce}'` : ''} 'unsafe-eval' blob:`,
+    // do not receive per-request nonces from middleware. Nonce remains for tagged inline scripts.
+    // eval only in local development (HMR/React Refresh).
+    isDevelopment
+      ? `script-src 'self' 'unsafe-inline'${nonce ? ` 'nonce-${nonce}'` : ''} 'unsafe-eval' blob:`
+      : `script-src 'self' 'unsafe-inline'${nonce ? ` 'nonce-${nonce}'` : ''} blob:`,
     // Element-specific sources to satisfy browsers that split elem vs attr policies
     `script-src-elem 'self' 'unsafe-inline'${nonce ? ` 'nonce-${nonce}'` : ''} blob:`,
 
@@ -456,8 +480,8 @@ export function getSecurityHeaders(options: { nonce?: string } = {}): Record<str
     "form-action 'self'",
     "frame-ancestors 'none'",
 
-    // Upgrade insecure requests in production
-    ...(isVercelProduction ? ['upgrade-insecure-requests'] : []),
+    // Upgrade insecure requests everywhere except local development
+    ...(isDevelopment ? [] : ['upgrade-insecure-requests']),
   ];
 
   if (process.env.ENABLE_CSP_VIOLATION_REPORTS === '1') {
