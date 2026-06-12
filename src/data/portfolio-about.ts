@@ -3,7 +3,7 @@
  * Bump `portfolioAboutLastUpdated` when revised.
  */
 
-export const portfolioAboutLastUpdated = '2026-05-21';
+export const portfolioAboutLastUpdated = '2026-06-12';
 
 export const portfolioAbout = {
   headline: 'Brandon Sauceda',
