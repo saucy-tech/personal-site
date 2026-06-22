@@ -5,14 +5,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatDate(date: Date): string {
-  return new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(date);
-}
-
 export function formatPostDate(date: string): string {
   const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date.trim());
   if (!match) {
