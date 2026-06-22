@@ -38,9 +38,6 @@ CLAUDE.md
 AGENTS.md
 .claude/
 
-# generated docs (regenerate with pnpm docs:architecture)
-docs/architecture-map.md
-
 # local session notes / wrap-up artifacts
 cs50x-session-logs/
 *-done-skill-session-summary.md

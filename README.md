@@ -236,8 +236,6 @@ This check:
 - fails when a local image reference is missing in `public/`
 - warns on large images and fails for oversized images
 
-Run `pnpm docs:architecture` to regenerate the local `docs/architecture-map.md` report after adding routes, API endpoints, or major utility/component files. That report is gitignored.
-
 Run `pnpm quality:gate` as the local "definition of done" check before pushing. It runs:
 - `pnpm lint`
 - `pnpm test`
