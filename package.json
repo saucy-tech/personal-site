@@ -21,7 +21,6 @@
     "content:check-images": "ts-node --project tsconfig.scripts.json scripts/check-image-hygiene.ts",
     "security:drift": "ts-node -r tsconfig-paths/register --project tsconfig.scripts.json scripts/check-security-drift.ts",
     "quality:gate": "pnpm lint && pnpm test && pnpm content:validate && pnpm content:check-links && pnpm content:check-images && pnpm security:drift",
-    "docs:architecture": "ts-node --project tsconfig.scripts.json scripts/generate-architecture-docs.ts",
     "preview": "pnpm gen:posts && opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "build:worker": "pnpm gen:posts && opennextjs-cloudflare build && node scripts/cf-slim-og.mjs",
     "deploy": "pnpm run build:worker && opennextjs-cloudflare deploy -- --keep-vars",
