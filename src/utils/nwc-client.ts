@@ -14,9 +14,3 @@ export function getOrCreateNWCClient(nostrWalletConnectUrl: string): NWCClient {
   cachedUrl = nostrWalletConnectUrl;
   return cached;
 }
-
-/** Test helper: clear singleton between jest.resetModules() lifecycles if needed */
-export function resetNWCClientCacheForTests(): void {
-  cached = null;
-  cachedUrl = null;
-}

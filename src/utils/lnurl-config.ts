@@ -47,47 +47,6 @@ export function validateLnurlAmount(amountMsats: number): { valid: boolean; erro
   return { valid: true };
 }
 
-// Validate LNURL comment with security measures
-export function validateLnurlComment(comment: string | null | undefined): {
-  valid: boolean;
-  sanitized?: string;
-  error?: string;
-} {
-  if (!comment) {
-    return { valid: true, sanitized: '' };
-  }
-
-  if (typeof comment !== 'string') {
-    return { valid: false, error: 'Comment must be a string.' };
-  }
-
-  // Remove null bytes and control characters except newlines and tabs
-  const sanitized = comment.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '').trim();
-
-  if (sanitized.length > LNURL_CONFIG.commentAllowed) {
-    return {
-      valid: false,
-      error: `Comment too long (max: ${LNURL_CONFIG.commentAllowed} characters).`,
-    };
-  }
-
-  // Check for suspicious patterns (basic XSS prevention)
-  const suspiciousPatterns = [
-    /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
-    /javascript:/gi,
-    /on\w+\s*=/gi,
-    /data:text\/html/gi,
-  ];
-
-  for (const pattern of suspiciousPatterns) {
-    if (pattern.test(sanitized)) {
-      return { valid: false, error: 'Comment contains suspicious content.' };
-    }
-  }
-
-  return { valid: true, sanitized };
-}
-
 // Session tracking for payment security
 const paymentSessions = new Map<
   string,
@@ -143,9 +102,4 @@ export function trackPaymentAttempt(paymentHash: string, amount: number, ip?: st
   }
 
   return true;
-}
-
-// Get payment session info for monitoring
-export function getPaymentSession(paymentHash: string) {
-  return paymentSessions.get(paymentHash);
 }

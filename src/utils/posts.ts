@@ -183,19 +183,6 @@ export function getPostsByYearMonth(year: number, month: number): PostMeta[] {
   return getAllPostsMeta().filter((post) => post.date.startsWith(prefix));
 }
 
-/** `getAllPostsMeta()` is newest-first; older = next index, newer = previous index. */
-export function getAdjacentPosts(slug: string): { older: PostMeta | null; newer: PostMeta | null } {
-  const posts = getAllPostsMeta();
-  const idx = posts.findIndex((post) => post.slug === slug);
-  if (idx === -1) {
-    return { older: null, newer: null };
-  }
-  return {
-    older: posts[idx + 1] ?? null,
-    newer: posts[idx - 1] ?? null,
-  };
-}
-
 /** Same-series neighbors in chronological reading order (oldest → newest). */
 export function getAllYearMonthArchiveParams(): { year: string; month: string }[] {
   const keys = new Set<string>();
@@ -246,10 +233,6 @@ export function getReadingTimeFromContent(content: string): number {
     .trim();
   const wordCount = plainText ? plainText.split(' ').length : 0;
   return Math.max(1, Math.ceil(wordCount / WORDS_PER_MINUTE));
-}
-
-export function getPostSlugs(): string[] {
-  return getParsedPosts().map((entry) => entry.slug);
 }
 
 function getParsedPosts(): ParsedPostEntry[] {
