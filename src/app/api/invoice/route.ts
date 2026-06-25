@@ -89,6 +89,11 @@ export async function POST(request: NextRequest) {
         description: memoValidation.sanitized || 'Lightning Tip Jar',
       });
 
+      if (!result?.invoice || !result.payment_hash) {
+        console.error('Nostr Wallet Connect makeInvoice returned no invoice');
+        return createSecureErrorResponse('Unable to process payment request', 503);
+      }
+
       const paymentRequest = result.invoice;
       const paymentHash = result.payment_hash;
 
