@@ -96,23 +96,26 @@ pandoc v2_Concise_ATS.md --standalone --css resume.css --metadata pagetitle='Bra
 
 ## Daily Devotion Workflow
 
-Daily Word devotions are the primary content pipeline. The lifecycle:
+New Daily Word devotions are authored in the `the-morning-portion` repo. The
+`src/posts/` directory here is an **archive** — leave it as-is unless explicitly
+asked to edit. The lifecycle for a post that ships from this repo:
 
 1. Brandon drafts the lesson in his Sunday School Obsidian vault.
-2. The `the-daily-word` Cowork skill reads today's entry, generates an MDX post
-   under `src/posts/YYYY-MM-DD-slug.mdx`, and opens a draft PR on this repo
-   labeled `devotion`.
-3. On merge to `main`, `.github/workflows/devotion-broadcast.yml` fires and
-   sends the post to ConvertKit (the "The Daily Word" email list) using
-   `KIT_API_KEY`.
-4. The merge is deployed to production automatically by Cloudflare Workers
-   Builds (Git integration).
+2. The authoring skill generates an MDX post under
+   `src/posts/YYYY-MM-DD-slug.mdx` and opens a PR.
+3. On merge to `main`, the post is deployed to production automatically by
+   Cloudflare Workers Builds (Git integration). **Merging does not send any
+   email** — the PR-label broadcast trigger was removed on 2026-06-10 so a stray
+   `devotion` label can never email subscribers from this archive.
+4. The ConvertKit email ("The Daily Word" list) is sent only by manually running
+   `.github/workflows/devotion-broadcast.yml` (Actions → Run workflow): supply
+   the post `slug` and type `SEND` in the confirm field. It uses `KIT_API_KEY`.
 
 Writing rules and quality checks for published content live in the scripts and
 runbooks in [`docs/`](./docs).
 
-`pnpm broadcast` is retained as a **manual fallback only** and is not the
-primary publishing path.
+`pnpm broadcast` is a second manual fallback that creates a draft broadcast from
+the latest post by frontmatter date.
 
 ## Contributing
 
@@ -164,11 +167,11 @@ SENTRY_DSN=
 
 ### GitHub Actions Secrets
 
-The devotion broadcast workflow is the primary production path. Configure these in **GitHub → Settings → Secrets and variables → Actions**:
+The devotion broadcast workflow runs only on manual dispatch (see Daily Devotion Workflow above). Configure these in **GitHub → Settings → Secrets and variables → Actions**:
 
 | Name | Type | Required by | Description |
 |------|------|-------------|-------------|
-| `KIT_API_KEY` | Secret | `devotion-broadcast.yml` | ConvertKit API key for the merge-based broadcast workflow |
+| `KIT_API_KEY` | Secret | `devotion-broadcast.yml` | ConvertKit API key for the manual broadcast workflow |
 | `NEXT_PUBLIC_APP_URL` | Variable | `devotion-broadcast.yml` | Your production site URL |
 
 `pnpm broadcast` is retained as a manual fallback. It creates a draft broadcast from the latest post by frontmatter date and should not be treated as the primary publishing path.
