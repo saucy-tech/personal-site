@@ -69,6 +69,22 @@ export default async function Support({ searchParams }: SupportPageProps) {
           </div>
         </div>
       </Section>
+
+      <Section emoji="🏦" title={"Gift to My Son's Trump Account"}>
+        <div className="w-full max-w-md mx-auto p-6">
+          <div className="border border-(--accent-border) rounded-lg p-6">
+            <p className="text-(--text-secondary) mb-4">
+              Family and friends can email me for the private contribution link.
+            </p>
+            <a
+              href="mailto:brandon@saucy.tech?subject=Trump%20Account%20contribution%20link"
+              className="inline-block rounded-sm bg-(--accent) px-4 py-2 text-sm font-medium text-(--on-accent) transition hover:bg-(--accent-dark)"
+            >
+              Request the contribution link
+            </a>
+          </div>
+        </div>
+      </Section>
     </PageLayout>
   );
 }
