@@ -23,7 +23,7 @@ import fs from 'fs';
 import path from 'path';
 
 import matter from 'gray-matter';
-import yaml from 'js-yaml';
+import { load as yamlLoad } from 'js-yaml';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
@@ -59,11 +59,11 @@ async function main(): Promise<void> {
     const slug = file.replace(/\.mdx?$/, '');
     const raw = fs.readFileSync(path.join(POSTS_DIR, file), 'utf-8');
     rawEntries[slug] = raw;
-    // gray-matter targets js-yaml 3; the repo pins js-yaml 4 (no safeLoad),
-    // so supply the v4 engine explicitly (same workaround as src/utils/posts.ts).
+    // gray-matter targets js-yaml 3; the repo pins js-yaml 5 (no safeLoad),
+    // so supply the v5 engine explicitly (same workaround as src/utils/posts.ts).
     const { content } = matter(raw, {
       engines: {
-        yaml: { parse: (str: string) => yaml.load(str) as Record<string, unknown> },
+        yaml: { parse: (str: string) => yamlLoad(str) as Record<string, unknown> },
       },
     });
     htmlEntries[slug] = String(await processor.process(content));

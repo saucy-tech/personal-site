@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import matter from 'gray-matter';
-import yaml from 'js-yaml';
+import { load as yamlLoad, dump as yamlDump } from 'js-yaml';
 
 import { extractMarkdownImages, hasMeaningfulAltText, classifyImageSize } from './image-hygiene';
 import {
@@ -77,8 +77,8 @@ const EXCERPT_MAX_LENGTH = 180;
 
 // @ts-expect-error gray-matter engines are runtime-configurable.
 matter.engines.yaml = {
-  parse: (value: string) => yaml.load(value) as Record<string, unknown>,
-  stringify: (value: Record<string, unknown>) => yaml.dump(value),
+  parse: (value: string) => yamlLoad(value) as Record<string, unknown>,
+  stringify: (value: Record<string, unknown>) => yamlDump(value),
 };
 
 function normalizeWhitespace(value: string): string {

@@ -14,7 +14,7 @@ import fs from 'fs';
 import path from 'path';
 
 import matter from 'gray-matter';
-import yaml from 'js-yaml';
+import { load as yamlLoad, dump as yamlDump } from 'js-yaml';
 
 interface BroadcastPost {
   content: string;
@@ -26,11 +26,11 @@ interface BroadcastPost {
 
 const SITE_TIME_ZONE = 'America/New_York';
 
-// Configure gray-matter to use js-yaml 4.x's load function.
+// Configure gray-matter to use js-yaml 5.x's load function.
 // @ts-expect-error - gray-matter's types don't include engines, but it exists at runtime
 matter.engines.yaml = {
-  parse: (str: string) => yaml.load(str) as Record<string, unknown>,
-  stringify: (obj: Record<string, unknown>) => yaml.dump(obj),
+  parse: (str: string) => yamlLoad(str) as Record<string, unknown>,
+  stringify: (obj: Record<string, unknown>) => yamlDump(obj),
 };
 
 function getSummary(content: string) {
