@@ -7,10 +7,10 @@ import Profile from '@/components/Profile';
 import Section from '@/components/Section';
 import SocialBar from '@/components/SocialBar';
 import SubscribeForm from '@/components/SubscribeForm';
-import { formatPostDate } from '@/utils/helpers';
-import { getAllPostsMeta } from '@/utils/posts';
 
 export const metadata: Metadata = {
+  description:
+    'Brandon Sauceda is a software engineer, independent builder, and creator of The Morning Portion.',
   alternates: {
     canonical: '/',
   },
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function Home() {
+export default function Home() {
   const profileData = {
     name: 'Brandon',
     bio: 'Love Jesus, Explore Ideas, Create Things, Save in Bitcoin',
@@ -81,39 +81,49 @@ export default async function Home() {
     },
   ];
 
-  const posts = getAllPostsMeta();
-  const latest = posts[0];
-
   return (
     <div className="pt-4 pb-6 px-4 md:px-8 flex flex-col items-center">
       <div className="space-y-6 w-full max-w-lg mx-auto">
         <div className="space-y-2">
           <Profile {...profileData} />
           <p className="text-center text-sm leading-relaxed text-(--text-secondary)">
-            Independent developer. My own products, plus a few client projects a year.
+            Software engineer. I build my own products and take on a few client projects each year.
           </p>
         </div>
         <SocialBar socials={socialLinks} />
 
         <div className="space-y-3">
-          {latest && (
-            <LinkCard
-              key="latest-blog"
-              title={latest.title}
-              cardTitle={latest.cardTitle}
-              href={`/blog/${latest.slug}`}
-              icon={<span className="text-2xl">📝</span>}
-              eyebrow="Latest Post"
-              meta={[latest.categoryLabel, formatPostDate(latest.date)].join(' • ')}
-            />
-          )}
+          <LinkCard
+            key="morning-portion"
+            title="The Morning Portion"
+            href="https://morningportion.com"
+            imageSrc="/icons/morning-portion.svg"
+            eyebrow="Flagship product"
+            meta="Weekday scripture reflections, published at morningportion.com"
+          />
+          <LinkCard
+            key="my-projects"
+            title="Projects"
+            href="/portfolio"
+            icon={<span className="text-2xl">🚀</span>}
+            eyebrow="Selected work"
+            meta="Products, public-sector systems, open source, and résumé"
+          />
+          <LinkCard
+            key="work-with-me"
+            title="Client work"
+            href="/about#work-with-me"
+            icon={<span className="text-2xl">🤝</span>}
+            eyebrow="Client work"
+            meta="Web apps and focused product builds"
+          />
           <LinkCard
             key="blog-home"
             title="Writing"
             href="/blog"
             icon={<span className="text-2xl">📚</span>}
-            eyebrow="Blog"
-            meta={`${posts.length} posts`}
+            eyebrow="Essays & archive"
+            meta="Personal essays and the earlier Daily Word archive"
           />
           <LinkCard
             key="field-notes"
@@ -122,22 +132,6 @@ export default async function Home() {
             icon={<span className="text-2xl">📓</span>}
             eyebrow="Field notes"
             meta="Tools, tech, and gear I'm using now"
-          />
-          <LinkCard
-            key="my-projects"
-            title="Projects"
-            href="/portfolio"
-            icon={<span className="text-2xl">🚀</span>}
-            eyebrow="Projects"
-            meta="Products, track record, talks, and résumé"
-          />
-          <LinkCard
-            key="work-with-me"
-            title="Client work"
-            href="/about#work-with-me"
-            icon={<span className="text-2xl">🤝</span>}
-            eyebrow="Client work"
-            meta="A few projects a year"
           />
           <LinkCard
             key="bitcoin"
@@ -155,9 +149,9 @@ export default async function Home() {
             eyebrow="Faith"
             meta="Truth Chapel livestreams and teaching"
           />
-          <Section title="Subscribe to Saucy.tech Updates" emoji="✉️">
+          <Section title="Subscribe to Saucy.Tech">
             <p className="text-sm leading-relaxed text-(--text-secondary)">
-              New essays, field notes, and writing, straight to your inbox.
+              Occasional notes on software, tools, and current projects.
             </p>
             <SubscribeForm />
           </Section>
