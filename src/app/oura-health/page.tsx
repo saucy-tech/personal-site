@@ -18,7 +18,8 @@ export default function OuraHealthPage() {
         <section className="space-y-4">
           <p className="text-base leading-relaxed text-(--text-secondary)">
             Sunday Health Review is a private, single-user integration that Brandon Sauceda uses to
-            bring his Oura sleep and recovery data into a local weekly health review.
+            bring his Oura sleep, recovery, stress, and cardiovascular trends into a local weekly
+            health review.
           </p>
           <p className="text-base leading-relaxed text-(--text-secondary)">
             It is not a public product, does not accept accounts, and does not provide medical

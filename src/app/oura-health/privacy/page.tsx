@@ -32,9 +32,9 @@ export default function OuraHealthPrivacyPage() {
         <section className="space-y-3">
           <h2 className="text-xl font-semibold">Data accessed</h2>
           <p className="leading-relaxed text-(--text-secondary)">
-            The integration requests Oura daily sleep, readiness, activity, recovery, and SpO2 data.
-            It does not request Oura email, profile, workout, tag, session, or ring configuration
-            data.
+            The integration requests Oura daily sleep, readiness, activity, recovery, SpO2, daytime
+            stress, resilience, cardiovascular age, and pulse-wave velocity data. It does not
+            request Oura email, profile, workout, tag, session, or ring configuration data.
           </p>
         </section>
 
