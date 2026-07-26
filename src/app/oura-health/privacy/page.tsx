@@ -41,9 +41,10 @@ export default function OuraHealthPrivacyPage() {
         <section className="space-y-3">
           <h2 className="text-xl font-semibold">Storage and security</h2>
           <p className="leading-relaxed text-(--text-secondary)">
-            Oura API credentials and refresh tokens are stored in the macOS Keychain. Imported data
-            is stored in Brandon&apos;s private local and iCloud health records. This public website
-            does not receive or store Oura health data.
+            Oura API credentials and refresh tokens are stored in the macOS Keychain when available,
+            with an encrypted, owner-only local credential store used for unattended reliability.
+            Imported data is stored in Brandon&apos;s private local and iCloud health records. This
+            public website does not receive or store Oura health data.
           </p>
         </section>
 
