@@ -6,7 +6,7 @@
  * Within scope: most recent year, then alphabetical by name.
  */
 
-export const awardsLastUpdated = '2026-05-07';
+export const awardsLastUpdated = '2026-07-31';
 
 export interface Award {
   id: string;
@@ -75,8 +75,8 @@ export const awards: Award[] = [
     id: 'gta-innovation-showcase',
     name: 'Georgia Technology Innovation Showcase Award',
     issuer: 'Georgia Technology Authority',
-    years: ['2021', '2019'],
+    years: ['2026', '2021', '2019'],
     impact:
-      'Georgia Technology Authority recognition for technology innovation in service of the State of Georgia.',
+      'Georgia Technology Authority recognition for technology innovation in service of the State of Georgia. The 2026 award, in the Operational Efficiency category, recognized the GIS platform behind Georgia’s yellow-legged hornet eradication response.',
   },
 ];
