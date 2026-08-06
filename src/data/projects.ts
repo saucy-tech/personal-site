@@ -146,6 +146,7 @@ export const projects: Project[] = [
     blurb:
       'A low-poly space fighter dogfight that runs entirely in the browser, built by ATL BitLab on Three.js. Contributed the power-up system: repair, Overdrive, and Shield pods, with the pickup and expiry handling around them. Merged as PR #6.',
     links: [
+      { href: 'https://neon-orbit-eight.vercel.app/', label: 'Play it' },
       { href: 'https://github.com/ATLBitLab/neon-orbit/pull/6', label: 'PR #6' },
       { href: 'https://github.com/ATLBitLab/neon-orbit', label: 'GitHub Repo' },
     ],
