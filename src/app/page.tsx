@@ -97,7 +97,7 @@ export default function Home() {
             key="morning-portion"
             title="The Morning Portion"
             href="https://morningportion.com"
-            imageSrc="/icons/morning-portion.svg"
+            imageSrc="/icons/morning-portion.png"
             eyebrow="Flagship product"
             meta="Weekday scripture reflections, published at morningportion.com"
           />
