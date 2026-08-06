@@ -14,7 +14,7 @@ export interface AboutProduct {
 export const about = {
   lead: "I'm Brandon, a software engineer and builder in Georgia. I care about my faith, my family, and making useful things that hold up over time.",
   shopOneLiner:
-    'Saucy Tech is how I ship my own software and take on outside work. The products are things like The Morning Portion, a daily devotional site, plus a handful of smaller apps. The client work is a few projects a year, usually web apps and product builds.',
+    'Saucy Tech is how I ship my own software and take on outside work. Two products get most of my time: The Morning Portion, a daily devotional site, and Train Every Day, the workout logger I use myself. The client work is a few projects a year, usually web apps and product builds.',
   trackRecord:
     'For ten years I have built public software for the State of Georgia: web apps and GIS systems used by state agencies and the public, with a few national awards along the way.',
   products: [
@@ -24,10 +24,10 @@ export const about = {
       href: 'https://morningportion.com',
     },
     {
-      name: 'Roll to Eat',
+      name: 'Train Every Day',
       oneLiner:
-        'A playful dinner-decision app that rolls two d20s to pair a cuisine with a main ingredient.',
-      href: 'https://roll-to-eat.vercel.app/',
+        'An offline-first workout logger on Cloudflare Workers. The live build is private, so this opens a sanitized demo.',
+      href: 'https://train-every-day-demo.brandonsauceda.workers.dev/',
     },
     {
       name: 'Lightning Tip Jar',

@@ -12,7 +12,7 @@
  */
 
 /** ISO date — bump when you revise items or copy. Shown on `/field-notes`. */
-export const fieldNotesLastUpdated = '2026-05-30';
+export const fieldNotesLastUpdated = '2026-08-06';
 
 export type FieldNoteStatus =
   | 'workflow'
@@ -265,34 +265,49 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['hostinger', 'KVM 4', 'Ubuntu 24.04'],
         badge: 'daily',
         homepage: 'https://www.hostinger.com',
-        note: 'My always-on server — a Hostinger KVM 4 box on Ubuntu 24.04. It complements Vercel rather than replacing it: Vercel stays the default for public web apps, while this runs Docker workloads, private tools, background jobs, and Hermes. Access is private-first over Tailscale, with only SSH and HTTP/S exposed publicly.',
+        note: 'My always-on server — a Hostinger KVM 4 box on Ubuntu 24.04. It complements Cloudflare rather than replacing it: Workers stay the default for public web apps, while this runs Docker workloads, private tools, background jobs, and Hermes. Access is private-first over Tailscale, with only SSH and HTTP/S exposed publicly.',
         link: { href: 'https://www.hostinger.com?REFERRALCODE=62HBRANDOYK4', label: 'my referral' },
         pros: [
           'Always-on home for self-hosted services and agents',
           'Private-first access over Tailscale keeps the surface small',
-          'Cheap, predictable place to run things Vercel is not meant for',
+          'Cheap, predictable place to run long-lived processes Workers are not meant for',
         ],
         cons: ['I own the patching, backups, and uptime myself'],
       },
       {
-        title: 'Vercel',
-        tags: ['hosting', 'next.js', 'ci/cd'],
+        title: 'Cloudflare Workers',
+        tags: ['hosting', 'next.js', 'opennext', 'edge'],
         badge: 'daily',
-        homepage: 'https://vercel.com',
-        note: 'Where all my public sites live, including this one. Every push deploys with a preview URL, so the default path for anything GitHub-backed and web-facing is Vercel — the VPS only picks up what Vercel is not meant to run.',
+        homepage: 'https://workers.cloudflare.com',
+        note: 'Where my public sites live, including this one and morningportion.com. Next.js apps ship through the OpenNext adapter, so the same App Router codebase runs at the edge instead of on a Node server. Static things skip the framework entirely and deploy as plain assets. Moving here from Vercel put hosting, DNS, storage, and access control on one bill and one dashboard.',
         pros: [
-          'Git push to production with zero server babysitting',
-          'Preview deploys on every branch make review easy',
-          'Pairs naturally with Next.js',
+          'One platform for hosting, DNS, KV, R2, and access control',
+          'OpenNext runs a normal Next.js codebase at the edge with no rewrite',
+          'Static sites deploy as assets with no framework overhead',
         ],
-        cons: ['Less suited to always-on background jobs and stateful services'],
+        cons: [
+          'The Workers runtime is not Node, so some npm packages need a compatibility flag or a swap',
+        ],
       },
       {
-        title: 'Cloudflare',
+        title: 'Cloudflare Access',
+        tags: ['zero-trust', 'auth', 'sso'],
+        badge: 'daily',
+        homepage: 'https://www.cloudflare.com/zero-trust/products/access/',
+        note: 'How my private apps stay private without building auth. A one-time-code login sits in front of the whole origin, so tools like my workout logger and a few family apps are reachable from any device but open to nobody else. It is the reason those projects can be genuinely useful to me and still never expose a login form to the internet.',
+        pros: [
+          'Real access control on a personal project without writing an auth system',
+          'One-time email codes mean no password to manage',
+          'Applies to the origin, so nothing leaks if a route is forgotten',
+        ],
+        cons: ['Anything behind it cannot be shown off without a separate sanitized build'],
+      },
+      {
+        title: 'Cloudflare DNS and Registrar',
         tags: ['dns', 'domains', 'registrar'],
         badge: 'daily',
         homepage: 'https://www.cloudflare.com',
-        note: 'My DNS and domain registrar — the layer that points every domain at Vercel, the VPS, and everything else. At-cost domain pricing and fast DNS make it the quiet foundation under the whole stack.',
+        note: 'My DNS and domain registrar — the layer that points every domain at Workers, the VPS, and everything else. At-cost domain pricing and fast DNS make it the quiet foundation under the whole stack.',
         pros: [
           'At-cost domain registration with no markup',
           'Fast, reliable DNS for every property',
