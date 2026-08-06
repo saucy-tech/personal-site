@@ -129,11 +129,16 @@ export const projects: Project[] = [
     group: 'open-source',
     title: 'Hubble',
     status: 'contributor',
-    tags: ['TypeScript', 'Astro', 'Open Source'],
+    tags: ['TypeScript', 'Astro', 'Desktop', 'Open Source'],
     blurb:
-      'Hubble is the notepad I keep open all day for my own notes and my agents’ scratch files. Contributed a workspace-switcher change that drops recent folders from the list, so the switcher shows the workspaces you actually chose. Merged as PR #196.',
+      'Hubble is the notepad I keep open all day for my own notes and my agents’ scratch files. Three merged contributions: Windows desktop build support, so the app ships on a second platform; system-follow dark mode, including the Windows title bar overlay; and a workspace-switcher change that drops recent folders so the list shows only the workspaces you chose.',
     links: [
-      { href: 'https://github.com/bholmesdev/hubble.md/pull/196', label: 'PR #196' },
+      {
+        href: 'https://github.com/bholmesdev/hubble.md/pull/115',
+        label: 'PR #115 (Windows build)',
+      },
+      { href: 'https://github.com/bholmesdev/hubble.md/pull/147', label: 'PR #147 (dark mode)' },
+      { href: 'https://github.com/bholmesdev/hubble.md/pull/196', label: 'PR #196 (workspaces)' },
       { href: 'https://github.com/bholmesdev/hubble.md', label: 'GitHub Repo' },
     ],
   },
