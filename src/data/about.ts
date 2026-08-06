@@ -3,7 +3,7 @@
  * (no em dashes, no LLM tells). Bump `aboutLastUpdated` when revised.
  */
 
-export const aboutLastUpdated = '2026-06-06';
+export const aboutLastUpdated = '2026-08-06';
 
 export interface AboutProduct {
   name: string;
@@ -16,7 +16,7 @@ export const about = {
   shopOneLiner:
     'Saucy Tech is how I ship my own software and take on outside work. The products are things like The Morning Portion, a daily devotional site, plus a handful of smaller apps. The client work is a few projects a year, usually web apps and product builds.',
   trackRecord:
-    'For ten years I have built public software for the State of Georgia: web apps and GIS systems used by more than 50,000 people a month, with a few national awards along the way.',
+    'For ten years I have built public software for the State of Georgia: web apps and GIS systems used by state agencies and the public, with a few national awards along the way.',
   products: [
     {
       name: 'The Morning Portion',

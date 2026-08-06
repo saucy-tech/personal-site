@@ -210,7 +210,7 @@ export const projects: Project[] = [
     status: 'launched',
     tags: ['Product leadership', 'GIS', 'Azure', 'C#', 'Public sector'],
     blurb:
-      'IT Development Manager for state agency systems serving 50,000+ monthly users. Owned public-facing web roadmap, cut citizen wait times 40%, led enterprise ArcGIS program (Esri SAG award), and built cross-agency APIs for five partner organizations. Details available on request, no public repo.',
+      'IT Development Manager for state agency systems. Owned public-facing web roadmap, cut citizen wait times 40%, led enterprise ArcGIS program (Esri SAG award), and built cross-agency APIs for five partner organizations. Details available on request, no public repo.',
     links: [{ href: '/Brandon_Sauceda_Resume.pdf', label: 'Résumé (PDF)' }],
   },
 ];
