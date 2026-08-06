@@ -19,7 +19,7 @@ export interface Project {
   group: ProjectGroup;
   title: string;
   status: ProjectStatus;
-  /** The two products I am actively building. Renders a Featured pill and sorts first. */
+  /** The products I actively build and use. Renders a Featured pill and sorts first. */
   featured?: boolean;
   tags: string[];
   blurb: string;
@@ -60,6 +60,22 @@ export const projects: Project[] = [
     ],
   },
   {
+    id: 'sunday-school',
+    group: 'apps',
+    title: 'Sunday School',
+    status: 'launched',
+    featured: true,
+    tags: ['Vanilla JS', 'PWA', 'Service worker', 'Offline-first', 'Cloudflare Workers'],
+    blurb:
+      'The lesson app I teach from on an iPad, in a classroom where the signal drops. A service worker precaches every lesson in the quarter, so the menu and the lesson open with no network at all; when that is not enough, any lesson or a whole quarter exports as one self-contained HTML file that opens from the Files app with no service worker involved. The menu, the lesson dates, and the badge on this Sunday are generated from the lesson files rather than hand-edited, so adding a lesson is dropping a file in a folder. No framework and no build step beyond a dependency-free Node script, covered by a test suite that runs on node --test. The lessons are written against paid curriculum and the real site sits behind Cloudflare Access, so what you can open here is a demo carrying three sample lessons written from scratch and none of the curriculum.',
+    links: [
+      {
+        href: 'https://sunday-school-demo.brandonsauceda.workers.dev',
+        label: 'Open the demo',
+      },
+    ],
+  },
+  {
     id: 'feed-eggs',
     group: 'apps',
     title: 'Feed Eggs',
@@ -83,19 +99,6 @@ export const projects: Project[] = [
     links: [
       { href: 'https://github.com/saucy-tech/lntipjar', label: 'GitHub Repo' },
       { href: '/support', label: 'Live Demo' },
-    ],
-  },
-  {
-    id: 'portfolio-site',
-    group: 'apps',
-    title: 'This Portfolio Site',
-    status: 'launched',
-    tags: ['Next.js', 'React', 'Tailwind CSS', 'MDX', 'Lightning', 'Cloudflare Workers'],
-    blurb:
-      'Built with Next.js (App Router), React, and Tailwind CSS, integrating @getalby/sdk Nostr Wallet Connect for native Lightning payments. Custom MDX blog, responsive design, dark mode, subtle animations. Runs on Cloudflare Workers via the OpenNext adapter. All content and components managed locally, no external CMS.',
-    links: [
-      { href: 'https://github.com/saucy-tech/personal-site', label: 'GitHub Repo' },
-      { href: '/support#lightning-tip-jar', label: 'Try Lightning Tip Jar' },
     ],
   },
 
