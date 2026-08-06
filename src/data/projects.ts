@@ -3,7 +3,7 @@
  * Edit here to update copy. Bump `projectsLastUpdated` when you revise.
  */
 
-export const projectsLastUpdated = '2026-06-12';
+export const projectsLastUpdated = '2026-08-06';
 
 export type ProjectGroup = 'apps' | 'tools' | 'open-source' | 'client-work' | 'track-record';
 
@@ -125,6 +125,38 @@ export const projects: Project[] = [
 
   // --- Open Source ---
   {
+    id: 'hubble',
+    group: 'open-source',
+    title: 'Hubble',
+    status: 'contributor',
+    tags: ['TypeScript', 'Astro', 'Desktop', 'Open Source'],
+    blurb:
+      'Hubble is the notepad I keep open all day for my own notes and my agents’ scratch files. Three merged contributions: Windows desktop build support, so the app ships on a second platform; system-follow dark mode, including the Windows title bar overlay; and a workspace-switcher change that drops recent folders so the list shows only the workspaces you chose.',
+    links: [
+      {
+        href: 'https://github.com/bholmesdev/hubble.md/pull/115',
+        label: 'PR #115 (Windows build)',
+      },
+      { href: 'https://github.com/bholmesdev/hubble.md/pull/147', label: 'PR #147 (dark mode)' },
+      { href: 'https://github.com/bholmesdev/hubble.md/pull/196', label: 'PR #196 (workspaces)' },
+      { href: 'https://github.com/bholmesdev/hubble.md', label: 'GitHub Repo' },
+    ],
+  },
+  {
+    id: 'neon-orbit',
+    group: 'open-source',
+    title: 'Neon Orbit',
+    status: 'contributor',
+    tags: ['TypeScript', 'Three.js', 'Vite', 'Open Source'],
+    blurb:
+      'A low-poly space fighter dogfight that runs entirely in the browser, built by ATL BitLab on Three.js. Contributed the power-up system: repair, Overdrive, and Shield pods, with the pickup and expiry handling around them. Merged as PR #6.',
+    links: [
+      { href: 'https://neon-orbit-eight.vercel.app/', label: 'Play it' },
+      { href: 'https://github.com/ATLBitLab/neon-orbit/pull/6', label: 'PR #6' },
+      { href: 'https://github.com/ATLBitLab/neon-orbit', label: 'GitHub Repo' },
+    ],
+  },
+  {
     id: 'warp',
     group: 'open-source',
     title: 'Warp',
@@ -178,7 +210,7 @@ export const projects: Project[] = [
     status: 'launched',
     tags: ['Product leadership', 'GIS', 'Azure', 'C#', 'Public sector'],
     blurb:
-      'IT Development Manager for state agency systems serving 50,000+ monthly users. Owned public-facing web roadmap, cut citizen wait times 40%, led enterprise ArcGIS program (Esri SAG award), and built cross-agency APIs for five partner organizations. Details available on request, no public repo.',
+      'IT Development Manager for state agency systems. Owned public-facing web roadmap, cut citizen wait times 40%, led enterprise ArcGIS program (Esri SAG award), and built cross-agency APIs for five partner organizations. Details available on request, no public repo.',
     links: [{ href: '/Brandon_Sauceda_Resume.pdf', label: 'Résumé (PDF)' }],
   },
 ];

@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { headers } from 'next/headers';
 
 import PageLayout from '@/components/PageLayout';
-import { Award, awards } from '@/data/awards';
+import { Award, awards, awardsLastUpdated } from '@/data/awards';
 import { portfolioAbout, portfolioAboutLastUpdated } from '@/data/portfolio-about';
 import {
   Project,
@@ -10,6 +10,7 @@ import {
   ProjectStatus,
   projectGroupLabels,
   projects,
+  projectsLastUpdated,
   talks,
   publications,
 } from '@/data/projects';
@@ -20,6 +21,14 @@ const PORTFOLIO_OG_IMAGE = absoluteUrl('/portfolio/opengraph-image');
 
 const PORTFOLIO_DESCRIPTION =
   'Brandon Sauceda — IT Development Manager and software engineer. Gov-tech, GIS, full-stack apps, open source, awards, and downloadable résumé.';
+
+// The page renders one "updated" date, so take the newest of the sections it draws from.
+// ISO dates compare lexically, so a string comparison is enough.
+const PORTFOLIO_LAST_UPDATED = [
+  portfolioAboutLastUpdated,
+  projectsLastUpdated,
+  awardsLastUpdated,
+].reduce((newest, date) => (date > newest ? date : newest));
 
 export const metadata: Metadata = {
   title: 'Portfolio',
@@ -142,7 +151,7 @@ export default async function Portfolio() {
     description: portfolioAbout.summary,
     imagePath: '/headshot.jpeg',
     sameAs: [portfolioAbout.linkedIn, portfolioAbout.github, 'https://x.com/Saucy_Tech'],
-    dateModified: portfolioAboutLastUpdated,
+    dateModified: PORTFOLIO_LAST_UPDATED,
   });
 
   return (
@@ -193,7 +202,7 @@ export default async function Portfolio() {
             </a>
           </div>
           <p className="text-xs text-(--text-secondary)">
-            Portfolio updated {portfolioAboutLastUpdated}
+            Portfolio updated {PORTFOLIO_LAST_UPDATED}
           </p>
         </section>
 
