@@ -90,6 +90,11 @@ function ProjectCard({ project }: { project: Project }) {
     <div className="bg-white/10 rounded-lg shadow-lg border border-(--accent-border) p-6">
       <div className="flex items-center gap-2 flex-wrap mb-2">
         <h3 className="text-xl font-semibold">{project.title}</h3>
+        {project.featured && (
+          <span className="text-xs bg-(--accent) text-(--on-accent) px-2 py-0.5 rounded-full">
+            Featured
+          </span>
+        )}
         <span className={`text-xs ${pill.className} px-2 py-0.5 rounded-full`}>{pill.label}</span>
       </div>
       <div className="flex flex-wrap gap-2 mb-3">
@@ -141,7 +146,9 @@ export default async function Portfolio() {
   const projectGroups = GROUP_ORDER.map((group) => ({
     group,
     label: projectGroupLabels[group],
-    items: projects.filter((p) => p.group === group),
+    items: projects
+      .filter((p) => p.group === group)
+      .sort((a, b) => Number(b.featured ?? false) - Number(a.featured ?? false)),
   })).filter((g) => g.items.length > 0);
 
   const jsonLd = getProfilePageJsonLd({

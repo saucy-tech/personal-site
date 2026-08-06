@@ -102,6 +102,14 @@ export default function Home() {
             meta="Weekday scripture reflections, published at morningportion.com"
           />
           <LinkCard
+            key="train-every-day"
+            title="Train Every Day"
+            href="https://train-every-day-demo.brandonsauceda.workers.dev/"
+            imageSrc="/icons/train-every-day.png"
+            eyebrow="Flagship product"
+            meta="Offline-first workout logger on Cloudflare Workers. Open the sanitized demo"
+          />
+          <LinkCard
             key="my-projects"
             title="Projects"
             href="/portfolio"

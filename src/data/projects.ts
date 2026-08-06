@@ -19,6 +19,8 @@ export interface Project {
   group: ProjectGroup;
   title: string;
   status: ProjectStatus;
+  /** The two products I am actively building. Renders a Featured pill and sorts first. */
+  featured?: boolean;
   tags: string[];
   blurb: string;
   links: ProjectLink[];
@@ -38,25 +40,23 @@ export const projects: Project[] = [
     group: 'apps',
     title: 'The Morning Portion',
     status: 'launched',
+    featured: true,
     tags: ['Next.js 16', 'React 19', 'MDX', 'Tailwind CSS', 'Vercel'],
     blurb:
-      'A standalone site I built to publish weekday scripture reflections. Next.js 16 App Router on Vercel with React 19, an MDX content pipeline (next-mdx-remote + gray-matter), Tailwind typography, and Vercel Analytics. New entries land here every weekday; the earlier archive (through May 2026) still lives on this site.',
-    links: [
-      { href: 'https://github.com/saucy-tech/the-morning-portion', label: 'GitHub Repo' },
-      { href: 'https://morningportion.com', label: 'Visit morningportion.com' },
-    ],
+      'A publishing product I write and run end to end: a weekday scripture reflection, an email broadcast to subscribers, and a podcast episode, shipped every weekday. Next.js 16 App Router on Vercel with React 19, an MDX content pipeline (next-mdx-remote + gray-matter), Tailwind typography, and Vercel Analytics. The archive through May 2026 still lives on this site. The repository is private; the published product is the artifact worth reading.',
+    links: [{ href: 'https://morningportion.com', label: 'Visit morningportion.com' }],
   },
   {
-    id: 'roll-to-eat',
+    id: 'train-every-day',
     group: 'apps',
-    title: 'Roll to Eat',
+    title: 'Train Every Day',
     status: 'launched',
-    tags: ['Next.js', 'React', 'TypeScript', 'Tailwind CSS'],
+    featured: true,
+    tags: ['Vanilla JS', 'PWA', 'Cloudflare Workers', 'KV', 'Offline-first'],
     blurb:
-      'A playful dinner-decision app that rolls two d20s to pair a cuisine with a main ingredient. Custom tables saved in the browser, reroll workflows with lockable dice, local roll history, and shareable result pages.',
+      'The workout logger I use on the gym floor every training day. Local-first: entries write to the device first and converge to Cloudflare KV through a commutative merge, so logging keeps working with no signal and a set is never lost to a failed request. Vanilla JavaScript with no framework, no build step, and no runtime dependencies, covered by a dependency-free test suite. Production sits behind Cloudflare Access and holds my own training record, so what you can open here is a separately sanitized build carrying fabricated data and no path back to the real store.',
     links: [
-      { href: 'https://github.com/saucy-tech/roll-to-eat', label: 'GitHub Repo' },
-      { href: 'https://roll-to-eat.vercel.app/', label: 'Live Demo' },
+      { href: 'https://train-every-day-demo.brandonsauceda.workers.dev/', label: 'Open the demo' },
     ],
   },
   {
