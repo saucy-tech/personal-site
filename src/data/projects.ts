@@ -41,9 +41,9 @@ export const projects: Project[] = [
     title: 'The Morning Portion',
     status: 'launched',
     featured: true,
-    tags: ['Next.js 16', 'React 19', 'MDX', 'Tailwind CSS', 'Vercel'],
+    tags: ['Next.js 16', 'React 19', 'MDX', 'Tailwind CSS', 'Cloudflare Workers'],
     blurb:
-      'A publishing product I write and run end to end: a weekday scripture reflection, an email broadcast to subscribers, and a podcast episode, shipped every weekday. Next.js 16 App Router on Vercel with React 19, an MDX content pipeline (next-mdx-remote + gray-matter), Tailwind typography, and Vercel Analytics. The archive through May 2026 still lives on this site. The repository is private; the published product is the artifact worth reading.',
+      'A publishing product I write and run end to end: a weekday scripture reflection, an email broadcast to subscribers, and a podcast episode, shipped every weekday. Next.js 16 App Router with React 19, an MDX content pipeline (next-mdx-remote + gray-matter), and Tailwind typography, running on Cloudflare Workers through the OpenNext adapter. The archive through May 2026 still lives on this site. The repository is private; the published product is the artifact worth reading.',
     links: [{ href: 'https://morningportion.com', label: 'Visit morningportion.com' }],
   },
   {
