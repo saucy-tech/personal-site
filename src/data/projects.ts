@@ -3,7 +3,7 @@
  * Edit here to update copy. Bump `projectsLastUpdated` when you revise.
  */
 
-export const projectsLastUpdated = '2026-08-06';
+export const projectsLastUpdated = '2026-08-10';
 
 export type ProjectGroup = 'apps' | 'tools' | 'open-source' | 'client-work' | 'track-record';
 
@@ -73,6 +73,19 @@ export const projects: Project[] = [
         href: 'https://sunday-school-demo.brandonsauceda.workers.dev',
         label: 'Open the demo',
       },
+    ],
+  },
+  {
+    id: 'home-hive',
+    group: 'apps',
+    title: 'The Home Hive',
+    status: 'launched',
+    tags: ['Vanilla JS', 'PWA', 'Cloudflare Workers', 'KV', 'Cloudflare Access'],
+    blurb:
+      'The weekly preschool lesson plan, folded into the evening a family is already having. Preschool rooms are mixed-age, so every activity carries two levels: count to 11 for the class, and count to 20 and backwards for a kid past that. Seven games alongside it, every prompt spoken aloud so a pre-reader can play alone. Cloudflare Worker and KV behind Access, a PWA with no framework or build step, and a week is one JSON file. The real app is private; the demo carries an invented week.',
+    links: [
+      { href: 'https://home-hive-demo.brandonsauceda.workers.dev', label: 'Open the demo' },
+      { href: 'https://github.com/saucy-tech/home-hive-demo', label: 'Demo repo' },
     ],
   },
   {
