@@ -222,7 +222,7 @@ export const projects: Project[] = [
   {
     id: 'gda-public-systems',
     group: 'track-record',
-    title: 'Georgia DGA: Public Web & GIS Systems',
+    title: 'Georgia GDA: Public Web & GIS Systems',
     status: 'launched',
     tags: ['Product leadership', 'GIS', 'Azure', 'C#', 'Public sector'],
     blurb:
