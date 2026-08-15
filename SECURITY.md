@@ -13,8 +13,9 @@ This is a personal project, so I can't promise a response time. I read every rep
 
 The code in this repository and the site it deploys at [saucy.tech](https://saucy.tech).
 
+That includes the unauthenticated API routes under `/api` — subscriber signup, which forwards visitor email addresses to Kit, and Lightning invoice creation. Anything touching those is squarely in scope.
+
 ## Out of scope
 
-- Missing security headers or cookie flags on a static site that has no accounts, sessions, or user data.
 - Dependency CVEs with no demonstrated exploit path here — Dependabot already tracks those.
 - Automated scanner output submitted without a working proof of concept.
