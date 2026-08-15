@@ -164,6 +164,12 @@ async function rateLimitWithUpstash(
   }
 }
 
+/** Just the two KV methods the limiter uses; the repo pulls in no Workers types. */
+interface RateLimitStore {
+  get(key: string): Promise<string | null>;
+  put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
+}
+
 /**
  * Counts a request against a KV-backed window shared by every isolate.
  *
@@ -177,12 +183,6 @@ async function rateLimitWithUpstash(
  * null — it denies, because failing open on the endpoint that spends money is
  * the bug this replaces.
  */
-/** Just the two KV methods the limiter uses; the repo pulls in no Workers types. */
-interface RateLimitStore {
-  get(key: string): Promise<string | null>;
-  put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
-}
-
 async function rateLimitWithKV(
   key: string,
   maxRequests: number,
