@@ -164,102 +164,73 @@ async function rateLimitWithUpstash(
   }
 }
 
-/** Just the two KV methods the limiter uses; the repo pulls in no Workers types. */
-interface RateLimitStore {
-  get(key: string): Promise<string | null>;
-  put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
+/**
+ * Cloudflare's rate-limiting binding: one atomic counter per key, evaluated in
+ * the runtime rather than in application code.
+ *
+ * This replaced a KV-backed counter, which could not do this job. KV has no
+ * atomic increment and accepts only one write per second to a given key, so a
+ * read-modify-write counter either denied legitimate callers (when a throttled
+ * write was treated as failure) or let a burst through (when it was not): at
+ * 100 req/s a "5 per minute" limit passed roughly 400 requests before the
+ * count caught up. Neither is a rate limit.
+ *
+ * The trade this makes instead is scope: the binding counts per Cloudflare
+ * location, not globally, so a caller spread across many locations gets that
+ * many allowances. That is a real limit with a known boundary, which beats an
+ * approximate global one that does not bind. If a global count is ever needed,
+ * a Durable Object is the primitive — with the caveat that exporting one from
+ * an OpenNext build is not a config-only change, which this is.
+ */
+interface RateLimiterBinding {
+  limit(options: { key: string }): Promise<{ success: boolean }>;
 }
 
-/**
- * Counts a request against a KV-backed window shared by every isolate.
- *
- * This is approximate by construction, in three ways worth stating plainly:
- *
- * 1. KV has no atomic increment, so this is a read-modify-write. Requests that
- *    land concurrently can read the same count and each write count+1, so a
- *    tightly parallel burst undercounts. Durable Objects are the primitive that
- *    counts exactly; KV was chosen here for not needing a new class, a
- *    migration and a binding on two sites.
- * 2. The window is fixed and aligned to the epoch rather than sliding, so a
- *    caller can spend its allowance at the end of one window and again at the
- *    start of the next.
- * 3. KV accepts one write per second to a given key, so under a burst most
- *    increments are dropped. The count still climbs on every write that lands,
- *    so the limit binds — just later than the request number would suggest.
- *
- * Both are acceptable for what this defends: unmetered use of the Kit API key
- * and the Alby wallet. An approximate global limit beats an exact per-isolate
- * one, which bounds nothing at all. Neither is acceptable if this is ever
- * asked to meter something billed per call — move to a Durable Object, or to
- * Cloudflare's `ratelimits` binding, then.
- *
- * Returns null only when there is no KV binding to talk to. A failed *read*
- * denies, because failing open on the endpoint that spends money is the bug
- * this replaces. A failed *write* does not — see below.
- */
-async function rateLimitWithKV(
+// Each tier is its own binding because the allowance lives in wrangler.jsonc
+// rather than in the call. Keyed by the constant so that changing a limit here
+// without changing it there is a visible mismatch rather than a silent one.
+const RATE_LIMITER_BINDINGS: Record<number, string> = {
+  [SECURITY_CONSTANTS.RATE_LIMIT_SUBSCRIBE]: 'RATE_LIMITER_SUBSCRIBE',
+  [SECURITY_CONSTANTS.RATE_LIMIT_INVOICE]: 'RATE_LIMITER_INVOICE',
+  [SECURITY_CONSTANTS.RATE_LIMIT_API]: 'RATE_LIMITER_API',
+};
+
+async function rateLimitWithBinding(
   key: string,
   maxRequests: number,
   windowMs: number
 ): Promise<{ allowed: boolean; resetTime: number; remaining: number } | null> {
-  let store: RateLimitStore | undefined;
+  const bindingName = RATE_LIMITER_BINDINGS[maxRequests];
+  if (!bindingName) return null;
+
+  let limiter: RateLimiterBinding | undefined;
   try {
     // Imported lazily and deliberately: outside a Workers runtime this module
     // is not loadable, and "not loadable" is exactly the signal that there is
-    // no KV to reach. Keeps the ESM-only package out of the Jest module graph.
+    // no binding to reach. Keeps the ESM-only package out of the Jest graph.
     const { getCloudflareContext } = await import('@opennextjs/cloudflare');
     const { env } = await getCloudflareContext({ async: true });
-    store = (env as unknown as { RATE_LIMIT?: RateLimitStore }).RATE_LIMIT;
+    limiter = (env as unknown as Record<string, RateLimiterBinding | undefined>)[bindingName];
   } catch {
     // Not running on Workers at all (a plain `next dev`, or a unit test).
     return null;
   }
-  if (!store) return null;
+  if (!limiter) return null;
 
-  const now = Date.now();
-  // The window is part of the key, so a window rolls over by being a different
-  // key rather than by anyone having to reset a counter.
-  const windowStart = Math.floor(now / windowMs) * windowMs;
-  const windowKey = `rl:${key}:${windowStart}`;
-  const resetTime = windowStart + windowMs;
+  // The binding does not report a window position, so Retry-After is the
+  // conservative whole window rather than the true remaining time.
+  const resetTime = Date.now() + windowMs;
 
-  // The READ decides. If it fails there is no count, so the request is refused —
-  // that is the fail-closed property this replaced a fail-open fallback for.
-  let count: number;
   try {
-    count = Number((await store.get(windowKey)) ?? 0) + 1;
+    const { success } = await limiter.limit({ key });
+    return { allowed: success, resetTime, remaining: success ? maxRequests - 1 : 0 };
   } catch (error) {
-    logStructured('error', 'rate_limit_read_failed', {
+    logStructured('error', 'rate_limit_backend_error', {
       message: error instanceof Error ? error.message : 'unknown',
     });
+    // Deny. A limiter that cannot count must not wave traffic through.
     return { allowed: false, resetTime, remaining: 0 };
   }
-
-  if (count > maxRequests) {
-    return { allowed: false, resetTime, remaining: 0 };
-  }
-
-  // The WRITE is bookkeeping, and its failure must not deny anyone. KV accepts
-  // only one write per second to a given key, so a caller making two requests
-  // inside the same second reliably fails the second put — and denying on that
-  // would refuse legitimate traffic long before the configured allowance, which
-  // is a worse bug than the one being fixed. A dropped increment undercounts,
-  // in the same way the read-modify-write race already does; it is bounded,
-  // because every write that does land still moves the count toward the limit.
-  try {
-    // expirationTtl is seconds and must be at least 60; the window is a minute
-    // in every current caller, and a slightly long-lived key costs nothing
-    // because the key name already encodes which window it belongs to.
-    await store.put(windowKey, String(count), {
-      expirationTtl: Math.max(60, Math.ceil((windowMs * 2) / 1000)),
-    });
-  } catch (error) {
-    logStructured('warn', 'rate_limit_write_dropped', {
-      message: error instanceof Error ? error.message : 'unknown',
-    });
-  }
-
-  return { allowed: true, resetTime, remaining: maxRequests - count };
 }
 
 export async function rateLimit(
@@ -278,15 +249,15 @@ export async function rateLimit(
     return distributedResult;
   }
 
-  const kvResult = await rateLimitWithKV(key, maxRequests, windowMs);
-  if (kvResult) {
-    return kvResult;
+  const bindingResult = await rateLimitWithBinding(key, maxRequests, windowMs);
+  if (bindingResult) {
+    return bindingResult;
   }
 
   logStructured('warn', 'rate_limit_per_isolate_fallback', {
     key: keyPrefix,
     detail:
-      'No RATE_LIMIT KV binding and no Upstash config; this limit is per-isolate and does not bound a distributed caller.',
+      'No rate-limiting binding and no Upstash config; this limit is per-isolate and does not bound a distributed caller.',
   });
 
   const bucket = rateLimitStore.get(key);
