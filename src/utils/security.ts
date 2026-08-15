@@ -173,11 +173,21 @@ interface RateLimitStore {
 /**
  * Counts a request against a KV-backed window shared by every isolate.
  *
- * KV is eventually consistent, so the count can lag under a burst spread across
- * colos and the effective limit is approximate. That is the right trade here:
- * this exists to stop unmetered use of the Kit API key and the Alby wallet, not
- * to bill anyone. An approximate global limit beats an exact per-isolate one,
- * which is no limit at all.
+ * This is approximate by construction, in two ways worth stating plainly:
+ *
+ * 1. KV has no atomic increment, so this is a read-modify-write. Requests that
+ *    land concurrently can read the same count and each write count+1, so a
+ *    tightly parallel burst undercounts. Durable Objects are the primitive that
+ *    counts exactly; KV was chosen here for not needing a new class, a
+ *    migration and a binding on two sites.
+ * 2. The window is fixed and aligned to the epoch rather than sliding, so a
+ *    caller can spend its allowance at the end of one window and again at the
+ *    start of the next.
+ *
+ * Both are acceptable for what this defends: unmetered use of the Kit API key
+ * and the Alby wallet. An approximate global limit beats an exact per-isolate
+ * one, which bounds nothing at all. Neither is acceptable if this is ever
+ * asked to meter something billed per call — move to a Durable Object then.
  *
  * Returns null only when there is no KV binding to talk to. A KV error is NOT
  * null — it denies, because failing open on the endpoint that spends money is
