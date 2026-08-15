@@ -173,7 +173,7 @@ interface RateLimitStore {
 /**
  * Counts a request against a KV-backed window shared by every isolate.
  *
- * This is approximate by construction, in two ways worth stating plainly:
+ * This is approximate by construction, in three ways worth stating plainly:
  *
  * 1. KV has no atomic increment, so this is a read-modify-write. Requests that
  *    land concurrently can read the same count and each write count+1, so a
@@ -183,15 +183,19 @@ interface RateLimitStore {
  * 2. The window is fixed and aligned to the epoch rather than sliding, so a
  *    caller can spend its allowance at the end of one window and again at the
  *    start of the next.
+ * 3. KV accepts one write per second to a given key, so under a burst most
+ *    increments are dropped. The count still climbs on every write that lands,
+ *    so the limit binds — just later than the request number would suggest.
  *
  * Both are acceptable for what this defends: unmetered use of the Kit API key
  * and the Alby wallet. An approximate global limit beats an exact per-isolate
  * one, which bounds nothing at all. Neither is acceptable if this is ever
- * asked to meter something billed per call — move to a Durable Object then.
+ * asked to meter something billed per call — move to a Durable Object, or to
+ * Cloudflare's `ratelimits` binding, then.
  *
- * Returns null only when there is no KV binding to talk to. A KV error is NOT
- * null — it denies, because failing open on the endpoint that spends money is
- * the bug this replaces.
+ * Returns null only when there is no KV binding to talk to. A failed *read*
+ * denies, because failing open on the endpoint that spends money is the bug
+ * this replaces. A failed *write* does not — see below.
  */
 async function rateLimitWithKV(
   key: string,
@@ -219,29 +223,43 @@ async function rateLimitWithKV(
   const windowKey = `rl:${key}:${windowStart}`;
   const resetTime = windowStart + windowMs;
 
+  // The READ decides. If it fails there is no count, so the request is refused —
+  // that is the fail-closed property this replaced a fail-open fallback for.
+  let count: number;
   try {
-    const current = Number((await store.get(windowKey)) ?? 0);
-    const count = current + 1;
+    count = Number((await store.get(windowKey)) ?? 0) + 1;
+  } catch (error) {
+    logStructured('error', 'rate_limit_read_failed', {
+      message: error instanceof Error ? error.message : 'unknown',
+    });
+    return { allowed: false, resetTime, remaining: 0 };
+  }
 
-    if (count > maxRequests) {
-      return { allowed: false, resetTime, remaining: 0 };
-    }
+  if (count > maxRequests) {
+    return { allowed: false, resetTime, remaining: 0 };
+  }
 
+  // The WRITE is bookkeeping, and its failure must not deny anyone. KV accepts
+  // only one write per second to a given key, so a caller making two requests
+  // inside the same second reliably fails the second put — and denying on that
+  // would refuse legitimate traffic long before the configured allowance, which
+  // is a worse bug than the one being fixed. A dropped increment undercounts,
+  // in the same way the read-modify-write race already does; it is bounded,
+  // because every write that does land still moves the count toward the limit.
+  try {
     // expirationTtl is seconds and must be at least 60; the window is a minute
     // in every current caller, and a slightly long-lived key costs nothing
     // because the key name already encodes which window it belongs to.
     await store.put(windowKey, String(count), {
       expirationTtl: Math.max(60, Math.ceil((windowMs * 2) / 1000)),
     });
-
-    return { allowed: true, resetTime, remaining: maxRequests - count };
   } catch (error) {
-    logStructured('error', 'rate_limit_backend_error', {
+    logStructured('warn', 'rate_limit_write_dropped', {
       message: error instanceof Error ? error.message : 'unknown',
     });
-    // Deny. A limiter that cannot count must not wave traffic through.
-    return { allowed: false, resetTime, remaining: 0 };
   }
+
+  return { allowed: true, resetTime, remaining: maxRequests - count };
 }
 
 export async function rateLimit(

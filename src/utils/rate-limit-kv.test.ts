@@ -96,7 +96,7 @@ describe('rateLimit with a KV binding', () => {
   });
 
   // The regression that matters: a limiter that cannot count must deny.
-  it('denies when the KV backend throws instead of falling through', async () => {
+  it('denies when the KV read throws instead of falling through', async () => {
     mockGetCloudflareContext.mockResolvedValue({
       env: {
         RATE_LIMIT: {
@@ -113,6 +113,59 @@ describe('rateLimit with a KV binding', () => {
 
     expect(result.allowed).toBe(false);
     expect(result.remaining).toBe(0);
+  });
+
+  // KV accepts one write per second to a key, so a caller making two requests
+  // inside the same second reliably fails the second put. Denying on that would
+  // refuse legitimate traffic far below the configured allowance.
+  it('allows the request when only the KV write fails', async () => {
+    const store = new Map<string, string>();
+    mockGetCloudflareContext.mockResolvedValue({
+      env: {
+        RATE_LIMIT: {
+          get: async (k: string) => store.get(k) ?? null,
+          put: async () => {
+            throw new Error('KV PUT failed: 429 Too Many Requests');
+          },
+        },
+      },
+    });
+
+    const ip = uniqueIP();
+    const prefix = `kv-write-fail-${ip}`;
+    for (let i = 0; i < 3; i++) {
+      const result = await rateLimit(makeRequest(ip), 5, WINDOW, prefix);
+      expect(result.allowed).toBe(true);
+    }
+  });
+
+  // A dropped write undercounts rather than un-limits: the count still climbs
+  // on every write that lands, so the limit continues to bind.
+  it('still enforces the limit when some writes land and some do not', async () => {
+    const store = new Map<string, string>();
+    let attempt = 0;
+    mockGetCloudflareContext.mockResolvedValue({
+      env: {
+        RATE_LIMIT: {
+          get: async (k: string) => store.get(k) ?? null,
+          put: async (k: string, v: string) => {
+            // Every other write is throttled, as a burst against KV would be.
+            if (attempt++ % 2 === 1) throw new Error('429');
+            store.set(k, v);
+          },
+        },
+      },
+    });
+
+    const ip = uniqueIP();
+    const prefix = `kv-partial-${ip}`;
+    let denied = false;
+    for (let i = 0; i < 12; i++) {
+      const result = await rateLimit(makeRequest(ip), 3, WINDOW, prefix);
+      if (!result.allowed) denied = true;
+    }
+
+    expect(denied).toBe(true);
   });
 
   it('falls back to the per-isolate bucket only when there is no binding at all', async () => {
