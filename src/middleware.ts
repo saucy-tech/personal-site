@@ -27,12 +27,17 @@ export const config = {
   matcher: [
     /*
      * Match all request paths except for the ones starting with:
-     * - api (API routes - handled separately)
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - public folder files
+     *
+     * `api` used to be excluded here with the comment "handled separately".
+     * Nothing handled them separately: every route handler returns a bare
+     * NextResponse.json(), so no API response carried nosniff, HSTS, frame
+     * protection or a CSP. A page CSP is harmless on a JSON response, and
+     * nosniff on one is worth having, so they go through the same path.
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\..*).*)',
   ],
 };

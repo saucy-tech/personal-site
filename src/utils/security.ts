@@ -32,6 +32,16 @@ interface RateLimitBucket {
   expires: number;
 }
 
+/**
+ * Per-isolate fallback bucket.
+ *
+ * This is NOT a rate limit on Cloudflare Workers and must never be the only
+ * thing standing in front of a paid API. Every colo runs its own isolates, each
+ * with its own empty Map, so a caller exceeds any limit enforced here by
+ * however many isolates it reaches. It survives only as the last resort when
+ * the KV binding is missing — a local `next dev` without wrangler, or a
+ * misconfigured deploy — and it says so loudly when it engages.
+ */
 const rateLimitStore = new Map<string, RateLimitBucket>();
 const UPSTASH_REDIS_REST_URL = process.env.UPSTASH_REDIS_REST_URL;
 const UPSTASH_REDIS_REST_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
@@ -154,6 +164,75 @@ async function rateLimitWithUpstash(
   }
 }
 
+/**
+ * Cloudflare's rate-limiting binding: one atomic counter per key, evaluated in
+ * the runtime rather than in application code.
+ *
+ * This replaced a KV-backed counter, which could not do this job. KV has no
+ * atomic increment and accepts only one write per second to a given key, so a
+ * read-modify-write counter either denied legitimate callers (when a throttled
+ * write was treated as failure) or let a burst through (when it was not): at
+ * 100 req/s a "5 per minute" limit passed roughly 400 requests before the
+ * count caught up. Neither is a rate limit.
+ *
+ * The trade this makes instead is scope: the binding counts per Cloudflare
+ * location, not globally, so a caller spread across many locations gets that
+ * many allowances. That is a real limit with a known boundary, which beats an
+ * approximate global one that does not bind. If a global count is ever needed,
+ * a Durable Object is the primitive — with the caveat that exporting one from
+ * an OpenNext build is not a config-only change, which this is.
+ */
+interface RateLimiterBinding {
+  limit(options: { key: string }): Promise<{ success: boolean }>;
+}
+
+// Each tier is its own binding because the allowance lives in wrangler.jsonc
+// rather than in the call. Keyed by the constant so that changing a limit here
+// without changing it there is a visible mismatch rather than a silent one.
+const RATE_LIMITER_BINDINGS: Record<number, string> = {
+  [SECURITY_CONSTANTS.RATE_LIMIT_SUBSCRIBE]: 'RATE_LIMITER_SUBSCRIBE',
+  [SECURITY_CONSTANTS.RATE_LIMIT_INVOICE]: 'RATE_LIMITER_INVOICE',
+  [SECURITY_CONSTANTS.RATE_LIMIT_API]: 'RATE_LIMITER_API',
+};
+
+async function rateLimitWithBinding(
+  key: string,
+  maxRequests: number,
+  windowMs: number
+): Promise<{ allowed: boolean; resetTime: number; remaining: number } | null> {
+  const bindingName = RATE_LIMITER_BINDINGS[maxRequests];
+  if (!bindingName) return null;
+
+  let limiter: RateLimiterBinding | undefined;
+  try {
+    // Imported lazily and deliberately: outside a Workers runtime this module
+    // is not loadable, and "not loadable" is exactly the signal that there is
+    // no binding to reach. Keeps the ESM-only package out of the Jest graph.
+    const { getCloudflareContext } = await import('@opennextjs/cloudflare');
+    const { env } = await getCloudflareContext({ async: true });
+    limiter = (env as unknown as Record<string, RateLimiterBinding | undefined>)[bindingName];
+  } catch {
+    // Not running on Workers at all (a plain `next dev`, or a unit test).
+    return null;
+  }
+  if (!limiter) return null;
+
+  // The binding does not report a window position, so Retry-After is the
+  // conservative whole window rather than the true remaining time.
+  const resetTime = Date.now() + windowMs;
+
+  try {
+    const { success } = await limiter.limit({ key });
+    return { allowed: success, resetTime, remaining: success ? maxRequests - 1 : 0 };
+  } catch (error) {
+    logStructured('error', 'rate_limit_backend_error', {
+      message: error instanceof Error ? error.message : 'unknown',
+    });
+    // Deny. A limiter that cannot count must not wave traffic through.
+    return { allowed: false, resetTime, remaining: 0 };
+  }
+}
+
 export async function rateLimit(
   request: NextRequest | Request,
   maxRequests: number = SECURITY_CONSTANTS.RATE_LIMIT_DEFAULT,
@@ -163,11 +242,23 @@ export async function rateLimit(
   const clientIP = getClientIP(request);
   const key = `${keyPrefix}:${clientIP}`;
   const now = Date.now();
-  const distributedResult = await rateLimitWithUpstash(key, maxRequests, windowMs);
 
+  // Upstash first only because it is already wired and exact when configured.
+  const distributedResult = await rateLimitWithUpstash(key, maxRequests, windowMs);
   if (distributedResult) {
     return distributedResult;
   }
+
+  const bindingResult = await rateLimitWithBinding(key, maxRequests, windowMs);
+  if (bindingResult) {
+    return bindingResult;
+  }
+
+  logStructured('warn', 'rate_limit_per_isolate_fallback', {
+    key: keyPrefix,
+    detail:
+      'No rate-limiting binding and no Upstash config; this limit is per-isolate and does not bound a distributed caller.',
+  });
 
   const bucket = rateLimitStore.get(key);
 

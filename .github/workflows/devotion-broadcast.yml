@@ -36,8 +36,17 @@ jobs:
 
       - name: Find devotion post
         id: post
+        env:
+          # Through the environment, never interpolated into the script body.
+          # ${{ }} is substituted as raw text before bash parses the line, so a
+          # slug containing shell metacharacters used to run as commands here.
+          INPUT_SLUG: ${{ inputs.slug }}
         run: |
-          NEW_FILE="src/posts/${{ inputs.slug }}.mdx"
+          if ! printf '%s' "$INPUT_SLUG" | grep -qE '^[0-9]{4}-[0-9]{2}-[0-9]{2}-[a-z0-9-]+$'; then
+            echo "::error::Slug must look like 2026-03-18-some-title (got: $INPUT_SLUG)"
+            exit 1
+          fi
+          NEW_FILE="src/posts/${INPUT_SLUG}.mdx"
           if [ ! -f "$NEW_FILE" ]; then
             echo "::error::Post file not found: $NEW_FILE"
             echo "skip=true" >> "$GITHUB_OUTPUT"
