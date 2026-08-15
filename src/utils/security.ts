@@ -32,6 +32,16 @@ interface RateLimitBucket {
   expires: number;
 }
 
+/**
+ * Per-isolate fallback bucket.
+ *
+ * This is NOT a rate limit on Cloudflare Workers and must never be the only
+ * thing standing in front of a paid API. Every colo runs its own isolates, each
+ * with its own empty Map, so a caller exceeds any limit enforced here by
+ * however many isolates it reaches. It survives only as the last resort when
+ * the KV binding is missing — a local `next dev` without wrangler, or a
+ * misconfigured deploy — and it says so loudly when it engages.
+ */
 const rateLimitStore = new Map<string, RateLimitBucket>();
 const UPSTASH_REDIS_REST_URL = process.env.UPSTASH_REDIS_REST_URL;
 const UPSTASH_REDIS_REST_TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN;
@@ -154,6 +164,76 @@ async function rateLimitWithUpstash(
   }
 }
 
+/**
+ * Counts a request against a KV-backed window shared by every isolate.
+ *
+ * KV is eventually consistent, so the count can lag under a burst spread across
+ * colos and the effective limit is approximate. That is the right trade here:
+ * this exists to stop unmetered use of the Kit API key and the Alby wallet, not
+ * to bill anyone. An approximate global limit beats an exact per-isolate one,
+ * which is no limit at all.
+ *
+ * Returns null only when there is no KV binding to talk to. A KV error is NOT
+ * null — it denies, because failing open on the endpoint that spends money is
+ * the bug this replaces.
+ */
+/** Just the two KV methods the limiter uses; the repo pulls in no Workers types. */
+interface RateLimitStore {
+  get(key: string): Promise<string | null>;
+  put(key: string, value: string, options?: { expirationTtl?: number }): Promise<void>;
+}
+
+async function rateLimitWithKV(
+  key: string,
+  maxRequests: number,
+  windowMs: number
+): Promise<{ allowed: boolean; resetTime: number; remaining: number } | null> {
+  let store: RateLimitStore | undefined;
+  try {
+    // Imported lazily and deliberately: outside a Workers runtime this module
+    // is not loadable, and "not loadable" is exactly the signal that there is
+    // no KV to reach. Keeps the ESM-only package out of the Jest module graph.
+    const { getCloudflareContext } = await import('@opennextjs/cloudflare');
+    const { env } = await getCloudflareContext({ async: true });
+    store = (env as unknown as { RATE_LIMIT?: RateLimitStore }).RATE_LIMIT;
+  } catch {
+    // Not running on Workers at all (a plain `next dev`, or a unit test).
+    return null;
+  }
+  if (!store) return null;
+
+  const now = Date.now();
+  // The window is part of the key, so a window rolls over by being a different
+  // key rather than by anyone having to reset a counter.
+  const windowStart = Math.floor(now / windowMs) * windowMs;
+  const windowKey = `rl:${key}:${windowStart}`;
+  const resetTime = windowStart + windowMs;
+
+  try {
+    const current = Number((await store.get(windowKey)) ?? 0);
+    const count = current + 1;
+
+    if (count > maxRequests) {
+      return { allowed: false, resetTime, remaining: 0 };
+    }
+
+    // expirationTtl is seconds and must be at least 60; the window is a minute
+    // in every current caller, and a slightly long-lived key costs nothing
+    // because the key name already encodes which window it belongs to.
+    await store.put(windowKey, String(count), {
+      expirationTtl: Math.max(60, Math.ceil((windowMs * 2) / 1000)),
+    });
+
+    return { allowed: true, resetTime, remaining: maxRequests - count };
+  } catch (error) {
+    logStructured('error', 'rate_limit_backend_error', {
+      message: error instanceof Error ? error.message : 'unknown',
+    });
+    // Deny. A limiter that cannot count must not wave traffic through.
+    return { allowed: false, resetTime, remaining: 0 };
+  }
+}
+
 export async function rateLimit(
   request: NextRequest | Request,
   maxRequests: number = SECURITY_CONSTANTS.RATE_LIMIT_DEFAULT,
@@ -163,11 +243,23 @@ export async function rateLimit(
   const clientIP = getClientIP(request);
   const key = `${keyPrefix}:${clientIP}`;
   const now = Date.now();
-  const distributedResult = await rateLimitWithUpstash(key, maxRequests, windowMs);
 
+  // Upstash first only because it is already wired and exact when configured.
+  const distributedResult = await rateLimitWithUpstash(key, maxRequests, windowMs);
   if (distributedResult) {
     return distributedResult;
   }
+
+  const kvResult = await rateLimitWithKV(key, maxRequests, windowMs);
+  if (kvResult) {
+    return kvResult;
+  }
+
+  logStructured('warn', 'rate_limit_per_isolate_fallback', {
+    key: keyPrefix,
+    detail:
+      'No RATE_LIMIT KV binding and no Upstash config; this limit is per-isolate and does not bound a distributed caller.',
+  });
 
   const bucket = rateLimitStore.get(key);
 

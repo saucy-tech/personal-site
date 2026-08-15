@@ -14,9 +14,23 @@
     { "pattern": "saucy.tech", "custom_domain": true },
     { "pattern": "www.saucy.tech", "custom_domain": true }
   ],
-  // Keep the workers.dev preview alive alongside the custom domains.
-  "workers_dev": true,
-  "preview_urls": true,
+  // Both off. A *.workers.dev hostname serves this identical Worker — including
+  // every anonymous /api/ route — but sits outside the saucy.tech zone, so no
+  // WAF rule, rate-limiting rule or bot-management setting scoped to that zone
+  // applies to it. It is also the obvious way around any limit added at the
+  // zone edge. Use `wrangler dev` or a preview deployment for the preview need.
+  "workers_dev": false,
+  "preview_urls": false,
+
+  // Rate-limit counters, shared across every isolate and colo. Without this the
+  // limiter falls back to a per-isolate Map, which is not a limit — see
+  // rateLimitWithKV in src/utils/security.ts.
+  "kv_namespaces": [
+    {
+      "binding": "RATE_LIMIT",
+      "id": "REPLACE_WITH_NAMESPACE_ID"
+    }
+  ],
   "services": [
     {
       "binding": "WORKER_SELF_REFERENCE",
