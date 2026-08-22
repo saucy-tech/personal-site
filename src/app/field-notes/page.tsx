@@ -52,8 +52,11 @@ export default function FieldNotesPage() {
     <PageLayout title="Field notes" backHref="/" backLabel="Back to Home">
       <div className="max-w-2xl space-y-3">
         <p className="text-base leading-relaxed text-(--text-secondary)">
-          What I&rsquo;m into in tech right now — the tools I reach for and what I&rsquo;m still
-          evaluating. A snapshot, updated when it changes.
+          How I actually work with AI right now: pick a model, a harness to run it in, and an
+          interface to drive the harness from. The shift that matters is that AI coding is no longer
+          just chatting with a model — it is a loop: give context, let an agent inspect the repo,
+          make edits, run tests and checks, review the output, iterate. A snapshot, updated when it
+          changes.
         </p>
         <p className="text-sm text-(--text-secondary)">
           <span className="uppercase tracking-[0.14em] text-xs">
