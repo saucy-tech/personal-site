@@ -1,11 +1,10 @@
 /**
  * Field notes (`/field-notes`) — how I actually work with AI right now.
  *
- * Sections are workflow-native rather than a flat tool ranking: orchestration
- * first (Current workflow), then the models, the harnesses that run them inside
- * a repo, the interfaces I drive those harnesses from, and what I'm still
- * evaluating — plus the subscriptions, infrastructure, and utilities
- * underneath. Harness = the agent loop (Claude Code, Codex, OpenCode);
+ * Sections follow the order the choice is actually made: the models, the
+ * harnesses that run them inside a repo, the interfaces I drive those harnesses
+ * from, and what I'm still evaluating — plus the subscriptions, infrastructure,
+ * and utilities underneath. Harness = the agent loop (Claude Code, Codex, OpenCode);
  * interface = the surface I sit in front of (T3 Code, Warp, the desktop apps).
  * The point is the loop, not the chat: give context, let an agent inspect the
  * repo, make edits, run tests/checks, review the output, iterate.
@@ -17,7 +16,6 @@
 export const fieldNotesLastUpdated = '2026-08-23';
 
 export type FieldNoteStatus =
-  | 'workflow'
   | 'coding-agents'
   | 'models'
   | 'interfaces'
@@ -26,7 +24,8 @@ export type FieldNoteStatus =
   | 'infrastructure'
   | 'tools';
 
-export type FieldNoteBadge = 'daily' | 'experimenting' | 'learning' | 'paused' | 'watching';
+export type FieldNoteBadge =
+  'daily' | 'occasional' | 'experimenting' | 'learning' | 'paused' | 'watching';
 
 export interface FieldNoteItem {
   title: string;
@@ -49,40 +48,9 @@ export interface FieldNoteSection {
 
 export const fieldNotesSections: FieldNoteSection[] = [
   {
-    id: 'workflow',
-    title: 'Current workflow',
-    blurb:
-      'How I actually work with AI right now: orchestration first, then a model, a harness to run it in, and an interface to drive the harness from. The shift that matters is that AI coding is no longer just chatting with a model — it is a loop: give context, let an agent inspect the repo, make edits, run tests and checks, review the output, iterate.',
-    items: [
-      {
-        title: 'Hermes Agent',
-        tags: ['nous research', 'orchestration', 'command center'],
-        badge: 'learning',
-        homepage: 'https://hermes-agent.nousresearch.com',
-        note: 'My orchestration layer and command center — Nous Research’s agent harness, self-hosted on the VPS. It coordinates Claude Code and Codex CLI as workers, exposes a dashboard, and takes work over a Telegram gateway, all over Tailscale rather than the public internet. This is where the loop starts: I hand it context and a goal, and it routes the actual repo work to a coding agent.',
-        pros: [
-          'One surface to dispatch and coordinate coding agents',
-          'Remote control from my phone via Telegram',
-          'Private by default — no public exposure',
-        ],
-        cons: ['Early days; I am still shaping how I lean on it day to day'],
-      },
-      {
-        title: 'M1 MacBook Pro',
-        tags: ['apple silicon', 'local environment', 'hardware'],
-        badge: 'daily',
-        homepage: 'https://www.apple.com',
-        note: 'The local environment everything runs against — not an AI tool, but the machine the agents edit and the checks run on. Still plenty of headroom for the whole stack of CLIs, editors, and a browser at once.',
-        pros: ['Handles the full local toolchain comfortably', 'Quiet, cool, and always ready'],
-        cons: ['Heavier model and container work still belongs on the VPS'],
-      },
-    ],
-  },
-  {
     id: 'models',
     title: 'Models',
-    blurb:
-      'The raw horsepower. Five models, pinned ⌘1–⌘5 in T3 Code, in the order I reach for them.',
+    blurb: 'The raw horsepower. Five models, pinned ⌘1–⌘5 in T3 Code.',
     items: [
       {
         title: 'Claude Fable 5',
@@ -143,7 +111,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         cons: ['I still pair it with Codex when I want a second read'],
       },
       {
-        title: 'Codex CLI',
+        title: 'Codex',
         tags: ['openai', 'cli', 'coding agent'],
         badge: 'daily',
         homepage: 'https://openai.com',
@@ -195,7 +163,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
       {
         title: 'Claude desktop',
         tags: ['anthropic', 'desktop app'],
-        badge: 'learning',
+        badge: 'occasional',
         homepage: 'https://claude.ai',
         note: 'Mostly for chat — conversation and thinking out loud rather than repo edits, which stay in Claude Code. In the rotation, but a smaller share of my week than it used to be.',
         pros: ['Good for conversation and thinking out loud'],
@@ -204,7 +172,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
       {
         title: 'Codex desktop',
         tags: ['openai', 'desktop app'],
-        badge: 'daily',
+        badge: 'occasional',
         homepage: 'https://openai.com',
         note: 'Where my scheduled tasks live. Recurring jobs run here on a timer while the interactive Codex work happens in T3 Code.',
         pros: ['Scheduled tasks without a server or cron to babysit'],
@@ -226,6 +194,18 @@ export const fieldNotesSections: FieldNoteSection[] = [
         note: "Warp's cloud-agent orchestration. Same family as my daily terminal, so I am testing where cloud agents fit next to Hermes and the local CLIs.",
         pros: ['Fits the Warp-centered direction of the stack'],
         cons: ['Still forming an opinion on when to reach for it'],
+      },
+      {
+        title: 'Hermes Agent',
+        tags: ['nous research', 'orchestration', 'command center'],
+        badge: 'experimenting',
+        homepage: 'https://hermes-agent.nousresearch.com',
+        note: 'Nous Research’s agent harness, self-hosted on the VPS. It can coordinate Claude Code and Codex as workers and take work over a Telegram gateway, all over Tailscale rather than the public internet. For me it is the remote and async lane — a job I can kick off from my phone — while most real work still happens locally on the Mac.',
+        pros: [
+          'Remote control from my phone via Telegram',
+          'Private by default — no public exposure',
+        ],
+        cons: ['Still deciding what actually belongs in a remote lane versus the local loop'],
       },
     ],
   },
@@ -276,8 +256,18 @@ export const fieldNotesSections: FieldNoteSection[] = [
   {
     id: 'infrastructure',
     title: 'Infrastructure',
-    blurb: 'Where my sites and services actually live — hosting, DNS, and the always-on box.',
+    blurb:
+      'Where the work and the sites actually live — the local box, the always-on box, hosting, and DNS.',
     items: [
+      {
+        title: 'M1 MacBook Pro',
+        tags: ['apple silicon', 'local environment', 'hardware'],
+        badge: 'daily',
+        homepage: 'https://www.apple.com',
+        note: 'Where the work actually happens. Not an AI tool, but the machine the harnesses edit on and the checks run against, and the default over the VPS for nearly everything. Still plenty of headroom for the whole stack of CLIs, editors, and a browser at once.',
+        pros: ['Handles the full local toolchain comfortably', 'Quiet, cool, and always ready'],
+        cons: ['Heavier model and container work still belongs on the VPS'],
+      },
       {
         title: 'Hostinger VPS',
         tags: ['hostinger', 'KVM 4', 'Ubuntu 24.04'],
