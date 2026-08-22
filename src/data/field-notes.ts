@@ -99,7 +99,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
     id: 'coding-agents',
     title: 'Harnesses',
     blurb:
-      'The agent loop itself — the thing that takes a model, gives it tools, and lets it inspect a repo, edit, and run checks. Each harness is tied to a vendor’s models; the interface I drive it from is a separate choice.',
+      'The agent loop itself — the thing that takes a model, gives it tools, and lets it inspect a repo, edit, and run checks. Claude Code and Codex each run their own vendor’s models; OpenCode runs anything. The interface I drive a harness from is a separate choice.',
     items: [
       {
         title: 'Claude Code',
