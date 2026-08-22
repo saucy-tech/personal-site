@@ -145,8 +145,8 @@ export const fieldNotesSections: FieldNoteSection[] = [
         homepage: 'https://t3.codes',
         note: 'Where I spend most of my time now. Not a harness — it sits on top of Claude Code, Codex, and OpenCode and lets me run any of them from one window, with five models pinned to ⌘1–⌘5 so switching is a keystroke instead of a context rebuild.',
         pros: [
-          'One harness over several coding agents',
-          'Switch models and agents without leaving the flow',
+          'One interface over three harnesses',
+          'Switch models and harnesses without leaving the flow',
         ],
         cons: ['Warp still wins when I just want a terminal'],
       },
