@@ -6,7 +6,7 @@
  * Within scope: most recent year, then alphabetical by name.
  */
 
-export const awardsLastUpdated = '2026-05-07';
+export const awardsLastUpdated = '2026-08-24';
 
 export interface Award {
   id: string;
@@ -19,6 +19,14 @@ export interface Award {
 
 export const awards: Award[] = [
   // International scope
+  {
+    id: 'gmis-g2g',
+    name: 'GMIS G2G Award — Government to Government',
+    issuer: 'GMIS International + GMIS Georgia Chapter',
+    years: ['2026'],
+    impact:
+      'GMIS (Government Management Information Sciences) recognition for cross-agency software collaboration delivering services between governmental entities. Won at the Georgia Chapter level, then advanced to win internationally.',
+  },
   {
     id: 'legends-of-lightning-hackathon',
     name: 'Legends of Lightning Vol. 2 Hackathon Winner',
@@ -56,20 +64,20 @@ export const awards: Award[] = [
 
   // State / chapter scope
   {
-    id: 'gmis-g2c',
-    name: 'Georgia GMIS G2C Award — Government to Citizens',
-    issuer: 'GMIS Georgia Chapter',
-    years: ['2026', '2025'],
-    impact:
-      'GMIS Georgia Chapter recognition for software delivering public-facing services directly to Georgia citizens.',
-  },
-  {
-    id: 'gmis-g2g',
-    name: 'Georgia GMIS G2G Award — Government to Government',
+    id: 'gmis-g2b-ga',
+    name: 'Georgia GMIS G2B Award — Government to Business',
     issuer: 'GMIS Georgia Chapter',
     years: ['2026'],
     impact:
-      'GMIS Georgia Chapter recognition for cross-agency software collaboration delivering services between governmental entities.',
+      'GMIS Georgia Chapter recognition for outstanding achievement in supporting business through innovative government solutions.',
+  },
+  {
+    id: 'gmis-g2c',
+    name: 'Georgia GMIS G2C Award — Government to Citizens',
+    issuer: 'GMIS Georgia Chapter',
+    years: ['2025'],
+    impact:
+      'GMIS Georgia Chapter recognition for software delivering public-facing services directly to Georgia citizens.',
   },
   {
     id: 'gta-innovation-showcase',
