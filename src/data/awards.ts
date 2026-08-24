@@ -6,7 +6,7 @@
  * Within scope: most recent year, then alphabetical by name.
  */
 
-export const awardsLastUpdated = '2026-08-11';
+export const awardsLastUpdated = '2026-08-24';
 
 export interface Award {
   id: string;
@@ -64,10 +64,18 @@ export const awards: Award[] = [
 
   // State / chapter scope
   {
+    id: 'gmis-g2b-ga',
+    name: 'Georgia GMIS G2B Award — Government to Business',
+    issuer: 'GMIS Georgia Chapter',
+    years: ['2026'],
+    impact:
+      'GMIS Georgia Chapter recognition for outstanding achievement in supporting business through innovative government solutions.',
+  },
+  {
     id: 'gmis-g2c',
     name: 'Georgia GMIS G2C Award — Government to Citizens',
     issuer: 'GMIS Georgia Chapter',
-    years: ['2026', '2025'],
+    years: ['2025'],
     impact:
       'GMIS Georgia Chapter recognition for software delivering public-facing services directly to Georgia citizens.',
   },
