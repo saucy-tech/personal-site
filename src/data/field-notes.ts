@@ -13,7 +13,7 @@
  */
 
 /** ISO date — bump when you revise items or copy. Shown on `/field-notes`. */
-export const fieldNotesLastUpdated = '2026-08-23';
+export const fieldNotesLastUpdated = '2026-08-30';
 
 export type FieldNoteStatus =
   | 'coding-agents'
@@ -50,7 +50,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
   {
     id: 'models',
     title: 'Models',
-    blurb: 'The raw horsepower. Five models, pinned ⌘1–⌘5 in T3 Code.',
+    blurb: 'The raw horsepower. Seven models, pinned ⌘1–⌘7 in T3 Code.',
     items: [
       {
         title: 'Claude Fable 5',
@@ -77,21 +77,36 @@ export const fieldNotesSections: FieldNoteSection[] = [
         pros: ['Useful contrast to the Anthropic models', 'Good at reading a repo cold'],
       },
       {
-        title: 'GPT-5.6-Luna',
-        tags: ['openai', 'model', 'codex'],
+        title: 'GPT-5.6 Luna',
+        tags: ['openai', 'model', 'opencode go'],
         badge: 'daily',
-        homepage: 'https://openai.com',
-        note: 'The lighter GPT-5.6 variant. What Codex runs for focused edits and the scheduled tasks I hand off to the Codex desktop app.',
-        pros: ['Fast into implementation', 'Cheap enough to leave running on a schedule'],
+        homepage: 'https://opencode.ai',
+        note: 'The lighter GPT-5.6 variant, run through OpenCode Go. Fast into focused edits when I do not need Sol.',
+        pros: ['Fast into implementation', 'A lighter option for routine work'],
       },
       {
         title: 'Kimi K3',
         tags: ['moonshot', 'model', 'opencode'],
-        badge: 'experimenting',
+        badge: 'daily',
         homepage: 'https://www.kimi.com',
-        note: 'Moonshot’s open-weight model, run through OpenCode (opencode-go) inside T3 Code. The one non-Anthropic, non-OpenAI model in the rotation — kept around to see where it holds up.',
+        note: 'Moonshot’s model, run through OpenCode Go inside T3 Code. A different read from Claude and GPT without leaving the same loop.',
         pros: ['Open weights', 'A genuinely different read from the big two'],
-        cons: ['Still deciding what kind of task it earns'],
+      },
+      {
+        title: 'GPT-OSS 20B',
+        tags: ['openai', 'model', 'opencode', 'ollama', 'local'],
+        badge: 'daily',
+        homepage: 'https://ollama.com',
+        note: 'The fast local model running through OpenCode and Ollama on my home 3090.',
+        pros: ['Private and local', 'Fast enough for routine work'],
+      },
+      {
+        title: 'Qwen3 32B',
+        tags: ['alibaba', 'model', 'opencode', 'ollama', 'local'],
+        badge: 'daily',
+        homepage: 'https://ollama.com',
+        note: 'The smarter local option on the same 3090 when the job can afford a slower pass.',
+        pros: ['Private and local', 'More capable than the fast 20B option'],
       },
     ],
   },
@@ -124,12 +139,12 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['open source', 'cli', 'coding agent'],
         badge: 'experimenting',
         homepage: 'https://opencode.ai',
-        note: 'The open-source harness, and the only one of the three that is not tied to a single vendor. I run it through T3 Code on the Go plan, mostly to put Kimi K3 into the same loop as the Claude and GPT models.',
+        note: 'The open-source harness, and the only one of the three that is not tied to a single vendor. I run Luna and Kimi through the Go plan, plus GPT-OSS and Qwen locally through Ollama on my 3090.',
         pros: [
           'Vendor-neutral — any model in the same loop',
           'Same repo workflow as the other two',
         ],
-        cons: ['Still deciding how much work it earns beyond Kimi'],
+        cons: ['Still deciding how much work it earns next to Claude Code and Codex'],
       },
     ],
   },
@@ -143,7 +158,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['interface', 'multi-harness', 'daily driver'],
         badge: 'daily',
         homepage: 'https://t3.codes',
-        note: 'Where I spend most of my time now. Not a harness — it sits on top of Claude Code, Codex, and OpenCode and lets me run any of them from one window, with five models pinned to ⌘1–⌘5 so switching is a keystroke instead of a context rebuild.',
+        note: 'Where I spend most of my time now. Not a harness — it sits on top of Claude Code, Codex, and OpenCode and lets me run any of them from one window, with seven models pinned to ⌘1–⌘7 so switching is a keystroke instead of a context rebuild.',
         pros: [
           'One interface over three harnesses',
           'Switch models and harnesses without leaving the flow',
