@@ -101,7 +101,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         pros: ['Private and local', 'Fast enough for routine work'],
       },
       {
-        title: 'Qwen3 32B',
+        title: 'Qwen3.8 27B',
         tags: ['alibaba', 'model', 'opencode', 'ollama', 'local'],
         badge: 'daily',
         homepage: 'https://ollama.com',
