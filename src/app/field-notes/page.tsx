@@ -6,6 +6,8 @@ import { fieldNotesLastUpdated, fieldNotesSections } from '@/data/field-notes';
 import { formatPostDate } from '@/utils/helpers';
 import { SITE_NAME } from '@/utils/constants';
 
+const FIELD_NOTES_OG_IMAGE = '/field-notes/opengraph-image';
+
 function ToolFavicon({ homepage }: { homepage: string }) {
   let hostname: string;
   try {
@@ -41,6 +43,21 @@ export const metadata: Metadata = {
       'What I\u2019m into in tech right now — tools I\u2019m using and things I\u2019m trying.',
     url: '/field-notes',
     type: 'website',
+    images: [
+      {
+        url: FIELD_NOTES_OG_IMAGE,
+        width: 1200,
+        height: 630,
+        alt: 'My AI coding stack — devices, T3 Code, coding agents, and remote infrastructure',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: `Field notes | ${SITE_NAME}`,
+    description:
+      'What I\u2019m into in tech right now — tools I\u2019m using and things I\u2019m trying.',
+    images: [FIELD_NOTES_OG_IMAGE],
   },
 };
 
