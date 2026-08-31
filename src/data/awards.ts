@@ -83,8 +83,8 @@ export const awards: Award[] = [
     id: 'gta-innovation-showcase',
     name: 'Georgia Technology Innovation Showcase Award',
     issuer: 'Georgia Technology Authority',
-    years: ['2021', '2019'],
+    years: ['2026', '2021', '2019'],
     impact:
-      'Georgia Technology Authority recognition for technology innovation in service of the State of Georgia.',
+      'The 2026 Operational Efficiency award recognized the yellow-legged hornet GIS response. Earlier awards recognized GDA technology projects in 2021 and 2019.',
   },
 ];
