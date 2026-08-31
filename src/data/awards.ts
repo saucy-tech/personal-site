@@ -6,7 +6,7 @@
  * Within scope: most recent year, then alphabetical by name.
  */
 
-export const awardsLastUpdated = '2026-08-24';
+export const awardsLastUpdated = '2026-08-31';
 
 export interface Award {
   id: string;
@@ -25,7 +25,7 @@ export const awards: Award[] = [
     issuer: 'GMIS International + GMIS Georgia Chapter',
     years: ['2026'],
     impact:
-      'GMIS (Government Management Information Sciences) recognition for cross-agency software collaboration delivering services between governmental entities. Won at the Georgia Chapter level, then advanced to win internationally.',
+      'Recognition for the yellow-legged hornet GIS response, which connected field collection, public reporting, dashboards, automation, and partner data. Won at the Georgia Chapter level, then advanced to win internationally.',
   },
   {
     id: 'legends-of-lightning-hackathon',
@@ -69,7 +69,7 @@ export const awards: Award[] = [
     issuer: 'GMIS Georgia Chapter',
     years: ['2026'],
     impact:
-      'GMIS Georgia Chapter recognition for outstanding achievement in supporting business through innovative government solutions.',
+      'Georgia Chapter recognition for the yellow-legged hornet GIS response in the Government to Business category.',
   },
   {
     id: 'gmis-g2c',
