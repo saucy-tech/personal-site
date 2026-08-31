@@ -72,19 +72,19 @@ export const awards: Award[] = [
       'Georgia Chapter recognition for the yellow-legged hornet GIS response in the Government to Business category.',
   },
   {
-    id: 'gmis-g2c',
-    name: 'Georgia GMIS G2C Award — Government to Citizens',
-    issuer: 'GMIS Georgia Chapter',
-    years: ['2025'],
-    impact:
-      'GMIS Georgia Chapter recognition for software delivering public-facing services directly to Georgia citizens.',
-  },
-  {
     id: 'gta-innovation-showcase',
     name: 'Georgia Technology Innovation Showcase Award',
     issuer: 'Georgia Technology Authority',
     years: ['2026', '2021', '2019'],
     impact:
       'The 2026 Operational Efficiency award recognized the yellow-legged hornet GIS response. Earlier awards recognized GDA technology projects in 2021 and 2019.',
+  },
+  {
+    id: 'gmis-g2c',
+    name: 'Georgia GMIS G2C Award — Government to Citizens',
+    issuer: 'GMIS Georgia Chapter',
+    years: ['2025'],
+    impact:
+      'GMIS Georgia Chapter recognition for software delivering public-facing services directly to Georgia citizens.',
   },
 ];
