@@ -12,7 +12,10 @@ export function logStructured(
     ts: new Date().toISOString(),
     level,
     event,
-    ...fields,
+    // Keep retained logs operational. Provider bodies, IPs, query values and
+    // exception messages can contain subscriber or payment data.
+    ...(typeof fields?.endpoint === 'string' ? { endpoint: fields.endpoint } : {}),
+    ...(typeof fields?.status === 'number' ? { status: fields.status } : {}),
   };
   const line = JSON.stringify(payload);
   if (level === 'error') {

@@ -114,7 +114,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(responseData);
   } catch (error) {
-    console.error('Error generating LNURL invoice:', error);
+    console.error('Error generating LNURL invoice');
     let reason = 'Failed to generate invoice.';
     if (error instanceof Error) {
       // Don't expose internal error details

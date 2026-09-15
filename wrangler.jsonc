@@ -19,7 +19,15 @@
   // WAF rule, rate-limiting rule or bot-management setting scoped to that zone
   // applies to it. It is also the obvious way around any limit added at the
   // zone edge. Use `wrangler dev` or a preview deployment for the preview need.
+  // Bound per-invocation CPU with headroom above the measured 30-day p99.
+  "limits": { "cpu_ms": 5000 },
   "workers_dev": false,
+  "observability": {
+    "enabled": true,
+    "redact_query_string": true,
+    "logs": { "head_sampling_rate": 1 },
+    "traces": { "enabled": false }
+  },
   "preview_urls": false,
 
   // One atomic counter per tier, evaluated by the runtime. Without these the
