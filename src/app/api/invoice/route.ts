@@ -112,17 +112,11 @@ export async function POST(request: NextRequest) {
 
       return NextResponse.json({ paymentRequest, paymentHash });
     } catch (apiError) {
-      console.error(
-        'Nostr Wallet Connect makeInvoice error:',
-        apiError instanceof Error ? apiError.message : 'Unknown error'
-      );
+      console.error('Nostr Wallet Connect makeInvoice error:');
       return createSecureErrorResponse('Unable to process payment request', 503);
     }
   } catch (error) {
-    console.error(
-      'Error creating invoice:',
-      error instanceof Error ? error.message : 'Unknown error'
-    );
+    console.error('Error creating invoice:');
     return createSecureErrorResponse('Failed to create invoice', 500);
   }
 }
@@ -170,10 +164,7 @@ export async function GET(request: NextRequest) {
       const preimage = status.preimage || null;
       return NextResponse.json({ paid, preimage });
     } catch (apiError) {
-      console.error(
-        'Nostr Wallet Connect lookupInvoice error:',
-        apiError instanceof Error ? apiError.message : 'Unknown error'
-      );
+      console.error('Nostr Wallet Connect lookupInvoice error:');
 
       // For payment status checks, we return a "not paid" status rather than an error
       // This allows the UI to continue polling without showing an error
@@ -183,10 +174,7 @@ export async function GET(request: NextRequest) {
       });
     }
   } catch (error) {
-    console.error(
-      'Error checking invoice status:',
-      error instanceof Error ? error.message : 'Unknown error'
-    );
+    console.error('Error checking invoice status:');
     return NextResponse.json(
       { paid: false },
       { status: 200 } // Return 200 to avoid breaking the polling loop
