@@ -47,12 +47,12 @@ const LinkCard: React.FC<LinkCardProps> = ({
         )}
       >
         {imageSrc ? (
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-(--accent-border) bg-(--accent-transparent)">
             <Image src={imageSrc} alt={title} width={32} height={32} className="rounded-full" />
           </div>
         ) : (
           icon && (
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-(--accent)">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-(--accent-border) bg-(--accent-transparent) text-(--accent)">
               {icon}
             </div>
           )
@@ -80,7 +80,7 @@ const LinkCard: React.FC<LinkCardProps> = ({
 
         <div
           className={cn(
-            'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-(--accent) transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5',
+            'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-(--accent-border) bg-(--accent-transparent) text-(--accent) transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5',
             align === 'left' ? 'self-start' : 'self-center'
           )}
         >

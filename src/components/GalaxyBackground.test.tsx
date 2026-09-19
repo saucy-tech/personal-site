@@ -10,7 +10,7 @@ describe('GalaxyBackground', () => {
   };
   const mockContext = {
     fillStyle: '',
-    fillRect: jest.fn(),
+    clearRect: jest.fn(),
     beginPath: jest.fn(),
     arc: jest.fn(),
     fill: jest.fn(),
@@ -76,7 +76,8 @@ describe('GalaxyBackground', () => {
     render(<GalaxyBackground />);
 
     expect(window.requestAnimationFrame).not.toHaveBeenCalled();
-    expect(mockContext.fillRect).toHaveBeenCalled();
+    expect(mockContext.clearRect).toHaveBeenCalled();
+    expect(mockContext.arc).toHaveBeenCalled();
   });
 
   it('responds to live reduced-motion changes without remounting', () => {
