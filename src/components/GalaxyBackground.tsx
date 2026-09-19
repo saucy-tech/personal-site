@@ -45,9 +45,7 @@ const GalaxyBackground: React.FC<GalaxyBackgroundProps> = ({ children }) => {
 
       // Retrieve CSS variables or fallback to defaults
       const computedStyle = getComputedStyle(document.documentElement);
-      const rawBg = computedStyle.getPropertyValue('--background').trim();
       const rawAccent = computedStyle.getPropertyValue('--accent').trim();
-      const background = rawBg || '#07251F';
       const accent = rawAccent || '#f7931a';
 
       // Helper to convert hex color to RGB
@@ -66,7 +64,6 @@ const GalaxyBackground: React.FC<GalaxyBackgroundProps> = ({ children }) => {
           b: intVal & 255,
         };
       };
-      const bgRgb = hexToRgb(background);
       const accentRgb = hexToRgb(accent);
 
       const ctx = canvas.getContext('2d', { alpha: true });
@@ -103,12 +100,10 @@ const GalaxyBackground: React.FC<GalaxyBackgroundProps> = ({ children }) => {
         canvas.height = window.innerHeight;
       };
 
-      const drawBackground = (opacity = 1) => {
-        ctx.fillStyle =
-          opacity === 1
-            ? `rgb(${bgRgb.r}, ${bgRgb.g}, ${bgRgb.b})`
-            : `rgba(${bgRgb.r}, ${bgRgb.g}, ${bgRgb.b}, ${opacity})`;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+      // The canvas stays transparent so the page backdrop shows through: an opaque
+      // fill here hides the wash that mobile Safari samples to tint its toolbars.
+      const clearCanvas = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
       };
 
       const drawStars = () => {
@@ -148,7 +143,7 @@ const GalaxyBackground: React.FC<GalaxyBackgroundProps> = ({ children }) => {
       };
 
       const drawStaticFrame = () => {
-        drawBackground();
+        clearCanvas();
         drawStars();
       };
 
@@ -156,13 +151,7 @@ const GalaxyBackground: React.FC<GalaxyBackgroundProps> = ({ children }) => {
         setCanvasSize();
         populateStars();
 
-        if (reducedMotion) {
-          drawStaticFrame();
-          return;
-        }
-
-        drawBackground();
-        drawStars();
+        drawStaticFrame();
       };
 
       setCanvasSize();
@@ -181,15 +170,15 @@ const GalaxyBackground: React.FC<GalaxyBackgroundProps> = ({ children }) => {
 
         time += 0.002; // Slower time increment for smoother animation
 
-        drawBackground(0.5);
+        clearCanvas();
         drawStars();
         updateStars();
 
         animationFrameId = window.requestAnimationFrame(animate);
       };
 
-      drawBackground();
-      drawStars();
+      drawStaticFrame();
+      canvas.style.opacity = '1';
 
       const handleVisibilityChange = () => {
         isPageVisible = !document.hidden;
@@ -238,7 +227,7 @@ const GalaxyBackground: React.FC<GalaxyBackgroundProps> = ({ children }) => {
     <>
       <canvas
         ref={canvasRef}
-        className="fixed inset-0 w-full h-full pointer-events-none"
+        className="fixed inset-0 w-full h-full pointer-events-none opacity-0 transition-opacity duration-1000 motion-reduce:transition-none"
         style={{ zIndex: 0 }}
       />
       {children}
