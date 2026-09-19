@@ -113,12 +113,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en" suppressHydrationWarning>
       <head>
         {/* Boot script: applies the stored color mode / appearance before first paint,
-            then adds the theme-color meta that `syncThemeColor` (utils/theme) keeps current. */}
+            then adds the theme-color meta that `syncThemeColor` (utils/theme) keeps current.
+            The stylesheet precedes this script, so `--background` normally resolves right
+            here; DOMContentLoaded is only the fallback if it has not loaded yet. */}
         <script
           suppressHydrationWarning
           {...(nonce ? { nonce } : {})}
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=${JSON.stringify(THEME_STORAGE_KEY)};var a=${JSON.stringify(APPEARANCE_STORAGE_KEY)};if(localStorage.getItem(t)==='green')document.documentElement.setAttribute('data-theme','green');if(localStorage.getItem(a)==='light')document.documentElement.setAttribute('data-appearance','light');}catch(e){}addEventListener('DOMContentLoaded',function(){var c=getComputedStyle(document.documentElement).getPropertyValue('--background').trim();if(!c)return;var m=document.createElement('meta');m.name='theme-color';m.content=c;m.setAttribute('data-active-theme-color','');document.head.prepend(m);});})();`,
+            __html: `(function(){try{var t=${JSON.stringify(THEME_STORAGE_KEY)};var a=${JSON.stringify(APPEARANCE_STORAGE_KEY)};if(localStorage.getItem(t)==='green')document.documentElement.setAttribute('data-theme','green');if(localStorage.getItem(a)==='light')document.documentElement.setAttribute('data-appearance','light');}catch(e){}var s=function(){var c=getComputedStyle(document.documentElement).getPropertyValue('--background').trim();if(!c)return false;var m=document.createElement('meta');m.name='theme-color';m.content=c;m.setAttribute('data-active-theme-color','');document.head.prepend(m);return true;};if(!s())addEventListener('DOMContentLoaded',s);})();`,
           }}
         />
         <script
