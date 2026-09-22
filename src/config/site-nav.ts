@@ -11,6 +11,7 @@ export const FOOTER_EXTRA_NAV: SiteNavItem[] = [
   { href: '/bitcoin', label: 'Bitcoin', match: 'exact' },
   { href: '/links', label: 'Links', match: 'exact' },
   { href: '/rss.xml', label: 'RSS', match: 'exact' },
+  { href: '/privacy', label: 'Privacy', match: 'exact' },
 ];
 
 export function isNavActive(pathname: string, item: SiteNavItem, allItems: SiteNavItem[]): boolean {

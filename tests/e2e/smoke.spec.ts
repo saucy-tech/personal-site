@@ -36,7 +36,11 @@ test.describe('smoke', () => {
     const subscribeButton = page.getByRole('button', { name: /^subscribe$/i });
     await expect(emailInput).toBeVisible();
     await expect(subscribeButton).toBeVisible();
-    await expect(page.getByText(/no spam, unsubscribe anytime/i)).toBeVisible();
+    await expect(page.getByText(/unsubscribe anytime/i)).toBeVisible();
+    await expect(page.getByRole('link', { name: 'privacy notice', exact: true })).toHaveAttribute(
+      'href',
+      '/privacy'
+    );
   });
 
   test('portfolio exposes resume and contact', async ({ page }) => {

@@ -47,6 +47,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     {
+      url: absoluteUrl('/privacy'),
+      lastModified: '2026-09-22',
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
       url: absoluteUrl('/'),
       lastModified: new Date(),
       changeFrequency: 'weekly',

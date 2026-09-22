@@ -6,6 +6,7 @@ interface PageLayoutProps {
   title: string;
   backHref?: string;
   backLabel?: string;
+  readingWidth?: boolean;
 }
 
 export default function PageLayout({
@@ -13,10 +14,11 @@ export default function PageLayout({
   title,
   backHref = '/',
   backLabel = 'Back to Home',
+  readingWidth = false,
 }: PageLayoutProps) {
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="container mx-auto px-4 py-8 grow">
+      <div className={`mx-auto w-full py-8 grow ${readingWidth ? 'max-w-3xl' : 'container px-4'}`}>
         <Link
           href={backHref}
           className="a11y-focus-ring mb-8 inline-flex items-center rounded-xs text-(--accent) transition-opacity hover:opacity-80"

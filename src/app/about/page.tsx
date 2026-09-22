@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 
 export default function About() {
   return (
-    <PageLayout title="About">
+    <PageLayout title="About" readingWidth>
       <section>
         <p className="text-base leading-relaxed text-(--text-secondary)">{about.lead}</p>
       </section>
@@ -50,7 +50,7 @@ export default function About() {
                 key={product.name}
                 href={product.href}
                 {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                className="block rounded-lg border border-(--accent-border) bg-white/10 p-5 transition hover:bg-white/15"
+                className="a11y-focus-ring block border-b border-(--surface-border) py-5 hover:underline underline-offset-4"
               >
                 <h3 className="mb-1 text-lg font-semibold">{product.name}</h3>
                 <p className="text-sm text-(--text-secondary)">{product.oneLiner}</p>

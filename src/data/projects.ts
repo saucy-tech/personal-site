@@ -3,7 +3,7 @@
  * Edit here to update copy. Bump `projectsLastUpdated` when you revise.
  */
 
-export const projectsLastUpdated = '2026-08-10';
+export const projectsLastUpdated = '2026-09-22';
 
 export type ProjectGroup = 'apps' | 'tools' | 'open-source' | 'client-work' | 'track-record';
 
@@ -19,10 +19,12 @@ export interface Project {
   group: ProjectGroup;
   title: string;
   status: ProjectStatus;
-  /** The products I actively build and use. Renders a Featured pill and sorts first. */
+  /** The products I actively build and use. Sorts first within its group. */
   featured?: boolean;
   tags: string[];
   blurb: string;
+  summary?: string;
+  preview?: { src: string; alt: string; width: number; height: number };
   links: ProjectLink[];
 }
 
@@ -37,6 +39,14 @@ export const projects: Project[] = [
   // --- Products ---
   {
     id: 'daily-word',
+    summary:
+      'A weekday scripture reading, email, and podcast. I write it and run the publishing system behind it.',
+    preview: {
+      src: '/images/products/morning-portion.webp',
+      alt: 'The Morning Portion homepage with the latest scripture reading and email signup.',
+      width: 1710,
+      height: 1008,
+    },
     group: 'apps',
     title: 'The Morning Portion',
     status: 'launched',
@@ -48,6 +58,14 @@ export const projects: Project[] = [
   },
   {
     id: 'train-every-day',
+    summary:
+      'The workout logger I use at the gym. It keeps working without a signal. Try the public demo with sample data.',
+    preview: {
+      src: '/images/products/train-every-day.webp',
+      alt: 'Train Every Day demo showing resistance, cardio, and mobility logging.',
+      width: 1720,
+      height: 1014,
+    },
     group: 'apps',
     title: 'Train Every Day',
     status: 'launched',
@@ -61,6 +79,8 @@ export const projects: Project[] = [
   },
   {
     id: 'sunday-school',
+    summary:
+      'The lesson app I teach from on an iPad. Lessons work offline and export as standalone files. The public demo contains original sample lessons.',
     group: 'apps',
     title: 'Sunday School',
     status: 'launched',
