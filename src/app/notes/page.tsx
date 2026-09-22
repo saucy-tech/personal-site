@@ -1,12 +1,11 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 
 import PageLayout from '@/components/PageLayout';
 import { fieldNotesLastUpdated, fieldNotesSections } from '@/data/field-notes';
 import { formatPostDate } from '@/utils/helpers';
 import { SITE_NAME } from '@/utils/constants';
 
-const FIELD_NOTES_OG_IMAGE = '/field-notes/opengraph-image';
+const FIELD_NOTES_OG_IMAGE = '/notes/opengraph-image';
 
 function ToolFavicon({ homepage }: { homepage: string }) {
   let hostname: string;
@@ -31,17 +30,15 @@ function ToolFavicon({ homepage }: { homepage: string }) {
 }
 
 export const metadata: Metadata = {
-  title: `Field notes | ${SITE_NAME}`,
-  description:
-    'What I\u2019m into in tech right now — tools I\u2019m using and things I\u2019m trying. Updated when it changes.',
+  title: 'Notes',
+  description: 'What I’m using and doing now: AI tools, Bitcoin, church, and current projects.',
   alternates: {
-    canonical: '/field-notes',
+    canonical: '/notes',
   },
   openGraph: {
-    title: `Field notes | ${SITE_NAME}`,
-    description:
-      'What I\u2019m into in tech right now — tools I\u2019m using and things I\u2019m trying.',
-    url: '/field-notes',
+    title: `Notes | ${SITE_NAME}`,
+    description: 'What I’m using and doing now: AI tools, Bitcoin, church, and current projects.',
+    url: '/notes',
     type: 'website',
     images: [
       {
@@ -54,26 +51,22 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: `Field notes | ${SITE_NAME}`,
-    description:
-      'What I\u2019m into in tech right now — tools I\u2019m using and things I\u2019m trying.',
+    title: `Notes | ${SITE_NAME}`,
+    description: 'What I’m using and doing now: AI tools, Bitcoin, church, and current projects.',
     images: [FIELD_NOTES_OG_IMAGE],
   },
 };
 
-export default function FieldNotesPage() {
+export default function NotesPage() {
   const lastUpdatedLabel = formatPostDate(fieldNotesLastUpdated);
   const sections = fieldNotesSections.filter((section) => section.items.length > 0);
 
   return (
-    <PageLayout title="Field notes" backHref="/" backLabel="Back to Home">
+    <PageLayout title="Notes" backHref="/" backLabel="Back to Home" readingWidth>
       <div className="max-w-2xl space-y-3">
         <p className="text-base leading-relaxed text-(--text-secondary)">
-          How I actually work with AI right now: pick a model, a harness to run it in, and an
-          interface to drive the harness from. The shift that matters is that AI coding is no longer
-          just chatting with a model — it is a loop: give context, let an agent inspect the repo,
-          make edits, run tests and checks, review the output, iterate. A snapshot, updated when it
-          changes.
+          What I’m using, learning, and spending time on. AI tools, Bitcoin, my church, and the
+          projects I’m building. I update this page when something changes.
         </p>
         <p className="text-sm text-(--text-secondary)">
           <span className="uppercase tracking-[0.14em] text-xs">
@@ -169,25 +162,6 @@ export default function FieldNotesPage() {
           </section>
         ))}
       </div>
-
-      <footer className="border-t border-(--accent-border) pt-8 text-sm leading-relaxed text-(--text-secondary)">
-        <p>
-          Related:{' '}
-          <Link
-            href="/bitcoin"
-            className="text-(--accent) underline underline-offset-2 transition hover:opacity-80"
-          >
-            Bitcoin
-          </Link>
-          {' · '}
-          <Link
-            href="/blog"
-            className="text-(--accent) underline underline-offset-2 transition hover:opacity-80"
-          >
-            Blog
-          </Link>
-        </p>
-      </footer>
     </PageLayout>
   );
 }

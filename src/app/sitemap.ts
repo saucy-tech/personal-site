@@ -47,6 +47,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   return [
     {
+      url: absoluteUrl('/privacy'),
+      lastModified: '2026-09-22',
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
+    {
       url: absoluteUrl('/'),
       lastModified: new Date(),
       changeFrequency: 'weekly',
@@ -71,7 +77,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
-      url: absoluteUrl('/field-notes'),
+      url: absoluteUrl('/notes'),
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.65,

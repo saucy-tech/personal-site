@@ -1,12 +1,12 @@
 # saucy.tech
 
-**Brandon Sauceda's personal site — portfolio, blog, and the Daily Word devotion archive.**
+**Brandon Sauceda's personal site — products, portfolio, and notes.**
 
 Live at [saucy.tech](https://saucy.tech). Next.js 16 on the App Router, deployed to Cloudflare Workers through the OpenNext adapter. Content is MDX in this repo, compiled to a static data module at build time. Clone it and `pnpm dev` — nothing external is required to run the site locally.
 
 ## Why
 
-The things I build live in different places: products on their own domains, open-source work in other people's repos, writing in an email list. This site is the one address that holds the record of all of it, and it is deliberately not rented from a platform — the feed, the subscribe endpoint, the webmention receiver, and the Lightning tip address are all routes in this repo, running on infrastructure I control.
+The things I build live in different places: products on their own domains and open-source work in other people's repos. This site is the one address that holds the record of all of it, and it is deliberately not rented from a platform — the feed, the subscribe endpoint, the webmention receiver, and the Lightning tip address are all routes in this repo, running on infrastructure I control.
 
 ## What's on it
 
@@ -14,7 +14,8 @@ The things I build live in different places: products on their own domains, open
 |---|---|
 | `/` | Landing page — profile, sections, link cards |
 | `/portfolio` | Products, tools, open-source contributions, and talks (content in `src/data/projects.ts`) |
-| `/blog` | Posts, with archive, category, series, and tag indexes |
+| `/notes` | Current interests, AI tools, Bitcoin, and church; `/field-notes` redirects here |
+| `/blog` | Earlier posts retained at their original URLs, no longer promoted in site navigation |
 | `/daily-word` | Archive of weekday scripture reflections |
 | `/about` | Background |
 | `/bitcoin`, `/links` | Bitcoin resources and a set of trackers and dashboards |
@@ -68,7 +69,15 @@ pnpm security:drift        # production CSP has not regressed
 
 ## Deploy
 
-Cloudflare Workers Builds deploys on push through the Git integration: branches get preview URLs, merges to `main` go to production. Manual deploy:
+Cloudflare Workers Builds deploys on push through the Git integration. Non-production branches upload a version without promoting it to `saucy.tech`; merges to `main` go to production.
+
+To test a PR, open its **Workers Builds: personal-site** check after it succeeds and follow the version preview URL. Branch aliases point to the latest successful upload for that branch; version URLs pin one upload. For example, PR #316 uses `https://t3code-audit-site-design-personal-site.brandonsauceda.workers.dev`.
+
+`preview_urls: true` intentionally makes these rendered previews public. This does not change GitHub repository visibility; a public preview also works with a private repository. The production `personal-site.brandonsauceda.workers.dev` alias remains disabled. Previews share this Worker's backend bindings, so signup and payment actions are real; the preview is for browsing and layout review unless an end-to-end action is intended. Worker rate limits and CPU limits still apply, but zone-level rules for `saucy.tech` do not apply to `workers.dev`.
+
+Version uploads do not change the Worker's routing switch. If bootstrapping previews for a Worker with preview routing disabled, enable **Settings → Domains & Routes → Version/Preview URLs** once as well as setting `preview_urls: true` in the repo. Subsequent production deploys retain that setting. See [Cloudflare version URLs](https://developers.cloudflare.com/workers/versions-and-deployments/version-urls/).
+
+Manual production deploy:
 
 ```bash
 pnpm deploy

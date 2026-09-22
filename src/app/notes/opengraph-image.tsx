@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const alt =
-  'Field notes diagram: devices connect through T3 Code to Claude Code, Codex, and OpenCode, then to remote machines and an RTX 3090';
+  'Notes diagram: devices connect through T3 Code to Claude Code, Codex, and OpenCode, then to remote machines and an RTX 3090';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -95,7 +95,7 @@ export default function OGImage() {
             textTransform: 'uppercase',
           }}
         >
-          Field notes
+          Notes
         </div>
         <div
           style={{

@@ -9,7 +9,7 @@ interface ProfileProps {
 const Profile: React.FC<ProfileProps> = ({ name, bio, imageSrc }) => {
   return (
     <div className="flex flex-col items-center space-y-4 w-full mx-auto px-2 mb-4">
-      <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-(--accent) shadow-xl transition-transform duration-200 hover:scale-105 active:scale-95">
+      <div className="relative w-32 h-32 rounded-full overflow-hidden border-4 border-(--accent)">
         <Image
           src={imageSrc}
           alt={`${name}'s profile photo`}

@@ -1,3 +1,5 @@
+import AppearanceToggle from '@/components/AppearanceToggle';
+import ThemeToggle from '@/components/ThemeToggle';
 import SiteNav from '@/components/layout/SiteNav';
 import type { SiteNavItem } from '@/config/site-nav';
 import { BaseProps } from '@/types';
@@ -18,7 +20,7 @@ export default function Footer({ className, navItems }: FooterProps) {
         <div className="flex flex-wrap justify-center gap-4 text-sm">
           <a
             href="mailto:brandon@saucy.tech"
-            className="text-(--accent) hover:text-white transition"
+            className="text-(--accent) a11y-focus-ring hover:underline underline-offset-4"
           >
             brandon@saucy.tech
           </a>
@@ -26,18 +28,25 @@ export default function Footer({ className, navItems }: FooterProps) {
             href="https://linkedin.com/in/saucytech"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-(--accent) hover:text-white transition"
+            className="text-(--accent) a11y-focus-ring hover:underline underline-offset-4"
           >
             LinkedIn
           </a>
           <a
             href="/Brandon_Sauceda_Resume.pdf"
-            className="text-(--accent) hover:text-white transition"
+            className="text-(--accent) a11y-focus-ring hover:underline underline-offset-4"
           >
             Résumé
           </a>
         </div>
-        <p className="text-(--accent) text-sm opacity-80">
+        <div
+          className="flex flex-wrap justify-center items-center gap-4"
+          aria-label="Site appearance"
+        >
+          <ThemeToggle />
+          <AppearanceToggle />
+        </div>
+        <p className="text-(--text-secondary) text-sm">
           &copy; {currentYear} {LEGAL_ENTITY}
         </p>
       </div>

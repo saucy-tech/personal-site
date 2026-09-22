@@ -1,5 +1,5 @@
 /**
- * Field notes (`/field-notes`) — how I actually work with AI right now.
+ * Notes (`/notes`) — how I actually work with AI right now.
  *
  * Sections follow the order the choice is actually made: the models, the
  * harnesses that run them inside a repo, the interfaces I drive those harnesses
@@ -12,10 +12,11 @@
  * Edit here to update copy; bump `fieldNotesLastUpdated` when you revise.
  */
 
-/** ISO date — bump when you revise items or copy. Shown on `/field-notes`. */
-export const fieldNotesLastUpdated = '2026-08-30';
+/** ISO date — bump when you revise items or copy. Shown on `/notes`. */
+export const fieldNotesLastUpdated = '2026-09-22';
 
 export type FieldNoteStatus =
+  | 'life'
   | 'coding-agents'
   | 'models'
   | 'interfaces'
@@ -47,6 +48,26 @@ export interface FieldNoteSection {
 }
 
 export const fieldNotesSections: FieldNoteSection[] = [
+  {
+    id: 'life',
+    title: 'Away from the keyboard',
+    blurb: 'Faith, Bitcoin, and the things I keep coming back to.',
+    items: [
+      {
+        title: 'Bitcoin',
+        note: 'I save in Bitcoin. This is where I explain why and collect the resources I would share with someone curious.',
+        link: { href: '/bitcoin', label: 'Why I save in Bitcoin' },
+      },
+      {
+        title: 'Truth Chapel',
+        note: 'My church. Livestreams and teaching are available on YouTube.',
+        link: {
+          href: 'https://www.youtube.com/@TruthChapelUPC/streams',
+          label: 'Watch Truth Chapel',
+        },
+      },
+    ],
+  },
   {
     id: 'models',
     title: 'Models',

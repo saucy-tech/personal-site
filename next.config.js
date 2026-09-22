@@ -7,8 +7,14 @@ const nextConfig = {
   poweredByHeader: false,
   async redirects() {
     return [
-      { source: '/notebook', destination: '/field-notes', permanent: true },
-      { source: '/state-of-ai', destination: '/field-notes', permanent: true },
+      { source: '/field-notes', destination: '/notes', permanent: true },
+      {
+        source: '/field-notes/opengraph-image',
+        destination: '/notes/opengraph-image',
+        permanent: true,
+      },
+      { source: '/notebook', destination: '/notes', permanent: true },
+      { source: '/state-of-ai', destination: '/notes', permanent: true },
       { source: '/projects', destination: '/portfolio', permanent: true },
       {
         source: '/blog/2026-05-19-mercy-while-the-nails-held',

@@ -8,7 +8,6 @@ import { getFooterNavItems, getSiteNavItems } from '@/config/site-nav';
 import { SITE_NAME, SITE_DESCRIPTION_HIRING, SITE_URL } from '@/utils/constants';
 import { getSiteJsonLd } from '@/utils/structured-data';
 import { APPEARANCE_STORAGE_KEY, THEME_STORAGE_KEY } from '@/utils/theme';
-import ClientGalaxyBackground from '@/components/ClientGalaxyBackground';
 
 const ibmSans = IBM_Plex_Sans({
   subsets: ['latin'],
@@ -131,10 +130,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         />
       </head>
       <body className={`${ibmSans.variable} ${ibmMono.variable} font-sans antialiased`}>
-        {/* Background canvas and content wrapper */}
-        <div className="shell-backdrop relative min-h-screen bg-(--background)">
-          {/* Client-only animated background */}
-          <ClientGalaxyBackground />
+        <div className="relative min-h-screen bg-(--background)">
           <div className="relative z-10 flex flex-col min-h-screen">
             <Header navItems={navItems} />
             <main id="main-content" className="grow">

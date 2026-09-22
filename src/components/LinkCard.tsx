@@ -16,6 +16,7 @@ interface LinkCardProps {
   description?: string;
   className?: string;
   align?: 'center' | 'left';
+  headingLevel?: 'h2' | 'h3';
 }
 
 const LinkCard: React.FC<LinkCardProps> = ({
@@ -29,20 +30,16 @@ const LinkCard: React.FC<LinkCardProps> = ({
   meta,
   description,
   className,
-  align = 'center',
+  align = 'left',
+  headingLevel: Heading = 'h2',
 }) => {
   const isExternal = href ? /^https?:\/\//.test(href) : false;
 
   const cardContent = (
-    <div
-      className={cn(
-        'group h-full w-full rounded-2xl border border-(--accent-border) bg-[linear-gradient(180deg,rgb(var(--accent-rgb)/0.16),rgba(255,255,255,0.04))] shadow-[0_10px_30px_rgba(0,0,0,0.16)] backdrop-blur-xs transition-all duration-300 hover:border-(--accent) hover:bg-[linear-gradient(180deg,rgb(var(--accent-rgb)/0.26),rgba(255,255,255,0.06))] hover:shadow-[0_20px_40px_rgba(0,0,0,0.24)] hover:-translate-y-0.5 active:scale-[0.985]',
-        className
-      )}
-    >
+    <div className={cn('group h-full w-full hover:bg-(--accent-transparent)', className)}>
       <div
         className={cn(
-          'flex h-full w-full gap-4 px-4 py-4 sm:px-5',
+          'flex h-full w-full gap-4 px-2 py-5',
           align === 'left' ? 'items-start' : 'items-center'
         )}
       >
@@ -64,15 +61,15 @@ const LinkCard: React.FC<LinkCardProps> = ({
               {eyebrow}
             </p>
           )}
-          <h2
+          <Heading
             className={cn(
-              'wrap-break-word text-sm font-semibold leading-snug text-(--text-primary) sm:text-base',
+              'wrap-break-word text-base font-semibold leading-snug text-(--text-primary) sm:text-base',
               eyebrow ? 'mt-2' : ''
             )}
           >
             {cardTitle || title}
-          </h2>
-          {meta && <p className="mt-2 text-xs text-(--text-secondary)">{meta}</p>}
+          </Heading>
+          {meta && <p className="mt-2 text-sm leading-relaxed text-(--text-secondary)">{meta}</p>}
           {description && (
             <p className="mt-3 text-sm leading-relaxed text-(--text-secondary)">{description}</p>
           )}
@@ -80,7 +77,7 @@ const LinkCard: React.FC<LinkCardProps> = ({
 
         <div
           className={cn(
-            'flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-(--accent-border) bg-(--accent-transparent) text-(--accent) transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5',
+            'flex h-10 w-10 shrink-0 items-center justify-center text-(--accent)',
             align === 'left' ? 'self-start' : 'self-center'
           )}
         >
@@ -106,7 +103,7 @@ const LinkCard: React.FC<LinkCardProps> = ({
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        className="a11y-focus-ring block h-full w-full rounded-2xl"
+        className="a11y-focus-ring block h-full w-full rounded-sm"
       >
         {cardContent}
       </a>
@@ -114,7 +111,7 @@ const LinkCard: React.FC<LinkCardProps> = ({
   }
 
   return (
-    <Link href={href} className="a11y-focus-ring block h-full w-full rounded-2xl">
+    <Link href={href} className="a11y-focus-ring block h-full w-full rounded-sm">
       {cardContent}
     </Link>
   );

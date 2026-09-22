@@ -4,7 +4,9 @@ test.describe('smoke', () => {
   test('home loads', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByRole('main')).toBeVisible();
-    await expect(page.getByRole('link', { name: /^writing$/i }).first()).toBeVisible();
+    await expect(
+      page.getByRole('navigation', { name: 'Site sections' }).getByRole('link')
+    ).toHaveText(['Portfolio', 'About', 'Notes']);
   });
 
   test('blog index loads', async ({ page }) => {
@@ -30,13 +32,12 @@ test.describe('smoke', () => {
     await expect(subscribeCardButton).toContainText(/enjoyed this post/i);
   });
 
-  test('home subscribe form is visible and actionable', async ({ page }) => {
-    await page.goto('/');
-    const emailInput = page.getByPlaceholder('Your email');
-    const subscribeButton = page.getByRole('button', { name: /^subscribe$/i });
-    await expect(emailInput).toBeVisible();
-    await expect(subscribeButton).toBeVisible();
-    await expect(page.getByText(/no spam, unsubscribe anytime/i)).toBeVisible();
+  test('notes keeps existing bookmarks and personal destinations working', async ({ page }) => {
+    await page.goto('/field-notes');
+    await expect(page).toHaveURL(/\/notes$/);
+    await expect(page.getByRole('heading', { name: 'Notes', exact: true })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Watch Truth Chapel' })).toBeVisible();
+    await expect(page.getByRole('link', { name: 'Why I save in Bitcoin' })).toBeVisible();
   });
 
   test('portfolio exposes resume and contact', async ({ page }) => {

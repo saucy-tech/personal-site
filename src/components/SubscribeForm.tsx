@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 
 export default function SubscribeForm() {
@@ -104,7 +105,11 @@ export default function SubscribeForm() {
         {status === 'loading' ? 'Subscribing…' : 'Subscribe'}
       </button>
       <p id={helperMessageId} className="text-xs text-center text-(--text-secondary)">
-        No spam, unsubscribe anytime.
+        Unsubscribe anytime. Read the{' '}
+        <Link href="/privacy" className="a11y-focus-ring underline underline-offset-4">
+          privacy notice
+        </Link>
+        .
       </p>
       <p id={statusMessageId} aria-live="polite" className="sr-only">
         {status === 'loading' ? 'Submitting your subscription request.' : ''}

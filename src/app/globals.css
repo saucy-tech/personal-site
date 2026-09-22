@@ -154,26 +154,6 @@
     --status-error: #b91c1c;
   }
 
-  /* Subtle radial wash behind content (stronger in dark; softer in light).
-     Radii are viewport-sized so a tall mobile page gets three glows rather than one
-     flat tint. The first layer fades the wash in from the top edge, so the flat
-     --background that shows during overscroll meets the page without a seam. */
-  .shell-backdrop {
-    background-image:
-      linear-gradient(to bottom, var(--background) 0, transparent 10rem),
-      radial-gradient(circle 60vmax at 20% 30%, var(--accent-transparent) 0%, transparent 100%),
-      radial-gradient(circle 60vmax at 70% 40%, var(--accent-transparent) 0%, transparent 100%),
-      radial-gradient(circle 60vmax at 40% 80%, var(--accent-transparent) 0%, transparent 100%);
-  }
-
-  html[data-appearance='light'] .shell-backdrop {
-    background-image:
-      linear-gradient(to bottom, var(--background) 0, transparent 10rem),
-      radial-gradient(circle 55vmax at 20% 30%, rgb(var(--accent-rgb) / 0.1) 0%, transparent 100%),
-      radial-gradient(circle 55vmax at 70% 40%, rgb(var(--accent-rgb) / 0.08) 0%, transparent 100%),
-      radial-gradient(circle 50vmax at 40% 80%, rgb(var(--accent-rgb) / 0.06) 0%, transparent 100%);
-  }
-
   /* Light mode: clearer link affordance in MDX prose */
   html[data-appearance='light'] article.prose a {
     text-decoration-thickness: 0.1em;
