@@ -14,11 +14,9 @@
     { "pattern": "saucy.tech", "custom_domain": true },
     { "pattern": "www.saucy.tech", "custom_domain": true }
   ],
-  // Both off. A *.workers.dev hostname serves this identical Worker — including
-  // every anonymous /api/ route — but sits outside the saucy.tech zone, so no
-  // WAF rule, rate-limiting rule or bot-management setting scoped to that zone
-  // applies to it. It is also the obvious way around any limit added at the
-  // zone edge. Use `wrangler dev` or a preview deployment for the preview need.
+  // Keep the production workers.dev alias off; production uses saucy.tech.
+  // Public version/branch previews are intentional for PR review. They use
+  // this Worker's bindings and runtime rate limits, not saucy.tech zone rules.
   // Bound per-invocation CPU with headroom above the measured 30-day p99.
   "limits": { "cpu_ms": 5000 },
   "workers_dev": false,
@@ -28,7 +26,7 @@
     "logs": { "head_sampling_rate": 1 },
     "traces": { "enabled": false }
   },
-  "preview_urls": false,
+  "preview_urls": true,
 
   // One atomic counter per tier, evaluated by the runtime. Without these the
   // limiter falls back to a per-isolate Map, which is not a limit at all — see

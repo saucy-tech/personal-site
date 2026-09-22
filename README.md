@@ -68,7 +68,15 @@ pnpm security:drift        # production CSP has not regressed
 
 ## Deploy
 
-Cloudflare Workers Builds deploys on push through the Git integration: branches get preview URLs, merges to `main` go to production. Manual deploy:
+Cloudflare Workers Builds deploys on push through the Git integration. Non-production branches upload a version without promoting it to `saucy.tech`; merges to `main` go to production.
+
+To test a PR, open its **Workers Builds: personal-site** check after it succeeds and follow the version preview URL. Branch aliases point to the latest successful upload for that branch; version URLs pin one upload. For example, PR #316 uses `https://t3code-audit-site-design-personal-site.brandonsauceda.workers.dev`.
+
+`preview_urls: true` intentionally makes these rendered previews public. The GitHub repository stays private. The production `personal-site.brandonsauceda.workers.dev` alias remains disabled. Previews share this Worker's backend bindings, so signup and payment actions are real; the preview is for browsing and layout review unless an end-to-end action is intended. Worker rate limits and CPU limits still apply, but zone-level rules for `saucy.tech` do not apply to `workers.dev`.
+
+Version uploads do not change the Worker's routing switch. If bootstrapping previews for a Worker with preview routing disabled, enable **Settings → Domains & Routes → Version/Preview URLs** once as well as setting `preview_urls: true` in the repo. Subsequent production deploys retain that setting. See [Cloudflare version URLs](https://developers.cloudflare.com/workers/versions-and-deployments/version-urls/).
+
+Manual production deploy:
 
 ```bash
 pnpm deploy
