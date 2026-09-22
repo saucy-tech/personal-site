@@ -39,11 +39,26 @@ export default function Privacy() {
         </p>
       </section>
       <section className="space-y-3 leading-relaxed">
+        <h2 className="text-2xl font-semibold">Product demos</h2>
+        <p>
+          The public demos linked from the portfolio (Train Every Day, The Home Hive, Sunday School,
+          and Health Dashboard) run on Cloudflare Workers. They have no accounts and no analytics.
+          Anything you enter stays in your own browser storage and is never sent to Saucy Tech;
+          clearing the site&rsquo;s browser data removes it. Cloudflare processes the requests that
+          deliver each demo, as described above.
+        </p>
+        <p>
+          Every person, measurement, and note shown in a demo is invented. The Health Dashboard demo
+          is not medical advice. When you play a Story Time video in The Home Hive demo, the video
+          loads from YouTube, and Google&rsquo;s privacy practices apply to that video.
+        </p>
+      </section>
+      <section className="space-y-3 leading-relaxed">
         <h2 className="text-2xl font-semibold">Other services</h2>
         <p>
-          Product demos, social links, and payment services may take you to other services with
-          their own privacy practices. The Morning Portion has its own privacy notice. The Oura
-          integration is covered by the separate{' '}
+          Social links and payment services may take you to other services with their own privacy
+          practices. The Morning Portion has its own privacy notice. The Oura integration is covered
+          by the separate{' '}
           <Link
             href="/oura-health/privacy"
             className="a11y-focus-ring text-(--accent) underline underline-offset-4"
