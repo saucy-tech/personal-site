@@ -14,7 +14,7 @@ export interface AboutProduct {
 export const about = {
   lead: "I'm Brandon, a software engineer and builder in Georgia. I care about my faith, my family, and making useful things that hold up over time.",
   shopOneLiner:
-    'Saucy Tech is how I ship my own software and take on outside work. Four products get most of my time: The Morning Portion, Train Every Day, The Home Hive, and Fitness Journal. They cover things I care about and use myself: faith, training, family learning, and fitness progress. The client work is a few projects a year, usually web apps and product builds.',
+    'Saucy Tech is how I ship my own software and take on outside work. Four products get most of my time: The Morning Portion, Train Every Day, The Home Hive, and Health Dashboard. They cover things I care about and use myself: faith, training, family learning, and health. The client work is a few projects a year, usually web apps and product builds.',
   trackRecord:
     'For ten years I have built public software for the State of Georgia: web apps and GIS systems used by state agencies and the public, with a few national awards along the way.',
   products: [
@@ -36,9 +36,9 @@ export const about = {
       href: 'https://home-hive-demo.brandonsauceda.workers.dev',
     },
     {
-      name: 'Fitness Journal',
-      oneLiner: 'A private fitness dashboard, shown here with fictional measurements and goals.',
-      href: '/portfolio#fitness-journal',
+      name: 'Health Dashboard',
+      oneLiner: 'The dashboard I run my own care from. The public demo uses an invented person.',
+      href: 'https://health-app-demo.brandonsauceda.workers.dev/',
     },
   ] as AboutProduct[],
   workWithMe: {

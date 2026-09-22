@@ -100,23 +100,25 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: 'fitness-journal',
+    id: 'health-dashboard',
     group: 'apps',
-    title: 'Fitness Journal',
+    title: 'Health Dashboard',
     status: 'launched',
     featured: true,
     summary:
-      'A private dashboard for fitness goals, measurements, and weekly progress. This preview shows the real interface with fictional data.',
+      'The dashboard I use to run my own care: weight, medication, labs, training, and a weekly review. The public demo uses an invented person.',
     preview: {
-      src: '/images/products/fitness-journal.webp',
-      alt: 'Fitness Journal sample showing progress toward fictional weight and waist goals, with trend charts.',
-      width: 1376,
-      height: 811,
+      src: '/images/products/health-dashboard.webp',
+      alt: 'Health Dashboard demo home showing an invented weight journey toward a goal and links to the tracker, journal, and labs.',
+      width: 1720,
+      height: 1014,
     },
-    tags: ['JavaScript', 'Python', 'Cloudflare Workers', 'Private dashboard'],
+    tags: ['JavaScript', 'Python', 'Cloudflare Workers', 'KV', 'D1', 'Cloudflare Access'],
     blurb:
-      'The dashboard I use to review fitness progress over time. It brings measurements, training, and weekly reviews into one place, with visible goals, trend charts, and the source behind each reading. Templates and data are kept separate. The live app is private; this screenshot was rendered locally from the interface using invented measurements and goals, with no personal records or photos. A public interactive demo is not available.',
-    links: [{ href: '/images/products/fitness-journal.webp', label: 'View sample preview' }],
+      'The dashboard I use to run my own care. A Python emitter reads the raw exports (scale, nutrition, training log, dose ledger, lab results) and turns them into one data file checked against a JSON schema before anything ships. The pages render from that file: a weight journey toward a goal, a GLP-1 tracker with a modeled drug level and dose calendar, a fitness journal with body-composition trends and progress photos, lab trends, and a weekly review. It runs as a Cloudflare Worker behind Access, with Web Push reminders on dose night. The live app holds my own records, so the demo runs the same emitter and pages over an invented person: generated measurements, a made-up clinic, and drawn silhouettes in place of photos.',
+    links: [
+      { href: 'https://health-app-demo.brandonsauceda.workers.dev/', label: 'Open the demo' },
+    ],
   },
   {
     id: 'sunday-school',
