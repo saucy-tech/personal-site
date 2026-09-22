@@ -247,11 +247,11 @@ export default function Bitcoin() {
       </section>
 
       <section>
-        <h2 className="text-2xl font-semibold mt-8 mb-4">Field notes</h2>
+        <h2 className="text-2xl font-semibold mt-8 mb-4">Notes</h2>
         <div className="bg-white/10 p-6 rounded-lg space-y-3 text-sm leading-relaxed">
           <p>
-            <Link href="/field-notes" className="text-blue-400 underline">
-              Field notes
+            <Link href="/notes" className="text-blue-400 underline">
+              Notes
             </Link>{' '}
             covers how I use AI day to day (models, harnesses, subscriptions, gear).
           </p>

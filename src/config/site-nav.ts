@@ -6,11 +6,12 @@ export type SiteNavItem = {
   match: NavMatch;
 };
 
-/** Shown in the footer after primary nav items (RSS, utility links). */
+/** Secondary destinations, kept out of the primary header. */
 export const FOOTER_EXTRA_NAV: SiteNavItem[] = [
   { href: '/bitcoin', label: 'Bitcoin', match: 'exact' },
   { href: '/links', label: 'Links', match: 'exact' },
-  { href: '/rss.xml', label: 'RSS', match: 'exact' },
+  { href: '/about#work-with-me', label: 'Client work', match: 'exact' },
+  { href: '/support', label: 'Support', match: 'exact' },
   { href: '/privacy', label: 'Privacy', match: 'exact' },
 ];
 
@@ -26,16 +27,11 @@ export function isNavActive(pathname: string, item: SiteNavItem, allItems: SiteN
 }
 
 export function getSiteNavItems(): SiteNavItem[] {
-  const items: SiteNavItem[] = [{ href: '/blog', label: 'Writing', match: 'prefix' }];
-  items.push(
-    { href: '/portfolio', label: 'Projects', match: 'exact' },
+  return [
+    { href: '/portfolio', label: 'Portfolio', match: 'exact' },
     { href: '/about', label: 'About', match: 'exact' },
-    { href: '/about#work-with-me', label: 'Client work', match: 'exact' },
-    { href: '/field-notes', label: 'Field notes', match: 'exact' },
-    { href: 'https://morningportion.com', label: 'Morning Portion', match: 'exact' },
-    { href: '/support', label: 'Support', match: 'exact' }
-  );
-  return items;
+    { href: '/notes', label: 'Notes', match: 'exact' },
+  ];
 }
 
 export function getFooterNavItems(): SiteNavItem[] {

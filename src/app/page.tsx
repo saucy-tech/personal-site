@@ -6,7 +6,6 @@ import LinkCard from '@/components/LinkCard';
 import Profile from '@/components/Profile';
 import { projects } from '@/data/projects';
 import SocialBar from '@/components/SocialBar';
-import SubscribeForm from '@/components/SubscribeForm';
 
 export const metadata: Metadata = {
   description:
@@ -98,7 +97,7 @@ export default function Home() {
           </h2>
           <div className="grid gap-10 md:grid-cols-2">
             {projects
-              .filter((project) => project.preview)
+              .filter((project) => project.featured && project.preview)
               .map((project) => {
                 const preview = project.preview;
                 const link = project.links[0];
@@ -107,8 +106,9 @@ export default function Home() {
                   <article key={project.id} className="space-y-4">
                     <a
                       href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      {...(/^https?:\/\//.test(link.href)
+                        ? { target: '_blank', rel: 'noopener noreferrer' }
+                        : {})}
                       className="a11y-focus-ring block rounded-sm"
                     >
                       <Image
@@ -124,8 +124,9 @@ export default function Home() {
                     <p className="text-(--text-secondary) leading-relaxed">{project.summary}</p>
                     <a
                       href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      {...(/^https?:\/\//.test(link.href)
+                        ? { target: '_blank', rel: 'noopener noreferrer' }
+                        : {})}
                       className="a11y-focus-ring inline-block py-2 text-(--accent) underline underline-offset-4"
                     >
                       {link.label}
@@ -144,7 +145,7 @@ export default function Home() {
             <LinkCard
               headingLevel="h3"
               key="my-projects"
-              title="Projects"
+              title="Portfolio"
               href="/portfolio"
               meta="Products, public-sector systems, open source, and résumé"
             />
@@ -157,46 +158,12 @@ export default function Home() {
             />
             <LinkCard
               headingLevel="h3"
-              key="blog-home"
-              title="Writing"
-              href="/blog"
-              meta="Personal essays and the earlier Daily Word archive"
-            />
-            <LinkCard
-              headingLevel="h3"
-              key="field-notes"
-              title="What I'm using now"
-              href="/field-notes"
-              meta="Tools, tech, and gear I'm using now"
-            />
-            <LinkCard
-              headingLevel="h3"
-              key="bitcoin"
-              title="Why I save in Bitcoin"
-              href="/bitcoin"
-              meta="Where I'd point someone curious"
-            />
-            <LinkCard
-              headingLevel="h3"
-              key="church"
-              title="My church"
-              href="https://www.youtube.com/@TruthChapelUPC/streams"
-              meta="Truth Chapel livestreams and teaching"
+              key="notes"
+              title="Notes"
+              href="/notes"
+              meta="AI tools, Bitcoin, my church, and what I'm doing now"
             />
           </div>
-        </section>
-
-        <section
-          aria-labelledby="subscribe-heading"
-          className="max-w-xl mx-auto space-y-5 border-t border-(--surface-border) pt-8"
-        >
-          <h2 id="subscribe-heading" className="text-2xl font-semibold text-center">
-            Subscribe to Saucy.Tech
-          </h2>
-          <p className="text-center leading-relaxed text-(--text-secondary)">
-            Occasional notes on software, tools, and current projects.
-          </p>
-          <SubscribeForm />
         </section>
 
         <div className="text-center text-sm">

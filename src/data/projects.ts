@@ -78,25 +78,16 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: 'sunday-school',
-    summary:
-      'The lesson app I teach from on an iPad. Lessons work offline and export as standalone files. The public demo contains original sample lessons.',
-    group: 'apps',
-    title: 'Sunday School',
-    status: 'launched',
-    featured: true,
-    tags: ['Vanilla JS', 'PWA', 'Service worker', 'Offline-first', 'Cloudflare Workers'],
-    blurb:
-      'The lesson app I teach from on an iPad, in a classroom where the signal drops. A service worker precaches every lesson in the quarter, so the menu and the lesson open with no network at all; when that is not enough, any lesson or a whole quarter exports as one self-contained HTML file that opens from the Files app with no service worker involved. The menu, the lesson dates, and the badge on this Sunday are generated from the lesson files rather than hand-edited, so adding a lesson is dropping a file in a folder. No framework and no build step beyond a dependency-free Node script, covered by a test suite that runs on node --test. The lessons are written against paid curriculum and the real site sits behind Cloudflare Access, so what you can open here is a demo carrying three sample lessons written from scratch and none of the curriculum.',
-    links: [
-      {
-        href: 'https://sunday-school-demo.brandonsauceda.workers.dev',
-        label: 'Open the demo',
-      },
-    ],
-  },
-  {
     id: 'home-hive',
+    featured: true,
+    summary:
+      'Preschool learning folded into family evenings, with weekly activities and games a child can play independently. The demo uses an invented week.',
+    preview: {
+      src: '/images/products/home-hive.webp',
+      alt: 'The Home Hive public demo with an invented weather lesson and evening activities.',
+      width: 1720,
+      height: 1014,
+    },
     group: 'apps',
     title: 'The Home Hive',
     status: 'launched',
@@ -106,6 +97,42 @@ export const projects: Project[] = [
     links: [
       { href: 'https://home-hive-demo.brandonsauceda.workers.dev', label: 'Open the demo' },
       { href: 'https://github.com/saucy-tech/home-hive-demo', label: 'Demo repo' },
+    ],
+  },
+  {
+    id: 'fitness-journal',
+    group: 'apps',
+    title: 'Fitness Journal',
+    status: 'launched',
+    featured: true,
+    summary:
+      'A private dashboard for fitness goals, measurements, and weekly progress. This preview shows the real interface with fictional data.',
+    preview: {
+      src: '/images/products/fitness-journal.webp',
+      alt: 'Fitness Journal sample showing progress toward fictional weight and waist goals, with trend charts.',
+      width: 1376,
+      height: 811,
+    },
+    tags: ['JavaScript', 'Python', 'Cloudflare Workers', 'Private dashboard'],
+    blurb:
+      'The dashboard I use to review fitness progress over time. It brings measurements, training, and weekly reviews into one place, with visible goals, trend charts, and the source behind each reading. Templates and data are kept separate. The live app is private; this screenshot was rendered locally from the interface using invented measurements and goals, with no personal records or photos. A public interactive demo is not available.',
+    links: [{ href: '/images/products/fitness-journal.webp', label: 'View sample preview' }],
+  },
+  {
+    id: 'sunday-school',
+    summary:
+      'The lesson app I teach from on an iPad. Lessons work offline and export as standalone files. The public demo contains original sample lessons.',
+    group: 'apps',
+    title: 'Sunday School',
+    status: 'launched',
+    tags: ['Vanilla JS', 'PWA', 'Service worker', 'Offline-first', 'Cloudflare Workers'],
+    blurb:
+      'The lesson app I teach from on an iPad, in a classroom where the signal drops. A service worker precaches every lesson in the quarter, so the menu and the lesson open with no network at all; when that is not enough, any lesson or a whole quarter exports as one self-contained HTML file that opens from the Files app with no service worker involved. The menu, the lesson dates, and the badge on this Sunday are generated from the lesson files rather than hand-edited, so adding a lesson is dropping a file in a folder. No framework and no build step beyond a dependency-free Node script, covered by a test suite that runs on node --test. The lessons are written against paid curriculum and the real site sits behind Cloudflare Access, so what you can open here is a demo carrying three sample lessons written from scratch and none of the curriculum.',
+    links: [
+      {
+        href: 'https://sunday-school-demo.brandonsauceda.workers.dev',
+        label: 'Open the demo',
+      },
     ],
   },
   {

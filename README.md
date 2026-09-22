@@ -1,12 +1,12 @@
 # saucy.tech
 
-**Brandon Sauceda's personal site — portfolio, blog, and the Daily Word devotion archive.**
+**Brandon Sauceda's personal site — products, portfolio, and notes.**
 
 Live at [saucy.tech](https://saucy.tech). Next.js 16 on the App Router, deployed to Cloudflare Workers through the OpenNext adapter. Content is MDX in this repo, compiled to a static data module at build time. Clone it and `pnpm dev` — nothing external is required to run the site locally.
 
 ## Why
 
-The things I build live in different places: products on their own domains, open-source work in other people's repos, writing in an email list. This site is the one address that holds the record of all of it, and it is deliberately not rented from a platform — the feed, the subscribe endpoint, the webmention receiver, and the Lightning tip address are all routes in this repo, running on infrastructure I control.
+The things I build live in different places: products on their own domains and open-source work in other people's repos. This site is the one address that holds the record of all of it, and it is deliberately not rented from a platform — the feed, the subscribe endpoint, the webmention receiver, and the Lightning tip address are all routes in this repo, running on infrastructure I control.
 
 ## What's on it
 
@@ -14,7 +14,8 @@ The things I build live in different places: products on their own domains, open
 |---|---|
 | `/` | Landing page — profile, sections, link cards |
 | `/portfolio` | Products, tools, open-source contributions, and talks (content in `src/data/projects.ts`) |
-| `/blog` | Posts, with archive, category, series, and tag indexes |
+| `/notes` | Current interests, AI tools, Bitcoin, and church; `/field-notes` redirects here |
+| `/blog` | Earlier posts retained at their original URLs, no longer promoted in site navigation |
 | `/daily-word` | Archive of weekday scripture reflections |
 | `/about` | Background |
 | `/bitcoin`, `/links` | Bitcoin resources and a set of trackers and dashboards |

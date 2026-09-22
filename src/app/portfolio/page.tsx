@@ -73,7 +73,7 @@ function SectionHeading({ id, label }: { id: string; label: string }) {
 
 function ProjectCard({ project }: { project: Project }) {
   return (
-    <article className="border-b border-(--surface-border) pb-8">
+    <article id={project.id} className="scroll-mt-8 border-b border-(--surface-border) pb-8">
       {project.preview && (
         <Image
           {...project.preview}

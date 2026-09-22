@@ -6,12 +6,6 @@ import { BaseProps } from '@/types';
 import { SITE_NAME } from '@/utils/constants';
 import { cn } from '@/utils/helpers';
 
-// Below `sm` the seven section links would wrap to two rows; keep them on one row
-// that scrolls sideways instead. The right-edge mask hints that the row continues,
-// and the end padding lets the last link scroll clear of it.
-const mobileNavRowClass =
-  'max-sm:-mx-4 max-sm:flex-nowrap max-sm:justify-start max-sm:overflow-x-auto max-sm:whitespace-nowrap max-sm:px-4 max-sm:py-1 max-sm:pr-12 max-sm:[scrollbar-width:none] max-sm:[mask-image:linear-gradient(to_right,black_88%,transparent)]';
-
 type HeaderProps = BaseProps & {
   navItems: SiteNavItem[];
 };
@@ -36,7 +30,7 @@ export default function Header({ className, navItems }: HeaderProps) {
             </Link>
           </nav>
         </div>
-        <SiteNav items={navItems} ariaLabel="Site sections" listClassName={mobileNavRowClass} />
+        <SiteNav items={navItems} ariaLabel="Site sections" />
       </div>
     </header>
   );
