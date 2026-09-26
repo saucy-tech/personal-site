@@ -39,7 +39,6 @@
     "@sentry/nextjs": "^10.74.0",
     "@tailwindcss/typography": "^0.5.20",
     "clsx": "^2.1.1",
-    "framer-motion": "^12.43.0",
     "github-slugger": "^2.0.0",
     "gray-matter": "^4.0.3",
     "js-yaml": "^5.4.2",
