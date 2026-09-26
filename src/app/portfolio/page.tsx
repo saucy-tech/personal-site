@@ -20,7 +20,7 @@ import { getProfilePageJsonLd } from '@/utils/structured-data';
 const PORTFOLIO_OG_IMAGE = absoluteUrl('/portfolio/opengraph-image');
 
 const PORTFOLIO_DESCRIPTION =
-  'Brandon Sauceda — IT Development Manager and software engineer. Gov-tech, GIS, full-stack apps, open source, awards, and downloadable résumé.';
+  'Brandon Sauceda, independent software engineer behind The Morning Portion, Train Every Day, The Home Hive, and Health Dashboard. Client work, ten years of public-sector systems, awards, and downloadable résumé.';
 
 // The page renders one "updated" date, so take the newest of the sections it draws from.
 // ISO dates compare lexically, so a string comparison is enough.

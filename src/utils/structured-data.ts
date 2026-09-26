@@ -1,4 +1,10 @@
-import { SITE_DESCRIPTION, SITE_NAME, SITE_URL, absoluteUrl } from '@/utils/constants';
+import {
+  SITE_DESCRIPTION,
+  SITE_DESCRIPTION_HIRING,
+  SITE_NAME,
+  SITE_URL,
+  absoluteUrl,
+} from '@/utils/constants';
 
 interface SiteJsonLdInput {
   authorName: string;
@@ -58,6 +64,8 @@ export function getSiteJsonLd(input: SiteJsonLdInput): {
         name: input.authorName,
         url: SITE_URL,
         image: absoluteUrl(input.authorImagePath),
+        jobTitle: 'Software Engineer',
+        description: SITE_DESCRIPTION_HIRING,
         sameAs: input.sameAs,
       },
       {
