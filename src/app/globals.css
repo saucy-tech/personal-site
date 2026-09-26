@@ -328,7 +328,7 @@
     break-inside: avoid;
   }
 
-  .resume .space-y-8 > * + * {
+  .resume.space-y-8 > * + * {
     margin-top: 1rem;
   }
 }

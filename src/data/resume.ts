@@ -1,14 +1,20 @@
 /**
  * Résumé content for /resume. Mirrors public/Brandon_Sauceda_Resume.pdf, with
  * products and awards drawn live from projects.ts and awards.ts. Keep it in
- * step with the PDF and bump `resumeLastUpdated` when either changes.
+ * step with the PDF and bump `resumeContentUpdated` when either changes.
  */
 
-import { awards } from '@/data/awards';
+import { awards, awardsLastUpdated } from '@/data/awards';
 import { portfolioAbout } from '@/data/portfolio-about';
-import { projects } from '@/data/projects';
+import { projects, projectsLastUpdated } from '@/data/projects';
 
-export const resumeLastUpdated = '2026-05-01';
+/** Date the PDF and hand-written sections below were last revised. */
+const resumeContentUpdated = '2026-05-21';
+
+/** Newest of the PDF revision and the live award/project data it renders. */
+export const resumeLastUpdated =
+  [resumeContentUpdated, awardsLastUpdated, projectsLastUpdated].sort().at(-1) ??
+  resumeContentUpdated;
 
 export const resume = {
   name: portfolioAbout.headline,
