@@ -5,6 +5,7 @@ export function middleware(request: NextRequest) {
   const nonce = generateCSPNonce();
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-nonce', nonce);
+  requestHeaders.set('x-pathname', request.nextUrl.pathname);
   const response = NextResponse.next({
     request: {
       headers: requestHeaders,
