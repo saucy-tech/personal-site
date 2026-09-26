@@ -6,87 +6,12 @@ import { load as yamlLoad, dump as yamlDump } from 'js-yaml';
 
 import { POST_HTML, RAW_POSTS } from '@/utils/posts-data.generated';
 
-import {
-  Post,
-  PostHeading,
-  PostMeta,
-  slugifyTag,
-  toPostMeta,
-  type PostCategory,
-} from '@/utils/post-taxonomy';
+import { Post, PostHeading, PostMeta, toPostMeta } from '@/utils/post-taxonomy';
 import { frontmatterSchema } from '@/utils/frontmatter-schema';
 import { absoluteUrl } from '@/utils/constants';
 
-export interface SeriesMeta {
-  name: string;
-  slug: string;
-  aliases: string[];
-  posts: PostMeta[];
-  count: number;
-  weekCount: number;
-}
-
 interface PostQueryOptions {
   includeFuture?: boolean;
-}
-
-export function seriesSlug(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '');
-}
-
-const SERIES_SLUG_ALIASES: Record<string, string[]> = {
-  'Nicodemus Series': ['nicodemus'],
-  'Woman at the Well Series': ['woman-at-the-well'],
-  'The Paralytic in Mark 2 Series': ['the-paralytic-in-mark-2'],
-  'Sent Like Witnesses Series': ['sent-like-witnesses'],
-  'He Has Risen Series': ['he-is-risen-the-victory-that-changes-everything'],
-};
-
-// Returns a sortable ISO week key "YYYY-WNN" for a "YYYY-MM-DD" date string.
-// Uses ISO 8601 (Mon–Sun weeks; week 1 contains the year's first Thursday).
-export function isoWeekKey(dateStr: string): string {
-  const parts = dateStr.split('-').map(Number);
-  const [year, month, day] = [parts[0] ?? 0, parts[1] ?? 1, parts[2] ?? 1];
-  const d = new Date(Date.UTC(year, month - 1, day));
-  const dayOfWeek = d.getUTCDay() || 7; // 1=Mon … 7=Sun
-  d.setUTCDate(d.getUTCDate() + 4 - dayOfWeek); // shift to nearest Thursday
-  const jan1 = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-  const weekNum = Math.ceil(((d.getTime() - jan1.getTime()) / 86_400_000 + 1) / 7);
-  return `${d.getUTCFullYear()}-W${String(weekNum).padStart(2, '0')}`;
-}
-
-export function getAllSeries(): SeriesMeta[] {
-  const posts = getAllPostsMeta();
-  const seriesMap = new Map<string, PostMeta[]>();
-  posts.forEach((p) => {
-    if (p.series) {
-      const existing = seriesMap.get(p.series) ?? [];
-      existing.push(p);
-      seriesMap.set(p.series, existing);
-    }
-  });
-  return Array.from(seriesMap.entries()).map(([name, seriesPosts]) => {
-    const sorted = seriesPosts.sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-    );
-    const weekCount = new Set(sorted.map((p) => isoWeekKey(p.date))).size;
-    const slug = seriesSlug(name);
-    return {
-      name,
-      slug,
-      aliases: (SERIES_SLUG_ALIASES[name] ?? []).filter((alias) => alias !== slug),
-      posts: sorted,
-      count: sorted.length,
-      weekCount,
-    };
-  });
-}
-
-export function getSeriesBySlug(slug: string): SeriesMeta | undefined {
-  return getAllSeries().find((series) => series.slug === slug || series.aliases.includes(slug));
 }
 
 // Configure gray-matter to use js-yaml 5.x's load function
@@ -155,53 +80,7 @@ export function extractPostHeadings(content: string): PostHeading[] {
   return headings;
 }
 
-export function getAllTagSlugEntries(): { slug: string; displayTag: string }[] {
-  const bySlug = new Map<string, string>();
-  for (const post of getAllPostsMeta()) {
-    for (const tag of post.tags) {
-      const slug = slugifyTag(tag);
-      if (!bySlug.has(slug)) {
-        bySlug.set(slug, tag);
-      }
-    }
-  }
-  return Array.from(bySlug.entries())
-    .map(([slug, displayTag]) => ({ slug, displayTag }))
-    .sort((a, b) => a.slug.localeCompare(b.slug));
-}
-
-export function getPostsByTagSlug(tagSlug: string): PostMeta[] {
-  return getAllPostsMeta().filter((post) => post.tags.some((tag) => slugifyTag(tag) === tagSlug));
-}
-
-export function getPostsByCategory(category: PostCategory): PostMeta[] {
-  return getAllPostsMeta().filter((post) => post.category === category);
-}
-
-export function getPostsByYearMonth(year: number, month: number): PostMeta[] {
-  const prefix = `${year}-${String(month).padStart(2, '0')}`;
-  return getAllPostsMeta().filter((post) => post.date.startsWith(prefix));
-}
-
 /** Same-series neighbors in chronological reading order (oldest → newest). */
-export function getAllYearMonthArchiveParams(): { year: string; month: string }[] {
-  const keys = new Set<string>();
-  for (const post of getAllPostsMeta()) {
-    const parts = post.date.split('-');
-    const y = parts[0];
-    const m = parts[1];
-    if (y && m) {
-      keys.add(`${y}-${m}`);
-    }
-  }
-  return Array.from(keys)
-    .sort((a, b) => b.localeCompare(a))
-    .map((key) => {
-      const [year, month] = key.split('-');
-      return { year: year!, month: month! };
-    });
-}
-
 export function getSeriesChronoNeighbors(post: Pick<PostMeta, 'slug' | 'series' | 'date'>): {
   previous: PostMeta | null;
   next: PostMeta | null;

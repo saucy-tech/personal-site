@@ -21,6 +21,12 @@ const nextConfig = {
         destination: '/blog/2026-05-18-mercy-while-the-nails-held',
         permanent: true,
       },
+      // Retired blog index surfaces; posts stay at /blog/[slug].
+      { source: '/blog/category/:category', destination: '/blog', permanent: true },
+      { source: '/blog/tag/:tag', destination: '/blog', permanent: true },
+      { source: '/blog/series', destination: '/blog', permanent: true },
+      { source: '/blog/series/:series', destination: '/blog', permanent: true },
+      { source: '/blog/archive/:year/:month', destination: '/blog', permanent: true },
     ];
   },
   // Security headers (CSP, X-Frame-Options, etc.) are set by src/middleware.ts

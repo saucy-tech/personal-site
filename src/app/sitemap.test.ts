@@ -11,13 +11,14 @@ describe('sitemap', () => {
     ).toBe(true);
   });
 
-  it('includes static pages, tag, category, and archive routes', () => {
+  it('includes static pages and omits retired blog index routes', () => {
     const entries = sitemap();
     const urls = entries.map((e) => e.url);
     expect(urls.some((u) => u.endsWith('/links'))).toBe(true);
     expect(urls.some((u) => u.endsWith('/about'))).toBe(true);
-    expect(urls.some((u) => u.includes('/blog/tag/'))).toBe(true);
-    expect(urls.some((u) => u.includes('/blog/category/daily-word'))).toBe(true);
-    expect(urls.some((u) => u.includes('/blog/archive/'))).toBe(true);
+    expect(urls.some((u) => u.includes('/blog/tag/'))).toBe(false);
+    expect(urls.some((u) => u.includes('/blog/category/'))).toBe(false);
+    expect(urls.some((u) => u.includes('/blog/series'))).toBe(false);
+    expect(urls.some((u) => u.includes('/blog/archive/'))).toBe(false);
   });
 });
