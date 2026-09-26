@@ -98,7 +98,7 @@ export function normalizePostCategory(value: unknown): PostCategory {
   return CATEGORY_ALIASES[normalized] ?? 'essays-ideas';
 }
 
-/** URL-safe slug for a tag (used in `/blog/tag/[tag]` and archive filters). */
+/** URL-safe slug for a tag (used in the /blog archive tag filter). */
 export function slugifyTag(tag: string): string {
   return tag
     .toLowerCase()
