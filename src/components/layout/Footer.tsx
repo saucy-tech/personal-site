@@ -32,12 +32,6 @@ export default function Footer({ className, navItems }: FooterProps) {
           >
             LinkedIn
           </a>
-          <a
-            href="/Brandon_Sauceda_Resume.pdf"
-            className="text-(--accent) a11y-focus-ring hover:underline underline-offset-4"
-          >
-            Résumé
-          </a>
         </div>
         <div
           className="flex flex-wrap justify-center items-center gap-4"
