@@ -3,7 +3,7 @@
  * Edit here to update copy. Bump `projectsLastUpdated` when you revise.
  */
 
-export const projectsLastUpdated = '2026-09-22';
+export const projectsLastUpdated = '2026-09-26';
 
 export type ProjectGroup = 'apps' | 'tools' | 'open-source' | 'client-work' | 'track-record';
 
@@ -14,19 +14,27 @@ export interface ProjectLink {
   label: string;
 }
 
-export interface Project {
+interface ProjectBase {
   id: string;
   group: ProjectGroup;
   title: string;
   status: ProjectStatus;
-  /** The products I actively build and use. Sorts first within its group. */
-  featured?: boolean;
   tags: string[];
   blurb: string;
   summary?: string;
   preview?: { src: string; alt: string; width: number; height: number };
   links: ProjectLink[];
 }
+
+/** Featured products must carry a `tagline`; the union makes tsc enforce it. */
+export type Project =
+  | (ProjectBase & {
+      /** The products I actively build and use. Sorts first within its group. */
+      featured: true;
+      /** One line, twelve words or fewer: who the product is for and what it does. */
+      tagline: string;
+    })
+  | (ProjectBase & { featured?: false; tagline?: never });
 
 export interface Talk {
   date: string;
@@ -39,6 +47,7 @@ export const projects: Project[] = [
   // --- Products ---
   {
     id: 'daily-word',
+    tagline: 'A weekday scripture reading for subscribers, by email and podcast.',
     summary:
       'A weekday scripture reading, email, and podcast. I write it and run the publishing system behind it.',
     preview: {
@@ -58,6 +67,7 @@ export const projects: Project[] = [
   },
   {
     id: 'train-every-day',
+    tagline: 'A workout logger for the gym floor that works without signal.',
     summary:
       'The workout logger I use at the gym. It keeps working without a signal. Try the public demo with sample data.',
     preview: {
@@ -80,6 +90,7 @@ export const projects: Project[] = [
   {
     id: 'home-hive',
     featured: true,
+    tagline: "Weekly preschool lessons and games for a family's evenings.",
     summary:
       'Preschool learning folded into family evenings, with weekly activities and games a child can play independently. The demo uses an invented week.',
     preview: {
@@ -105,6 +116,7 @@ export const projects: Project[] = [
     title: 'Health Dashboard',
     status: 'launched',
     featured: true,
+    tagline: 'One dashboard to run your own care: weight, medication, labs, training.',
     summary:
       'The dashboard I use to run my own care: weight, medication, labs, training, and a weekly review. The public demo uses an invented person.',
     preview: {

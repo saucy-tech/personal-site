@@ -121,6 +121,7 @@ export default function Home() {
                       />
                     </a>
                     <h3 className="text-xl font-semibold">{project.title}</h3>
+                    <p className="leading-relaxed">{project.tagline}</p>
                     <p className="text-(--text-secondary) leading-relaxed">{project.summary}</p>
                     <a
                       href={link.href}
