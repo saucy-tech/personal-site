@@ -1,7 +1,6 @@
 'use client';
 
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
-import { motion } from 'framer-motion';
 import { useState } from 'react';
 
 import { cn } from '@/utils/helpers';
@@ -85,16 +84,12 @@ export default function SubscribeCard({
 
   return (
     <>
-      <motion.button
+      <button
         onClick={() => setOpen(true)}
         className={cn(
-          'group block h-full w-full rounded-2xl border border-(--accent-border) bg-[linear-gradient(180deg,rgb(var(--accent-rgb)/0.16),rgba(255,255,255,0.04))] text-left shadow-[0_10px_30px_rgba(0,0,0,0.16)] backdrop-blur-xs transition-all duration-300 hover:border-(--accent) hover:bg-[linear-gradient(180deg,rgb(var(--accent-rgb)/0.26),rgba(255,255,255,0.06))] hover:shadow-[0_20px_40px_rgba(0,0,0,0.24)]',
+          'group block h-full w-full rounded-2xl border border-(--accent-border) bg-[linear-gradient(180deg,rgb(var(--accent-rgb)/0.16),rgba(255,255,255,0.04))] text-left shadow-[0_10px_30px_rgba(0,0,0,0.16)] backdrop-blur-xs transition-all duration-300 hover:border-(--accent) hover:bg-[linear-gradient(180deg,rgb(var(--accent-rgb)/0.26),rgba(255,255,255,0.06))] hover:shadow-[0_20px_40px_rgba(0,0,0,0.24)] animate-fade-in motion-safe:hover:-translate-y-0.5 motion-safe:hover:scale-[1.01] motion-safe:active:scale-[0.985] motion-reduce:animate-none',
           className
         )}
-        whileHover={{ scale: 1.01, y: -2 }}
-        whileTap={{ scale: 0.985 }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
       >
         <div
           className={cn(
@@ -130,7 +125,7 @@ export default function SubscribeCard({
             <ArrowRightIcon className="h-4 w-4" />
           </div>
         </div>
-      </motion.button>
+      </button>
 
       {open && (
         <div

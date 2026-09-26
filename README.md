@@ -43,7 +43,6 @@ Open http://localhost:3000. No environment variables are needed for the site to 
 - **Framework** — Next.js 16 (App Router, Turbopack), React 19, TypeScript 6
 - **Styling** — Tailwind CSS 4 with `@tailwindcss/typography`; dark mode via a theme toggle
 - **Content** — MDX files in `src/posts/`, frontmatter parsed by `gray-matter`, rendered through a remark/rehype pipeline (`remark-gfm`, `rehype-slug`, `rehype-autolink-headings`)
-- **Animation** — Framer Motion
 - **Payments** — Lightning via the Alby SDK over Nostr Wallet Connect
 - **Testing** — Jest and React Testing Library, Playwright for E2E
 - **Hosting** — Cloudflare Workers via the [OpenNext adapter](https://opennext.js.org/cloudflare)
@@ -105,7 +104,7 @@ Merging a post does not email anyone. The email to the Daily Word list is sent o
 
 ### Seasonal features
 
-The falling-snow animation is winter-only and is not in the active layout. The components are kept at `src/components/Snowflakes.tsx` and `src/components/ClientSnowflakes.tsx`; to bring it back, import `ClientSnowflakes` in `src/app/layout.tsx` and render it after `<ClientGalaxyBackground />`.
+The winter falling-snow animation and the galaxy background were deleted on 2026-09-26. To bring either back, restore `src/components/Snowflakes.tsx`, `ClientSnowflakes.tsx`, `GalaxyBackground.tsx`, and `ClientGalaxyBackground.tsx` from git history before PR #320, then render them from `src/app/layout.tsx`.
 
 ### Environment variables
 

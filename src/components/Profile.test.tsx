@@ -11,37 +11,10 @@ jest.mock('next/image', () => ({
   ),
 }));
 
-jest.mock('framer-motion', () => {
-  const createMotionComponent = (tag: 'div' | 'p') => {
-    const MotionComponent = ({
-      children,
-      initial: _initial,
-      animate: _animate,
-      transition: _transition,
-      whileHover: _whileHover,
-      whileTap: _whileTap,
-      ...props
-    }: React.PropsWithChildren<Record<string, unknown>>) =>
-      React.createElement(tag, props, children);
-
-    MotionComponent.displayName = `motion.${tag}`;
-    return MotionComponent;
-  };
-
-  return {
-    motion: {
-      div: createMotionComponent('div'),
-      p: createMotionComponent('p'),
-    },
-  };
-});
-
 describe('Profile', () => {
   it('renders the bio as wrapped centered text without overflow helpers', () => {
     const bio = 'Love Jesus, Explore Ideas, Create Things, Save in Bitcoin';
-    const { container } = render(
-      <Profile name="Brandon" bio={bio} imageSrc="/headshot.jpeg" />
-    );
+    const { container } = render(<Profile name="Brandon" bio={bio} imageSrc="/headshot.jpeg" />);
 
     const bioElement = screen.getByText(bio);
 
