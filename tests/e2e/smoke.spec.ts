@@ -43,7 +43,7 @@ test.describe('smoke', () => {
   test('portfolio exposes resume and contact', async ({ page }) => {
     await page.goto('/portfolio');
     const main = page.locator('#main-content');
-    await expect(main.getByRole('link', { name: 'Download résumé (PDF)' })).toBeVisible();
+    await expect(main.getByRole('link', { name: 'View résumé' })).toBeVisible();
     await expect(main.getByRole('link', { name: 'brandon@saucy.tech' })).toBeVisible();
     await expect(main.getByRole('link', { name: 'LinkedIn' })).toBeVisible();
   });
