@@ -53,4 +53,46 @@ test.describe('smoke', () => {
     expect(res.status()).toBe(200);
     expect(res.headers()['content-type']).toContain('pdf');
   });
+
+  test('subscribe form rejects an invalid email before any request leaves the page', async ({
+    page,
+  }) => {
+    const requests: string[] = [];
+    page.on('request', (req) => {
+      if (/\/api\/subscribe|kit\.com|convertkit/.test(req.url())) requests.push(req.url());
+    });
+
+    await page.goto('/blog');
+    const email = page.getByLabel('Email address');
+    await email.fill('not-an-email');
+    await page.getByRole('button', { name: 'Subscribe' }).click();
+
+    // The email input is `type="email" required`, so the browser's constraint
+    // validation blocks submit and surfaces the inline message itself.
+    await expect(page.locator('#subscribe-email:invalid')).toBeVisible();
+    expect(await email.evaluate((el: HTMLInputElement) => el.validationMessage)).not.toBe('');
+    expect(requests).toEqual([]);
+  });
+
+  test('tip jar shows the Lightning error when the invoice service is unconfigured', async ({
+    page,
+  }) => {
+    await page.goto('/support');
+    await page.getByRole('button', { name: 'Custom' }).click();
+    await page.getByPlaceholder('Enter sats').fill('500');
+
+    const invoiceResponse = page.waitForResponse(
+      (res) => res.url().includes('/api/invoice') && res.request().method() === 'POST'
+    );
+    await page.getByRole('button', { name: 'Tip me' }).click();
+
+    const res = await invoiceResponse;
+    expect(res.status()).toBe(503);
+    expect(await res.json()).toEqual({ error: 'Service temporarily unavailable' });
+
+    await expect(
+      page.getByText(/couldn't connect to the Lightning Network at this time/)
+    ).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Tip me' })).toBeEnabled();
+  });
 });
