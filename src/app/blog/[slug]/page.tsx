@@ -9,7 +9,6 @@ import ReadingProgress from '@/components/ReadingProgress';
 import ShareButtons from '@/components/ShareButtons';
 import SubscribeCard from '@/components/SubscribeCard';
 import { formatPostDate } from '@/utils/helpers';
-import { slugifyTag } from '@/utils/post-taxonomy';
 import {
   getAllPostsMeta,
   getPostBySlug,
@@ -17,7 +16,6 @@ import {
   getPostOgMeta,
   getRelatedPosts,
   getSeriesChronoNeighbors,
-  seriesSlug,
 } from '@/utils/posts';
 import { absoluteUrl } from '@/utils/constants';
 import { getPostJsonLd } from '@/utils/structured-data';
@@ -77,12 +75,9 @@ export default async function PostPage({ params }: PostPageProps) {
         <div id="post-top" className="space-y-10">
           <section className="overflow-hidden rounded-4xl border border-(--accent-border) bg-[radial-gradient(circle_at_top_right,rgb(var(--accent-rgb)/0.18),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-6 sm:p-8">
             <div className="flex flex-wrap gap-2">
-              <Link
-                href={`/blog/category/${post.category}`}
-                className="a11y-focus-ring rounded-full border border-(--accent-border) bg-(--accent-transparent) px-3 py-1 text-xs uppercase tracking-[0.18em] text-(--accent) transition hover:brightness-110"
-              >
+              <span className="rounded-full border border-(--accent-border) bg-(--accent-transparent) px-3 py-1 text-xs uppercase tracking-[0.18em] text-(--accent)">
                 {post.categoryLabel}
-              </Link>
+              </span>
               <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary)">
                 {formatPostDate(post.date)}
               </span>
@@ -90,12 +85,9 @@ export default async function PostPage({ params }: PostPageProps) {
                 {post.readingTimeMinutes} min read
               </span>
               {post.series && (
-                <Link
-                  href={`/blog/series/${seriesSlug(post.series)}`}
-                  className="a11y-focus-ring rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary) transition hover:border-(--accent-border) hover:text-(--accent)"
-                >
+                <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary)">
                   {post.series}
-                </Link>
+                </span>
               )}
             </div>
 
@@ -108,13 +100,12 @@ export default async function PostPage({ params }: PostPageProps) {
             {post.tags.length > 0 && (
               <div className="mt-6 flex flex-wrap gap-2">
                 {post.tags.map((tag) => (
-                  <Link
+                  <span
                     key={tag}
-                    href={`/blog/tag/${slugifyTag(tag)}`}
-                    className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary) transition hover:border-(--accent-border) hover:text-(--accent)"
+                    className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary)"
                   >
                     {tag}
-                  </Link>
+                  </span>
                 ))}
               </div>
             )}
