@@ -16,6 +16,7 @@ describe('sitemap', () => {
     const urls = entries.map((e) => e.url);
     expect(urls.some((u) => u.endsWith('/links'))).toBe(true);
     expect(urls.some((u) => u.endsWith('/about'))).toBe(true);
+    expect(urls.some((u) => u.endsWith('/resume'))).toBe(true);
     expect(urls.some((u) => u.includes('/blog/tag/'))).toBe(false);
     expect(urls.some((u) => u.includes('/blog/category/'))).toBe(false);
     expect(urls.some((u) => u.includes('/blog/series'))).toBe(false);

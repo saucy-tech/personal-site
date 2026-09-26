@@ -11,6 +11,7 @@ export const FOOTER_EXTRA_NAV: SiteNavItem[] = [
   { href: '/bitcoin', label: 'Bitcoin', match: 'exact' },
   { href: '/links', label: 'Links', match: 'exact' },
   { href: '/about#work-with-me', label: 'Client work', match: 'exact' },
+  { href: '/resume', label: 'Résumé', match: 'exact' },
   { href: '/support', label: 'Support', match: 'exact' },
   { href: '/privacy', label: 'Privacy', match: 'exact' },
 ];

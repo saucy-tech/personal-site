@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 
+import { resumeLastUpdated } from '@/data/resume';
 import { absoluteUrl } from '@/utils/constants';
 import { getAllPostsMeta } from '@/utils/posts';
 
@@ -65,6 +66,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: 'monthly',
       priority: 0.8,
+    },
+    {
+      url: absoluteUrl('/resume'),
+      lastModified: resumeLastUpdated,
+      changeFrequency: 'monthly',
+      priority: 0.6,
     },
     {
       url: absoluteUrl('/bitcoin'),
