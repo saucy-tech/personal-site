@@ -13,6 +13,6 @@ export const portfolioAbout = {
   email: 'brandon@saucy.tech',
   linkedIn: 'https://linkedin.com/in/saucytech',
   github: 'https://github.com/saucy-tech',
-  resumeHref: '/Brandon_Sauceda_Resume.pdf',
-  resumeLabel: 'Download résumé (PDF)',
+  resumeHref: '/resume',
+  resumeLabel: 'View résumé',
 } as const;
