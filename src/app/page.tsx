@@ -4,8 +4,10 @@ import type { Metadata } from 'next';
 
 import LinkCard from '@/components/LinkCard';
 import Profile from '@/components/Profile';
-import { projects } from '@/data/projects';
+import { fieldNotesLastUpdated } from '@/data/field-notes';
+import { projects, projectsLastUpdated } from '@/data/projects';
 import SocialBar from '@/components/SocialBar';
+import { formatPostDate } from '@/utils/helpers';
 
 export const metadata: Metadata = {
   description:
@@ -135,6 +137,47 @@ export default function Home() {
                 );
               })}
           </div>
+        </section>
+
+        <section aria-labelledby="now" className="max-w-2xl mx-auto">
+          <h2 id="now" className="text-2xl font-semibold mb-4">
+            Now
+          </h2>
+          <ul className="space-y-2 text-sm leading-relaxed text-(--text-secondary)">
+            <li>
+              Notes updated{' '}
+              <time dateTime={fieldNotesLastUpdated}>{formatPostDate(fieldNotesLastUpdated)}</time>
+              {' · '}
+              <Link
+                href="/notes"
+                className="a11y-focus-ring rounded-xs text-(--accent) underline underline-offset-4"
+              >
+                Read the latest
+              </Link>
+            </li>
+            <li>
+              Portfolio updated{' '}
+              <time dateTime={projectsLastUpdated}>{formatPostDate(projectsLastUpdated)}</time>
+              {' · '}
+              <Link
+                href="/portfolio"
+                className="a11y-focus-ring rounded-xs text-(--accent) underline underline-offset-4"
+              >
+                See what changed
+              </Link>
+            </li>
+            <li>
+              Today’s weekday devotion{' · '}
+              <a
+                href="https://morningportion.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="a11y-focus-ring rounded-xs text-(--accent) underline underline-offset-4"
+              >
+                Read it at morningportion.com
+              </a>
+            </li>
+          </ul>
         </section>
 
         <section aria-labelledby="explore" className="max-w-2xl mx-auto">
