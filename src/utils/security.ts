@@ -428,6 +428,12 @@ const REQUIRED_CSP_SUBSTRINGS = [
   "frame-ancestors 'none'",
   "base-uri 'self'",
   "form-action 'self'",
+  // Pinned with the trailing ';' so widening a directive back to a bare scheme
+  // (https:, wss:) is drift. The allowlist is derived from a crawl of the built
+  // site; see docs/runbooks/csp-origins.md before changing these.
+  "img-src 'self' data: blob: https://www.google.com https://*.gstatic.com;",
+  "font-src 'self' data:;",
+  "connect-src 'self';",
 ] as const;
 
 // The CSP branches on environment (development allows 'unsafe-eval' for HMR).
@@ -543,14 +549,16 @@ export function getSecurityHeaders(options: { nonce?: string } = {}): Record<str
     "style-src 'self' 'unsafe-inline' data:",
     "style-src-elem 'self' 'unsafe-inline'",
 
-    // Image sources - comprehensive coverage for canvas operations
-    "img-src 'self' data: blob: https:",
+    // Image sources. The only cross-origin images are the /notes favicons,
+    // fetched from www.google.com and redirected to t{0-3}.gstatic.com.
+    "img-src 'self' data: blob: https://www.google.com https://*.gstatic.com",
 
-    // Font sources with CDN support
-    "font-src 'self' data: https:",
+    // Fonts are self-hosted by next/font; nothing loads from a CDN.
+    "font-src 'self' data:",
 
-    // Connection sources for API calls
-    "connect-src 'self' https://api.coingecko.com https: wss:",
+    // The browser only ever calls same-origin /api routes. The Nostr relay
+    // WebSocket and the BTC price lookup happen server-side in those routes.
+    "connect-src 'self'",
 
     // Media sources for canvas-generated content
     "media-src 'self' data: blob:",
