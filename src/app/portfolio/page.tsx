@@ -83,6 +83,7 @@ function ProjectCard({ project }: { project: Project }) {
         />
       )}
       <h3 className="text-2xl font-semibold mb-3">{project.title}</h3>
+      {project.tagline && <p className="mb-3 text-lg leading-relaxed">{project.tagline}</p>}
       <p className="mb-4 text-base leading-relaxed text-(--text-secondary)">
         {project.summary ?? project.blurb}
       </p>
