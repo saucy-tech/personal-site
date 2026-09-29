@@ -18,8 +18,10 @@ The things I build live in different places: products on their own domains and o
 | `/blog` | Earlier posts retained at their original URLs, no longer promoted in site navigation |
 | `/daily-word` | Archive of weekday scripture reflections |
 | `/about` | Background |
+| `/resume` | Résumé — experience, products, awards, and skills, with a PDF download (content in `src/data/resume.ts`) |
 | `/bitcoin`, `/links` | Bitcoin resources and a set of trackers and dashboards |
 | `/support` | Lightning tips and email subscription |
+| `/privacy` | How the site handles email subscriptions, preferences, and technical data |
 | `/oura-health` | Disclosure page for a private Oura health-data integration, plus its privacy and terms pages |
 
 API routes under `src/app/api/`: BTC price proxy, Lightning invoice and LNURL-pay callback, email subscribe, webmention receiver, and a CSP violation report sink. RSS at `src/app/rss.xml`, sitemap at `src/app/sitemap.ts`.
