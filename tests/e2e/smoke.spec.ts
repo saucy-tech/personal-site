@@ -9,6 +9,66 @@ test.describe('smoke', () => {
     ).toHaveText(['Portfolio', 'About', 'Notes']);
   });
 
+  test('skip link moves keyboard focus into the main content', async ({ page }) => {
+    await page.goto('/');
+    await page.keyboard.press('Tab');
+    await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(page.getByRole('main')).toBeFocused();
+  });
+
+  for (const width of [1280, 390]) {
+    test(`newsletter dialog contains focus and returns it on close at ${width}px`, async ({
+      page,
+    }) => {
+      await page.setViewportSize({ width, height: 844 });
+      await page.goto('/blog/2026-03-04-for-god-so-loved');
+      const trigger = page.locator('[aria-label="Subscribe"] button').first();
+      await trigger.focus();
+      await page.keyboard.press('Enter');
+      const dialog = page.getByRole('dialog', { name: 'Subscribe — Saucy.tech Updates' });
+      await expect(dialog).toBeVisible();
+      await expect(dialog.getByLabel('Email address')).toBeFocused();
+      await dialog.getByRole('link', { name: 'privacy notice' }).focus();
+      await page.keyboard.press('Tab');
+      await expect(dialog.getByRole('button', { name: 'Close', exact: true })).toBeFocused();
+      await page.keyboard.press('Shift+Tab');
+      await expect(dialog.getByRole('link', { name: 'privacy notice' })).toBeFocused();
+      await page.keyboard.press('Escape');
+      await expect(dialog).not.toBeVisible();
+      await expect(trigger).toBeFocused();
+      await page.keyboard.press('Enter');
+      await dialog.getByRole('button', { name: 'Close', exact: true }).click();
+      await expect(dialog).not.toBeVisible();
+      await expect(trigger).toBeFocused();
+      await page.keyboard.press('Enter');
+      await dialog.click({ position: { x: 4, y: 4 } });
+      await expect(dialog).not.toBeVisible();
+      await expect(trigger).toBeFocused();
+    });
+  }
+
+  test('mobile notes keeps every keyboard-focused section chip fully visible', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/notes');
+    const links = page.getByRole('navigation', { name: 'Sections', exact: true }).getByRole('link');
+    await links.first().focus();
+    for (let index = 0; index < (await links.count()); index++) {
+      const link = links.nth(index);
+      await expect(link).toBeFocused();
+      await expect
+        .poll(() =>
+          link.evaluate((element) => {
+            const rect = element.getBoundingClientRect();
+            const list = element.closest('ul')!.getBoundingClientRect();
+            return rect.left >= list.left - 1 && rect.right <= list.right + 1;
+          })
+        )
+        .toBe(true);
+      await page.keyboard.press('Tab');
+    }
+  });
+
   test('blog index loads', async ({ page }) => {
     await page.goto('/blog');
     await expect(page.getByRole('heading', { name: /articles & reflections/i })).toBeVisible();

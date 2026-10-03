@@ -74,9 +74,12 @@ export default function NotesSectionIndex({ sections }: NotesSectionIndexProps) 
           <li key={section.id} className="shrink-0">
             <a
               href={`#${section.id}`}
+              onFocus={(event) => {
+                event.currentTarget.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+              }}
               aria-current={activeId === section.id ? 'location' : undefined}
               className={cn(
-                'a11y-focus-ring block rounded-full border px-3 py-1 text-xs whitespace-nowrap transition md:rounded-sm md:border-0 md:px-2 md:text-sm',
+                'a11y-focus-ring focus-visible:ring-inset focus-visible:ring-offset-0 block rounded-full border px-3 py-1 text-xs whitespace-nowrap transition md:rounded-sm md:border-0 md:px-2 md:text-sm',
                 activeId === section.id
                   ? 'border-(--accent) bg-(--accent-transparent) text-(--text-primary)'
                   : 'border-(--surface-border) text-(--text-secondary) hover:text-(--text-primary)'

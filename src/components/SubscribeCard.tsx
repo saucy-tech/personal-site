@@ -1,7 +1,7 @@
 'use client';
 
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
-import { useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 
 import { cn } from '@/utils/helpers';
 
@@ -31,6 +31,22 @@ export default function SubscribeCard({
   contextCount,
 }: SubscribeCardProps) {
   const [open, setOpen] = useState(false);
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const dialogTitleId = useId();
+  const dialogDescriptionId = useId();
+
+  useEffect(() => {
+    if (open) {
+      dialogRef.current?.showModal();
+      dialogRef.current?.querySelector<HTMLInputElement>('input[type="email"]')?.focus();
+    }
+  }, [open]);
+
+  function closeDialog() {
+    dialogRef.current?.close();
+    setOpen(false);
+  }
+
   const normalizedCount =
     typeof contextCount === 'number' && Number.isFinite(contextCount) ? contextCount : undefined;
 
@@ -87,7 +103,7 @@ export default function SubscribeCard({
       <button
         onClick={() => setOpen(true)}
         className={cn(
-          'group block h-full w-full rounded-2xl border border-(--accent-border) bg-[linear-gradient(180deg,rgb(var(--accent-rgb)/0.16),rgba(255,255,255,0.04))] text-left shadow-[0_10px_30px_rgba(0,0,0,0.16)] backdrop-blur-xs transition-all duration-300 hover:border-(--accent) hover:bg-[linear-gradient(180deg,rgb(var(--accent-rgb)/0.26),rgba(255,255,255,0.06))] hover:shadow-[0_20px_40px_rgba(0,0,0,0.24)] animate-fade-in motion-safe:hover:-translate-y-0.5 motion-safe:hover:scale-[1.01] motion-safe:active:scale-[0.985] motion-reduce:animate-none',
+          'a11y-focus-ring group block h-full w-full rounded-2xl border border-(--accent-border) bg-[linear-gradient(180deg,rgb(var(--accent-rgb)/0.16),rgba(255,255,255,0.04))] text-left shadow-[0_10px_30px_rgba(0,0,0,0.16)] backdrop-blur-xs transition-all duration-300 hover:border-(--accent) hover:bg-[linear-gradient(180deg,rgb(var(--accent-rgb)/0.26),rgba(255,255,255,0.06))] hover:shadow-[0_20px_40px_rgba(0,0,0,0.24)] animate-fade-in motion-safe:hover:-translate-y-0.5 motion-safe:hover:scale-[1.01] motion-safe:active:scale-[0.985] motion-reduce:animate-none',
           className
         )}
       >
@@ -128,9 +144,34 @@ export default function SubscribeCard({
       </button>
 
       {open && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
-          onClick={() => setOpen(false)}
+        <dialog
+          ref={dialogRef}
+          aria-labelledby={dialogTitleId}
+          aria-describedby={dialogDescriptionId}
+          className="fixed inset-0 m-0 h-full max-h-none w-full max-w-none items-center justify-center border-0 bg-transparent p-4 text-(--text-primary) open:flex backdrop:bg-black/70"
+          onClose={() => setOpen(false)}
+          onCancel={(event) => {
+            event.preventDefault();
+            closeDialog();
+          }}
+          onKeyDown={(event) => {
+            if (event.key !== 'Tab') return;
+            const controls = event.currentTarget.querySelectorAll<HTMLElement>(
+              'button:not(:disabled), a[href], input:not([tabindex="-1"]):not(:disabled)'
+            );
+            const first = controls[0];
+            const last = controls[controls.length - 1];
+            if (event.shiftKey && document.activeElement === first) {
+              event.preventDefault();
+              last?.focus();
+            } else if (!event.shiftKey && document.activeElement === last) {
+              event.preventDefault();
+              first?.focus();
+            }
+          }}
+          onClick={(event) => {
+            if (event.target === event.currentTarget) closeDialog();
+          }}
         >
           <div
             className="bg-(--background) rounded-xl p-6 w-full max-w-md relative"
@@ -138,19 +179,26 @@ export default function SubscribeCard({
           >
             <button
               aria-label="Close"
-              onClick={() => setOpen(false)}
-              className="absolute top-2 right-2 text-2xl leading-none text-gray-400 hover:text-white"
+              onClick={closeDialog}
+              className="a11y-focus-ring absolute top-2 right-2 rounded-xs text-2xl leading-none text-(--text-secondary) hover:text-(--text-primary)"
             >
               ×
             </button>
-            <h2 className="text-xl font-semibold mb-2 text-center">{resolvedModalTitle}</h2>
+            <h2 id={dialogTitleId} className="text-xl font-semibold mb-2 text-center">
+              {resolvedModalTitle}
+            </h2>
             {resolvedMeta ? (
-              <p className="text-sm text-gray-400 text-center">{resolvedMeta}</p>
+              <p className="text-sm text-(--text-secondary) text-center">{resolvedMeta}</p>
             ) : null}
-            <p className="text-sm text-gray-400 text-center mb-4">{resolvedDescription}</p>
+            <p
+              id={dialogDescriptionId}
+              className="text-sm text-(--text-secondary) text-center mb-4"
+            >
+              {resolvedDescription}
+            </p>
             <SubscribeForm />
           </div>
-        </div>
+        </dialog>
       )}
     </>
   );

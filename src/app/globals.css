@@ -115,14 +115,14 @@
     --background: #f2efe6;
     --foreground: #0a0a0a;
     /* Darker orange for AA contrast on warm paper (body links, UI chrome) */
-    --accent: #b45309;
-    --accent-dark: #9a4508;
-    --accent-rgb: 180 83 9;
+    --accent: #984608;
+    --accent-dark: #803906;
+    --accent-rgb: 152 70 8;
     --on-accent: #fafaf9;
 
-    --accent-transparent: rgba(180, 83, 9, 0.12);
-    --accent-hover: rgba(180, 83, 9, 0.2);
-    --accent-border: rgba(180, 83, 9, 0.42);
+    --accent-transparent: rgba(152, 70, 8, 0.12);
+    --accent-hover: rgba(152, 70, 8, 0.2);
+    --accent-border: rgba(152, 70, 8, 0.42);
 
     --text-primary: #0a0a0a;
     --text-secondary: #3f3e3c;
@@ -143,14 +143,14 @@
 
     --background: #e8f2ec;
     --foreground: #050f0c;
-    --accent: #7a6210;
+    --accent: #735c0f;
     --accent-dark: #5f4d0c;
-    --accent-rgb: 122 98 16;
+    --accent-rgb: 115 92 15;
     --on-accent: #fafaf9;
 
-    --accent-transparent: rgba(122, 98, 16, 0.12);
-    --accent-hover: rgba(122, 98, 16, 0.2);
-    --accent-border: rgba(122, 98, 16, 0.4);
+    --accent-transparent: rgba(115, 92, 15, 0.12);
+    --accent-hover: rgba(115, 92, 15, 0.2);
+    --accent-border: rgba(115, 92, 15, 0.4);
 
     --text-primary: #050f0c;
     --text-secondary: #2c3834;
@@ -163,6 +163,17 @@
     --focus-ring: #050f0c;
     --status-success: #166534;
     --status-error: #b91c1c;
+  }
+
+  /* The post keeps prose-invert for dark mode; map its inherited text colors
+     to the existing light palette instead of leaving pale gray on paper. */
+  html[data-appearance='light'] article.prose {
+    --tw-prose-invert-body: var(--text-secondary);
+    --tw-prose-invert-lead: var(--text-secondary);
+    --tw-prose-invert-counters: var(--text-secondary);
+    --tw-prose-invert-bullets: var(--text-secondary);
+    --tw-prose-invert-captions: var(--text-secondary);
+    --tw-prose-invert-code: var(--text-primary);
   }
 
   /* Light mode: clearer link affordance in MDX prose */
@@ -180,14 +191,14 @@
       --text-secondary: #1c1b1a;
       --text-muted: #2e2d2b;
       --surface-border: rgba(0, 0, 0, 0.28);
-      --accent-border: rgba(180, 83, 9, 0.55);
+      --accent-border: rgba(152, 70, 8, 0.55);
     }
 
     html[data-appearance='light'][data-theme='green'] {
       --text-secondary: #1a2320;
       --text-muted: #2c3834;
       --surface-border: rgba(0, 0, 0, 0.28);
-      --accent-border: rgba(122, 98, 16, 0.55);
+      --accent-border: rgba(115, 92, 15, 0.55);
     }
   }
 
