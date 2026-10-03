@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 
 interface SocialProps {
@@ -23,7 +21,7 @@ const SocialBar: React.FC<SocialBarProps> = ({ socials }) => {
           href={social.href}
           target="_blank"
           rel="noopener noreferrer me"
-          className="inline-flex size-12 shrink-0 items-center justify-center rounded-full border border-(--accent-border) bg-(--accent-transparent) p-0 hover:bg-(--accent-hover)"
+          className="a11y-focus-ring inline-flex size-12 shrink-0 items-center justify-center rounded-full border border-(--accent-border) bg-(--accent-transparent) p-0 hover:bg-(--accent-hover)"
           aria-label={social.label}
         >
           <span className="flex size-8 items-center justify-center [&_img]:block [&_img]:h-8 [&_img]:w-8 [&_img]:object-contain">

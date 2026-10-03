@@ -18,7 +18,7 @@ const ibmSans = IBM_Plex_Sans({
 
 const ibmMono = IBM_Plex_Mono({
   subsets: ['latin'],
-  weight: ['400', '500'],
+  weight: ['400'],
   variable: '--font-mono',
   display: 'swap',
 });
@@ -137,7 +137,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <div className="relative min-h-screen bg-(--background)">
           <div className="relative z-10 flex flex-col min-h-screen">
             <Header navItems={navItems} />
-            <main id="main-content" className="grow">
+            <main id="main-content" tabIndex={-1} className="grow">
               <div className="container mx-auto max-w-[min(100%,80rem)] px-4 sm:px-6">
                 {children}
               </div>

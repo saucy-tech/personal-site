@@ -1,0 +1,566 @@
+{
+  "baselineCommit": "e52cc7b5381e5d7809e04909217afcc97b917e6d",
+  "branch": "fix/measured-site-performance",
+  "date": "2026-10-02",
+  "environment": {
+    "node": "26.10.0",
+    "pnpm": "10.15.0",
+    "next": "16.3.6",
+    "playwright": "1.63.0",
+    "chromium": "153.0.8010.12",
+    "axe": "4.11.0"
+  },
+  "routes": [
+    {
+      "route": "/",
+      "browser": {
+        "1280": {
+          "before": {
+            "runs": 3,
+            "scriptEncodedBytesMedian": 152030,
+            "fontEncodedBytesMedian": 60352,
+            "lcpMsMedian": 64,
+            "clsMedian": 0,
+            "longTaskMsMedian": 0,
+            "documentOverflowPxMax": 0,
+            "pageOrConsoleErrors": 0,
+            "failedHttpResponses": 0
+          },
+          "after": {
+            "runs": 3,
+            "scriptEncodedBytesMedian": 151739,
+            "fontEncodedBytesMedian": 50292,
+            "lcpMsMedian": 60,
+            "clsMedian": 0,
+            "longTaskMsMedian": 0,
+            "documentOverflowPxMax": 0,
+            "pageOrConsoleErrors": 0,
+            "failedHttpResponses": 0
+          }
+        },
+        "390": {
+          "before": {
+            "runs": 3,
+            "scriptEncodedBytesMedian": 152030,
+            "fontEncodedBytesMedian": 60352,
+            "lcpMsMedian": 60,
+            "clsMedian": 0,
+            "longTaskMsMedian": 0,
+            "documentOverflowPxMax": 0,
+            "pageOrConsoleErrors": 0,
+            "failedHttpResponses": 0
+          },
+          "after": {
+            "runs": 3,
+            "scriptEncodedBytesMedian": 151739,
+            "fontEncodedBytesMedian": 50292,
+            "lcpMsMedian": 56,
+            "clsMedian": 0,
+            "longTaskMsMedian": 0,
+            "documentOverflowPxMax": 0,
+            "pageOrConsoleErrors": 0,
+            "failedHttpResponses": 0
+          }
+        }
+      },
+      "lighthouse": {
+        "before": {
+          "runs": 3,
+          "performanceScoreMedian": 94.0,
+          "accessibilityScoreMedian": 100,
+          "lcpMsMedian": 3027.5,
+          "clsMedian": 0,
+          "tbtMsMedian": 19.5,
+          "unusedJsBytesMedian": 29293
+        },
+        "after": {
+          "runs": 3,
+          "performanceScoreMedian": 95.0,
+          "accessibilityScoreMedian": 100,
+          "lcpMsMedian": 2865.5,
+          "clsMedian": 0,
+          "tbtMsMedian": 16.5,
+          "unusedJsBytesMedian": 29361
+        }
+      },
+      "settledAxe": {
+        "1280": {
+          "before": {
+            "dark-orange": {},
+            "light-orange": {
+              "color-contrast": 10
+            },
+            "light-green": {},
+            "dark-green": {}
+          },
+          "after": {
+            "dark-orange": {},
+            "light-orange": {},
+            "light-green": {},
+            "dark-green": {}
+          }
+        },
+        "390": {
+          "before": {
+            "dark-orange": {},
+            "light-orange": {
+              "color-contrast": 10
+            },
+            "light-green": {},
+            "dark-green": {}
+          },
+          "after": {
+            "dark-orange": {},
+            "light-orange": {},
+            "light-green": {},
+            "dark-green": {}
+          }
+        }
+      }
+    },
+    {
+      "route": "/portfolio",
+      "browser": {
+        "1280": {
+          "before": {
+            "runs": 3,
+            "scriptEncodedBytesMedian": 151739,
+            "fontEncodedBytesMedian": 60352,
+            "lcpMsMedian": 64,
+            "clsMedian": 0,
+            "longTaskMsMedian": 0,
+            "documentOverflowPxMax": 0,
+            "pageOrConsoleErrors": 0,
+            "failedHttpResponses": 0
+          },
+          "after": {
+            "runs": 3,
+            "scriptEncodedBytesMedian": 151739,
+            "fontEncodedBytesMedian": 50292,
+            "lcpMsMedian": 60,
+            "clsMedian": 0,
+            "longTaskMsMedian": 0,
+            "documentOverflowPxMax": 0,
+            "pageOrConsoleErrors": 0,
+            "failedHttpResponses": 0
+          }
+        },
+        "390": {
+          "before": {
+            "runs": 3,
+            "scriptEncodedBytesMedian": 151739,
+            "fontEncodedBytesMedian": 60352,
+            "lcpMsMedian": 40,
+            "clsMedian": 0,
+            "longTaskMsMedian": 0,
+            "documentOverflowPxMax": 0,
+            "pageOrConsoleErrors": 0,
+            "failedHttpResponses": 0
+          },
+          "after": {
+            "runs": 3,
+            "scriptEncodedBytesMedian": 151739,
+            "fontEncodedBytesMedian": 50292,
+            "lcpMsMedian": 40,
+            "clsMedian": 0,
+            "longTaskMsMedian": 0,
+            "documentOverflowPxMax": 0,
+            "pageOrConsoleErrors": 0,
+            "failedHttpResponses": 0
+          }
+        }
+      },
+      "lighthouse": {
+        "before": {
+          "runs": 3,
+          "performanceScoreMedian": 98.0,
+          "accessibilityScoreMedian": 100,
+          "lcpMsMedian": 2342.8,
+          "clsMedian": 0,
+          "tbtMsMedian": 18.500000000000227,
+          "unusedJsBytesMedian": 29279
+        },
+        "after": {
+          "runs": 3,
+          "performanceScoreMedian": 98.0,
+          "accessibilityScoreMedian": 100,
+          "lcpMsMedian": 2405.4,
+          "clsMedian": 0,
+          "tbtMsMedian": 16,
+          "unusedJsBytesMedian": 29279
+        }
+      },
+      "settledAxe": {
+        "1280": {
+          "before": {
+            "dark-orange": {},
+            "light-orange": {
+              "color-contrast": 8
+            },
+            "light-green": {},
+            "dark-green": {}
+          },
+          "after": {
+            "dark-orange": {},
+            "light-orange": {},
+            "light-green": {},
+            "dark-green": {}
+          }
+        },
+        "390": {
+          "before": {
+            "dark-orange": {},
+            "light-orange": {
+              "color-contrast": 8
+            },
+            "light-green": {},
+            "dark-green": {}
+          },
+          "after": {
+            "dark-orange": {},
+            "light-orange": {},
+            "light-green": {},
+            "dark-green": {}
+          }
+        }
+      }
+    },
+    {
+      "route": "/notes",
+      "browser": {
+        "1280": {
+          "before": {
+            "runs": 3,
+            "scriptEncodedBytesMedian": 147079,
+            "fontEncodedBytesMedian": 60352,
+            "lcpMsMedian": 52,
+            "clsMedian": 0,
+            "longTaskMsMedian": 0,
+            "documentOverflowPxMax": 0,
+            "pageOrConsoleErrors": 0,
+            "failedHttpResponses": 0
+          },
+          "after": {
+            "runs": 3,
+            "scriptEncodedBytesMedian": 147117,
+            "fontEncodedBytesMedian": 50292,
+            "lcpMsMedian": 52,
+            "clsMedian": 0,
+            "longTaskMsMedian": 0,
+            "documentOverflowPxMax": 0,
+            "pageOrConsoleErrors": 0,
+            "failedHttpResponses": 0
+          }
+        },
+        "390": {
+          "before": {
+            "runs": 3,
+            "scriptEncodedBytesMedian": 147079,
+            "fontEncodedBytesMedian": 60352,
+            "lcpMsMedian": 48,
+            "clsMedian": 0,
+            "longTaskMsMedian": 0,
+            "documentOverflowPxMax": 0,
+            "pageOrConsoleErrors": 0,
+            "failedHttpResponses": 0
+          },
+          "after": {
+            "runs": 3,
+            "scriptEncodedBytesMedian": 147117,
+            "fontEncodedBytesMedian": 50292,
+            "lcpMsMedian": 48,
+            "clsMedian": 0,
+            "longTaskMsMedian": 0,
+            "documentOverflowPxMax": 0,
+            "pageOrConsoleErrors": 0,
+            "failedHttpResponses": 0
+          }
+        }
+      },
+      "lighthouse": {
+        "before": {
+          "runs": 3,
+          "performanceScoreMedian": 95.0,
+          "accessibilityScoreMedian": 100,
+          "lcpMsMedian": 2945.0,
+          "clsMedian": 0,
+          "tbtMsMedian": 16.5,
+          "unusedJsBytesMedian": 29353
+        },
+        "after": {
+          "runs": 3,
+          "performanceScoreMedian": 95.0,
+          "accessibilityScoreMedian": 100,
+          "lcpMsMedian": 2937.4,
+          "clsMedian": 0,
+          "tbtMsMedian": 16,
+          "unusedJsBytesMedian": 29353
+        }
+      },
+      "settledAxe": {
+        "1280": {
+          "before": {
+            "dark-orange": {},
+            "light-orange": {
+              "color-contrast": 40
+            },
+            "light-green": {},
+            "dark-green": {}
+          },
+          "after": {
+            "dark-orange": {},
+            "light-orange": {},
+            "light-green": {},
+            "dark-green": {}
+          }
+        },
+        "390": {
+          "before": {
+            "dark-orange": {},
+            "light-orange": {
+              "color-contrast": 40
+            },
+            "light-green": {},
+            "dark-green": {}
+          },
+          "after": {
+            "dark-orange": {},
+            "light-orange": {},
+            "light-green": {},
+            "dark-green": {}
+          }
+        }
+      }
+    },
+    {
+      "route": "/blog/2026-03-04-for-god-so-loved",
+      "browser": {
+        "1280": {
+          "before": {
+            "runs": 3,
+            "scriptEncodedBytesMedian": 151156,
+            "fontEncodedBytesMedian": 60352,
+            "lcpMsMedian": 48,
+            "clsMedian": 0,
+            "longTaskMsMedian": 0,
+            "documentOverflowPxMax": 0,
+            "pageOrConsoleErrors": 0,
+            "failedHttpResponses": 0
+          },
+          "after": {
+            "runs": 3,
+            "scriptEncodedBytesMedian": 151476,
+            "fontEncodedBytesMedian": 50292,
+            "lcpMsMedian": 48,
+            "clsMedian": 0,
+            "longTaskMsMedian": 0,
+            "documentOverflowPxMax": 0,
+            "pageOrConsoleErrors": 0,
+            "failedHttpResponses": 0
+          }
+        },
+        "390": {
+          "before": {
+            "runs": 3,
+            "scriptEncodedBytesMedian": 151156,
+            "fontEncodedBytesMedian": 60352,
+            "lcpMsMedian": 48,
+            "clsMedian": 0,
+            "longTaskMsMedian": 0,
+            "documentOverflowPxMax": 0,
+            "pageOrConsoleErrors": 0,
+            "failedHttpResponses": 0
+          },
+          "after": {
+            "runs": 3,
+            "scriptEncodedBytesMedian": 151476,
+            "fontEncodedBytesMedian": 50292,
+            "lcpMsMedian": 48,
+            "clsMedian": 0,
+            "longTaskMsMedian": 0,
+            "documentOverflowPxMax": 0,
+            "pageOrConsoleErrors": 0,
+            "failedHttpResponses": 0
+          }
+        }
+      },
+      "lighthouse": {
+        "before": {
+          "runs": 3,
+          "performanceScoreMedian": 96.0,
+          "accessibilityScoreMedian": 100,
+          "lcpMsMedian": 2787.4,
+          "clsMedian": 0,
+          "tbtMsMedian": 15,
+          "unusedJsBytesMedian": 28988
+        },
+        "after": {
+          "runs": 3,
+          "performanceScoreMedian": 97.0,
+          "accessibilityScoreMedian": 100,
+          "lcpMsMedian": 2635.7,
+          "clsMedian": 0,
+          "tbtMsMedian": 14,
+          "unusedJsBytesMedian": 28899
+        }
+      },
+      "settledAxe": {
+        "1280": {
+          "before": {
+            "dark-orange": {},
+            "light-orange": {
+              "color-contrast": 28
+            },
+            "light-green": {
+              "color-contrast": 21
+            },
+            "dark-green": {}
+          },
+          "after": {
+            "dark-orange": {},
+            "light-orange": {},
+            "light-green": {},
+            "dark-green": {}
+          }
+        },
+        "390": {
+          "before": {
+            "dark-orange": {},
+            "light-orange": {
+              "color-contrast": 28
+            },
+            "light-green": {
+              "color-contrast": 20
+            },
+            "dark-green": {}
+          },
+          "after": {
+            "dark-orange": {},
+            "light-orange": {},
+            "light-green": {},
+            "dark-green": {}
+          }
+        }
+      }
+    },
+    {
+      "route": "/blog/2025-06-06-architecture-of-inaction",
+      "browser": {
+        "1280": {
+          "before": {
+            "runs": 3,
+            "scriptEncodedBytesMedian": 151156,
+            "fontEncodedBytesMedian": 60352,
+            "lcpMsMedian": 56,
+            "clsMedian": 0,
+            "longTaskMsMedian": 0,
+            "documentOverflowPxMax": 0,
+            "pageOrConsoleErrors": 0,
+            "failedHttpResponses": 0
+          },
+          "after": {
+            "runs": 3,
+            "scriptEncodedBytesMedian": 151476,
+            "fontEncodedBytesMedian": 50292,
+            "lcpMsMedian": 60,
+            "clsMedian": 0,
+            "longTaskMsMedian": 0,
+            "documentOverflowPxMax": 0,
+            "pageOrConsoleErrors": 0,
+            "failedHttpResponses": 0
+          }
+        },
+        "390": {
+          "before": {
+            "runs": 3,
+            "scriptEncodedBytesMedian": 151156,
+            "fontEncodedBytesMedian": 60352,
+            "lcpMsMedian": 48,
+            "clsMedian": 0,
+            "longTaskMsMedian": 0,
+            "documentOverflowPxMax": 0,
+            "pageOrConsoleErrors": 0,
+            "failedHttpResponses": 0
+          },
+          "after": {
+            "runs": 3,
+            "scriptEncodedBytesMedian": 151476,
+            "fontEncodedBytesMedian": 50292,
+            "lcpMsMedian": 44,
+            "clsMedian": 0,
+            "longTaskMsMedian": 0,
+            "documentOverflowPxMax": 0,
+            "pageOrConsoleErrors": 0,
+            "failedHttpResponses": 0
+          }
+        }
+      },
+      "lighthouse": {
+        "before": {
+          "runs": 3,
+          "performanceScoreMedian": 93.0,
+          "accessibilityScoreMedian": 100,
+          "lcpMsMedian": 3159.8,
+          "clsMedian": 0,
+          "tbtMsMedian": 19.5,
+          "unusedJsBytesMedian": 28988
+        },
+        "after": {
+          "runs": 3,
+          "performanceScoreMedian": 94.0,
+          "accessibilityScoreMedian": 100,
+          "lcpMsMedian": 3155.2,
+          "clsMedian": 0,
+          "tbtMsMedian": 16,
+          "unusedJsBytesMedian": 28899
+        }
+      },
+      "settledAxe": {
+        "1280": {
+          "before": {
+            "dark-orange": {},
+            "light-orange": {
+              "color-contrast": 34
+            },
+            "light-green": {
+              "color-contrast": 26
+            },
+            "dark-green": {}
+          },
+          "after": {
+            "dark-orange": {},
+            "light-orange": {},
+            "light-green": {},
+            "dark-green": {}
+          }
+        },
+        "390": {
+          "before": {
+            "dark-orange": {},
+            "light-orange": {
+              "color-contrast": 34
+            },
+            "light-green": {
+              "color-contrast": 26
+            },
+            "dark-green": {}
+          },
+          "after": {
+            "dark-orange": {},
+            "light-orange": {},
+            "light-green": {},
+            "dark-green": {}
+          }
+        }
+      }
+    }
+  ],
+  "validation": {
+    "check": "18 suites, 128 tests passed",
+    "qualityGate": "passed",
+    "productionBuild": "passed",
+    "e2e": "13 passed",
+    "lighthouseAssertions": "15 runs on 5 routes passed before and after",
+    "documentOverflowWidths": [320, 390, 1280]
+  }
+}
