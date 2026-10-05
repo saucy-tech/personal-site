@@ -28,12 +28,13 @@ API routes under `src/app/api/`: BTC price proxy, Lightning invoice and LNURL-pa
 
 ## Run it
 
-Requires Node and pnpm 10 (pinned via Corepack in `package.json`).
+Requires Node and pnpm at the version declared by `packageManager` in
+`package.json` (currently 10.15.0). Install pnpm before running the setup below;
+Corepack is optional when pnpm is installed directly.
 
 ```bash
 git clone https://github.com/saucy-tech/personal-site.git
 cd personal-site
-corepack enable
 pnpm install
 pnpm dev
 ```
