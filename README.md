@@ -69,6 +69,16 @@ pnpm content:check-images  # alt text present, local images resolve, size limits
 pnpm security:drift        # production CSP has not regressed
 ```
 
+## Cloudflare runtime compatibility
+
+Next.js, eslint-config-next, and the bundle analyzer are held on `~16.3.8`
+while OpenNext 1.20.10 lacks Next 16.4's `preview-props.json` manifest support
+([upstream issue #1355](https://github.com/opennextjs/opennextjs-cloudflare/issues/1355)).
+A successful Next build or Worker upload does not exercise request handling.
+Run `pnpm test:worker` to build the actual Worker and check read-only requests
+locally; CI also runs this smoke test. Lift the hold only after the adapter
+supports the manifest and the Worker smoke test and deployed preview pass.
+
 ## Deploy
 
 Cloudflare Workers Builds deploys on push through the Git integration. Non-production branches upload a version without promoting it to `saucy.tech`; merges to `main` go to production.

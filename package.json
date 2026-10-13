@@ -24,7 +24,8 @@
     "preview": "pnpm gen:posts && opennextjs-cloudflare build && opennextjs-cloudflare preview",
     "build:worker": "pnpm gen:posts && opennextjs-cloudflare build && node scripts/cf-slim-og.mjs",
     "deploy": "pnpm run build:worker && opennextjs-cloudflare deploy -- --keep-vars",
-    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts"
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
+    "test:worker": "pnpm build:worker && node scripts/smoke-worker.mjs"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -42,7 +43,7 @@
     "github-slugger": "^2.0.0",
     "gray-matter": "^4.0.3",
     "js-yaml": "^5.4.3",
-    "next": "^16.3.8",
+    "next": "~16.3.8",
     "react": "^19.3.0",
     "react-confetti": "^6.4.0",
     "react-dom": "^19.3.0",
@@ -86,7 +87,7 @@
     }
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "^16.4.0",
+    "@next/bundle-analyzer": "~16.3.8",
     "@playwright/test": "^1.64.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@testing-library/jest-dom": "^7.0.1",
@@ -98,7 +99,7 @@
     "@typescript-eslint/eslint-plugin": "^8.71.2",
     "@typescript-eslint/parser": "^8.71.2",
     "eslint": "^9.39.5",
-    "eslint-config-next": "^16.4.0",
+    "eslint-config-next": "~16.3.8",
     "eslint-import-resolver-typescript": "^4.4.5",
     "eslint-plugin-import": "^2.32.0",
     "globals": "^17.13.0",

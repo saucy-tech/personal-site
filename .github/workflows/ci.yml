@@ -59,3 +59,9 @@ jobs:
           CI=true pnpm exec playwright test
         env:
           NEXT_PUBLIC_APP_URL: https://example.com
+
+      - name: Cloudflare Worker request smoke
+        run: pnpm test:worker
+        env:
+          NEXT_PUBLIC_APP_URL: https://example.com
+          WRANGLER_SEND_METRICS: 'false'
