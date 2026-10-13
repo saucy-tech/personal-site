@@ -138,19 +138,6 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: 'feed-eggs',
-    group: 'apps',
-    title: 'Feed Eggs',
-    status: 'launched',
-    tags: ['Vanilla JS', 'Browser game', 'Cloudflare Workers'],
-    blurb:
-      'A browser arcade game: pull back a slingshot and fling eggs at a moving egg-mouth target. Vanilla JavaScript with no framework and no build step. Streak multipliers, levels that speed up the target, a rare golden egg worth 5x, and synthesized WebAudio sound. Served as static assets on Cloudflare Workers.',
-    links: [
-      { href: 'https://github.com/saucy-tech/eggman', label: 'GitHub Repo' },
-      { href: 'https://eggman.brandonsauceda.workers.dev', label: 'Live Demo' },
-    ],
-  },
-  {
     id: 'lightning-tip-jar',
     group: 'apps',
     title: 'Lightning Tip Jar',
