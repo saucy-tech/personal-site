@@ -42,7 +42,7 @@
     "github-slugger": "^2.0.0",
     "gray-matter": "^4.0.3",
     "js-yaml": "^5.4.3",
-    "next": "^16.4.0",
+    "next": "^16.3.8",
     "react": "^19.3.0",
     "react-confetti": "^6.4.0",
     "react-dom": "^19.3.0",
@@ -79,10 +79,10 @@
       "undici@>=7.0.0 <7.29.1": ">=7.29.1 <8",
       "esbuild@>=0.27.3 <0.28.1": ">=0.28.1",
       "@opentelemetry/core@<2.8.0": ">=2.8.0",
-      "sharp@<0.35.5": "0.35.5",
+      "sharp@<0.35.5": ">=0.35.5",
       "nanoid@<3.3.18": ">=3.3.18 <4",
       "@humanfs/node@<0.16.8": ">=0.16.8",
-      "postcss-selector-parser@<7.1.6": "7.1.6"
+      "postcss-selector-parser@<7.1.6": ">=7.1.6"
     }
   },
   "devDependencies": {
@@ -120,7 +120,7 @@
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.71.2",
     "unified": "^11.0.5",
-    "wrangler": "4.141.0",
+    "wrangler": "4.149.0",
     "zod": "^4.6.7"
   }
 }
