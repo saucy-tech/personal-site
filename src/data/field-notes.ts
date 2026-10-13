@@ -4,7 +4,7 @@
  * Sections follow the order the choice is actually made: the models, the
  * harnesses that run them inside a repo, the interfaces I drive those harnesses
  * from, and what I'm still evaluating — plus the subscriptions, infrastructure,
- * and utilities underneath. Harness = the agent loop (Claude Code, Codex, OpenCode);
+ * and utilities underneath. Harness = the agent loop (Claude Code, Codex, Grok Build, OpenCode);
  * interface = the surface I sit in front of (T3 Code, Warp, the desktop apps).
  * The point is the loop, not the chat: give context, let an agent inspect the
  * repo, make edits, run tests/checks, review the output, iterate.
@@ -13,7 +13,7 @@
  */
 
 /** ISO date — bump when you revise items or copy. Shown on `/notes`. */
-export const fieldNotesLastUpdated = '2026-09-22';
+export const fieldNotesLastUpdated = '2026-10-13';
 
 export type FieldNoteStatus =
   | 'life'
@@ -71,63 +71,84 @@ export const fieldNotesSections: FieldNoteSection[] = [
   {
     id: 'models',
     title: 'Models',
-    blurb: 'The raw horsepower. Seven models, pinned ⌘1–⌘7 in T3 Code.',
+    blurb:
+      'The raw horsepower. Opus 5.5, GPT-6.1 Sol, and Grok 4.7 carry the daily work; the rest come in when a job calls for them. Both local models are American open-weight models.',
     items: [
       {
-        title: 'Claude Fable 5',
+        title: 'Claude Opus 5.5',
         tags: ['anthropic', 'model', 'default'],
         badge: 'daily',
         homepage: 'https://www.anthropic.com',
-        note: 'My default. The model behind most of my Claude Code sessions — the one I hand the large, context-heavy, repo-shaped work to.',
-        pros: ['Strongest at planning and long sessions', 'Careful on niche problems'],
+        note: 'My default. The model behind most of my Claude Code sessions — planning, larger edits, and the long, context-heavy, repo-shaped work.',
+        pros: [
+          'Strong at planning and long sessions',
+          'Tight, deterministic output on routine edits',
+        ],
       },
       {
-        title: 'Claude Opus 5',
-        tags: ['anthropic', 'model'],
-        badge: 'daily',
-        homepage: 'https://www.anthropic.com',
-        note: 'The everyday Anthropic model when I do not need Fable — fast, precise, and still the one I trust for tight, deterministic output.',
-        pros: ['Quick and reliable for routine edits', 'Same harness, lower cost'],
-      },
-      {
-        title: 'GPT-5.6-Sol',
+        title: 'GPT-6.1 Sol',
         tags: ['openai', 'model', 'second opinion'],
         badge: 'daily',
         homepage: 'https://openai.com',
-        note: 'The heavier of the two GPT-5.6 variants, and my go-to second read through Codex — a different angle when Claude and I keep circling the same answer.',
+        note: 'My daily OpenAI model through Codex, and my go-to second read — a different angle when Claude and I keep circling the same answer.',
         pros: ['Useful contrast to the Anthropic models', 'Good at reading a repo cold'],
       },
       {
-        title: 'GPT-5.6 Luna',
-        tags: ['openai', 'model', 'opencode go'],
+        title: 'Grok 4.7',
+        tags: ['xai', 'model', 'grok build'],
         badge: 'daily',
-        homepage: 'https://opencode.ai',
-        note: 'The lighter GPT-5.6 variant, run through OpenCode Go. Fast into focused edits when I do not need Sol.',
-        pros: ['Fast into implementation', 'A lighter option for routine work'],
+        homepage: 'https://grok.com',
+        note: 'xAI’s current model, run through Grok Build and covered by my X Subscription. A third daily read next to Claude and GPT.',
+        pros: ['A third independent read in the daily rotation'],
+      },
+      {
+        title: 'Claude Fable 5.1',
+        tags: ['anthropic', 'model'],
+        badge: 'occasional',
+        homepage: 'https://www.anthropic.com',
+        note: 'Anthropic’s top model. I bring it in when a problem is niche or hard enough to be worth it; Opus handles the rest.',
+        pros: ['Careful on niche, hard problems'],
+      },
+      {
+        title: 'GPT-6 Astra',
+        tags: ['openai', 'model'],
+        badge: 'occasional',
+        homepage: 'https://openai.com',
+        note: 'OpenAI’s flagship, saved for the jobs where Sol comes up short.',
+        pros: ['The heavier OpenAI option when Sol is not enough'],
       },
       {
         title: 'Kimi K3',
-        tags: ['moonshot', 'model', 'opencode'],
-        badge: 'daily',
+        tags: ['moonshot', 'model', 'opencode zen'],
+        badge: 'occasional',
         homepage: 'https://www.kimi.com',
-        note: 'Moonshot’s model, run through OpenCode Go inside T3 Code. A different read from Claude and GPT without leaving the same loop.',
+        note: 'Moonshot’s model, run through OpenCode Zen inside T3 Code. A different read from Claude and GPT without leaving the same loop.',
         pros: ['Open weights', 'A genuinely different read from the big two'],
       },
       {
-        title: 'GPT-OSS 20B',
-        tags: ['openai', 'model', 'opencode', 'ollama', 'local'],
-        badge: 'daily',
-        homepage: 'https://ollama.com',
-        note: 'The fast local model running through OpenCode and Ollama on my home 3090.',
-        pros: ['Private and local', 'Fast enough for routine work'],
+        title: 'Muse Wonder',
+        tags: ['meta', 'model', 'muse code'],
+        badge: 'experimenting',
+        homepage: 'https://dev.meta.ai',
+        note: 'Meta’s first frontier model. I am running it through Muse Code to see where it lands against the daily three.',
+        pros: ['A fourth vendor’s read on the same problems'],
+        cons: ['Too new to have an opinion yet'],
       },
       {
-        title: 'Qwen3.8 27B',
-        tags: ['alibaba', 'model', 'opencode', 'ollama', 'local'],
-        badge: 'daily',
+        title: 'Gemma 4 26B A4B',
+        tags: ['google', 'model', 'ollama', 'local'],
+        badge: 'occasional',
         homepage: 'https://ollama.com',
-        note: 'The smarter local option on the same 3090 when the job can afford a slower pass.',
-        pros: ['Private and local', 'More capable than the fast 20B option'],
+        note: 'Google’s open model (gemma4:26b-a4b), running locally through Ollama on my home 3090. Only about 4B of its 26B parameters are active at a time, so it stays quick.',
+        pros: ['Private and local', 'Fast for its size'],
+      },
+      {
+        title: 'Muse Glimmer 30B',
+        tags: ['meta', 'model', 'ollama', 'local'],
+        badge: 'occasional',
+        homepage: 'https://ollama.com',
+        note: 'Meta’s open model built for local agents (muse-glimmer:30b), on the same 3090.',
+        pros: ['Private and local', 'Built for agent work'],
       },
     ],
   },
@@ -135,7 +156,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
     id: 'coding-agents',
     title: 'Harnesses',
     blurb:
-      'The agent loop itself — the thing that takes a model, gives it tools, and lets it inspect a repo, edit, and run checks. Claude Code and Codex each run their own vendor’s models; OpenCode runs anything. The interface I drive a harness from is a separate choice.',
+      'The agent loop itself — the thing that takes a model, gives it tools, and lets it inspect a repo, edit, and run checks. Claude Code, Codex, and Grok Build each run their own vendor’s models; OpenCode runs anything. The interface I drive a harness from is a separate choice.',
     items: [
       {
         title: 'Claude Code',
@@ -156,11 +177,20 @@ export const fieldNotesSections: FieldNoteSection[] = [
         cons: ['I reach for Claude Code first on the largest, most context-heavy tasks'],
       },
       {
+        title: 'Grok Build',
+        tags: ['xai', 'cli', 'coding agent'],
+        badge: 'daily',
+        homepage: 'https://grok.com',
+        note: 'xAI’s coding agent, and the newest harness in my rotation. It runs Grok 4.7 through the same inspect, edit, and check loop as the others, and comes with my X Subscription.',
+        pros: ['Grok models in a real repo loop', 'Included with the X Subscription'],
+        cons: ['Newest of the four — still learning where it beats the others'],
+      },
+      {
         title: 'OpenCode',
         tags: ['open source', 'cli', 'coding agent'],
         badge: 'experimenting',
         homepage: 'https://opencode.ai',
-        note: 'The open-source harness, and the only one of the three that is not tied to a single vendor. I run Luna and Kimi through the Go plan, plus GPT-OSS and Qwen locally through Ollama on my 3090.',
+        note: 'The open-source harness, and the only one of the four that is not tied to a single vendor. I run Kimi through OpenCode Zen, plus Gemma and Muse Glimmer locally through Ollama on my 3090.',
         pros: [
           'Vendor-neutral — any model in the same loop',
           'Same repo workflow as the other two',
@@ -179,7 +209,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['interface', 'multi-harness', 'daily driver'],
         badge: 'daily',
         homepage: 'https://t3.codes',
-        note: 'Where I spend most of my time now. Not a harness — it sits on top of Claude Code, Codex, and OpenCode and lets me run any of them from one window, with seven models pinned to ⌘1–⌘7 so switching is a keystroke instead of a context rebuild.',
+        note: 'Where I spend most of my time now. Not a harness — it sits on top of Claude Code, Codex, and OpenCode and lets me run any of them from one window, with my models pinned to keyboard shortcuts so switching is a keystroke instead of a context rebuild.',
         pros: [
           'One interface over three harnesses',
           'Switch models and harnesses without leaving the flow',
@@ -188,12 +218,12 @@ export const fieldNotesSections: FieldNoteSection[] = [
       },
       {
         title: 'Warp',
-        tags: ['terminal', 'interface', 'daily driver'],
-        badge: 'daily',
+        tags: ['terminal', 'interface'],
+        badge: 'occasional',
         homepage: 'https://warp.dev',
-        note: 'The terminal, and the second surface after T3 Code. Anything that is not an agent session — git, deploys, the odd CLI run — happens here, and it is still where I drop to when I want the raw CLIs.',
+        note: 'The terminal I drop to when I want the raw CLIs. T3 Code has taken over most of what used to happen here, so Warp is an occasional surface now rather than the second one.',
         link: { href: 'https://app.warp.dev/referral/3MJVPD', label: 'my referral' },
-        pros: ['Keeps a real terminal in the loop', 'Works naturally with both major CLIs'],
+        pros: ['Still a good terminal when I need one', 'Works naturally with the major CLIs'],
         cons: ['Still learning where Oz fits alongside it'],
       },
       {
@@ -227,9 +257,27 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['warp', 'cloud agents'],
         badge: 'experimenting',
         homepage: 'https://warp.dev',
-        note: "Warp's cloud-agent orchestration. Same family as my daily terminal, so I am testing where cloud agents fit next to Hermes and the local CLIs.",
+        note: "Warp's cloud-agent orchestration. Same family as Warp, so I am testing where cloud agents fit next to Hermes and the local CLIs.",
         pros: ['Fits the Warp-centered direction of the stack'],
         cons: ['Still forming an opinion on when to reach for it'],
+      },
+      {
+        title: 'Grok Bot',
+        tags: ['spacexsi', 'personal agent', 'cloud agents'],
+        badge: 'experimenting',
+        homepage: 'https://grok.com',
+        note: 'SpaceXSI’s personal agent: it runs on its own cloud computer, signs into apps the way I would, and keeps working with my laptop closed. It comes with my X Subscription, so I am testing what it can take off my plate next to Hermes.',
+        pros: ['Keeps working without my machine on'],
+        cons: ['Another remote lane to sort out against Hermes'],
+      },
+      {
+        title: 'Muse',
+        tags: ['meta', 'personal agent'],
+        badge: 'experimenting',
+        homepage: 'https://muse.ai',
+        note: 'Meta’s personal agent, now running Muse Wonder. I am testing it against Grok Bot to see which personal agent earns a place, if either does.',
+        pros: ['A second personal agent to compare against Grok Bot'],
+        cons: ['Too new to have an opinion yet'],
       },
       {
         title: 'Hermes Agent',
@@ -265,27 +313,53 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['openai', '$100 plan'],
         badge: 'daily',
         homepage: 'https://chatgpt.com',
-        note: 'The plan behind my Codex work and GPT-5.6 access. I am still confirming the cleanest public-facing name for the exact Codex tier.',
+        note: 'The plan behind my Codex work and the GPT-6 models. I am still confirming the cleanest public-facing name for the exact Codex tier.',
         pros: ['Makes Codex a real daily agent instead of an occasional backup'],
         cons: ['Naming around the Codex tiers is easy to make too messy'],
       },
       {
-        title: 'OpenCode Go',
-        tags: ['opencode', 'Go plan'],
+        title: 'OpenCode Zen',
+        tags: ['opencode', 'pay as you go'],
         badge: 'experimenting',
         homepage: 'https://opencode.ai',
-        note: 'The plan behind OpenCode and my Kimi K3 access. Cheap enough to keep a third harness in the rotation without thinking about it.',
-        pros: ['Puts an open-weight model in the same loop as the big two'],
+        note: 'Pay-as-you-go credit behind OpenCode and my Kimi K3 access. It replaced the Go plan, so I pay for what I run instead of a monthly seat.',
+        pros: [
+          'Puts an open-weight model in the same loop as the big two',
+          'Only pay for what I run',
+        ],
         cons: ['Only earns its slot if OpenCode does'],
+      },
+      {
+        title: 'The X Subscription',
+        tags: ['spacexsi', 'Premium tier', '$30 plan'],
+        badge: 'daily',
+        homepage: 'https://x.com',
+        note: 'SpaceXSI’s new bundle of Grok, Cursor, and X Premium, on the Premium tier. Every paid tier includes Grok Build and Cursor; Premium is the first to add Grok Bot and the latest Grok models, which is what puts Grok 4.7 in my daily rotation.',
+        pros: [
+          'One plan covers Grok, Grok Bot, Cursor, and X',
+          'Replaces what used to be three separate subscriptions',
+        ],
+        cons: ['Still finding out how much of the bundle I actually use'],
+      },
+      {
+        title: 'Muse Code',
+        tags: ['meta', 'coding agent plan'],
+        badge: 'experimenting',
+        homepage: 'https://dev.meta.ai',
+        note: 'Meta’s coding-agent plan, and how I am getting at Muse Wonder.',
+        pros: ['Puts Meta’s frontier model in reach for testing'],
+        cons: ['Only earns its slot if Muse Wonder does'],
       },
       {
         title: 'Warp Build',
         tags: ['warp', 'Build plan'],
-        badge: 'daily',
+        badge: 'occasional',
         homepage: 'https://warp.dev',
-        note: 'The terminal plan behind my second surface.',
-        pros: ['Worth it for a terminal I open every day'],
-        cons: ['Oz is still in the evaluating bucket for me'],
+        note: 'The terminal plan behind Warp.',
+        cons: [
+          'Harder to justify now that Warp is occasional',
+          'Oz is still in the evaluating bucket for me',
+        ],
       },
     ],
   },
