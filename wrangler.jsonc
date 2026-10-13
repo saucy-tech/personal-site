@@ -2,7 +2,12 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "personal-site",
   "main": ".open-next/worker.js",
-  "compatibility_date": "2026-06-01",
+  // Reviewed through 2026-10-13. New date-gated defaults do not apply:
+  // TLS option errors (no node:tls), Python 3.14, and Durable Object eviction
+  // (no DO bindings). nodejs_compat stays explicit for OpenNext; on dates on or
+  // after 2026-08-04 it is redundant and Wrangler ignores it.
+  // global_fetch_strictly_public is not date-gated.
+  "compatibility_date": "2026-10-13",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   // Free-plan worker budget is 3 MiB gzipped; minify keeps us under it.
   "minify": true,
