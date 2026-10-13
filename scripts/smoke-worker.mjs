@@ -12,7 +12,7 @@ const child = spawn(
     stdio: 'inherit',
     detached: true,
     env: { ...process.env, WRANGLER_SEND_METRICS: 'false' },
-  },
+  }
 );
 let startupError;
 child.on('error', (error) => {
