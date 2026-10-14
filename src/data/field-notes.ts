@@ -13,7 +13,7 @@
  */
 
 /** ISO date — bump when you revise items or copy. Shown on `/notes`. */
-export const fieldNotesLastUpdated = '2026-10-13';
+export const fieldNotesLastUpdated = '2026-10-14';
 
 export type FieldNoteStatus =
   | 'life'
@@ -120,24 +120,15 @@ export const fieldNotesSections: FieldNoteSection[] = [
       {
         title: 'Kimi K3',
         tags: ['moonshot', 'model', 'opencode zen'],
-        badge: 'occasional',
+        badge: 'experimenting',
         homepage: 'https://www.kimi.com',
         note: 'Moonshot’s model, run through OpenCode Zen inside T3 Code. A different read from Claude and GPT without leaving the same loop.',
         pros: ['Open weights', 'A genuinely different read from the big two'],
       },
       {
-        title: 'Muse Wonder',
-        tags: ['meta', 'model', 'muse code'],
-        badge: 'experimenting',
-        homepage: 'https://dev.meta.ai',
-        note: 'Meta’s first frontier model. I am running it through Muse Code to see where it lands against the daily three.',
-        pros: ['A fourth vendor’s read on the same problems'],
-        cons: ['Too new to have an opinion yet'],
-      },
-      {
         title: 'Gemma 4 26B A4B',
         tags: ['google', 'model', 'ollama', 'local'],
-        badge: 'occasional',
+        badge: 'experimenting',
         homepage: 'https://ollama.com',
         note: 'Google’s open model (gemma4:26b-a4b), running locally through Ollama on my home 3090. Only about 4B of its 26B parameters are active at a time, so it stays quick.',
         pros: ['Private and local', 'Fast for its size'],
@@ -145,7 +136,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
       {
         title: 'Muse Glimmer 30B',
         tags: ['meta', 'model', 'ollama', 'local'],
-        badge: 'occasional',
+        badge: 'experimenting',
         homepage: 'https://ollama.com',
         note: 'Meta’s open model built for local agents (muse-glimmer:30b), on the same 3090.',
         pros: ['Private and local', 'Built for agent work'],
@@ -188,7 +179,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
       {
         title: 'OpenCode',
         tags: ['open source', 'cli', 'coding agent'],
-        badge: 'experimenting',
+        badge: 'occasional',
         homepage: 'https://opencode.ai',
         note: 'The open-source harness, and the only one of the four that is not tied to a single vendor. I run Kimi through OpenCode Zen, plus Gemma and Muse Glimmer locally through Ollama on my 3090.',
         pros: [
@@ -275,7 +266,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['meta', 'personal agent'],
         badge: 'experimenting',
         homepage: 'https://muse.ai',
-        note: 'Meta’s personal agent, now running Muse Wonder. I am testing it against Grok Bot to see which personal agent earns a place, if either does.',
+        note: 'Meta’s personal agent. I am testing it against Grok Bot to see which personal agent earns a place, if either does.',
         pros: ['A second personal agent to compare against Grok Bot'],
         cons: ['Too new to have an opinion yet'],
       },
@@ -318,18 +309,6 @@ export const fieldNotesSections: FieldNoteSection[] = [
         cons: ['Naming around the Codex tiers is easy to make too messy'],
       },
       {
-        title: 'OpenCode Zen',
-        tags: ['opencode', 'pay as you go'],
-        badge: 'experimenting',
-        homepage: 'https://opencode.ai',
-        note: 'Pay-as-you-go credit behind OpenCode and my Kimi K3 access. It replaced the Go plan, so I pay for what I run instead of a monthly seat.',
-        pros: [
-          'Puts an open-weight model in the same loop as the big two',
-          'Only pay for what I run',
-        ],
-        cons: ['Only earns its slot if OpenCode does'],
-      },
-      {
         title: 'The X Subscription',
         tags: ['spacexsi', 'Premium tier', '$30 plan'],
         badge: 'daily',
@@ -342,13 +321,16 @@ export const fieldNotesSections: FieldNoteSection[] = [
         cons: ['Still finding out how much of the bundle I actually use'],
       },
       {
-        title: 'Muse Code',
-        tags: ['meta', 'coding agent plan'],
+        title: 'OpenCode Zen',
+        tags: ['opencode', 'pay as you go'],
         badge: 'experimenting',
-        homepage: 'https://dev.meta.ai',
-        note: 'Meta’s coding-agent plan, and how I am getting at Muse Wonder.',
-        pros: ['Puts Meta’s frontier model in reach for testing'],
-        cons: ['Only earns its slot if Muse Wonder does'],
+        homepage: 'https://opencode.ai',
+        note: 'Pay-as-you-go credit behind OpenCode and my Kimi K3 access. It replaced the Go plan, so I pay for what I run instead of a monthly seat.',
+        pros: [
+          'Puts an open-weight model in the same loop as the big two',
+          'Only pay for what I run',
+        ],
+        cons: ['Only earns its slot if OpenCode does'],
       },
       {
         title: 'Warp Build',
@@ -454,14 +436,6 @@ export const fieldNotesSections: FieldNoteSection[] = [
         cons: [
           'Mode customization takes a beat to internalize when you build out more than a couple',
         ],
-      },
-      {
-        title: 'Obsidian',
-        tags: ['notes', 'vault', 'editor'],
-        badge: 'daily',
-        homepage: 'https://obsidian.md',
-        note: 'My personal knowledge vault and note-taking surface; central to workflows and long-form drafting.',
-        pros: ['Local-first, extensible with plugins', 'Great for Zettelkasten-style linking'],
       },
       {
         title: 'Tailscale',
