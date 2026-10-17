@@ -215,7 +215,7 @@ export const projects: Project[] = [
     status: 'contributor',
     tags: ['Terminal', 'AI', 'Open Source'],
     blurb:
-      'Contributed to Warp, the agentic terminal I use daily. Fixed repo-picker UX so multi-repo workflows are smoother. See PR #9451.',
+      'Contributed to Warp, the agentic terminal. Fixed repo-picker UX so multi-repo workflows are smoother. See PR #9451.',
     links: [
       { href: 'https://github.com/warpdotdev/warp/pull/9451', label: 'PR #9451' },
       { href: 'https://github.com/warpdotdev/warp/issues/9439', label: 'Issue #9439' },

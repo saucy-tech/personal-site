@@ -5,7 +5,7 @@
  * harnesses that run them inside a repo, the interfaces I drive those harnesses
  * from, and what I'm still evaluating — plus the subscriptions, infrastructure,
  * and utilities underneath. Harness = the agent loop (Claude Code, Codex, Grok Build, OpenCode);
- * interface = the surface I sit in front of (T3 Code, Warp, the desktop apps).
+ * interface = the surface I sit in front of (T3 Code, Cursor, Grok Bot; Warp barely).
  * The point is the loop, not the chat: give context, let an agent inspect the
  * repo, make edits, run tests/checks, review the output, iterate.
  *
@@ -77,7 +77,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
     id: 'models',
     title: 'Models',
     blurb:
-      'The raw horsepower. Opus 5.5, GPT-6.1 Sol, and Grok 4.7 carry the daily work; the rest come in when a job calls for them. Both local models are American open-weight models.',
+      'The raw horsepower. Opus 5.5, GPT-6.1 Sol, and Grok 4.7 carry the daily work; the rest come in when a job calls for them. The one local model, Muse Glimmer, is an American open-weight model.',
     items: [
       {
         title: 'Claude Opus 5.5',
@@ -131,19 +131,11 @@ export const fieldNotesSections: FieldNoteSection[] = [
         pros: ['Open weights', 'A genuinely different read from the big two'],
       },
       {
-        title: 'Gemma 4 26B A4B',
-        tags: ['google', 'model', 'ollama', 'local'],
-        badge: 'experimenting',
-        homepage: 'https://ollama.com',
-        note: 'Google’s open model (gemma4:26b-a4b), running locally through Ollama on my home 3090. Only about 4B of its 26B parameters are active at a time, so it stays quick.',
-        pros: ['Private and local', 'Fast for its size'],
-      },
-      {
         title: 'Muse Glimmer 30B',
-        tags: ['meta', 'model', 'ollama', 'local'],
+        tags: ['meta', '🇺🇸', 'model', 'ollama', 'local'],
         badge: 'experimenting',
         homepage: 'https://ollama.com',
-        note: 'Meta’s open model built for local agents (muse-glimmer:30b), on the same 3090.',
+        note: 'The only local model I still run. Meta’s American open model for local agents (muse-glimmer:30b), on the 3090.',
         pros: ['Private and local', 'Built for agent work'],
       },
     ],
@@ -159,7 +151,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['anthropic', 'cli', 'coding agent'],
         badge: 'daily',
         homepage: 'https://claude.ai',
-        note: 'My default harness for high-context, repo-shaped work — planning, larger edits, and longer sessions where keeping the whole repo in view matters. Runs the Claude models; I drive it from T3 Code or Warp.',
+        note: 'My default harness for high-context, repo-shaped work — planning, larger edits, and longer sessions where keeping the whole repo in view matters. Runs the Claude models; I drive it from T3 Code.',
         pros: ['Strong at planning and repo-shaped work', 'Holds context across longer sessions'],
         cons: ['I still pair it with Codex when I want a second read'],
       },
@@ -168,8 +160,8 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['openai', 'cli', 'coding agent'],
         badge: 'daily',
         homepage: 'https://openai.com',
-        note: 'My implementation-and-inspection agent: fast at reading the repo, making focused edits, and running the test/check loop. I drive it through T3 Code or Warp, often as a second read against Claude Code.',
-        pros: ['Quick into implementation and repo inspection', 'Clean inside T3 Code and Warp'],
+        note: 'My implementation-and-inspection agent: fast at reading the repo, making focused edits, and running the test/check loop. I drive it through T3 Code, often as a second read against Claude Code.',
+        pros: ['Quick into implementation and repo inspection', 'Clean inside T3 Code'],
         cons: ['I reach for Claude Code first on the largest, most context-heavy tasks'],
       },
       {
@@ -186,7 +178,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['open source', 'cli', 'coding agent'],
         badge: 'occasional',
         homepage: 'https://opencode.ai',
-        note: 'The open-source harness, and the only one of the four that is not tied to a single vendor. I run Kimi through OpenCode Zen, plus Gemma and Muse Glimmer locally through Ollama on my 3090.',
+        note: 'The open-source harness, and the only one of the four that is not tied to a single vendor. I run Kimi through OpenCode Zen, and Muse Glimmer locally through Ollama on my 3090.',
         pros: [
           'Vendor-neutral — any model in the same loop',
           'Same repo workflow as the other two',
@@ -198,7 +190,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
   {
     id: 'interfaces',
     title: 'Interfaces',
-    blurb: 'The surfaces I sit in front of. An interface hosts a harness; it does not replace one.',
+    blurb: 'The surfaces I sit in front of.',
     items: [
       {
         title: 'T3 Code',
@@ -210,35 +202,32 @@ export const fieldNotesSections: FieldNoteSection[] = [
           'One interface over three harnesses',
           'Switch models and harnesses without leaving the flow',
         ],
-        cons: ['Warp still wins when I just want a terminal'],
+      },
+      {
+        title: 'Grok Bot',
+        tags: ['spacexsi', 'personal agent', 'app'],
+        badge: 'daily',
+        homepage: 'https://grok.com',
+        note: 'SpaceXSI’s personal agent, and one of the three apps I actually work in. It runs on its own cloud computer, signs into apps the way I would, and keeps working with my laptop closed. It comes with my X Subscription.',
+        pros: ['Keeps working without my machine on'],
+      },
+      {
+        title: 'Cursor',
+        tags: ['cursor', 'app', 'web'],
+        badge: 'daily',
+        homepage: 'https://cursor.com',
+        note: 'The Cursor app and the web app. One of the three places I actually work, with T3 Code and Grok Bot. It comes with the X Subscription.',
+        pros: ['App and web on the same plan as Grok and X'],
       },
       {
         title: 'Warp',
-        tags: ['terminal', 'interface'],
+        tags: ['terminal', 'barely used'],
         badge: 'occasional',
         homepage: 'https://warp.dev',
-        note: 'The terminal I drop to when I want the raw CLIs. T3 Code has taken over most of what used to happen here, so Warp is an occasional surface now rather than the second one.',
+        note: 'The terminal I still have installed. I barely use it — T3 Code took over almost all of what used to happen here.',
         link: { href: 'https://app.warp.dev/referral/3MJVPD', label: 'my referral' },
-        pros: ['Still a good terminal when I need one', 'Works naturally with the major CLIs'],
-        cons: ['Still learning where Oz fits alongside it'],
-      },
-      {
-        title: 'Claude desktop',
-        tags: ['anthropic', 'desktop app'],
-        badge: 'occasional',
-        homepage: 'https://claude.ai',
-        note: 'Mostly for chat — conversation and thinking out loud rather than repo edits, which stay in Claude Code. In the rotation, but a smaller share of my week than it used to be.',
-        pros: ['Good for conversation and thinking out loud'],
-        cons: ['Not a replacement for Claude Code on repo work'],
-      },
-      {
-        title: 'Codex desktop',
-        tags: ['openai', 'desktop app'],
-        badge: 'occasional',
-        homepage: 'https://openai.com',
-        note: 'Where my scheduled tasks live. Recurring jobs run here on a timer while the interactive Codex work happens in T3 Code.',
-        pros: ['Scheduled tasks without a server or cron to babysit'],
-        cons: ['Little reason to open it outside the schedule'],
+        pros: ['Still a good terminal when I need one'],
+        cons: ['I barely open it'],
       },
     ],
   },
@@ -249,29 +238,11 @@ export const fieldNotesSections: FieldNoteSection[] = [
       'Tools I am testing against my real workflow before promoting them to daily-driver status.',
     items: [
       {
-        title: 'Oz',
-        tags: ['warp', 'cloud agents'],
-        badge: 'experimenting',
-        homepage: 'https://warp.dev',
-        note: "Warp's cloud-agent orchestration. Same family as Warp, so I am testing where cloud agents fit next to Hermes and the local CLIs.",
-        pros: ['Fits the Warp-centered direction of the stack'],
-        cons: ['Still forming an opinion on when to reach for it'],
-      },
-      {
-        title: 'Grok Bot',
-        tags: ['spacexsi', 'personal agent', 'cloud agents'],
-        badge: 'experimenting',
-        homepage: 'https://grok.com',
-        note: 'SpaceXSI’s personal agent: it runs on its own cloud computer, signs into apps the way I would, and keeps working with my laptop closed. It comes with my X Subscription, so I am testing what it can take off my plate next to Hermes.',
-        pros: ['Keeps working without my machine on'],
-        cons: ['Another remote lane to sort out against Hermes'],
-      },
-      {
         title: 'Muse',
         tags: ['meta', 'personal agent'],
         badge: 'experimenting',
         homepage: 'https://muse.ai',
-        note: 'Meta’s personal agent. I am testing it against Grok Bot to see which personal agent earns a place, if either does.',
+        note: 'Meta’s personal agent. I am testing it next to Grok Bot.',
         pros: ['A second personal agent to compare against Grok Bot'],
         cons: ['Too new to have an opinion yet'],
       },
@@ -312,9 +283,8 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['anthropic', '$100 plan'],
         badge: 'daily',
         homepage: 'https://claude.ai',
-        note: 'The plan behind my Claude Code, T3 Code, and Claude desktop usage — enough headroom for the heavier, repo-shaped sessions.',
+        note: 'The plan behind my Claude Code and T3 Code usage — enough headroom for the heavier, repo-shaped sessions.',
         pros: ['Room for longer Claude Code runs'],
-        cons: ['Still deciding how much belongs in desktop vs. CLI'],
       },
       {
         title: 'ChatGPT Pro',
@@ -339,14 +309,11 @@ export const fieldNotesSections: FieldNoteSection[] = [
       },
       {
         title: 'Warp Build',
-        tags: ['warp', 'Build plan'],
+        tags: ['warp', 'annual', 'not renewing'],
         badge: 'occasional',
         homepage: 'https://warp.dev',
-        note: 'The terminal plan behind Warp.',
-        cons: [
-          'Harder to justify now that Warp is occasional',
-          'Oz is still in the evaluating bucket for me',
-        ],
+        note: 'The annual plan behind Warp. I barely use Warp, so it is set to lapse and will not renew.',
+        cons: ['Hard to justify while I barely open it'],
       },
     ],
   },
