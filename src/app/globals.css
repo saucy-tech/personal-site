@@ -343,3 +343,9 @@
     margin-top: 1rem;
   }
 }
+
+/* cursor.com.png is a black mark. The default theme is dark, so flip it there;
+   light appearance keeps the black mark on paper. */
+html:not([data-appearance='light']) img[src='/icons/tools/cursor.com.png'] {
+  filter: invert(1);
+}
