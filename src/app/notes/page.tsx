@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 
 import NotesSectionIndex from '@/components/NotesSectionIndex';
 import PageLayout from '@/components/PageLayout';
+import { PlanMarks } from '@/components/PlanMarks';
 import { fieldNotesLastUpdated, fieldNotesSections } from '@/data/field-notes';
 import { formatPostDate } from '@/utils/helpers';
 import { SITE_NAME } from '@/utils/constants';
@@ -96,7 +97,7 @@ export default function NotesPage() {
                   >
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                       <h3 className="flex items-center gap-2 text-base font-semibold leading-snug text-(--text-primary)">
-                        {item.homepage && <ToolFavicon homepage={item.homepage} />}
+                        {item.homepage && !item.marks && <ToolFavicon homepage={item.homepage} />}
                         {item.title}
                       </h3>
                       {item.badge && (
@@ -115,6 +116,7 @@ export default function NotesPage() {
                         ))}
                       </p>
                     )}
+                    {item.marks && item.marks.length > 0 && <PlanMarks ids={item.marks} />}
                     <p className="mt-2 text-sm leading-relaxed text-(--text-secondary)">
                       {item.note}
                       {item.link && (
