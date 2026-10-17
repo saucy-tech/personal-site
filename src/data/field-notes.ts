@@ -28,6 +28,9 @@ export type FieldNoteStatus =
 export type FieldNoteBadge =
   'daily' | 'occasional' | 'experimenting' | 'learning' | 'paused' | 'watching';
 
+/** Product marks drawn beside a subscription. */
+export type FieldNoteMark = 'x' | 'grok' | 'cursor' | 'grok-bot';
+
 export interface FieldNoteItem {
   title: string;
   note: string;
@@ -38,6 +41,8 @@ export interface FieldNoteItem {
   cons?: string[];
   /** Official homepage URL — used to render a favicon next to the title. */
   homepage?: string;
+  /** Product marks shown under the title, in this order. */
+  marks?: FieldNoteMark[];
 }
 
 export interface FieldNoteSection {
@@ -295,6 +300,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['spacexsi', 'Super tier', '$100/mo'],
         badge: 'daily',
         homepage: 'https://x.com',
+        marks: ['x', 'grok', 'cursor', 'grok-bot'],
         note: 'SpaceXSI’s bundle of Grok, Cursor, and X Premium, on the Super tier at $100/mo. I am a heavy Grok Bot, Grok, and Cursor user.',
         pros: [
           'One plan covers Grok, Grok Bot, Cursor, and X',
