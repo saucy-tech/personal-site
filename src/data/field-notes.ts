@@ -13,7 +13,7 @@
  */
 
 /** ISO date — bump when you revise items or copy. Shown on `/notes`. */
-export const fieldNotesLastUpdated = '2026-10-14';
+export const fieldNotesLastUpdated = '2026-10-17';
 
 export type FieldNoteStatus =
   | 'life'
@@ -291,6 +291,17 @@ export const fieldNotesSections: FieldNoteSection[] = [
       'The paid plans that make the stack work — a different kind of thing from the agents and models they unlock.',
     items: [
       {
+        title: 'The X Subscription',
+        tags: ['spacexsi', 'Super tier', '$100/mo'],
+        badge: 'daily',
+        homepage: 'https://x.com',
+        note: 'SpaceXSI’s bundle of Grok, Cursor, and X Premium, on the Super tier at $100/mo. I am a heavy Grok Bot, Grok, and Cursor user.',
+        pros: [
+          'One plan covers Grok, Grok Bot, Cursor, and X',
+          'Replaces what used to be three separate subscriptions',
+        ],
+      },
+      {
         title: 'Claude Max',
         tags: ['anthropic', '$100 plan'],
         badge: 'daily',
@@ -307,18 +318,6 @@ export const fieldNotesSections: FieldNoteSection[] = [
         note: 'The plan behind my Codex work and the GPT-6 models. I am still confirming the cleanest public-facing name for the exact Codex tier.',
         pros: ['Makes Codex a real daily agent instead of an occasional backup'],
         cons: ['Naming around the Codex tiers is easy to make too messy'],
-      },
-      {
-        title: 'The X Subscription',
-        tags: ['spacexsi', 'Premium tier', '$30 plan'],
-        badge: 'daily',
-        homepage: 'https://x.com',
-        note: 'SpaceXSI’s new bundle of Grok, Cursor, and X Premium, on the Premium tier. Every paid tier includes Grok Build and Cursor; Premium is the first to add Grok Bot and the latest Grok models, which is what puts Grok 4.7 in my daily rotation.',
-        pros: [
-          'One plan covers Grok, Grok Bot, Cursor, and X',
-          'Replaces what used to be three separate subscriptions',
-        ],
-        cons: ['Still finding out how much of the bundle I actually use'],
       },
       {
         title: 'OpenCode Zen',
