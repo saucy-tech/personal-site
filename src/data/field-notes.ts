@@ -4,8 +4,8 @@
  * Sections follow the order the choice is actually made: the models, the
  * harnesses that run them inside a repo, the interfaces I drive those harnesses
  * from, and what I'm still evaluating — plus the subscriptions, infrastructure,
- * and utilities underneath. Harness = the agent loop (Claude Code, Codex, Grok Build, OpenCode);
- * interface = the surface I sit in front of (T3 Code and Grok Bot; Cursor now and then).
+ * and utilities underneath. Harness = the agent loop (Claude Code, Codex, Grok Build, Cursor);
+ * interface = the surface I sit in front of (T3 Code and Grok Bot).
  * The point is the loop, not the chat: give context, let an agent inspect the
  * repo, make edits, run tests/checks, review the output, iterate.
  *
@@ -136,7 +136,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
     id: 'coding-agents',
     title: 'Harnesses',
     blurb:
-      'The agent loop itself — the thing that takes a model, gives it tools, and lets it inspect a repo, edit, and run checks. Claude Code, Codex, and Grok Build each run their own vendor’s models; OpenCode runs anything. The interface I drive a harness from is a separate choice.',
+      'The agent loop itself — the thing that takes a model, gives it tools, and lets it inspect a repo, edit, and run checks. Claude Code, Codex, and Grok Build each run their own vendor’s models; Cursor covers the others. The interface I drive a harness from is a separate choice.',
     items: [
       {
         title: 'Claude Code',
@@ -161,18 +161,21 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['xai', 'cli', 'coding agent'],
         badge: 'daily',
         homepage: 'https://grok.com',
-        note: 'xAI’s coding agent, and the newest harness in my rotation. It runs Grok 4.7 through the same inspect, edit, and check loop as the others, and comes with my X Subscription.',
+        note: 'xAI’s coding agent, and the newest vendor harness in my rotation. It runs Grok 4.7 through the same inspect, edit, and check loop as the others, and comes with my X Subscription.',
         pros: ['Grok models in a real repo loop', 'Included with the X Subscription'],
-        cons: ['Newest of the four — still learning where it beats the others'],
+        cons: ['Newest vendor harness — still learning where it beats the others'],
       },
       {
-        title: 'OpenCode',
-        tags: ['open source', 'cli', 'coding agent'],
+        title: 'Cursor',
+        tags: ['cursor', 'app', 'coding agent'],
         badge: 'occasional',
-        homepage: 'https://opencode.ai',
-        note: 'The open-source harness, and the only one of the four that is not tied to a single vendor. I run a few models through OpenCode Zen now and then, and Muse Glimmer locally through Ollama on my 3090.',
-        pros: ['Vendor-neutral — any model in the same loop', 'Same repo workflow as the others'],
-        cons: ['Still deciding how much work it earns next to the vendor harnesses'],
+        homepage: 'https://cursor.com',
+        note: 'My occasional harness for models outside the vendor CLIs — Muse Wonder, Gemini, and whatever else I want in the same inspect, edit, and check loop. It comes with the X Subscription.',
+        pros: [
+          'Vendor-neutral — other models in the same loop',
+          'Same repo workflow as the others',
+        ],
+        cons: ['Occasional by design — the vendor harnesses carry the daily work'],
       },
     ],
   },
@@ -186,9 +189,9 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['interface', 'multi-harness', 'daily driver'],
         badge: 'daily',
         homepage: 'https://t3.codes',
-        note: 'Where I spend most of my time now. Not a harness — it sits on top of Claude Code, Codex, and OpenCode and lets me run any of them from one window, with my models pinned to keyboard shortcuts so switching is a keystroke instead of a context rebuild.',
+        note: 'Where I spend most of my time now. Not a harness — it sits on top of Claude Code, Codex, Grok Build, and Cursor and lets me run any of them from one window, with my models pinned to keyboard shortcuts so switching is a keystroke instead of a context rebuild.',
         pros: [
-          'One interface over three harnesses',
+          'One interface over four harnesses',
           'Switch models and harnesses without leaving the flow',
         ],
       },
@@ -199,14 +202,6 @@ export const fieldNotesSections: FieldNoteSection[] = [
         homepage: 'https://grok.com',
         note: 'SpaceXSI’s personal agent, and one of the two apps I actually work in, with T3 Code. It runs on its own cloud computer, signs into apps the way I would, and keeps working with my laptop closed. It comes with my X Subscription.',
         pros: ['Keeps working without my machine on'],
-      },
-      {
-        title: 'Cursor',
-        tags: ['cursor', 'app', 'web'],
-        badge: 'occasional',
-        homepage: 'https://cursor.com',
-        note: 'The Cursor app and the web app. I mostly reach it through Grok Bot now instead of opening it myself. It comes with the X Subscription.',
-        pros: ['App and web on the same plan as Grok and X'],
       },
     ],
   },
@@ -253,7 +248,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         badge: 'daily',
         homepage: 'https://x.com',
         marks: ['x', 'grok', 'cursor', 'grok-bot'],
-        note: 'SpaceXSI’s bundle of Grok, Cursor, and X Premium, on the Super tier at $100/mo. I am a heavy Grok Bot and Grok user, and reach Cursor through Grok Bot.',
+        note: 'SpaceXSI’s bundle of Grok, Cursor, and X Premium, on the Super tier at $100/mo. I am a heavy Grok Bot and Grok user, with occasional Cursor use on the same plan.',
         pros: [
           'One plan covers Grok, Grok Bot, Cursor, and X',
           'Replaces what used to be three separate subscriptions',
@@ -274,15 +269,6 @@ export const fieldNotesSections: FieldNoteSection[] = [
         homepage: 'https://chatgpt.com',
         note: 'The plan behind my Codex work and the GPT-6 models.',
         pros: ['Makes Codex a real daily agent instead of an occasional backup'],
-      },
-      {
-        title: 'OpenCode Zen',
-        tags: ['opencode', 'pay as you go'],
-        badge: 'experimenting',
-        homepage: 'https://opencode.ai',
-        note: 'Pay-as-you-go credit behind OpenCode, for the handful of models I run there from time to time. It replaced the Go plan, so I pay for what I run instead of a monthly seat.',
-        pros: ['Only pay for what I run'],
-        cons: ['Only earns its slot if OpenCode does'],
       },
     ],
   },
@@ -379,11 +365,11 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['voice', 'dictation', 'macOS'],
         badge: 'daily',
         homepage: 'https://superwhisper.com',
-        note: 'Push-to-talk dictation surface. Hold the hotkey, talk, release — audio is transcribed then processed by an LLM mode of my choice.',
+        note: 'Push-to-talk dictation surface. Hold the hotkey, talk, release — audio is transcribed then processed by a model of my choice, including local models.',
         link: { href: 'https://superwhisper.com', label: 'superwhisper.com' },
         pros: [
           'Push-to-talk hotkey makes voice feel like a real input mode',
-          'Choose transcription and processing models independently',
+          'Choose transcription and processing models independently, including local models',
           'Modes for verbose dictation, summarized meeting notes, and clean prose',
         ],
         cons: [
