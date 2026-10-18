@@ -5,7 +5,7 @@
  * harnesses that run them inside a repo, the interfaces I drive those harnesses
  * from, and what I'm still evaluating — plus the subscriptions, infrastructure,
  * and utilities underneath. Harness = the agent loop (Claude Code, Codex, Grok Build, OpenCode);
- * interface = the surface I sit in front of (T3 Code, Cursor, Grok Bot; Warp barely).
+ * interface = the surface I sit in front of (T3 Code and Grok Bot; Cursor now and then).
  * The point is the loop, not the chat: give context, let an agent inspect the
  * repo, make edits, run tests/checks, review the output, iterate.
  *
@@ -13,7 +13,7 @@
  */
 
 /** ISO date — bump when you revise items or copy. Shown on `/notes`. */
-export const fieldNotesLastUpdated = '2026-10-17';
+export const fieldNotesLastUpdated = '2026-10-18';
 
 export type FieldNoteStatus =
   | 'life'
@@ -123,14 +123,6 @@ export const fieldNotesSections: FieldNoteSection[] = [
         pros: ['The heavier OpenAI option when Sol is not enough'],
       },
       {
-        title: 'Kimi K3',
-        tags: ['moonshot', 'model', 'opencode zen'],
-        badge: 'experimenting',
-        homepage: 'https://www.kimi.com',
-        note: 'Moonshot’s model, run through OpenCode Zen inside T3 Code. A different read from Claude and GPT without leaving the same loop.',
-        pros: ['Open weights', 'A genuinely different read from the big two'],
-      },
-      {
         title: 'Muse Glimmer 30B',
         tags: ['meta', '🇺🇸', 'model', 'ollama', 'local'],
         badge: 'experimenting',
@@ -178,7 +170,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['open source', 'cli', 'coding agent'],
         badge: 'occasional',
         homepage: 'https://opencode.ai',
-        note: 'The open-source harness, and the only one of the four that is not tied to a single vendor. I run Kimi through OpenCode Zen, and Muse Glimmer locally through Ollama on my 3090.',
+        note: 'The open-source harness, and the only one of the four that is not tied to a single vendor. I run Muse Glimmer locally through Ollama on my 3090.',
         pros: [
           'Vendor-neutral — any model in the same loop',
           'Same repo workflow as the other two',
@@ -208,26 +200,16 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['spacexsi', 'personal agent', 'app'],
         badge: 'daily',
         homepage: 'https://grok.com',
-        note: 'SpaceXSI’s personal agent, and one of the three apps I actually work in. It runs on its own cloud computer, signs into apps the way I would, and keeps working with my laptop closed. It comes with my X Subscription.',
+        note: 'SpaceXSI’s personal agent, and one of the two apps I actually work in, with T3 Code. It runs on its own cloud computer, signs into apps the way I would, and keeps working with my laptop closed. It comes with my X Subscription.',
         pros: ['Keeps working without my machine on'],
       },
       {
         title: 'Cursor',
         tags: ['cursor', 'app', 'web'],
-        badge: 'daily',
-        homepage: 'https://cursor.com',
-        note: 'The Cursor app and the web app. One of the three places I actually work, with T3 Code and Grok Bot. It comes with the X Subscription.',
-        pros: ['App and web on the same plan as Grok and X'],
-      },
-      {
-        title: 'Warp',
-        tags: ['terminal', 'barely used'],
         badge: 'occasional',
-        homepage: 'https://warp.dev',
-        note: 'The terminal I still have installed. I barely use it — T3 Code took over almost all of what used to happen here.',
-        link: { href: 'https://app.warp.dev/referral/3MJVPD', label: 'my referral' },
-        pros: ['Still a good terminal when I need one'],
-        cons: ['I barely open it'],
+        homepage: 'https://cursor.com',
+        note: 'The Cursor app and the web app. I mostly reach it through Grok Bot now instead of opening it myself. It comes with the X Subscription.',
+        pros: ['App and web on the same plan as Grok and X'],
       },
     ],
   },
@@ -272,7 +254,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         badge: 'daily',
         homepage: 'https://x.com',
         marks: ['x', 'grok', 'cursor', 'grok-bot'],
-        note: 'SpaceXSI’s bundle of Grok, Cursor, and X Premium, on the Super tier at $100/mo. I am a heavy Grok Bot, Grok, and Cursor user.',
+        note: 'SpaceXSI’s bundle of Grok, Cursor, and X Premium, on the Super tier at $100/mo. I am a heavy Grok Bot and Grok user, and reach Cursor through Grok Bot.',
         pros: [
           'One plan covers Grok, Grok Bot, Cursor, and X',
           'Replaces what used to be three separate subscriptions',
@@ -300,20 +282,9 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['opencode', 'pay as you go'],
         badge: 'experimenting',
         homepage: 'https://opencode.ai',
-        note: 'Pay-as-you-go credit behind OpenCode and my Kimi K3 access. It replaced the Go plan, so I pay for what I run instead of a monthly seat.',
-        pros: [
-          'Puts an open-weight model in the same loop as the big two',
-          'Only pay for what I run',
-        ],
+        note: 'Pay-as-you-go credit behind OpenCode. It replaced the Go plan, so I pay for what I run instead of a monthly seat.',
+        pros: ['Only pay for what I run'],
         cons: ['Only earns its slot if OpenCode does'],
-      },
-      {
-        title: 'Warp Build',
-        tags: ['warp', 'annual', 'not renewing'],
-        badge: 'occasional',
-        homepage: 'https://warp.dev',
-        note: 'The annual plan behind Warp. I barely use Warp, so it is set to lapse and will not renew.',
-        cons: ['Hard to justify while I barely open it'],
       },
     ],
   },
@@ -416,22 +387,6 @@ export const fieldNotesSections: FieldNoteSection[] = [
         homepage: 'https://tailscale.com',
         note: 'Zero-config mesh VPN that keeps my machines and VPS reachable securely.',
         pros: ['Simple secure networking across devices', 'Works well for remote agent access'],
-      },
-      {
-        title: 'Helium Browser',
-        tags: ['browser', 'privacy'],
-        badge: 'daily',
-        homepage: 'https://helium.computer',
-        note: 'Lightweight browser I use for isolated browsing and testing; useful for quick checks.',
-        pros: ['Fast, minimal surface for quick browsing and testing'],
-      },
-      {
-        title: 'Codex Bar',
-        tags: ['menu bar', 'codex'],
-        badge: 'daily',
-        homepage: 'https://codexbar.app',
-        note: 'Menu-bar runner for quick Codex prompts and snippets without opening the full app.',
-        pros: ['Convenient for one-off prompts and small snippets'],
       },
     ],
   },
