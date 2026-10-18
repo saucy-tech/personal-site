@@ -230,12 +230,14 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['nous research', 'orchestration', 'command center'],
         badge: 'experimenting',
         homepage: 'https://hermes-agent.nousresearch.com',
-        note: 'Nous Research’s agent harness, self-hosted on the VPS. It can coordinate Claude Code and Codex as workers and take work over a Telegram gateway, all over Tailscale rather than the public internet. For me it is the remote and async lane — a job I can kick off from my phone — while most real work still happens locally on the Mac.',
+        note: 'Nous Research’s agent harness, self-hosted on my home StartOS box. It takes work over a private Discord server and can kick off T3 Code sessions on my Mac over Tailscale. For me it is an async lane I can reach from my phone while most real work still happens locally.',
         pros: [
-          'Remote control from my phone via Telegram',
+          'Remote control from my phone via Discord',
           'Private by default — no public exposure',
         ],
-        cons: ['Still deciding what actually belongs in a remote lane versus the local loop'],
+        cons: [
+          'Still deciding what actually belongs in a remote lane versus Grok Bot and the local loop',
+        ],
       },
     ],
   },
@@ -288,7 +290,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
     id: 'infrastructure',
     title: 'Infrastructure',
     blurb:
-      'Where the work and the sites actually live — the local box, the always-on box, hosting, and DNS.',
+      'Where the work and the sites actually live — the Mac, the home GPU PC, the always-on VPS, hosting, and DNS.',
     items: [
       {
         title: 'M1 MacBook Pro',
@@ -297,19 +299,31 @@ export const fieldNotesSections: FieldNoteSection[] = [
         homepage: 'https://www.apple.com',
         note: 'Where the work actually happens. Not an AI tool, but the machine the harnesses edit on and the checks run against, and the default over the VPS for nearly everything. Still plenty of headroom for the whole stack of CLIs, editors, and a browser at once.',
         pros: ['Handles the full local toolchain comfortably', 'Quiet, cool, and always ready'],
-        cons: ['Heavier model and container work still belongs on the VPS'],
+        cons: ['Local model inference runs on the 3090 PC instead'],
+      },
+      {
+        title: 'RTX 3090 PC',
+        tags: ['nvidia', '24 GB VRAM', 'ollama', 'hardware'],
+        badge: 'occasional',
+        homepage: 'https://ollama.com',
+        note: 'My Windows desktop with a 24 GB RTX 3090. It serves Ollama over Tailscale so the Mac can run Muse Glimmer locally without giving up laptop memory.',
+        pros: [
+          '24 GB of VRAM handles 30B open-weight models comfortably',
+          'Shared with the Mac over Tailscale',
+        ],
+        cons: ['Only on when I need local inference or gaming'],
       },
       {
         title: 'Hostinger VPS',
         tags: ['hostinger', 'KVM 4', 'Ubuntu 24.04'],
         badge: 'daily',
         homepage: 'https://www.hostinger.com',
-        note: 'My always-on server — a Hostinger KVM 4 box on Ubuntu 24.04. It complements Cloudflare rather than replacing it: Workers stay the default for public web apps, while this runs Docker workloads, private tools, background jobs, and Hermes. Access is private-first over Tailscale, with only SSH and HTTP/S exposed publicly.',
+        note: 'My always-on Linux box — a Hostinger KVM 4 on Ubuntu 24.04. Workers handle all of my public web apps, so this server has one job: an always-on T3 Code host I can reach from anywhere through T3 Connect or Grok Bot, plus a Tailscale exit node. No public web ports are open; SSH only listens on Tailscale.',
         link: { href: 'https://www.hostinger.com?REFERRALCODE=62HBRANDOYK4', label: 'my referral' },
         pros: [
-          'Always-on home for self-hosted services and agents',
-          'Private-first access over Tailscale keeps the surface small',
-          'Cheap, predictable place to run long-lived processes Workers are not meant for',
+          'Always-on T3 Code host when my Mac is closed',
+          'SSH over Tailscale only — no public ports open',
+          'Doubles as a Tailscale exit node with automated daily backups',
         ],
         cons: ['I own the patching, backups, and uptime myself'],
       },
