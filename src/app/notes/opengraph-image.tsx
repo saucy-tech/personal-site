@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const alt =
-  'Notes diagram: devices connect through T3 Code to Claude Code, Codex, and OpenCode, then to remote machines and an RTX 3090';
+  'Notes diagram: devices connect through T3 Code to Claude Code, Codex, Grok Build, and Cursor, then to remote machines and an RTX 3090';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -22,11 +22,11 @@ function Node({
     <div
       style={{
         width: `${width}px`,
-        minHeight: '62px',
+        minHeight: '54px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: '14px 20px',
+        padding: '10px 20px',
         borderRadius: '16px',
         border: `1px solid ${emphasis ? accent : border}`,
         background: emphasis ? 'rgba(247, 147, 26, 0.16)' : panel,
@@ -152,10 +152,11 @@ export default function OGImage() {
           T3 Code
         </Node>
         <Arrow />
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <Node width={206}>Claude Code</Node>
           <Node width={206}>Codex</Node>
-          <Node width={206}>OpenCode</Node>
+          <Node width={206}>Grok Build</Node>
+          <Node width={206}>Cursor</Node>
         </div>
         <Arrow />
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
