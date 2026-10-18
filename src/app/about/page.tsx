@@ -70,7 +70,7 @@ export default function About() {
         <p className="text-base leading-relaxed text-(--text-secondary)">{about.workWithMe.body}</p>
         <a
           href={`mailto:${about.workWithMe.email}`}
-          className="inline-block rounded-sm bg-(--accent) px-4 py-2 text-(--on-accent) transition hover:bg-(--accent-dark)"
+          className="a11y-focus-ring inline-block rounded-sm bg-(--accent) px-4 py-2 text-(--on-accent) transition hover:bg-(--accent-dark)"
         >
           {about.workWithMe.email}
         </a>
