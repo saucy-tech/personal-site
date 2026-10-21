@@ -131,6 +131,17 @@ export const fieldNotesSections: FieldNoteSection[] = [
         note: 'The only local model I still run. Qwen3.8-27B at Q4_K_M quantization, served by llama.cpp on the 3090.',
         pros: ['Private and local'],
       },
+      {
+        title: 'Muse Wonder',
+        tags: ['meta', 'model', 'opencode'],
+        badge: 'occasional',
+        homepage: 'https://dev.meta.ai',
+        note: 'Meta’s model, run through OpenCode. It is not a frontier coding model, but it is better than that sounds — I like how it has worked and how it responds, so it stays in the rotation for occasional use.',
+        pros: [
+          'Better than its tier suggests on real work',
+          'A response style I keep coming back to',
+        ],
+      },
     ],
   },
   {
