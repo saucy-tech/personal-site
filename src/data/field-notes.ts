@@ -13,7 +13,7 @@
  */
 
 /** ISO date — bump when you revise items or copy. Shown on `/notes`. */
-export const fieldNotesLastUpdated = '2026-10-20';
+export const fieldNotesLastUpdated = '2026-10-21';
 
 export type FieldNoteStatus =
   | 'life'
@@ -126,7 +126,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         title: 'Qwen3.8-27B',
         tags: ['qwen', 'model', 'llama.cpp', 'local'],
         badge: 'experimenting',
-        homepage: 'https://github.com/ggml-org/llama.cpp',
+        homepage: 'https://qwen.ai',
         note: 'The only local model I still run. Qwen3.8-27B at Q4_K_M quantization, served by llama.cpp on the 3090.',
         pros: ['Private and local'],
       },
