@@ -77,7 +77,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
     id: 'models',
     title: 'Models',
     blurb:
-      'The raw horsepower. Opus 5.5, GPT-6.1 Sol, and Grok 4.7 carry the daily work; the rest come in when a job calls for them. The one local model, Muse Glimmer, is an American open-weight model.',
+      'The raw horsepower. Opus 5.5, GPT-6.1 Sol, and Grok 4.7 carry the daily work; the rest come in when a job calls for them. The one local model, Qwen3.8-27B, runs at Q4_K_M quantization through llama.cpp.',
     items: [
       {
         title: 'Claude Opus 5.5',
@@ -123,12 +123,12 @@ export const fieldNotesSections: FieldNoteSection[] = [
         pros: ['The heavier OpenAI option when Sol is not enough'],
       },
       {
-        title: 'Muse Glimmer 30B',
-        tags: ['meta', '🇺🇸', 'model', 'ollama', 'local'],
+        title: 'Qwen3.8-27B',
+        tags: ['qwen', 'model', 'llama.cpp', 'local'],
         badge: 'experimenting',
-        homepage: 'https://ollama.com',
-        note: 'The only local model I still run. Meta’s American open model for local agents (muse-glimmer:30b), on the 3090.',
-        pros: ['Private and local', 'Built for agent work'],
+        homepage: 'https://github.com/ggml-org/llama.cpp',
+        note: 'The only local model I still run. Qwen3.8-27B at Q4_K_M quantization, served by llama.cpp on the 3090.',
+        pros: ['Private and local'],
       },
     ],
   },
@@ -289,10 +289,10 @@ export const fieldNotesSections: FieldNoteSection[] = [
       },
       {
         title: 'RTX 3090 PC',
-        tags: ['nvidia', '24 GB VRAM', 'ollama', 'hardware'],
+        tags: ['nvidia', '24 GB VRAM', 'llama.cpp', 'hardware'],
         badge: 'occasional',
-        homepage: 'https://ollama.com',
-        note: 'My Windows desktop with a 24 GB RTX 3090. It serves Ollama over Tailscale so the Mac can run Muse Glimmer locally without giving up laptop memory.',
+        homepage: 'https://github.com/ggml-org/llama.cpp',
+        note: 'My Windows desktop with a 24 GB RTX 3090. It runs llama.cpp serving Qwen3.8-27B at Q4_K_M quantization over Tailscale so the Mac can use the local model without giving up laptop memory.',
         pros: [
           '24 GB of VRAM handles 30B open-weight models comfortably',
           'Shared with the Mac over Tailscale',
