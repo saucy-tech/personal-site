@@ -4,8 +4,9 @@
  * Sections follow the order the choice is actually made: the models, the
  * harnesses that run them inside a repo, the interfaces I drive those harnesses
  * from, and what I'm still evaluating — plus the subscriptions, infrastructure,
- * and utilities underneath. Harness = the agent loop (Claude Code, Codex, Grok Build, Cursor);
- * interface = the surface I sit in front of (T3 Code and Grok Bot).
+ * and utilities underneath. Harness = the agent loop (Claude Code, Codex, Grok Build,
+ * OpenCode, and Cursor's cloud agents); interface = the surface I sit in front of
+ * (T3 Code and Grok Bot).
  * The point is the loop, not the chat: give context, let an agent inspect the
  * repo, make edits, run tests/checks, review the output, iterate.
  *
@@ -13,7 +14,7 @@
  */
 
 /** ISO date — bump when you revise items or copy. Shown on `/notes`. */
-export const fieldNotesLastUpdated = '2026-10-20';
+export const fieldNotesLastUpdated = '2026-10-21';
 
 export type FieldNoteStatus =
   | 'life'
@@ -136,7 +137,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
     id: 'coding-agents',
     title: 'Harnesses',
     blurb:
-      'The agent loop itself — the thing that takes a model, gives it tools, and lets it inspect a repo, edit, and run checks. Claude Code, Codex, and Grok Build each run their own vendor’s models; Cursor covers the others. The interface I drive a harness from is a separate choice.',
+      'The agent loop itself — the thing that takes a model, gives it tools, and lets it inspect a repo, edit, and run checks. Claude Code, Codex, and Grok Build each run their own vendor’s models; OpenCode and Cursor cover the others — OpenCode locally, Cursor as cloud agents I reach through Grok Bot. The interface I drive a harness from is a separate choice.',
     items: [
       {
         title: 'Claude Code',
@@ -166,16 +167,28 @@ export const fieldNotesSections: FieldNoteSection[] = [
         cons: ['Newest vendor harness — still learning where it beats the others'],
       },
       {
+        title: 'OpenCode',
+        tags: ['open source', 'cli', 'coding agent'],
+        badge: 'daily',
+        homepage: 'https://opencode.ai',
+        note: 'The open-source harness, and the one I run Muse Wonder through. It is also how the local model fits the loop: OpenCode talks to llama.cpp on the RTX 3090 PC, which serves Qwen3.8-27B at Q4_K_M quantization, so the same inspect, edit, and check workflow runs against a model on my own hardware.',
+        pros: [
+          'Vendor-neutral — cloud and local models in the same loop',
+          'Runs the 3090’s Qwen3.8-27B through llama.cpp',
+        ],
+        cons: ['One more harness to keep configured next to the vendor CLIs'],
+      },
+      {
         title: 'Cursor',
-        tags: ['cursor', 'app', 'coding agent'],
+        tags: ['cursor', 'cloud agents', 'coding agent'],
         badge: 'occasional',
         homepage: 'https://cursor.com',
-        note: 'My occasional harness for models outside the vendor CLIs — Muse Wonder, Gemini, and whatever else I want in the same inspect, edit, and check loop. It comes with the X Subscription.',
+        note: 'Cursor’s cloud agents, not the editor. I rarely sit in Cursor itself; I dispatch its agents through Grok Bot, which makes Grok Bot the interface and Cursor the harness running the repo loop in the cloud. It comes with the X Subscription.',
         pros: [
-          'Vendor-neutral — other models in the same loop',
-          'Same repo workflow as the others',
+          'Cloud agents keep working without my machine in the loop',
+          'Reached through Grok Bot instead of another app to sit in',
         ],
-        cons: ['Occasional by design — the vendor harnesses carry the daily work'],
+        cons: ['Occasional by design — the local harnesses carry the daily work'],
       },
     ],
   },
@@ -189,7 +202,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['interface', 'multi-harness', 'daily driver'],
         badge: 'daily',
         homepage: 'https://t3.codes',
-        note: 'Where I spend most of my time now. Not a harness — it sits on top of Claude Code, Codex, Grok Build, and Cursor and lets me run any of them from one window, with my models pinned to keyboard shortcuts so switching is a keystroke instead of a context rebuild.',
+        note: 'Where I spend most of my time now. Not a harness — it sits on top of Claude Code, Codex, Grok Build, and OpenCode and lets me run any of them from one window, with my models pinned to keyboard shortcuts so switching is a keystroke instead of a context rebuild. Cursor’s cloud agents are the exception: those I reach through Grok Bot instead.',
         pros: [
           'One interface over four harnesses',
           'Switch models and harnesses without leaving the flow',
@@ -200,8 +213,8 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['spacexsi', 'personal agent', 'app'],
         badge: 'daily',
         homepage: 'https://grok.com',
-        note: 'SpaceXSI’s personal agent, and one of the two apps I actually work in, with T3 Code. It runs on its own cloud computer, signs into apps the way I would, and keeps working with my laptop closed. It comes with my X Subscription.',
-        pros: ['Keeps working without my machine on'],
+        note: 'SpaceXSI’s personal agent, and one of the two apps I actually work in, with T3 Code. It runs on its own cloud computer, signs into apps the way I would, and keeps working with my laptop closed. It is also how I reach Cursor’s cloud agents, so it is the interface even when Cursor is the harness doing the work. It comes with my X Subscription.',
+        pros: ['Keeps working without my machine on', 'Dispatches Cursor cloud agents'],
       },
     ],
   },
