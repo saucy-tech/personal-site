@@ -9,6 +9,11 @@ read that file. `engines.node` requires the patched 24.x line. pnpm remains
 **10.15.0**. Use a per-shell runner or `nvm use`; do not change a shared host's
 default runtime to validate this repository.
 
+Keep `.nvmrc` as the exact bytes `24.22.1`, without a trailing newline.
+Cloudflare's raw failed-build log included the file's newline in the detected
+Node version. The literal pin avoids that ambiguous installer input while
+Actions continue to read the same version file; verify the new preview build.
+
 Separately, [GHSA-xjj6-f33q-929c / CVE-2026-109869](https://github.com/nodejs/undici/security/advisories/GHSA-xjj6-f33q-929c)
 requires npm Undici 6.29.1 or 7.30.1 on the installed major lines:
 

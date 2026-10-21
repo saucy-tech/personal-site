@@ -160,3 +160,23 @@ Cloudflare preview; production merge/release remains a separate gate.
 ## Open questions for review
 
 Production build settings, merge, and release remain Brandon's separate gate.
+
+## Resumed 2026-10-21
+
+### Test the embedded newline in Cloudflare's version input — 2026-10-21
+**Spec section:** Repository-specific Node selection / preview verification
+Brandon supplied the raw build log, which preserves a newline immediately
+after `nodejs@24.22.1` and after the install version. The dashboard had
+flattened that newline to a space. The checked-in .nvmrc ends with LF; remove
+only that byte while retaining exact Node 24.22.1 and the same Actions source
+of truth. A new git-connected build must establish whether this fixes the
+installer before treating it as confirmed. No shared build setting changes.
+
+### Verify the literal version file before the next build — 2026-10-21
+**Spec section:** Owned checks
+The official nvm parser accepts the no-LF file as 24.22.1 in an isolated
+shell with auto-use disabled. The local Node 24.22.1 / pnpm 10.15.0 runner
+still passes quality:gate (18 suites / 128 tests). The effective runtime and
+dependency graph are unchanged; GitHub and Cloudflare will rerun their full
+acceptance on the new head. Brandon's current-session unsigned-commit
+authorization remains in effect; signing defaults are unchanged.
