@@ -304,7 +304,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         title: 'RTX 3090 PC',
         tags: ['nvidia', '24 GB VRAM', 'llama.cpp', 'hardware'],
         badge: 'occasional',
-        homepage: 'https://github.com/ggml-org/llama.cpp',
+        homepage: 'https://www.nvidia.com',
         note: 'My Windows desktop with a 24 GB RTX 3090. It runs llama.cpp serving Qwen3.8-27B at Q4_K_M quantization over Tailscale so the Mac can use the local model without giving up laptop memory.',
         pros: [
           '24 GB of VRAM handles 30B open-weight models comfortably',
