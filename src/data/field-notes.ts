@@ -13,7 +13,7 @@
  */
 
 /** ISO date — bump when you revise items or copy. Shown on `/notes`. */
-export const fieldNotesLastUpdated = '2026-10-18';
+export const fieldNotesLastUpdated = '2026-10-20';
 
 export type FieldNoteStatus =
   | 'life'
