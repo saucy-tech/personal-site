@@ -95,7 +95,7 @@ export default function Home() {
 
         <section aria-labelledby="selected-products" className="space-y-6">
           <h2 id="selected-products" className="text-2xl font-semibold">
-            Products I build and use
+            Products I build
           </h2>
           <div className="grid gap-10 md:grid-cols-2">
             {projects
@@ -175,6 +175,17 @@ export default function Home() {
                 className="a11y-focus-ring rounded-xs text-(--accent) underline underline-offset-4"
               >
                 Read it at morningportion.com
+              </a>
+            </li>
+            <li>
+              This week in QGIS plugins{' · '}
+              <a
+                href="https://gisplugins.dev/newsletter"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="a11y-focus-ring rounded-xs text-(--accent) underline underline-offset-4"
+              >
+                Read GIS Plugins Weekly
               </a>
             </li>
           </ul>
