@@ -3,7 +3,7 @@
  * Edit here to update copy. Bump `projectsLastUpdated` when you revise.
  */
 
-export const projectsLastUpdated = '2026-09-22';
+export const projectsLastUpdated = '2026-10-23';
 
 export type ProjectGroup = 'apps' | 'tools' | 'open-source' | 'client-work' | 'track-record';
 
@@ -57,6 +57,28 @@ export const projects: Project[] = [
     links: [{ href: 'https://morningportion.com', label: 'Visit morningportion.com' }],
   },
   {
+    id: 'gis-plugins',
+    summary:
+      'A QGIS plugin directory that tracks which plugins are ready for QGIS 4. GIS Plugins Weekly, a free email, covers new plugins and readiness changes.',
+    preview: {
+      src: '/images/products/gis-plugins.webp',
+      alt: 'GIS Plugins homepage with a QGIS plugin search box, popular searches, categories, and a GIS Plugins Weekly signup form.',
+      width: 1720,
+      height: 1014,
+    },
+    group: 'apps',
+    title: 'GIS Plugins',
+    status: 'launched',
+    featured: true,
+    tags: ['Python', 'Static site generator', 'Cloudflare Pages', 'QGIS', 'Static analysis'],
+    blurb:
+      'An independent QGIS plugin directory and QGIS 4 readiness tracker, rebuilt daily from the public plugins.qgis.org feeds. The generator is Python on the standard library alone and writes a static site served from Cloudflare Pages: search by task, categories, a page per plugin, and share images drawn at build time. The adopt page lists popular plugins that still need a port to QGIS 4, with an automatic port-difficulty estimate on each from a scan of the plugin ZIP’s syntax tree that never runs plugin code. GIS Plugins Weekly sends new plugins, notable updates, and readiness changes once a week. The repository is private, so the live site is the thing to look at.',
+    links: [
+      { href: 'https://gisplugins.dev', label: 'Visit gisplugins.dev' },
+      { href: 'https://gisplugins.dev/newsletter', label: 'GIS Plugins Weekly' },
+    ],
+  },
+  {
     id: 'train-every-day',
     summary:
       'The workout logger I use at the gym. It keeps working without a signal. Try the public demo with sample data.',
@@ -104,7 +126,6 @@ export const projects: Project[] = [
     group: 'apps',
     title: 'Health Dashboard',
     status: 'launched',
-    featured: true,
     summary:
       'The dashboard I use to run my own care: weight, medication, labs, training, and a weekly review. The public demo uses an invented person.',
     preview: {
