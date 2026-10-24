@@ -137,6 +137,8 @@ test.describe('smoke', () => {
   test('tip jar shows the Lightning error when the invoice service is unconfigured', async ({
     page,
   }) => {
+    // Keep this local error-path check independent of Coinbase availability.
+    await page.route('**/api/btcusd', (route) => route.fulfill({ json: { usd: 100_000 } }));
     await page.goto('/support');
     await page.getByRole('button', { name: 'Custom' }).click();
     await page.getByPlaceholder('Enter sats').fill('500');
