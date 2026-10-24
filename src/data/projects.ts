@@ -3,7 +3,7 @@
  * Edit here to update copy. Bump `projectsLastUpdated` when you revise.
  */
 
-export const projectsLastUpdated = '2026-10-23';
+export const projectsLastUpdated = '2026-10-24';
 
 export type ProjectGroup = 'apps' | 'tools' | 'open-source' | 'client-work' | 'track-record';
 
@@ -156,19 +156,6 @@ export const projects: Project[] = [
         href: 'https://sunday-school-demo.brandonsauceda.workers.dev',
         label: 'Open the demo',
       },
-    ],
-  },
-  {
-    id: 'lightning-tip-jar',
-    group: 'apps',
-    title: 'Lightning Tip Jar',
-    status: 'launched',
-    tags: ['React', 'Lightning', 'NWC'],
-    blurb:
-      "A Lightning tipping interface from ATL BitLab's workshop, enhanced with @getalby/sdk for seamless Nostr Wallet Connect support. Pick sats, generate an invoice, tip via Lightning.",
-    links: [
-      { href: 'https://github.com/saucy-tech/lntipjar', label: 'GitHub Repo' },
-      { href: '/support', label: 'Live Demo' },
     ],
   },
 
