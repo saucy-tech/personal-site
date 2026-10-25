@@ -28,9 +28,9 @@ API routes under `src/app/api/`: BTC price proxy, Lightning invoice and LNURL-pa
 
 ## Run it
 
-Requires Node and pnpm at the version declared by `packageManager` in
-`package.json` (currently 10.15.0). Install pnpm before running the setup below;
-Corepack is optional when pnpm is installed directly.
+Requires Node 24.22.1 (see `.nvmrc`) and pnpm at the version declared by
+`packageManager` in `package.json` (currently 10.15.0). Install pnpm before
+running the setup below; Corepack is optional when pnpm is installed directly.
 
 ```bash
 git clone https://github.com/saucy-tech/personal-site.git
@@ -71,13 +71,15 @@ pnpm security:drift        # production CSP has not regressed
 
 ## Cloudflare runtime compatibility
 
-Next.js, eslint-config-next, and the bundle analyzer are held on `~16.3.8`
-while OpenNext 1.20.10 lacks Next 16.4's `preview-props.json` manifest support
-([upstream issue #1355](https://github.com/opennextjs/opennextjs-cloudflare/issues/1355)).
+Next.js, eslint-config-next, and the bundle analyzer use `~16.4.2` with
+OpenNext 1.20.12. Keep that tested pairing when changing build tooling.
 A successful Next build or Worker upload does not exercise request handling.
 Run `pnpm test:worker` to build the actual Worker and check read-only requests
-locally; CI also runs this smoke test. Lift the hold only after the adapter
-supports the manifest and the Worker smoke test and deployed preview pass.
+locally; CI also runs this smoke test. Framework or adapter upgrades require
+both the Worker smoke test and deployed preview to pass.
+
+The October 2026 Node/Undici verification and approval-gated release/rollback
+steps are in [the security runbook](docs/runbooks/node-october-2026.md).
 
 ## Deploy
 
