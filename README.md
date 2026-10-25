@@ -111,7 +111,7 @@ Verify with `curl -sI https://saucy.tech | grep -i content-security-policy`, or 
 
 ### Devotion broadcast
 
-Merging a post does not email anyone. The email to the Daily Word list is sent only by manually dispatching `.github/workflows/devotion-broadcast.yml` (Actions → Run workflow), supplying the post slug and typing `SEND` in the confirm field. It uses the `KIT_API_KEY` secret and the `NEXT_PUBLIC_APP_URL` variable. The PR-label trigger was removed on 2026-06-10 so a stray `devotion` label can never send mail from this archive. `pnpm broadcast` is a manual fallback that creates a draft from the latest post by frontmatter date.
+Merging a post does not email anyone, and this repo no longer sends Daily Word email. Devotion authoring and the Kit broadcast moved to `the-morning-portion`; the archive's manual broadcast and correction workflows and their `KIT_API_KEY` Actions secret were removed on 2026-10-24. `pnpm broadcast` remains a local manual fallback that creates a draft from the latest post by frontmatter date, using `CK_SECRET_KEY` and `CK_PUBLISHER_ID` from your local env.
 
 ### Résumé PDF
 

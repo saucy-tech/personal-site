@@ -44,7 +44,7 @@ export const resume = {
       org: 'Saucy Tech, evenings and weekends',
       dates: 'March 2023 – Present',
       bullets: [
-        'Ship and run my own products on Cloudflare Workers: The Morning Portion, Train Every Day, The Home Hive, and Health Dashboard, plus a few client projects a year.',
+        'Ship and run my own products on Cloudflare: The Morning Portion, Train Every Day, The Home Hive, and GIS Plugins, plus a few client projects a year.',
         'Open-source contributions in TypeScript, Rust, and Python: Hubble (Windows desktop build, dark mode, workspace switcher), Warp (repo-picker UX), Neon Orbit (power-up system), Abbot, and Plebnet.',
         'Bitcoin/Lightning community: Legends of Lightning hackathon winner (Community & Education Award); ATL BitDevs, PlebLab.',
       ],
