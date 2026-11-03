@@ -41,11 +41,8 @@ NEXT_PUBLIC_APP_URL=https://example.com pnpm build
 pnpm exec tsc --noEmit
 ```
 
-Start `pnpm start` in another terminal, then match CI's production-server E2E
-flow with `CI=true pnpm exec playwright test`. Install the matching Chromium
-first with `pnpm exec playwright install chromium` if needed. Local secrets
-must be absent: the Lightning test expects an unconfigured service (503),
-uses a mocked BTC quote, and successful Kit requests are mocked in unit tests.
+Local secrets must be absent: successful Kit requests are mocked in unit
+tests.
 Do not run that full suite against a deployed preview with real bindings.
 
 Stop the Next server before the Worker build, then run:

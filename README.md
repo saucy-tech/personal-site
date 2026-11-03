@@ -47,7 +47,7 @@ Open http://localhost:3000. No environment variables are needed for the site to 
 - **Styling** — Tailwind CSS 4 with `@tailwindcss/typography`; dark mode via a theme toggle
 - **Content** — MDX files in `src/posts/`, frontmatter parsed by `gray-matter`, rendered through a remark/rehype pipeline (`remark-gfm`, `rehype-slug`, `rehype-autolink-headings`)
 - **Payments** — Lightning via the Alby SDK over Nostr Wallet Connect
-- **Testing** — Jest and React Testing Library, Playwright for E2E
+- **Testing** — Jest and React Testing Library
 - **Hosting** — Cloudflare Workers via the [OpenNext adapter](https://opennext.js.org/cloudflare)
 
 ## Content pipeline
