@@ -100,6 +100,65 @@ test.describe('smoke', () => {
     await expect(page.getByRole('link', { name: 'Why I save in Bitcoin' })).toBeVisible();
   });
 
+  test('notes shows the current stack and loads the new product icons', async ({ page }) => {
+    await page.goto('/notes');
+    await expect(page.locator('#coding-agents h3')).toHaveText([
+      'Claude Code',
+      'Codex',
+      'OpenCode',
+    ]);
+    await expect(page.locator('#interfaces h3')).toHaveText([
+      'T3 Code',
+      'Grok Bot',
+      'Claude Duet',
+      'Muse',
+    ]);
+    await expect(page.getByRole('heading', { name: 'Evaluating', exact: true })).toHaveCount(0);
+    await expect(page.getByRole('heading', { name: 'Hermes Agent', exact: true })).toHaveCount(0);
+    await expect(page.locator('#infrastructure h3').filter({ hasText: 'Cloudflare' })).toHaveText([
+      'Cloudflare',
+    ]);
+    for (const [section, title] of [
+      ['interfaces', 'Claude Duet'],
+      ['tools', 'Hex'],
+    ]) {
+      const article = page.locator(`#${section} article`).filter({
+        has: page.getByRole('heading', { name: title, exact: true }),
+      });
+      await article.scrollIntoViewIfNeeded();
+      await expect
+        .poll(() => article.locator('img').evaluate((img: HTMLImageElement) => img.naturalWidth))
+        .toBeGreaterThan(0);
+    }
+  });
+
+  for (const appearance of ['light', 'dark']) {
+    test(`notes icons load with a contrast backing in ${appearance} mode`, async ({ page }) => {
+      await page.addInitScript((mode) => {
+        localStorage.setItem('saucy-appearance', mode);
+      }, appearance);
+      await page.goto('/notes');
+      const icons = page.locator('article h3 img');
+      for (const icon of await icons.all()) {
+        await icon.scrollIntoViewIfNeeded();
+        await expect
+          .poll(() => icon.evaluate((img: HTMLImageElement) => img.naturalWidth))
+          .toBeGreaterThan(0);
+        await expect(icon).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+        await expect(icon).toHaveCSS('opacity', '1');
+      }
+      const codex = page.locator('#coding-agents article').filter({
+        has: page.getByRole('heading', { name: 'Codex', exact: true }),
+      });
+      const chatgpt = page.locator('#subscriptions article').filter({
+        has: page.getByRole('heading', { name: 'ChatGPT Pro 100', exact: true }),
+      });
+      expect(await chatgpt.locator('img').getAttribute('src')).toBe(
+        await codex.locator('img').getAttribute('src')
+      );
+    });
+  }
+
   test('portfolio exposes resume and contact', async ({ page }) => {
     await page.goto('/portfolio');
     const main = page.locator('#main-content');
