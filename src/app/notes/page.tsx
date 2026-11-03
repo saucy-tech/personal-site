@@ -9,24 +9,24 @@ import { SITE_NAME } from '@/utils/constants';
 
 const FIELD_NOTES_OG_IMAGE = '/notes/opengraph-image';
 
-function ToolFavicon({ homepage }: { homepage: string }) {
+function ToolFavicon({ homepage, icon }: { homepage: string; icon?: string }) {
   let hostname: string;
   try {
     hostname = new URL(homepage).hostname;
   } catch {
     return null;
   }
-  // 32px icons stored under public/icons/tools/<hostname>.png (no www.) so the
-  // page makes no third-party requests; next/image adds nothing at this size.
+  // Local product icons or 32px homepage favicons (no www.) keep the page free
+  // of third-party image requests; next/image adds nothing at this size.
   return (
     // eslint-disable-next-line @next/next/no-img-element
     <img
-      src={`/icons/tools/${hostname.replace(/^www\./, '')}.png`}
+      src={icon ?? `/icons/tools/${hostname.replace(/^www\./, '')}.png`}
       alt=""
       width={16}
       height={16}
       loading="lazy"
-      className="inline-block h-4 w-4 rounded-sm opacity-90"
+      className="inline-block h-4 w-4 shrink-0 rounded-sm bg-white"
     />
   );
 }
@@ -97,7 +97,9 @@ export default function NotesPage() {
                   >
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                       <h3 className="flex items-center gap-2 text-base font-semibold leading-snug text-(--text-primary)">
-                        {item.homepage && !item.marks && <ToolFavicon homepage={item.homepage} />}
+                        {item.homepage && !item.marks && (
+                          <ToolFavicon homepage={item.homepage} icon={item.icon} />
+                        )}
                         {item.title}
                       </h3>
                       {item.badge && (
