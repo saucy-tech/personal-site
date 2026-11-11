@@ -81,6 +81,29 @@ try {
     assert.ok(body.length > 1_000, `${path}: image is missing or truncated`);
     console.log(`Worker smoke: GET ${path} -> 200 (${body.length} bytes)`);
   }
+  // Every image width the homepage offers must be a real, pre-sized file with a
+  // content hash in its name, cached as immutable. /_next/image cannot resize here.
+  const home = await (await fetch(base, { signal: AbortSignal.timeout(15_000) })).text();
+  assert.ok(!home.includes('/_next/image'), '/: still references /_next/image');
+  const variants = [...new Set(home.match(/\/optimized\/[\w.-]+\.webp/g))];
+  assert.ok(variants.length >= 6, `/: expected pre-sized image variants, found ${variants.length}`);
+  for (const path of variants) {
+    const response = await fetch(`${base}${path}`, { signal: AbortSignal.timeout(15_000) });
+    assert.equal(response.status, 200, path);
+    assert.ok(response.headers.get('content-type')?.includes('image/webp'), path);
+    assert.match(response.headers.get('cache-control') ?? '', /immutable/, path);
+    const body = new Uint8Array(await response.arrayBuffer());
+    assert.ok(body.length > 1_000, `${path}: image is missing or truncated`);
+    console.log(`Worker smoke: GET ${path} -> 200 (${body.length} bytes, immutable)`);
+  }
+  // Unversioned URLs keep a short cache so a replaced file is picked up.
+  for (const path of ['/headshot.jpeg', '/favicon.ico']) {
+    const response = await fetch(`${base}${path}`, { signal: AbortSignal.timeout(15_000) });
+    const cacheControl = response.headers.get('cache-control') ?? '';
+    assert.match(cacheControl, /max-age=86400/, path);
+    assert.doesNotMatch(cacheControl, /immutable/, path);
+    console.log(`Worker smoke: GET ${path} -> ${cacheControl}`);
+  }
 } finally {
   // Stop pnpm, Wrangler and workerd, including when an assertion fails.
   if (child.pid) {

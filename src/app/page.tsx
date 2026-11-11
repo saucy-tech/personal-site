@@ -33,26 +33,14 @@ export default function Home() {
     {
       href: 'https://x.com/Saucy_Tech',
       icon: (
-        <Image
-          src="/icons/x-logo.svg"
-          width={32}
-          height={32}
-          alt="X (Twitter) logo"
-          quality={100}
-        />
+        <Image src="/icons/x-logo.svg" width={32} height={32} alt="X (Twitter) logo" unoptimized />
       ),
       label: 'X',
     },
     {
       href: 'https://github.com/saucy-tech',
       icon: (
-        <Image
-          src="/icons/github-logo.svg"
-          width={32}
-          height={32}
-          alt="GitHub logo"
-          quality={100}
-        />
+        <Image src="/icons/github-logo.svg" width={32} height={32} alt="GitHub logo" unoptimized />
       ),
       label: 'GitHub',
     },
@@ -64,7 +52,7 @@ export default function Home() {
           width={32}
           height={32}
           alt="Nostr protocol logo"
-          quality={100}
+          unoptimized
         />
       ),
       label: 'Nostr',
@@ -77,7 +65,7 @@ export default function Home() {
           width={32}
           height={32}
           alt="Discord logo"
-          quality={100}
+          unoptimized
         />
       ),
       label: 'Discord',
