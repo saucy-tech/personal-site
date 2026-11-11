@@ -17,7 +17,7 @@ import {
   getRelatedPosts,
   getSeriesChronoNeighbors,
 } from '@/utils/posts';
-import { absoluteUrl } from '@/utils/constants';
+import { AUTHOR_NAME, absoluteUrl } from '@/utils/constants';
 import { getPostJsonLd } from '@/utils/structured-data';
 
 export async function generateStaticParams() {
@@ -59,7 +59,7 @@ export default async function PostPage({ params }: PostPageProps) {
     category: post.category,
     tags: post.tags,
     imageUrl: getPostOgImageUrl(post.slug),
-    authorName: 'Brandon',
+    authorName: AUTHOR_NAME,
   });
 
   return (

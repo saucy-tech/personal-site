@@ -1,3 +1,4 @@
+import EmailLink from '@/components/EmailLink';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -73,13 +74,7 @@ export default function Privacy() {
         <p>
           For questions about your information or a request to remove your subscription information,
           email{' '}
-          <a
-            href="mailto:brandon@saucy.tech"
-            className="a11y-focus-ring text-(--accent) underline underline-offset-4"
-          >
-            brandon@saucy.tech
-          </a>
-          .
+          <EmailLink className="a11y-focus-ring text-(--accent) underline underline-offset-4" />.
         </p>
       </section>
     </PageLayout>
