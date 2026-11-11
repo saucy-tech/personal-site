@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 
 import BlogArchive from '@/components/BlogArchive';
 import PageLayout from '@/components/PageLayout';
+import { siteOpenGraph } from '@/utils/open-graph';
 import Section from '@/components/Section';
 import SubscribeForm from '@/components/SubscribeForm';
 import { formatPostDate } from '@/utils/helpers';
@@ -16,9 +17,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/blog',
   },
-  openGraph: {
-    url: '/blog',
-  },
+  openGraph: siteOpenGraph({ url: '/blog' }),
 };
 
 export default function BlogIndex() {

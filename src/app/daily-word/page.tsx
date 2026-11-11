@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import PageLayout from '@/components/PageLayout';
+import { siteOpenGraph } from '@/utils/open-graph';
 import { formatPostDate } from '@/utils/helpers';
 import { getAllPostsMeta } from '@/utils/posts';
 
@@ -11,11 +12,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/daily-word',
   },
-  openGraph: {
+  openGraph: siteOpenGraph({
     title: 'The Daily Word',
     description: "Archive of weekday scripture reflections from Brandon's Sunday School series.",
     url: '/daily-word',
-  },
+  }),
 };
 
 export default function DailyWordPage() {
@@ -33,8 +34,8 @@ export default function DailyWordPage() {
         </h2>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-(--text-secondary)">
           A weekday scripture reflection series rooted in the Sunday School lessons. Each post is a
-          2-minute read. This archive runs through May 2026. New entries now publish at The
-          Morning Portion.
+          2-minute read. This archive runs through May 2026. New entries now publish at The Morning
+          Portion.
         </p>
 
         <div className="mt-6 flex flex-wrap gap-3">

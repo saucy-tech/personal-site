@@ -10,6 +10,7 @@ import { Metadata } from 'next';
 
 import LinkCard from '@/components/LinkCard';
 import PageLayout from '@/components/PageLayout';
+import { siteOpenGraph } from '@/utils/open-graph';
 import { SITE_NAME } from '@/utils/constants';
 
 export const metadata: Metadata = {
@@ -19,12 +20,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/links',
   },
-  openGraph: {
+  openGraph: siteOpenGraph({
     title: 'Bitcoin Links',
     description: 'Favorite Bitcoin trackers, calculators, and dashboards.',
     url: '/links',
-    type: 'website',
-  },
+  }),
 };
 
 const links = [
