@@ -5,8 +5,10 @@ import type { Metadata } from 'next';
 import LinkCard from '@/components/LinkCard';
 import Profile from '@/components/Profile';
 import { fieldNotesLastUpdated } from '@/data/field-notes';
+import { portfolioAbout } from '@/data/portfolio-about';
 import { projects, projectsLastUpdated } from '@/data/projects';
 import SocialBar from '@/components/SocialBar';
+import { AUTHOR_NAME } from '@/utils/constants';
 import { formatPostDate } from '@/utils/helpers';
 
 export const metadata: Metadata = {
@@ -22,7 +24,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   const profileData = {
-    name: 'Brandon',
+    name: AUTHOR_NAME,
     bio: 'Love Jesus, Explore Ideas, Create Things, Save in Bitcoin',
     imageSrc: '/headshot.jpeg',
   };
@@ -90,6 +92,19 @@ export default function Home() {
           <p className="text-center text-sm leading-relaxed text-(--text-secondary)">
             Software engineer. I build my own products and take on a few client projects each year.
           </p>
+          <p className="text-center text-sm leading-relaxed text-(--text-secondary)">
+            For ten years I have built public web and GIS systems for the State of Georgia: 50,000+
+            monthly users, citizen wait times cut 40%, and international awards from Esri (2020) and
+            GMIS (2026).
+          </p>
+          <div className="pt-2 text-center text-sm">
+            <a
+              href={`mailto:${portfolioAbout.email}`}
+              className="a11y-focus-ring inline-block rounded-sm bg-(--accent) px-4 py-2 text-(--on-accent) transition hover:bg-(--accent-dark)"
+            >
+              Email me
+            </a>
+          </div>
         </div>
         <SocialBar socials={socialLinks} />
 
