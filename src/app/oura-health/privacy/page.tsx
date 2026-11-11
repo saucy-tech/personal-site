@@ -1,3 +1,4 @@
+import EmailLink from '@/components/EmailLink';
 import type { Metadata } from 'next';
 
 import PageLayout from '@/components/PageLayout';
@@ -70,10 +71,7 @@ export default function OuraHealthPrivacyPage() {
           <h2 className="text-xl font-semibold">Contact</h2>
           <p className="leading-relaxed text-(--text-secondary)">
             Questions about this policy can be sent to{' '}
-            <a className="text-(--accent) hover:underline" href="mailto:brandon@saucy.tech">
-              brandon@saucy.tech
-            </a>
-            .
+            <EmailLink className="text-(--accent) hover:underline" />.
           </p>
         </section>
       </article>

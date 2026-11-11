@@ -2,10 +2,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 
+import EmailLink from '@/components/EmailLink';
 import LinkCard from '@/components/LinkCard';
 import Profile from '@/components/Profile';
 import { fieldNotesLastUpdated } from '@/data/field-notes';
-import { portfolioAbout } from '@/data/portfolio-about';
 import { projects, projectsLastUpdated } from '@/data/projects';
 import SocialBar from '@/components/SocialBar';
 import { AUTHOR_NAME } from '@/utils/constants';
@@ -98,12 +98,9 @@ export default function Home() {
             GMIS (2026).
           </p>
           <div className="pt-2 text-center text-sm">
-            <a
-              href={`mailto:${portfolioAbout.email}`}
-              className="a11y-focus-ring inline-block rounded-sm bg-(--accent) px-4 py-2 text-(--on-accent) transition hover:bg-(--accent-dark)"
-            >
+            <EmailLink className="a11y-focus-ring inline-block rounded-sm bg-(--accent) px-4 py-2 text-(--on-accent) transition hover:bg-(--accent-dark)">
               Email me
-            </a>
+            </EmailLink>
           </div>
         </div>
         <SocialBar socials={socialLinks} />

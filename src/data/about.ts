@@ -30,6 +30,5 @@ export const about = {
   workWithMe: {
     heading: 'Client work',
     body: 'I take on a few client projects a year, usually web apps and product work. If that is a fit, email me.',
-    email: 'brandon@saucy.tech',
   },
 } as const;

@@ -1,3 +1,4 @@
+import EmailLink from '@/components/EmailLink';
 import PageLayout from '@/components/PageLayout';
 import { Metadata } from 'next';
 import { SITE_NAME } from '@/utils/constants';
@@ -76,12 +77,12 @@ export default async function Support({ searchParams }: SupportPageProps) {
             <p className="text-(--text-secondary) mb-4">
               Family and friends can email me for the private contribution link.
             </p>
-            <a
-              href="mailto:brandon@saucy.tech?subject=Trump%20Account%20contribution%20link"
+            <EmailLink
+              subject="Trump Account contribution link"
               className="inline-block rounded-sm bg-(--accent) px-4 py-2 text-sm font-medium text-(--on-accent) transition hover:bg-(--accent-dark)"
             >
               Request the contribution link
-            </a>
+            </EmailLink>
           </div>
         </div>
       </Section>

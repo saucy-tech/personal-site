@@ -1,3 +1,4 @@
+import EmailLink from '@/components/EmailLink';
 import { Metadata } from 'next';
 
 import PageLayout from '@/components/PageLayout';
@@ -68,12 +69,10 @@ export default function About() {
       <section id="work-with-me" className="scroll-mt-24 space-y-4">
         <h2 className="text-2xl font-semibold">{about.workWithMe.heading}</h2>
         <p className="text-base leading-relaxed text-(--text-secondary)">{about.workWithMe.body}</p>
-        <a
-          href={`mailto:${about.workWithMe.email}`}
+        <EmailLink
+          fallback="Email me"
           className="a11y-focus-ring inline-block rounded-sm bg-(--accent) px-4 py-2 text-(--on-accent) transition hover:bg-(--accent-dark)"
-        >
-          {about.workWithMe.email}
-        </a>
+        />
       </section>
 
       <p className="text-xs text-(--text-secondary)">About updated {aboutLastUpdated}</p>

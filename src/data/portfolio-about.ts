@@ -10,7 +10,6 @@ export const portfolioAbout = {
   title: 'IT Development Manager · Software Engineer',
   summary:
     'I run Saucy Tech, where I ship my own software products and take on a few client projects a year. For ten years I have built public technology for the State of Georgia: web apps and enterprise GIS for state agencies and the public. I also contribute to open source in TypeScript, Rust, and Python, including Windows desktop support for the Hubble notepad.',
-  email: 'brandon@saucy.tech',
   linkedIn: 'https://linkedin.com/in/saucytech',
   github: 'https://github.com/saucy-tech',
   resumeHref: '/resume',
