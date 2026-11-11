@@ -8,6 +8,7 @@ import { fieldNotesLastUpdated } from '@/data/field-notes';
 import { projects, projectsLastUpdated } from '@/data/projects';
 import SocialBar from '@/components/SocialBar';
 import { formatPostDate } from '@/utils/helpers';
+import { siteOpenGraph } from '@/utils/open-graph';
 
 export const metadata: Metadata = {
   description:
@@ -15,9 +16,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
-  openGraph: {
-    url: '/',
-  },
+  openGraph: siteOpenGraph({ url: '/' }),
 };
 
 export default function Home() {

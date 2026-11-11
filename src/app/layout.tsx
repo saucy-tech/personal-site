@@ -6,6 +6,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { getFooterNavItems, getSiteNavItems } from '@/config/site-nav';
 import { SITE_NAME, SITE_DESCRIPTION_HIRING, SITE_URL } from '@/utils/constants';
+import { DEFAULT_OG_IMAGE_PATH, siteOpenGraph } from '@/utils/open-graph';
 import { getSiteJsonLd } from '@/utils/structured-data';
 import { APPEARANCE_STORAGE_KEY, THEME_STORAGE_KEY } from '@/utils/theme';
 
@@ -65,27 +66,16 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
+  openGraph: siteOpenGraph({
     url: '/',
-    siteName: SITE_NAME,
     title: SITE_NAME,
     description: SITE_DESCRIPTION_HIRING,
-    images: [
-      {
-        url: '/headshot.jpeg',
-        width: 1200,
-        height: 630,
-        alt: SITE_NAME,
-      },
-    ],
-  },
+  }),
   twitter: {
     card: 'summary_large_image',
     title: SITE_NAME,
     description: SITE_DESCRIPTION_HIRING,
-    images: ['/headshot.jpeg'],
+    images: [DEFAULT_OG_IMAGE_PATH],
     creator: '@Saucy_Tech',
   },
   icons: {

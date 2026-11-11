@@ -64,9 +64,31 @@ try {
     if (content) assert.ok(body.includes(content), `${path}: expected ${content}`);
     console.log(`Worker smoke: GET ${path} -> ${response.status}`);
   }
+  // Share-card tags: a page-level `openGraph` replaces the layout's, so check
+  // the pages that rely on the site-wide default still emit a full set.
+  for (const path of ['/', '/blog', '/daily-word', '/links']) {
+    const html = await (
+      await fetch(`${base}${path}`, { signal: AbortSignal.timeout(15_000) })
+    ).text();
+    for (const tag of [
+      'property="og:image" content="https://saucy.tech/opengraph-image"',
+      'property="og:image:width" content="1200"',
+      'property="og:image:height" content="630"',
+      'property="og:image:alt"',
+      'property="og:type" content="website"',
+      'property="og:site_name"',
+      'property="og:locale" content="en_US"',
+      'name="twitter:card" content="summary_large_image"',
+      'name="twitter:image" content="https://saucy.tech/opengraph-image"',
+    ]) {
+      assert.ok(html.includes(tag), `${path}: missing ${tag}`);
+    }
+    console.log(`Worker smoke: GET ${path} -> share-card tags present`);
+  }
   for (const [path, contentType] of [
     ['/headshot.jpeg', 'image/jpeg'],
     ['/images/products/morning-portion.webp', 'image/webp'],
+    ['/opengraph-image', 'image/png'],
     ['/portfolio/opengraph-image', 'image/png'],
     ['/notes/opengraph-image', 'image/png'],
     ['/blog/2026-03-04-for-god-so-loved/opengraph-image', 'image/png'],
