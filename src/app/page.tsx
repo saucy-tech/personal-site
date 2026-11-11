@@ -2,11 +2,13 @@ import Image from 'next/image';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 
+import EmailLink from '@/components/EmailLink';
 import LinkCard from '@/components/LinkCard';
 import Profile from '@/components/Profile';
 import { fieldNotesLastUpdated } from '@/data/field-notes';
 import { projects, projectsLastUpdated } from '@/data/projects';
 import SocialBar from '@/components/SocialBar';
+import { AUTHOR_NAME } from '@/utils/constants';
 import { formatPostDate } from '@/utils/helpers';
 import { siteOpenGraph } from '@/utils/open-graph';
 
@@ -21,7 +23,7 @@ export const metadata: Metadata = {
 
 export default function Home() {
   const profileData = {
-    name: 'Brandon',
+    name: AUTHOR_NAME,
     bio: 'Love Jesus, Explore Ideas, Create Things, Save in Bitcoin',
     imageSrc: '/headshot.jpeg',
   };
@@ -30,26 +32,14 @@ export default function Home() {
     {
       href: 'https://x.com/Saucy_Tech',
       icon: (
-        <Image
-          src="/icons/x-logo.svg"
-          width={32}
-          height={32}
-          alt="X (Twitter) logo"
-          quality={100}
-        />
+        <Image src="/icons/x-logo.svg" width={32} height={32} alt="X (Twitter) logo" unoptimized />
       ),
       label: 'X',
     },
     {
       href: 'https://github.com/saucy-tech',
       icon: (
-        <Image
-          src="/icons/github-logo.svg"
-          width={32}
-          height={32}
-          alt="GitHub logo"
-          quality={100}
-        />
+        <Image src="/icons/github-logo.svg" width={32} height={32} alt="GitHub logo" unoptimized />
       ),
       label: 'GitHub',
     },
@@ -61,7 +51,7 @@ export default function Home() {
           width={32}
           height={32}
           alt="Nostr protocol logo"
-          quality={100}
+          unoptimized
         />
       ),
       label: 'Nostr',
@@ -74,7 +64,7 @@ export default function Home() {
           width={32}
           height={32}
           alt="Discord logo"
-          quality={100}
+          unoptimized
         />
       ),
       label: 'Discord',
@@ -89,6 +79,16 @@ export default function Home() {
           <p className="text-center text-sm leading-relaxed text-(--text-secondary)">
             Software engineer. I build my own products and take on a few client projects each year.
           </p>
+          <p className="text-center text-sm leading-relaxed text-(--text-secondary)">
+            For ten years I have built public web and GIS systems for the State of Georgia: 50,000+
+            monthly users, citizen wait times cut 40%, and international awards from Esri (2020) and
+            GMIS (2026).
+          </p>
+          <div className="pt-2 text-center text-sm">
+            <EmailLink className="a11y-focus-ring inline-block rounded-sm bg-(--accent) px-4 py-2 text-(--on-accent) transition hover:bg-(--accent-dark)">
+              Email me
+            </EmailLink>
+          </div>
         </div>
         <SocialBar socials={socialLinks} />
 

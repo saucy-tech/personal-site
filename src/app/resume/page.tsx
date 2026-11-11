@@ -1,3 +1,4 @@
+import EmailLink from '@/components/EmailLink';
 import type { Metadata } from 'next';
 
 import PageLayout from '@/components/PageLayout';
@@ -37,6 +38,9 @@ export default function Resume() {
         <div className="space-y-3">
           <p className="text-lg font-semibold">{resume.title}</p>
           <ul className="resume-contact flex flex-wrap gap-x-4 gap-y-1 text-sm">
+            <li>
+              <EmailLink className={linkClass} />
+            </li>
             {resume.contact.map((item) => (
               <li key={item.href}>
                 <a href={item.href} className={linkClass}>

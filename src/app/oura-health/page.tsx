@@ -1,3 +1,4 @@
+import EmailLink from '@/components/EmailLink';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -47,10 +48,7 @@ export default function OuraHealthPage() {
         </section>
 
         <p className="text-sm text-(--text-secondary)">
-          Questions:{' '}
-          <a className="text-(--accent) hover:underline" href="mailto:brandon@saucy.tech">
-            brandon@saucy.tech
-          </a>
+          Questions: <EmailLink className="text-(--accent) hover:underline" />
         </p>
       </div>
     </PageLayout>

@@ -1,3 +1,4 @@
+import EmailLink from '@/components/EmailLink';
 import { Metadata } from 'next';
 import Image from 'next/image';
 import { headers } from 'next/headers';
@@ -172,12 +173,10 @@ export default async function Portfolio() {
             {portfolioAbout.summary}
           </p>
           <div className="flex flex-wrap gap-3 text-sm">
-            <a
-              href={`mailto:${portfolioAbout.email}`}
+            <EmailLink
+              fallback="Email me"
               className="a11y-focus-ring inline-block px-4 py-2 bg-(--accent) text-(--on-accent) rounded-sm hover:bg-(--accent-dark) transition"
-            >
-              {portfolioAbout.email}
-            </a>
+            />
             <a
               href={portfolioAbout.linkedIn}
               target="_blank"

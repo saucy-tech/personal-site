@@ -14,11 +14,13 @@ jest.mock('next/image', () => ({
 describe('Profile', () => {
   it('renders the bio as wrapped centered text without overflow helpers', () => {
     const bio = 'Love Jesus, Explore Ideas, Create Things, Save in Bitcoin';
-    const { container } = render(<Profile name="Brandon" bio={bio} imageSrc="/headshot.jpeg" />);
+    const { container } = render(
+      <Profile name="Brandon Sauceda" bio={bio} imageSrc="/headshot.jpeg" />
+    );
 
     const bioElement = screen.getByText(bio);
 
-    expect(screen.getByRole('heading', { name: 'Brandon' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Brandon Sauceda' })).toBeInTheDocument();
     expect(bioElement).toHaveClass('whitespace-normal', 'text-center');
     expect(bioElement.className).not.toContain('sm:whitespace-nowrap');
     expect(container.querySelector('.no-scrollbar')).toBeNull();

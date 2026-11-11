@@ -9,10 +9,13 @@ import { SITE_URL, absoluteUrl } from '@/utils/constants';
 describe('structured data helpers', () => {
   it('adds SearchAction to the website graph node', () => {
     const jsonLd = getSiteJsonLd({
-      authorName: 'Brandon',
+      authorName: 'Brandon Sauceda',
       authorImagePath: '/headshot.jpeg',
       sameAs: ['https://x.com/Saucy_Tech'],
     });
+
+    const personNode = jsonLd['@graph'].find((node) => node['@type'] === 'Person');
+    expect(personNode?.name).toBe('Brandon Sauceda');
 
     const websiteNode = jsonLd['@graph'].find((node) => node['@type'] === 'WebSite');
     expect(websiteNode).toBeDefined();
@@ -71,7 +74,7 @@ describe('structured data helpers', () => {
       tags: ['faith', 'hope'],
       imageUrl:
         'https://www.brandonssite.com/blog/2026-04-24-death-hath-no-more-dominion/opengraph-image',
-      authorName: 'Brandon',
+      authorName: 'Brandon Sauceda',
     });
 
     expect(jsonLd['@type']).toBe('BlogPosting');

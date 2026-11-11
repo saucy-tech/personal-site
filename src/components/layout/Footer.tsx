@@ -1,3 +1,4 @@
+import EmailLink from '@/components/EmailLink';
 import AppearanceToggle from '@/components/AppearanceToggle';
 import ThemeToggle from '@/components/ThemeToggle';
 import SiteNav from '@/components/layout/SiteNav';
@@ -18,12 +19,7 @@ export default function Footer({ className, navItems }: FooterProps) {
       <div className="container mx-auto px-4 flex flex-col items-center gap-4">
         <SiteNav items={navItems} ariaLabel="Footer" />
         <div className="flex flex-wrap justify-center gap-4 text-sm">
-          <a
-            href="mailto:brandon@saucy.tech"
-            className="text-(--accent) a11y-focus-ring hover:underline underline-offset-4"
-          >
-            brandon@saucy.tech
-          </a>
+          <EmailLink className="text-(--accent) a11y-focus-ring hover:underline underline-offset-4" />
           <a
             href="https://linkedin.com/in/saucytech"
             target="_blank"

@@ -22,7 +22,6 @@ export const resume = {
   summary:
     'Software engineer and IT leader with 10+ years in government technology, GIS, and full-stack web development. Shipped products serving 50,000+ users; open-source contributor in TypeScript, Rust, and Python.',
   contact: [
-    { href: `mailto:${portfolioAbout.email}`, label: portfolioAbout.email },
     { href: 'https://saucy.tech', label: 'saucy.tech' },
     { href: portfolioAbout.github, label: 'github.com/saucy-tech' },
     { href: portfolioAbout.linkedIn, label: 'linkedin.com/in/saucytech' },

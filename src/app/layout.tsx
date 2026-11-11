@@ -5,7 +5,7 @@ import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { getFooterNavItems, getSiteNavItems } from '@/config/site-nav';
-import { SITE_NAME, SITE_DESCRIPTION_HIRING, SITE_URL } from '@/utils/constants';
+import { AUTHOR_NAME, SITE_NAME, SITE_DESCRIPTION_HIRING, SITE_URL } from '@/utils/constants';
 import { DEFAULT_OG_IMAGE_PATH, siteOpenGraph } from '@/utils/open-graph';
 import { getSiteJsonLd } from '@/utils/structured-data';
 import { APPEARANCE_STORAGE_KEY, THEME_STORAGE_KEY } from '@/utils/theme';
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   title: {
-    default: SITE_NAME,
+    default: `${AUTHOR_NAME}, Software Engineer | ${SITE_NAME}`,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION_HIRING,
@@ -53,8 +53,8 @@ export const metadata: Metadata = {
     'Cloudflare Workers',
     'Brandon Sauceda',
   ],
-  authors: [{ name: 'Brandon' }],
-  creator: 'Brandon',
+  authors: [{ name: AUTHOR_NAME }],
+  creator: AUTHOR_NAME,
   robots: {
     index: true,
     follow: true,
@@ -94,7 +94,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   // layout, so it carries the per-request nonce and stays CSP-compliant. The home
   // page is statically prerendered and cannot emit a nonced inline script.
   const siteJsonLd = getSiteJsonLd({
-    authorName: 'Brandon',
+    authorName: AUTHOR_NAME,
     authorImagePath: '/headshot.jpeg',
     sameAs: [
       'https://x.com/Saucy_Tech',
