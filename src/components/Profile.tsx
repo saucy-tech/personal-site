@@ -13,11 +13,11 @@ const Profile: React.FC<ProfileProps> = ({ name, bio, imageSrc }) => {
         <Image
           src={imageSrc}
           alt={`${name}'s profile photo`}
-          fill
-          className="object-cover"
+          width={128}
+          height={128}
+          className="h-full w-full object-cover"
           priority
-          sizes="128px"
-          quality={75}
+          fetchPriority="high"
         />
       </div>
 

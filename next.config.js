@@ -31,9 +31,17 @@ const nextConfig = {
   },
   // Security headers (CSP, X-Frame-Options, etc.) are set by src/middleware.ts
   // via getSecurityHeaders(); defining them here too doubled every header value.
+  // The Worker has no image resizing, so /_next/image served the original file
+  // at every width. The loader maps each requested width to a committed,
+  // pre-sized file in public/optimized (see scripts/generate-image-variants.mjs).
+  // These lists are the only widths next/image will ask for, and each one has a
+  // file: deviceSizes for the product previews, imageSizes for the avatar and icons.
   images: {
+    loader: 'custom',
+    loaderFile: './src/utils/image-loader.ts',
     remotePatterns: [],
-    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 960, 1280, 1600],
+    imageSizes: [32, 64, 128, 256],
   },
 };
 

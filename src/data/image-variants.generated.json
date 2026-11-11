@@ -1,0 +1,61 @@
+{
+  "/headshot.jpeg": {
+    "sourceSha256": "a6e1c6b1420da9429454dbce0fc06da13883867fa58af49dfc039a23696cd2e8",
+    "variants": {
+      "128": "/optimized/headshot-128.9f01cee46a.webp",
+      "256": "/optimized/headshot-256.ed1640fa55.webp"
+    }
+  },
+  "/bitcoin-journey.png": {
+    "sourceSha256": "1cef3d0426a1b2f9b6ec5629bf0d9918775cf8e88dfe1dd394149f80c2921e80",
+    "variants": {
+      "640": "/optimized/bitcoin-journey-640.5ecd49a770.webp",
+      "1024": "/optimized/bitcoin-journey-1024.afeffeee02.webp"
+    }
+  },
+  "/images/products/gis-plugins.webp": {
+    "sourceSha256": "16ea34c34ff95c884992c5acefecfa7d664c643bce18ec3c6a867a9d8abc46fa",
+    "variants": {
+      "640": "/optimized/gis-plugins-640.2581ffdf42.webp",
+      "960": "/optimized/gis-plugins-960.65066b371b.webp",
+      "1280": "/optimized/gis-plugins-1280.db9273f064.webp",
+      "1600": "/optimized/gis-plugins-1600.371f88f9ad.webp"
+    }
+  },
+  "/images/products/health-dashboard.webp": {
+    "sourceSha256": "f5f2ad9af3997e8c956c063378000d13de6bb40b79afe160c88422366350b469",
+    "variants": {
+      "640": "/optimized/health-dashboard-640.bd31c17ac2.webp",
+      "960": "/optimized/health-dashboard-960.6465ac44f9.webp",
+      "1280": "/optimized/health-dashboard-1280.91e433cdae.webp",
+      "1600": "/optimized/health-dashboard-1600.8f2b760605.webp"
+    }
+  },
+  "/images/products/home-hive.webp": {
+    "sourceSha256": "409e70e58ce4773a08d0d88dae608ecd7031fc7cbe214f519ed25b4e4759a85f",
+    "variants": {
+      "640": "/optimized/home-hive-640.efe48d97c9.webp",
+      "960": "/optimized/home-hive-960.78a029f180.webp",
+      "1280": "/optimized/home-hive-1280.327d1adc8d.webp",
+      "1600": "/optimized/home-hive-1600.f3771f6b1f.webp"
+    }
+  },
+  "/images/products/morning-portion.webp": {
+    "sourceSha256": "3c344dc6540135c9e6c8b5ff82b99fca02fc45c9b9a57a50d3b77af39f940a64",
+    "variants": {
+      "640": "/optimized/morning-portion-640.cc3ee6777e.webp",
+      "960": "/optimized/morning-portion-960.e10b229603.webp",
+      "1280": "/optimized/morning-portion-1280.8b14e990dd.webp",
+      "1600": "/optimized/morning-portion-1600.95dae37015.webp"
+    }
+  },
+  "/images/products/train-every-day.webp": {
+    "sourceSha256": "323c7cfc62d1604b9d7fc7cc6975aa58dd1c5cf14fead6b0e5e725579cb2c59b",
+    "variants": {
+      "640": "/optimized/train-every-day-640.8f3afafc31.webp",
+      "960": "/optimized/train-every-day-960.177b8fdb58.webp",
+      "1280": "/optimized/train-every-day-1280.1120d07674.webp",
+      "1600": "/optimized/train-every-day-1600.6bfb9fc148.webp"
+    }
+  }
+}
