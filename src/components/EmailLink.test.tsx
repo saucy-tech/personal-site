@@ -16,9 +16,9 @@ describe('EmailLink', () => {
   it('shows the address as a mailto link in the browser', () => {
     render(<EmailLink />);
 
-    expect(screen.getByRole('link', { name: 'brandon@saucy.tech' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'contact@saucy.tech' })).toHaveAttribute(
       'href',
-      'mailto:brandon@saucy.tech'
+      'mailto:contact@saucy.tech'
     );
   });
 
@@ -27,7 +27,7 @@ describe('EmailLink', () => {
 
     expect(screen.getByRole('link', { name: 'Request the link' })).toHaveAttribute(
       'href',
-      'mailto:brandon@saucy.tech?subject=Trump%20Account%20contribution%20link'
+      'mailto:contact@saucy.tech?subject=Trump%20Account%20contribution%20link'
     );
   });
 });

@@ -6,7 +6,7 @@ import { useSyncExternalStore, type ReactNode } from 'react';
 // appears in the server HTML or the RSC payload where scrapers harvest it.
 // Do not pass the address in as a prop or put it in a data file: both end up
 // in the page source.
-const USER = 'brandon';
+const USER = 'contact';
 const HOST = ['saucy', 'tech'];
 
 const subscribe = () => () => {};
