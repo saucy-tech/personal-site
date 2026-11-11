@@ -78,8 +78,10 @@ describe('current notes stack', () => {
     expect(cloudflare).toHaveLength(1);
     expect(cloudflare[0].tags).toEqual(expect.arrayContaining(['Workers', 'R2', 'Access', 'DNS']));
     const tools = section('tools').items;
-    expect(tools.find((item) => item.title === 'Superwhisper')?.tags).toContain('Windows');
-    expect(tools.find((item) => item.title === 'Hex')?.badge).toBe('experimenting');
+    expect(tools.some((item) => item.title === 'Superwhisper')).toBe(false);
+    const hex = tools.find((item) => item.title === 'Hex');
+    expect(hex?.badge).toBe('daily');
+    expect(hex?.tags).toEqual(expect.arrayContaining(['macOS', 'Windows', 'Linux']));
   });
 
   it('has a local image for every product icon and homepage favicon', () => {
