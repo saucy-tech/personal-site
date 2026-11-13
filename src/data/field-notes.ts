@@ -14,7 +14,7 @@
  */
 
 /** ISO date — bump when you revise items or copy. Shown on `/notes`. */
-export const fieldNotesLastUpdated = '2026-11-03';
+export const fieldNotesLastUpdated = '2026-11-13';
 
 export type FieldNoteStatus =
   'life' | 'coding-agents' | 'models' | 'interfaces' | 'subscriptions' | 'infrastructure' | 'tools';
@@ -73,8 +73,15 @@ export const fieldNotesSections: FieldNoteSection[] = [
     id: 'models',
     title: 'Models',
     blurb:
-      'Opus 5.5, GPT-6.1 Sol, and GPT-6.1 Terra carry my daily work. Muse Wonder and Grok 4.7 are occasional choices, with Grok mainly coming through Grok Bot or Cursor. The one local model, Qwen3.8-27B, runs at Q4_K_M quantization through llama.cpp.',
+      'Fable 5.2 and Opus 5.5 carry my daily work. GPT-6.1 Sol today; may switch to Terra. Muse Wonder and Grok 4.7 are occasional choices, with Grok mainly coming through Grok Bot or Cursor. The one local model, Qwen3.8-27B, runs at Q4_K_M quantization through llama.cpp.',
     items: [
+      {
+        title: 'Claude Fable 5.2',
+        tags: ['anthropic', 'model'],
+        badge: 'daily',
+        homepage: 'https://www.anthropic.com',
+        note: 'One of the two models I use every day, with Opus 5.5.',
+      },
       {
         title: 'Claude Opus 5.5',
         tags: ['anthropic', 'model', 'default'],
@@ -88,18 +95,9 @@ export const fieldNotesSections: FieldNoteSection[] = [
       },
       {
         title: 'GPT-6.1 Sol',
-        tags: ['openai', 'model', 'second opinion'],
-        badge: 'daily',
-        homepage: 'https://openai.com',
-        note: 'My daily OpenAI model through Codex, and my go-to second read — a different angle when Claude and I keep circling the same answer.',
-        pros: ['Useful contrast to the Anthropic models', 'Good at reading a repo cold'],
-      },
-      {
-        title: 'GPT-6.1 Terra',
         tags: ['openai', 'model'],
-        badge: 'daily',
         homepage: 'https://openai.com',
-        note: 'Another daily OpenAI model through Codex, alongside Sol. Both are part of my regular rotation next to Opus.',
+        note: 'GPT-6.1 Sol today; may switch to Terra.',
       },
       {
         title: 'Muse Wonder',
@@ -117,7 +115,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['xai', 'model'],
         badge: 'occasional',
         homepage: 'https://grok.com',
-        note: 'An occasional third perspective, mainly when Grok Bot or Cursor uses it. Opus, Sol, and Terra are the daily drivers.',
+        note: 'An occasional third perspective, mainly when Grok Bot or Cursor uses it. Fable 5.2 and Opus 5.5 are the daily drivers.',
         pros: ['Another perspective outside the Claude and GPT pairing'],
       },
       {
@@ -229,7 +227,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         badge: 'daily',
         homepage: 'https://x.com',
         marks: ['x', 'grok', 'cursor', 'grok-bot'],
-        note: 'SpaceXSI’s bundle of Grok, Cursor, and X Premium, on the Super tier at $100/mo. I am a heavy Grok Bot and Grok user, with occasional Cursor use on the same plan.',
+        note: 'SpaceXSI’s bundle of Grok, Cursor, and X, on the Super tier at $100/mo. I am a heavy Grok Bot and Grok user, with occasional Cursor use on the same plan.',
         pros: [
           'One plan covers Grok, Grok Bot, Cursor, and X',
           'Replaces what used to be three separate subscriptions',
@@ -252,7 +250,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         badge: 'daily',
         homepage: 'https://chatgpt.com',
         icon: '/icons/tools/openai.com.png',
-        note: 'My $100/month ChatGPT Pro tier, behind my daily Codex work with GPT-6.1 Sol and Terra.',
+        note: 'My $100/month ChatGPT Pro tier. GPT-6.1 Sol today; may switch to Terra.',
         pros: [
           'Makes Codex a real daily agent instead of an occasional backup',
           '$100/month in API credits for my own builds and API-backed third-party tools, including dictation software',

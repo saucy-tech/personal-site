@@ -48,7 +48,7 @@ const links = [
   },
   {
     title: 'STRC.Live',
-    description: 'Live dashboard for Strive Bitcoin treasury data',
+    description: "Live tracker for Strategy's Bitcoin preferred stocks, including STRC and SATA.",
     href: 'https://strc.live/',
     icon: <BoltIcon className="h-5 w-5" aria-hidden />,
   },

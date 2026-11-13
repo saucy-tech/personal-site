@@ -9,20 +9,22 @@ describe('current notes stack', () => {
   it('keeps daily models distinct from occasional use and experiments', () => {
     const models = section('models').items;
     expect(models.filter((item) => item.badge === 'daily').map((item) => item.title)).toEqual([
+      'Claude Fable 5.2',
       'Claude Opus 5.5',
-      'GPT-6.1 Sol',
-      'GPT-6.1 Terra',
     ]);
+    expect(models.find((item) => item.title === 'GPT-6.1 Sol')?.note).toBe(
+      'GPT-6.1 Sol today; may switch to Terra.'
+    );
     expect(models.find((item) => item.title === 'Grok 4.7')?.badge).toBe('occasional');
     expect(models.map((item) => item.title)).toEqual([
+      'Claude Fable 5.2',
       'Claude Opus 5.5',
       'GPT-6.1 Sol',
-      'GPT-6.1 Terra',
       'Muse Wonder',
       'Grok 4.7',
       'Qwen3.8-27B',
     ]);
-    for (const title of ['GPT-6 Astra', 'Claude Fable 5.1']) {
+    for (const title of ['GPT-6 Astra', 'Claude Fable 5.1', 'GPT-6.1 Terra']) {
       expect(models.map((item) => item.title)).not.toContain(title);
     }
   });
@@ -60,6 +62,20 @@ describe('current notes stack', () => {
     expect(
       fieldNotesSections.flatMap((entry) => entry.items).map((item) => item.title)
     ).not.toContain('Hermes Agent');
+  });
+
+  it('lists the X subscription on Super, not Premium', () => {
+    const plan = section('subscriptions').items.find(
+      (item) => item.title === 'The X Subscription'
+    )!;
+    expect(plan.tags).toContain('Super tier');
+    expect(plan.note).toContain('Super');
+    expect(plan.note).not.toContain('Premium');
+    expect(
+      section('subscriptions')
+        .items.flatMap((item) => [item.note, ...(item.pros ?? [])])
+        .join(' ')
+    ).not.toContain('Premium');
   });
 
   it('documents both $100 subscriptions and their API-credit benefit', () => {
