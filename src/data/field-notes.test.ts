@@ -9,13 +9,14 @@ describe('current notes stack', () => {
   it('keeps daily models distinct from occasional use and experiments', () => {
     const models = section('models').items;
     expect(models.filter((item) => item.badge === 'daily').map((item) => item.title)).toEqual([
-      'Claude Fable 5.2',
       'Claude Opus 5.5',
+      'Claude Fable 5.2',
     ]);
     expect(models.find((item) => item.title === 'Grok 4.7')?.badge).toBe('occasional');
+    expect(models.find((item) => item.title === 'Claude Opus 5.5')?.tags).toContain('default');
     expect(models.map((item) => item.title)).toEqual([
-      'Claude Fable 5.2',
       'Claude Opus 5.5',
+      'Claude Fable 5.2',
       'Muse Wonder',
       'Grok 4.7',
       'Qwen3.8-27B',

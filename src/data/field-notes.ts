@@ -73,15 +73,8 @@ export const fieldNotesSections: FieldNoteSection[] = [
     id: 'models',
     title: 'Models',
     blurb:
-      'Fable 5.2 and Opus 5.5 carry my daily work. Muse Wonder and Grok 4.7 are occasional choices, with Grok mainly coming through Grok Bot or Cursor. The one local model, Qwen3.8-27B, runs at Q4_K_M quantization through llama.cpp.',
+      'Opus 5.5 is my default, and Fable 5.2 is in daily use with it. Muse Wonder and Grok 4.7 are occasional choices, with Grok mainly coming through Grok Bot or Cursor. The one local model, Qwen3.8-27B, runs at Q4_K_M quantization through llama.cpp.',
     items: [
-      {
-        title: 'Claude Fable 5.2',
-        tags: ['anthropic', 'model'],
-        badge: 'daily',
-        homepage: 'https://www.anthropic.com',
-        note: 'One of the two models I use every day, with Opus 5.5.',
-      },
       {
         title: 'Claude Opus 5.5',
         tags: ['anthropic', 'model', 'default'],
@@ -92,6 +85,13 @@ export const fieldNotesSections: FieldNoteSection[] = [
           'Strong at planning and long sessions',
           'Tight, deterministic output on routine edits',
         ],
+      },
+      {
+        title: 'Claude Fable 5.2',
+        tags: ['anthropic', 'model'],
+        badge: 'daily',
+        homepage: 'https://www.anthropic.com',
+        note: 'Also in daily use, alongside Opus 5.5.',
       },
       {
         title: 'Muse Wonder',
@@ -109,7 +109,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['xai', 'model'],
         badge: 'occasional',
         homepage: 'https://grok.com',
-        note: 'An occasional third perspective, mainly when Grok Bot or Cursor uses it. Fable 5.2 and Opus 5.5 are the daily drivers.',
+        note: 'An occasional third perspective, mainly when Grok Bot or Cursor uses it. Opus 5.5 is the default, with Fable 5.2 also in daily use.',
         pros: ['Another perspective outside the Claude models'],
       },
       {
