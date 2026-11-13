@@ -12,19 +12,15 @@ describe('current notes stack', () => {
       'Claude Fable 5.2',
       'Claude Opus 5.5',
     ]);
-    expect(models.find((item) => item.title === 'GPT-6.1 Sol')?.note).toBe(
-      'GPT-6.1 Sol today; may switch to Terra.'
-    );
     expect(models.find((item) => item.title === 'Grok 4.7')?.badge).toBe('occasional');
     expect(models.map((item) => item.title)).toEqual([
       'Claude Fable 5.2',
       'Claude Opus 5.5',
-      'GPT-6.1 Sol',
       'Muse Wonder',
       'Grok 4.7',
       'Qwen3.8-27B',
     ]);
-    for (const title of ['GPT-6 Astra', 'Claude Fable 5.1', 'GPT-6.1 Terra']) {
+    for (const title of ['GPT-6 Astra', 'Claude Fable 5.1', 'GPT-6.1 Sol', 'GPT-6.1 Terra']) {
       expect(models.map((item) => item.title)).not.toContain(title);
     }
   });
@@ -38,18 +34,17 @@ describe('current notes stack', () => {
     }
   });
 
-  it('uses the same icon for ChatGPT and Codex', () => {
-    const codex = section('coding-agents').items.find((item) => item.title === 'Codex')!;
-    const chatgpt = section('subscriptions').items.find(
-      (item) => item.title === 'ChatGPT Pro 100'
-    )!;
-    expect(chatgpt.icon).toBe(`/icons/tools/${new URL(codex.homepage!).hostname}.png`);
+  it('keeps Grok Bot daily and Claude Duet an experiment', () => {
+    const interfaces = section('interfaces').items;
+    expect(interfaces.find((item) => item.title === 'Grok Bot')?.badge).toBe('daily');
+    expect(interfaces.find((item) => item.title === 'Claude Duet')?.badge).toBe('experimenting');
+    expect(section('interfaces').blurb).toContain('I use Grok Bot daily');
+    expect(section('interfaces').blurb).toContain('experimenting with Claude Duet');
   });
 
   it('groups assistants with interfaces rather than a separate evaluating section', () => {
     expect(section('coding-agents').items.map((item) => item.title)).toEqual([
       'Claude Code',
-      'Codex',
       'OpenCode',
     ]);
     expect(section('interfaces').items.map((item) => item.title)).toEqual([
@@ -78,13 +73,14 @@ describe('current notes stack', () => {
     ).not.toContain('Premium');
   });
 
-  it('documents both $100 subscriptions and their API-credit benefit', () => {
-    for (const title of ['Claude Max', 'ChatGPT Pro 100']) {
-      const plan = section('subscriptions').items.find((item) => item.title === title)!;
-      expect(plan.tags).toContain('$100/mo');
-      expect(plan.pros).toContainEqual(expect.stringContaining('$100/month in API credits'));
-      expect(plan.pros).toContainEqual(expect.stringContaining('dictation software'));
-    }
+  it('documents the Claude Max API-credit benefit', () => {
+    const plan = section('subscriptions').items.find((item) => item.title === 'Claude Max')!;
+    expect(plan.tags).toContain('$100/mo');
+    expect(plan.pros).toContainEqual(expect.stringContaining('$100/month in API credits'));
+    expect(plan.pros).toContainEqual(expect.stringContaining('dictation software'));
+    expect(section('subscriptions').items.map((item) => item.title)).not.toContain(
+      'ChatGPT Pro 100'
+    );
   });
 
   it('condenses Cloudflare and keeps dictation tools in Tools', () => {
