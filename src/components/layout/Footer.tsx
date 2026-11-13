@@ -16,7 +16,7 @@ export default function Footer({ className, navItems }: FooterProps) {
 
   return (
     <footer className={cn('py-6 transparent', className)}>
-      <div className="container mx-auto px-4 flex flex-col items-center gap-4">
+      <div className="mx-auto flex w-full max-w-[min(100%,80rem)] flex-col items-center gap-4 px-4 sm:px-6">
         <SiteNav items={navItems} ariaLabel="Footer" />
         <div className="flex flex-wrap justify-center gap-4 text-sm">
           <EmailLink className="text-(--accent) a11y-focus-ring hover:underline underline-offset-4" />

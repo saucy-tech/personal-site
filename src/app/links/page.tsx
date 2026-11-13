@@ -1,7 +1,6 @@
 import {
   ArrowTrendingUpIcon,
   BoltIcon,
-  BuildingOffice2Icon,
   CalculatorIcon,
   ChartBarIcon,
   CircleStackIcon,
@@ -48,7 +47,7 @@ const links = [
   },
   {
     title: 'STRC.Live',
-    description: 'Live dashboard for Strive Bitcoin treasury data',
+    description: "Live tracker for Strategy's Bitcoin preferred stocks, including STRC and SATA.",
     href: 'https://strc.live/',
     icon: <BoltIcon className="h-5 w-5" aria-hidden />,
   },
@@ -57,12 +56,6 @@ const links = [
     description: 'Bitcoin accumulation tracker and portfolio insights',
     href: 'https://www.hodlbase.io/',
     icon: <CircleStackIcon className="h-5 w-5" aria-hidden />,
-  },
-  {
-    title: 'Strategy Dashboard',
-    description: "MicroStrategy's official Bitcoin treasury dashboard",
-    href: 'https://www.strategy.com/',
-    icon: <BuildingOffice2Icon className="h-5 w-5" aria-hidden />,
   },
 ];
 

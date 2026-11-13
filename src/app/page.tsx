@@ -72,14 +72,14 @@ export default function Home() {
   ];
 
   return (
-    <div className="pt-6 pb-12 flex flex-col items-center">
-      <div className="space-y-8 w-full max-w-4xl mx-auto">
-        <div className="space-y-3 max-w-xl mx-auto">
+    <div className="pt-6 pb-12">
+      <div className="w-full space-y-10">
+        <div className="mx-auto max-w-2xl space-y-3 text-center">
           <Profile {...profileData} />
-          <p className="text-center text-sm leading-relaxed text-(--text-secondary)">
+          <p className="text-balance text-sm leading-relaxed text-(--text-secondary)">
             Software engineer. I build my own products and take on a few client projects each year.
           </p>
-          <p className="text-center text-sm leading-relaxed text-(--text-secondary)">
+          <p className="text-balance text-sm leading-relaxed text-(--text-secondary)">
             For ten years I have built public web and GIS systems for the State of Georgia: 50,000+
             monthly users, citizen wait times cut 40%, and international awards from Esri (2020) and
             GMIS (2026).
@@ -117,7 +117,7 @@ export default function Home() {
                         alt={preview.alt}
                         width={preview.width}
                         height={preview.height}
-                        sizes="(min-width: 768px) 432px, 100vw"
+                        sizes="(min-width: 1024px) 600px, (min-width: 768px) 50vw, 100vw"
                         className="w-full h-auto rounded-sm border border-(--surface-border)"
                       />
                     </a>
@@ -138,86 +138,90 @@ export default function Home() {
           </div>
         </section>
 
-        <section aria-labelledby="now" className="max-w-2xl mx-auto">
-          <h2 id="now" className="text-2xl font-semibold mb-4">
-            Now
-          </h2>
-          <ul className="space-y-2 text-sm leading-relaxed text-(--text-secondary)">
-            <li>
-              Notes updated{' '}
-              <time dateTime={fieldNotesLastUpdated}>{formatPostDate(fieldNotesLastUpdated)}</time>
-              {' · '}
-              <Link
-                href="/notes"
-                className="a11y-focus-ring rounded-xs text-(--accent) underline underline-offset-4"
-              >
-                Read the latest
-              </Link>
-            </li>
-            <li>
-              Portfolio updated{' '}
-              <time dateTime={projectsLastUpdated}>{formatPostDate(projectsLastUpdated)}</time>
-              {' · '}
-              <Link
-                href="/portfolio"
-                className="a11y-focus-ring rounded-xs text-(--accent) underline underline-offset-4"
-              >
-                See what changed
-              </Link>
-            </li>
-            <li>
-              Today’s weekday devotion{' · '}
-              <a
-                href="https://morningportion.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="a11y-focus-ring rounded-xs text-(--accent) underline underline-offset-4"
-              >
-                Read it at morningportion.com
-              </a>
-            </li>
-            <li>
-              This week in QGIS plugins{' · '}
-              <a
-                href="https://gisplugins.dev/newsletter"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="a11y-focus-ring rounded-xs text-(--accent) underline underline-offset-4"
-              >
-                Read GIS Plugins Weekly
-              </a>
-            </li>
-          </ul>
-        </section>
+        <div className="grid gap-10 lg:grid-cols-2">
+          <section aria-labelledby="now">
+            <h2 id="now" className="text-2xl font-semibold mb-4">
+              Now
+            </h2>
+            <ul className="space-y-2 text-sm leading-relaxed text-(--text-secondary)">
+              <li>
+                Notes updated{' '}
+                <time dateTime={fieldNotesLastUpdated}>
+                  {formatPostDate(fieldNotesLastUpdated)}
+                </time>
+                {' · '}
+                <Link
+                  href="/notes"
+                  className="a11y-focus-ring rounded-xs text-(--accent) underline underline-offset-4"
+                >
+                  Read the latest
+                </Link>
+              </li>
+              <li>
+                Portfolio updated{' '}
+                <time dateTime={projectsLastUpdated}>{formatPostDate(projectsLastUpdated)}</time>
+                {' · '}
+                <Link
+                  href="/portfolio"
+                  className="a11y-focus-ring rounded-xs text-(--accent) underline underline-offset-4"
+                >
+                  See what changed
+                </Link>
+              </li>
+              <li>
+                Today’s weekday devotion{' · '}
+                <a
+                  href="https://morningportion.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="a11y-focus-ring rounded-xs text-(--accent) underline underline-offset-4"
+                >
+                  Read it at morningportion.com
+                </a>
+              </li>
+              <li>
+                This week in QGIS plugins{' · '}
+                <a
+                  href="https://gisplugins.dev/newsletter"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="a11y-focus-ring rounded-xs text-(--accent) underline underline-offset-4"
+                >
+                  Read GIS Plugins Weekly
+                </a>
+              </li>
+            </ul>
+          </section>
 
-        <section aria-labelledby="explore" className="max-w-2xl mx-auto">
-          <h2 id="explore" className="text-2xl font-semibold mb-4">
-            More from me
-          </h2>
-          <div className="divide-y divide-(--surface-border)">
-            <LinkCard
-              headingLevel="h3"
-              key="my-projects"
-              title="Portfolio"
-              href="/portfolio"
-              meta="Products, public-sector systems, open source, and résumé"
-            />
-            <LinkCard
-              headingLevel="h3"
-              key="work-with-me"
-              title="Client work"
-              href="/about#work-with-me"
-              meta="Web apps and focused product builds"
-            />
-            <LinkCard
-              headingLevel="h3"
-              key="notes"
-              title="Notes"
-              href="/notes"
-              meta="AI tools, Bitcoin, my church, and what I'm doing now"
-            />
-          </div>
-        </section>
+          <section aria-labelledby="explore">
+            <h2 id="explore" className="text-2xl font-semibold mb-4">
+              More from me
+            </h2>
+            <div className="divide-y divide-(--surface-border)">
+              <LinkCard
+                headingLevel="h3"
+                key="my-projects"
+                title="Portfolio"
+                href="/portfolio"
+                meta="Products, public-sector systems, open source, and résumé"
+              />
+              <LinkCard
+                headingLevel="h3"
+                key="work-with-me"
+                title="Client work"
+                href="/about#work-with-me"
+                meta="Web apps and focused product builds"
+              />
+              <LinkCard
+                headingLevel="h3"
+                key="notes"
+                title="Notes"
+                href="/notes"
+                meta="AI tools, Bitcoin, my church, and what I'm doing now"
+              />
+            </div>
+          </section>
+        </div>
 
         <div className="text-center text-sm">
           <Link

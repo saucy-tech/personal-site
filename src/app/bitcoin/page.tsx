@@ -87,14 +87,14 @@ export default function Bitcoin() {
               <li>
                 <strong>📚 Read:</strong>{' '}
                 <a
-                  href="https://river.com/learn/bitcoin-in-just-21-minutes/"
+                  href="https://river.com/learn/bitcoin-in-10-minutes/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-400 underline"
                 >
-                  Bitcoin in 21 Minutes – River
+                  Bitcoin in 10 Minutes – River
                 </a>{' '}
-                – A concise guide covering the essentials of Bitcoin in just 21 minutes.
+                – A concise guide covering the essentials of Bitcoin in 10 minutes.
               </li>
               <li>
                 <strong>📚 Read:</strong>{' '}
@@ -140,7 +140,7 @@ export default function Bitcoin() {
             <ul className="list-disc list-inside space-y-2">
               <li>
                 <a
-                  href="https://blog.river.com/entering-the-dual-money-era/"
+                  href="https://river.com/content/entering-the-dual-money-era"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-400 underline"

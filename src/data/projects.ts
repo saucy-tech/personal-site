@@ -302,10 +302,6 @@ export const publications: Publication[] = [
     title: 'GIS Technology Utilization for Rapid Response Teams',
     venue: 'Centers for Disease Control and Prevention (CDC)',
     authors: ['Brandon Sauceda', 'CDC Collaborators'],
-    link: {
-      href: 'https://www.cdc.gov/nceh/hsb/disaster/rrt.htm',
-      label: 'CDC Rapid Response Teams',
-    },
   },
 ];
 

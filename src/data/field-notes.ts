@@ -4,7 +4,7 @@
  * Sections follow the order the choice is actually made: the models, the
  * harnesses that run them inside a repo, the interfaces I drive those harnesses
  * from — plus the subscriptions, infrastructure, and utilities underneath.
- * Harness = the agent loop (Claude Code, Codex, and OpenCode); interface =
+ * Harness = the agent loop (Claude Code, OpenCode, and Codex); interface =
  * the surface I sit in front of (T3 Code, Grok Bot, Claude Duet, and Muse).
  * Experiments live alongside daily tools, distinguished by their badges.
  * The point is the loop, not the chat: give context, let an agent inspect the
@@ -14,7 +14,7 @@
  */
 
 /** ISO date — bump when you revise items or copy. Shown on `/notes`. */
-export const fieldNotesLastUpdated = '2026-11-03';
+export const fieldNotesLastUpdated = '2026-11-13';
 
 export type FieldNoteStatus =
   'life' | 'coding-agents' | 'models' | 'interfaces' | 'subscriptions' | 'infrastructure' | 'tools';
@@ -73,7 +73,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
     id: 'models',
     title: 'Models',
     blurb:
-      'Opus 5.5, GPT-6.1 Sol, and GPT-6.1 Terra carry my daily work. Muse Wonder and Grok 4.7 are occasional choices, with Grok mainly coming through Grok Bot or Cursor. The one local model, Qwen3.8-27B, runs at Q4_K_M quantization through llama.cpp.',
+      'Opus 5.5 is my default, and Fable 5.2 is in daily use with it. Muse Wonder and Grok 4.7 are occasional choices, with Grok mainly coming through Grok Bot or Cursor. The one local model, Qwen3.8-27B, runs at Q4_K_M quantization through llama.cpp.',
     items: [
       {
         title: 'Claude Opus 5.5',
@@ -87,19 +87,11 @@ export const fieldNotesSections: FieldNoteSection[] = [
         ],
       },
       {
-        title: 'GPT-6.1 Sol',
-        tags: ['openai', 'model', 'second opinion'],
+        title: 'Claude Fable 5.2',
+        tags: ['anthropic', 'model'],
         badge: 'daily',
-        homepage: 'https://openai.com',
-        note: 'My daily OpenAI model through Codex, and my go-to second read — a different angle when Claude and I keep circling the same answer.',
-        pros: ['Useful contrast to the Anthropic models', 'Good at reading a repo cold'],
-      },
-      {
-        title: 'GPT-6.1 Terra',
-        tags: ['openai', 'model'],
-        badge: 'daily',
-        homepage: 'https://openai.com',
-        note: 'Another daily OpenAI model through Codex, alongside Sol. Both are part of my regular rotation next to Opus.',
+        homepage: 'https://www.anthropic.com',
+        note: 'Also in daily use, alongside Opus 5.5.',
       },
       {
         title: 'Muse Wonder',
@@ -117,8 +109,8 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['xai', 'model'],
         badge: 'occasional',
         homepage: 'https://grok.com',
-        note: 'An occasional third perspective, mainly when Grok Bot or Cursor uses it. Opus, Sol, and Terra are the daily drivers.',
-        pros: ['Another perspective outside the Claude and GPT pairing'],
+        note: 'An occasional third perspective, mainly when Grok Bot or Cursor uses it. Opus 5.5 is the default, with Fable 5.2 also in daily use.',
+        pros: ['Another perspective outside the Claude models'],
       },
       {
         title: 'Qwen3.8-27B',
@@ -134,7 +126,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
     id: 'coding-agents',
     title: 'Harnesses',
     blurb:
-      'The agent loop itself — the thing that takes a model, gives it tools, and lets it inspect a repo, edit, and run checks. Claude Code and Codex carry the daily work; OpenCode covers other providers and my local model. I drive them from T3 Code.',
+      'The agent loop itself — the thing that takes a model, gives it tools, and lets it inspect a repo, edit, and run checks. Claude Code carries the daily work; OpenCode covers other providers and my local model. Codex is an occasional second read. I drive them from T3 Code.',
     items: [
       {
         title: 'Claude Code',
@@ -143,16 +135,6 @@ export const fieldNotesSections: FieldNoteSection[] = [
         homepage: 'https://claude.ai',
         note: 'My default harness for high-context, repo-shaped work — planning, larger edits, and longer sessions where keeping the whole repo in view matters. Runs the Claude models; I drive it from T3 Code.',
         pros: ['Strong at planning and repo-shaped work', 'Holds context across longer sessions'],
-        cons: ['I still pair it with Codex when I want a second read'],
-      },
-      {
-        title: 'Codex',
-        tags: ['openai', 'cli', 'coding agent'],
-        badge: 'daily',
-        homepage: 'https://openai.com',
-        note: 'My implementation-and-inspection agent: fast at reading the repo, making focused edits, and running the test/check loop. I drive it through T3 Code, often as a second read against Claude Code.',
-        pros: ['Quick into implementation and repo inspection', 'Clean inside T3 Code'],
-        cons: ['I reach for Claude Code first on the largest, most context-heavy tasks'],
       },
       {
         title: 'OpenCode',
@@ -164,7 +146,15 @@ export const fieldNotesSections: FieldNoteSection[] = [
           'Vendor-neutral — cloud and local models in the same loop',
           'Runs the 3090’s Qwen3.8-27B through llama.cpp',
         ],
-        cons: ['One more harness to keep configured next to the vendor CLIs'],
+        cons: ['One more harness to keep configured next to Claude Code'],
+      },
+      {
+        title: 'Codex',
+        tags: ['openai', 'cli', 'coding agent'],
+        badge: 'occasional',
+        homepage: 'https://openai.com',
+        note: 'An occasional implementation-and-inspection pass. I drive it through T3 Code when I want a second read against Claude Code.',
+        pros: ['Quick into implementation and repo inspection', 'Clean inside T3 Code'],
       },
     ],
   },
@@ -172,14 +162,14 @@ export const fieldNotesSections: FieldNoteSection[] = [
     id: 'interfaces',
     title: 'Interfaces',
     blurb:
-      'T3 Code is my main coding interface. Grok Bot and Claude Duet are my assistants; Muse is another experiment in that same category.',
+      'T3 Code is my main coding interface. I use Grok Bot daily, and I am experimenting with Claude Duet. Muse is another experiment in that same category.',
     items: [
       {
         title: 'T3 Code',
         tags: ['interface', 'multi-harness', 'daily driver'],
         badge: 'daily',
         homepage: 'https://t3.codes',
-        note: 'My main interface and where I spend most of my time. Not a harness — it sits on top of Claude Code, Codex, and OpenCode and lets me run them from one window, with my models pinned to keyboard shortcuts so switching is a keystroke instead of a context rebuild.',
+        note: 'My main interface and where I spend most of my time. Not a harness — it sits on top of Claude Code, OpenCode, and Codex and lets me run them from one window, with my models pinned to keyboard shortcuts so switching is a keystroke instead of a context rebuild.',
         pros: [
           'One interface over my coding harnesses',
           'Switch models and harnesses without leaving the flow',
@@ -190,7 +180,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['spacexsi', 'personal agent', 'app'],
         badge: 'daily',
         homepage: 'https://grok.com',
-        note: 'One of my assistants alongside Claude Duet. It runs on its own cloud computer, signs into apps the way I would, and keeps working with my laptop closed. Occasional Cursor work happens through here rather than in a separate harness I sit in. It comes with my X Subscription.',
+        note: 'The assistant I use every day. It runs on its own cloud computer, signs into apps the way I would, and keeps working with my laptop closed. Occasional Cursor work happens through here rather than in a separate harness I sit in. It comes with my X Subscription.',
         pros: ['Keeps working without my machine on', 'Dispatches Cursor cloud agents'],
       },
       {
@@ -199,7 +189,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         badge: 'experimenting',
         homepage: 'https://claude.com/product/claude-duet',
         icon: '/icons/tools/claude-duet.svg',
-        note: 'The new assistant I am most excited about. I am experimenting with it alongside Grok Bot: an ongoing thread with Claude that can work in connected apps, keep going while I am away, and come back when it needs my attention or approval.',
+        note: 'An assistant I am experimenting with. An ongoing thread with Claude that can work in connected apps, keep going while I am away, and come back when it needs my attention or approval.',
         link: { href: 'https://claude.com/product/claude-duet', label: 'Claude Duet' },
         pros: [
           'Carries over my Claude memory, skills, and connected apps',
@@ -229,7 +219,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         badge: 'daily',
         homepage: 'https://x.com',
         marks: ['x', 'grok', 'cursor', 'grok-bot'],
-        note: 'SpaceXSI’s bundle of Grok, Cursor, and X Premium, on the Super tier at $100/mo. I am a heavy Grok Bot and Grok user, with occasional Cursor use on the same plan.',
+        note: 'SpaceXSI’s bundle of Grok, Cursor, and X, on the Super tier at $100/mo. I am a heavy Grok Bot and Grok user, with occasional Cursor use on the same plan.',
         pros: [
           'One plan covers Grok, Grok Bot, Cursor, and X',
           'Replaces what used to be three separate subscriptions',
@@ -249,12 +239,11 @@ export const fieldNotesSections: FieldNoteSection[] = [
       {
         title: 'ChatGPT Pro 100',
         tags: ['openai', '$100/mo'],
-        badge: 'daily',
+        badge: 'occasional',
         homepage: 'https://chatgpt.com',
         icon: '/icons/tools/openai.com.png',
-        note: 'My $100/month ChatGPT Pro tier, behind my daily Codex work with GPT-6.1 Sol and Terra.',
+        note: 'My $100/month plan for occasional Codex use.',
         pros: [
-          'Makes Codex a real daily agent instead of an occasional backup',
           '$100/month in API credits for my own builds and API-backed third-party tools, including dictation software',
         ],
       },
