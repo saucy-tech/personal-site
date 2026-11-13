@@ -128,9 +128,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <div className="relative z-10 flex flex-col min-h-screen">
             <Header navItems={navItems} />
             <main id="main-content" tabIndex={-1} className="grow">
-              <div className="container mx-auto max-w-[min(100%,80rem)] px-4 sm:px-6">
-                {children}
-              </div>
+              <div className="mx-auto w-full max-w-[min(100%,80rem)] px-4 sm:px-6">{children}</div>
             </main>
             <Footer navItems={footerNavItems} />
           </div>

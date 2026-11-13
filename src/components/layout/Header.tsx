@@ -19,7 +19,7 @@ export default function Header({ className, navItems }: HeaderProps) {
       >
         Skip to content
       </a>
-      <div className="container mx-auto flex flex-col gap-3 px-4">
+      <div className="mx-auto flex w-full max-w-[min(100%,80rem)] flex-col gap-3 px-4 sm:px-6">
         <div className="flex justify-center">
           <nav aria-label="Main navigation" className="flex justify-center">
             <Link

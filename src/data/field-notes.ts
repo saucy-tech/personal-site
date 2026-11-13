@@ -4,7 +4,7 @@
  * Sections follow the order the choice is actually made: the models, the
  * harnesses that run them inside a repo, the interfaces I drive those harnesses
  * from — plus the subscriptions, infrastructure, and utilities underneath.
- * Harness = the agent loop (Claude Code and OpenCode); interface =
+ * Harness = the agent loop (Claude Code, OpenCode, and Codex); interface =
  * the surface I sit in front of (T3 Code, Grok Bot, Claude Duet, and Muse).
  * Experiments live alongside daily tools, distinguished by their badges.
  * The point is the loop, not the chat: give context, let an agent inspect the
@@ -126,7 +126,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
     id: 'coding-agents',
     title: 'Harnesses',
     blurb:
-      'The agent loop itself — the thing that takes a model, gives it tools, and lets it inspect a repo, edit, and run checks. Claude Code carries the daily work; OpenCode covers other providers and my local model. I drive them from T3 Code.',
+      'The agent loop itself — the thing that takes a model, gives it tools, and lets it inspect a repo, edit, and run checks. Claude Code carries the daily work; OpenCode covers other providers and my local model. Codex is an occasional second read. I drive them from T3 Code.',
     items: [
       {
         title: 'Claude Code',
@@ -148,6 +148,14 @@ export const fieldNotesSections: FieldNoteSection[] = [
         ],
         cons: ['One more harness to keep configured next to Claude Code'],
       },
+      {
+        title: 'Codex',
+        tags: ['openai', 'cli', 'coding agent'],
+        badge: 'occasional',
+        homepage: 'https://openai.com',
+        note: 'An occasional implementation-and-inspection pass. I drive it through T3 Code when I want a second read against Claude Code.',
+        pros: ['Quick into implementation and repo inspection', 'Clean inside T3 Code'],
+      },
     ],
   },
   {
@@ -161,7 +169,7 @@ export const fieldNotesSections: FieldNoteSection[] = [
         tags: ['interface', 'multi-harness', 'daily driver'],
         badge: 'daily',
         homepage: 'https://t3.codes',
-        note: 'My main interface and where I spend most of my time. Not a harness — it sits on top of Claude Code and OpenCode and lets me run them from one window, with my models pinned to keyboard shortcuts so switching is a keystroke instead of a context rebuild.',
+        note: 'My main interface and where I spend most of my time. Not a harness — it sits on top of Claude Code, OpenCode, and Codex and lets me run them from one window, with my models pinned to keyboard shortcuts so switching is a keystroke instead of a context rebuild.',
         pros: [
           'One interface over my coding harnesses',
           'Switch models and harnesses without leaving the flow',
@@ -225,6 +233,17 @@ export const fieldNotesSections: FieldNoteSection[] = [
         note: 'My $100/month Claude plan, now simply called Max. It supports my Claude Code work through T3 Code and my experiments with Claude Duet.',
         pros: [
           'Room for longer Claude Code runs',
+          '$100/month in API credits for my own builds and API-backed third-party tools, including dictation software',
+        ],
+      },
+      {
+        title: 'ChatGPT Pro 100',
+        tags: ['openai', '$100/mo'],
+        badge: 'occasional',
+        homepage: 'https://chatgpt.com',
+        icon: '/icons/tools/openai.com.png',
+        note: 'My $100/month plan for occasional Codex use.',
+        pros: [
           '$100/month in API credits for my own builds and API-backed third-party tools, including dictation software',
         ],
       },
@@ -298,12 +317,12 @@ export const fieldNotesSections: FieldNoteSection[] = [
         badge: 'daily',
         homepage: 'https://anoma.ly/hex/',
         icon: '/icons/tools/hex.svg',
-        note: 'Free, open-source local dictation from Anomaly, the team behind OpenCode. It replaced Superwhisper for me: hold a shortcut, speak, and it transcribes on the device with Parakeet or Cohere models and pastes into the app I am using. Post-processing is optional, and it can run through the Claude Code subscription I already pay for.',
+        note: 'Free, open-source local dictation from Anomaly, the team behind OpenCode. It replaced Superwhisper for me: hold a shortcut, speak, and it transcribes on the device with Parakeet or Cohere models and pastes into the app I am using. Post-processing is optional, and it can run through the Claude Code and OpenAI subscriptions I already pay for.',
         link: { href: 'https://anoma.ly/hex/', label: 'Hex' },
         pros: [
           'Runs on Mac, Windows and Linux at no cost',
           'On-device transcription with Parakeet and Cohere models',
-          'Post-processing through my existing Claude Code subscription when I want it',
+          'Post-processing through my existing Claude Code and OpenAI subscriptions when I want it',
         ],
       },
       {

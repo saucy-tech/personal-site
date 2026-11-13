@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const alt =
-  'Notes diagram: devices connect through T3 Code to Claude Code and OpenCode, then to remote machines and an RTX 3090';
+  'Notes diagram: devices connect through T3 Code to Claude Code, OpenCode, and Codex, then to remote machines and an RTX 3090';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -155,6 +155,7 @@ export default function OGImage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           <Node width={206}>Claude Code</Node>
           <Node width={206}>OpenCode</Node>
+          <Node width={206}>Codex</Node>
         </div>
         <Arrow />
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>

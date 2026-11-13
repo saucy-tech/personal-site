@@ -47,7 +47,11 @@ describe('current notes stack', () => {
     expect(section('coding-agents').items.map((item) => item.title)).toEqual([
       'Claude Code',
       'OpenCode',
+      'Codex',
     ]);
+    expect(section('coding-agents').items.find((item) => item.title === 'Codex')?.badge).toBe(
+      'occasional'
+    );
     expect(section('interfaces').items.map((item) => item.title)).toEqual([
       'T3 Code',
       'Grok Bot',
@@ -74,14 +78,20 @@ describe('current notes stack', () => {
     ).not.toContain('Premium');
   });
 
+  it('uses the same icon for ChatGPT and Codex', () => {
+    const codex = section('coding-agents').items.find((item) => item.title === 'Codex')!;
+    const chatgpt = section('subscriptions').items.find(
+      (item) => item.title === 'ChatGPT Pro 100'
+    )!;
+    expect(chatgpt.badge).toBe('occasional');
+    expect(chatgpt.icon).toBe(`/icons/tools/${new URL(codex.homepage!).hostname}.png`);
+  });
+
   it('documents the Claude Max API-credit benefit', () => {
     const plan = section('subscriptions').items.find((item) => item.title === 'Claude Max')!;
     expect(plan.tags).toContain('$100/mo');
     expect(plan.pros).toContainEqual(expect.stringContaining('$100/month in API credits'));
     expect(plan.pros).toContainEqual(expect.stringContaining('dictation software'));
-    expect(section('subscriptions').items.map((item) => item.title)).not.toContain(
-      'ChatGPT Pro 100'
-    );
   });
 
   it('condenses Cloudflare and keeps dictation tools in Tools', () => {
