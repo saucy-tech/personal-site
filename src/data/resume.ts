@@ -9,7 +9,7 @@ import { portfolioAbout } from '@/data/portfolio-about';
 import { projects, projectsLastUpdated } from '@/data/projects';
 
 /** Date the PDF and hand-written sections below were last revised. */
-const resumeContentUpdated = '2026-05-21';
+const resumeContentUpdated = '2026-11-27';
 
 /** Newest of the PDF revision and the live award/project data it renders. */
 export const resumeLastUpdated =
@@ -29,7 +29,7 @@ export const resume = {
   pdfHref: '/Brandon_Sauceda_Resume.pdf',
   experience: [
     {
-      role: 'IT Development Manager',
+      role: 'IT Applications and GIS Manager',
       org: 'Georgia Department of Agriculture, Atlanta, GA',
       dates: 'March 2019 – Present',
       bullets: [

@@ -7,7 +7,7 @@ import { resume, resumeLastUpdated } from '@/data/resume';
 import { formatPostDate } from '@/utils/helpers';
 
 const RESUME_DESCRIPTION =
-  'Brandon Sauceda’s résumé: IT Development Manager at the Georgia Department of Agriculture and independent software engineer behind Saucy Tech. Experience, products, awards, and skills, with a PDF download.';
+  'Brandon Sauceda’s résumé: IT Applications and GIS Manager at the Georgia Department of Agriculture and independent software engineer behind Saucy Tech. Experience, products, awards, and skills, with a PDF download.';
 
 export const metadata: Metadata = {
   title: 'Résumé',
