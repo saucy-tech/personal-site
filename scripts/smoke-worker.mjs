@@ -5,6 +5,11 @@ import { execFileSync, spawn } from 'node:child_process';
 import { setTimeout as delay } from 'node:timers/promises';
 
 const base = 'http://127.0.0.1:8787';
+// Absolute share-card URLs come from the build's site URL (CI builds with
+// NEXT_PUBLIC_APP_URL=https://example.com); mirror getSiteUrl() in src/utils/constants.ts.
+const siteUrl = (process.env.SITE_URL || process.env.NEXT_PUBLIC_APP_URL || 'https://saucy.tech')
+  .trim()
+  .replace(/\/+$/, '');
 const env = { ...process.env, WRANGLER_SEND_METRICS: 'false' };
 // Match OpenNext preview/upload preparation before exercising the slimmed OG bundle.
 execFileSync('pnpm', ['exec', 'opennextjs-cloudflare', 'populateCache', 'local'], {
@@ -71,7 +76,7 @@ try {
       await fetch(`${base}${path}`, { signal: AbortSignal.timeout(15_000) })
     ).text();
     for (const tag of [
-      'property="og:image" content="https://saucy.tech/opengraph-image"',
+      `property="og:image" content="${siteUrl}/opengraph-image"`,
       'property="og:image:width" content="1200"',
       'property="og:image:height" content="630"',
       'property="og:image:alt"',
@@ -79,7 +84,7 @@ try {
       'property="og:site_name"',
       'property="og:locale" content="en_US"',
       'name="twitter:card" content="summary_large_image"',
-      'name="twitter:image" content="https://saucy.tech/opengraph-image"',
+      `name="twitter:image" content="${siteUrl}/opengraph-image"`,
     ]) {
       assert.ok(html.includes(tag), `${path}: missing ${tag}`);
     }
