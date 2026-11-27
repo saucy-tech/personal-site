@@ -61,18 +61,20 @@ const links = [
 
 export default function Links() {
   return (
-    <PageLayout title="₿ Bitcoin Links">
-      <p className="text-(--text-secondary) text-center mb-8 max-w-sm mx-auto text-sm">
+    <PageLayout title="₿ Bitcoin Links" readingWidth>
+      <p className="text-sm text-(--text-secondary)">
         Favorite trackers, calculators, and dashboards.
       </p>
 
-      <section className="w-full max-w-2xl mx-auto space-y-4">
+      <section className="divide-y divide-(--surface-border)">
         {links.map((link) => (
-          <LinkCard key={link.href} title={link.title} href={link.href} icon={link.icon}>
-            <p className="px-4 pb-3 text-xs text-(--text-secondary) text-center leading-relaxed">
-              {link.description}
-            </p>
-          </LinkCard>
+          <LinkCard
+            key={link.href}
+            title={link.title}
+            href={link.href}
+            icon={link.icon}
+            description={link.description}
+          />
         ))}
       </section>
     </PageLayout>

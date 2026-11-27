@@ -1,9 +1,11 @@
 import EmailLink from '@/components/EmailLink';
 import { Metadata } from 'next';
 
+import LinkCard from '@/components/LinkCard';
 import PageLayout from '@/components/PageLayout';
 import { about, aboutLastUpdated } from '@/data/about';
 import { SITE_NAME } from '@/utils/constants';
+import { formatPostDate } from '@/utils/helpers';
 
 export const metadata: Metadata = {
   title: 'About',
@@ -43,21 +45,16 @@ export default function About() {
 
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold">Products</h2>
-        <div className="flex flex-col gap-4">
-          {about.products.map((product) => {
-            const isExternal = /^https?:\/\//.test(product.href);
-            return (
-              <a
-                key={product.name}
-                href={product.href}
-                {...(isExternal ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                className="a11y-focus-ring block border-b border-(--surface-border) py-5 hover:underline underline-offset-4"
-              >
-                <h3 className="mb-1 text-lg font-semibold">{product.name}</h3>
-                <p className="text-sm text-(--text-secondary)">{product.oneLiner}</p>
-              </a>
-            );
-          })}
+        <div className="divide-y divide-(--surface-border)">
+          {about.products.map((product) => (
+            <LinkCard
+              key={product.name}
+              headingLevel="h3"
+              title={product.name}
+              href={product.href}
+              meta={product.oneLiner}
+            />
+          ))}
         </div>
       </section>
 
@@ -75,7 +72,9 @@ export default function About() {
         />
       </section>
 
-      <p className="text-xs text-(--text-secondary)">About updated {aboutLastUpdated}</p>
+      <p className="text-xs text-(--text-secondary)">
+        About updated <time dateTime={aboutLastUpdated}>{formatPostDate(aboutLastUpdated)}</time>
+      </p>
     </PageLayout>
   );
 }

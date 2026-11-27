@@ -30,7 +30,7 @@ export default function AppearanceToggle({ className }: { className?: string }) 
   return (
     <div
       className={cn(
-        'inline-flex items-center rounded-full border border-(--accent-border) bg-(--accent-transparent) p-0.5 font-mono text-[10px] uppercase tracking-wider sm:text-xs',
+        'inline-flex items-center rounded-full border border-(--accent-border) bg-(--accent-transparent) p-0.5 font-mono uppercase tracking-wider',
         className
       )}
       role="group"
@@ -40,8 +40,9 @@ export default function AppearanceToggle({ className }: { className?: string }) 
       <button
         type="button"
         onClick={() => select('light')}
+        aria-pressed={mode === 'light'}
         className={cn(
-          'rounded-full px-2.5 py-1 transition sm:px-3',
+          'a11y-focus-ring rounded-full px-3 py-1.5 text-xs transition',
           mode === 'light'
             ? 'bg-(--accent) text-(--on-accent) shadow-xs'
             : 'text-(--text-secondary) hover:text-(--text-primary)'
@@ -52,8 +53,9 @@ export default function AppearanceToggle({ className }: { className?: string }) 
       <button
         type="button"
         onClick={() => select('dark')}
+        aria-pressed={mode === 'dark'}
         className={cn(
-          'rounded-full px-2.5 py-1 transition sm:px-3',
+          'a11y-focus-ring rounded-full px-3 py-1.5 text-xs transition',
           mode === 'dark'
             ? 'bg-(--accent) text-(--on-accent) shadow-xs'
             : 'text-(--text-secondary) hover:text-(--text-primary)'
