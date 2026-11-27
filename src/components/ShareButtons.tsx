@@ -1,13 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  CheckIcon,
-  EnvelopeIcon,
-  LinkIcon,
-  ShareIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline';
+import { CheckIcon, EnvelopeIcon, LinkIcon, ShareIcon } from '@heroicons/react/24/outline';
+
+import { cn } from '@/utils/helpers';
+
+/** Uses the shared `--surface` token when defined, else a light/dark-safe foreground tint. */
+const surface = 'bg-[var(--surface,color-mix(in_srgb,var(--foreground)_4%,transparent))]';
+
+const pillClass = cn(
+  'a11y-focus-ring min-h-[44px] min-w-[44px] items-center gap-2 rounded-2xl border border-(--surface-border) px-4 py-2.5 text-sm font-medium text-(--text-secondary) transition hover:border-(--accent-border) hover:bg-(--accent-transparent) hover:text-(--text-primary)',
+  surface
+);
 
 interface ShareButtonsProps {
   title: string;
@@ -62,7 +66,7 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
   }
 
   return (
-    <div className="rounded-4xl border border-white/10 bg-white/3 p-6 sm:p-8">
+    <div className={cn('rounded-4xl border border-(--surface-border) p-6 sm:p-8', surface)}>
       <p className="text-sm uppercase tracking-[0.18em] text-(--accent)">Share</p>
       <p className="mt-1 text-base font-semibold text-(--text-primary)">
         Found this helpful? Pass it on.
@@ -72,7 +76,7 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
         <button
           type="button"
           onClick={handleMobileShare}
-          className="flex min-h-[44px] min-w-[44px] items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-(--text-secondary) transition hover:border-(--accent-border) hover:bg-(--accent-transparent) hover:text-(--text-primary) sm:hidden"
+          className={cn('flex sm:hidden', pillClass)}
           aria-label="Share this post or copy the link"
         >
           <ShareIcon className="h-4 w-4" aria-hidden="true" />
@@ -83,17 +87,26 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
           href={twitterUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden min-h-[44px] min-w-[44px] items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-(--text-secondary) transition hover:border-(--accent-border) hover:bg-(--accent-transparent) hover:text-(--text-primary) sm:flex"
+          className={cn('hidden sm:flex', pillClass)}
           aria-label="Share on X (Twitter)"
         >
-          <XMarkIcon className="h-4 w-4" aria-hidden="true" />X / Twitter
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+            className="h-4 w-4"
+            aria-hidden="true"
+          >
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+          </svg>
+          X / Twitter
         </a>
 
         <a
           href={facebookUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="hidden min-h-[44px] min-w-[44px] items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-(--text-secondary) transition hover:border-(--accent-border) hover:bg-(--accent-transparent) hover:text-(--text-primary) sm:flex"
+          className={cn('hidden sm:flex', pillClass)}
           aria-label="Share on Facebook"
         >
           <svg
@@ -108,11 +121,7 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
           Facebook
         </a>
 
-        <a
-          href={emailUrl}
-          className="hidden min-h-[44px] min-w-[44px] items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-(--text-secondary) transition hover:border-(--accent-border) hover:bg-(--accent-transparent) hover:text-(--text-primary) sm:flex"
-          aria-label="Share via email"
-        >
+        <a href={emailUrl} className={cn('hidden sm:flex', pillClass)} aria-label="Share via email">
           <EnvelopeIcon className="h-4 w-4" aria-hidden="true" />
           Email
         </a>
@@ -120,11 +129,11 @@ export default function ShareButtons({ title, url, excerpt }: ShareButtonsProps)
         <button
           type="button"
           onClick={handleCopy}
-          className="flex min-h-[44px] min-w-[44px] items-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-medium text-(--text-secondary) transition hover:border-(--accent-border) hover:bg-(--accent-transparent) hover:text-(--text-primary)"
+          className={cn('flex', pillClass)}
           aria-label={copied ? 'Link copied!' : 'Copy link to clipboard'}
         >
           {copied ? (
-            <CheckIcon className="h-4 w-4 text-green-400" aria-hidden="true" />
+            <CheckIcon className="h-4 w-4 text-(--status-success)" aria-hidden="true" />
           ) : (
             <LinkIcon className="h-4 w-4" aria-hidden="true" />
           )}

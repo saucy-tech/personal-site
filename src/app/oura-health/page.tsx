@@ -14,8 +14,8 @@ export const metadata: Metadata = {
 
 export default function OuraHealthPage() {
   return (
-    <PageLayout title="Sunday Health Review">
-      <div className="mx-auto max-w-2xl space-y-8">
+    <PageLayout title="Sunday Health Review" readingWidth>
+      <div className="space-y-8">
         <section className="space-y-4">
           <p className="text-base leading-relaxed text-(--text-secondary)">
             Sunday Health Review is a private, single-user integration that Brandon Sauceda uses to
@@ -48,7 +48,8 @@ export default function OuraHealthPage() {
         </section>
 
         <p className="text-sm text-(--text-secondary)">
-          Questions: <EmailLink className="text-(--accent) hover:underline" />
+          Questions:{' '}
+          <EmailLink className="a11y-focus-ring rounded-xs text-(--accent) hover:underline" />
         </p>
       </div>
     </PageLayout>

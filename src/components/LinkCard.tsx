@@ -36,7 +36,12 @@ const LinkCard: React.FC<LinkCardProps> = ({
   const isExternal = href ? /^https?:\/\//.test(href) : false;
 
   const cardContent = (
-    <div className={cn('group h-full w-full hover:bg-(--accent-transparent)', className)}>
+    <div
+      className={cn(
+        'group h-full w-full transition-colors hover:bg-(--accent-transparent)',
+        className
+      )}
+    >
       <div
         className={cn(
           'flex h-full w-full gap-4 px-2 py-5',
@@ -82,9 +87,9 @@ const LinkCard: React.FC<LinkCardProps> = ({
           )}
         >
           {isExternal ? (
-            <ArrowTopRightOnSquareIcon className="h-4 w-4" />
+            <ArrowTopRightOnSquareIcon className="h-4 w-4 transition-transform motion-safe:group-hover:translate-x-0.5 motion-safe:group-hover:-translate-y-0.5" />
           ) : (
-            <ArrowRightIcon className="h-4 w-4" />
+            <ArrowRightIcon className="h-4 w-4 transition-transform motion-safe:group-hover:translate-x-0.5" />
           )}
         </div>
       </div>
