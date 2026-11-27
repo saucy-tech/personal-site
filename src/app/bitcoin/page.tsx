@@ -27,24 +27,29 @@ export const metadata: Metadata = {
   },
 };
 
+// Theme tokens, so the cards and links follow all four palettes.
+const cardClass = 'rounded-sm border border-(--surface-border) bg-(--surface) p-6';
+const linkClass = 'a11y-focus-ring rounded-xs text-(--accent) underline underline-offset-4';
+
 export default function Bitcoin() {
   return (
-    <PageLayout title="Why I save in Bitcoin">
+    <PageLayout title="Why I save in Bitcoin" readingWidth>
       {/* VISUAL HOOK */}
       <section>
         <Image
           src="/bitcoin-journey.png"
           alt="Bitcoin vs. Gold – A Visual Journey"
-          width={500}
-          height={300}
-          className="rounded-lg shadow-lg w-full max-w-md mx-auto mb-6 px-4"
+          width={1024}
+          height={1536}
+          sizes="(min-width: 480px) 448px, 100vw"
+          className="mx-auto mb-6 h-auto w-full max-w-md rounded-sm border border-(--surface-border)"
         />
       </section>
 
       {/* PERSONAL STORY */}
       <section>
         <h2 className="text-2xl font-semibold mb-4">Why this matters to me</h2>
-        <div className="bg-white/10 p-6 rounded-lg space-y-4">
+        <div className={`${cardClass} space-y-4`}>
           <p>
             As a Christian, I care about truth, integrity, and other people. The longer I looked at
             how the money system works, the more it cut against those things: it rewards debt,
@@ -65,7 +70,7 @@ export default function Bitcoin() {
       {/* START HERE SECTION */}
       <section>
         <h2 className="text-2xl font-semibold mt-8 mb-4">Start here</h2>
-        <div className="bg-white/10 p-6 rounded-lg space-y-6">
+        <div className={`${cardClass} space-y-6`}>
           <div className="text-center mb-6">
             <p className="text-lg mb-4">New to Bitcoin? Start with this documentary.</p>
             <div className="max-w-2xl mx-auto">
@@ -73,14 +78,14 @@ export default function Bitcoin() {
                 href="https://www.youtube.com/watch?v=oksraL7wN6Q"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors duration-200"
+                className="a11y-focus-ring block rounded-sm bg-(--accent) px-6 py-3 font-semibold text-(--on-accent) transition-colors duration-200 hover:bg-(--accent-dark)"
               >
                 Watch &quot;God Bless Bitcoin&quot; →
               </a>
             </div>
           </div>
 
-          <div className="border-t border-white/20 pt-6">
+          <div className="border-t border-(--surface-border) pt-6">
             <h3 className="text-xl font-semibold mb-4">Want to go deeper?</h3>
             <p className="mb-4">After watching the documentary, I recommend these resources:</p>
             <ul className="list-disc list-inside space-y-2">
@@ -90,7 +95,7 @@ export default function Bitcoin() {
                   href="https://river.com/learn/bitcoin-in-10-minutes/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 underline"
+                  className={linkClass}
                 >
                   Bitcoin in 10 Minutes – River
                 </a>{' '}
@@ -102,7 +107,7 @@ export default function Bitcoin() {
                   href="https://www.amazon.com/Bitcoin-Standard-Decentralized-Alternative-Central/dp/1119473861"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 underline"
+                  className={linkClass}
                 >
                   The Bitcoin Standard
                 </a>{' '}
@@ -114,7 +119,7 @@ export default function Bitcoin() {
                   href="https://www.youtube.com/watch?v=4rvTppy1qLI&list=PL2jAZ0x9H0bQFY6wIbQfnrnIlqMcSHd6X"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 underline"
+                  className={linkClass}
                 >
                   What is Money? – Michael Saylor Series
                 </a>{' '}
@@ -128,7 +133,7 @@ export default function Bitcoin() {
       {/* GROWING RESOURCE LIST */}
       <section>
         <h2 className="text-2xl font-semibold mb-4">Growing resource list</h2>
-        <div className="bg-white/10 p-6 rounded-lg space-y-6">
+        <div className={`${cardClass} space-y-6`}>
           <p className="text-md mb-2">
             A curated list of resources that have shaped my understanding of Bitcoin - from
             technical deep dives to philosophical discussions about money and society. I&apos;ll
@@ -143,37 +148,37 @@ export default function Bitcoin() {
                   href="https://river.com/content/entering-the-dual-money-era"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 underline"
+                  className={linkClass}
                 >
                   Entering The Dual Money Era – River Financial
                 </a>{' '}
-                <span className="text-sm text-white/60">(Nov 2024)</span> – A compelling thesis on
-                how Bitcoin will replace the dollar as a way to save while dollars remain for
-                spending.
+                <span className="text-sm text-(--text-secondary)">(Nov 2024)</span> – A compelling
+                thesis on how Bitcoin will replace the dollar as a way to save while dollars remain
+                for spending.
               </li>
               <li>
                 <a
                   href="https://www.amazon.com/Price-Tomorrow-Technology-Deflation-Abundant/dp/1999257405"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 underline"
+                  className={linkClass}
                 >
                   The Price of Tomorrow – Jeff Booth
                 </a>{' '}
-                <span className="text-sm text-white/60">(Jan 2020)</span> – Explores how technology
-                and deflation will shape our future.
+                <span className="text-sm text-(--text-secondary)">(Jan 2020)</span> – Explores how
+                technology and deflation will shape our future.
               </li>
               <li>
                 <a
                   href="https://www.swanbitcoin.com/inventing-bitcoin/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 underline"
+                  className={linkClass}
                 >
                   Inventing Bitcoin – Yan Pritzker
                 </a>{' '}
-                <span className="text-sm text-white/60">(Jun 2019)</span> – Short, clear, and great
-                for technical newcomers.
+                <span className="text-sm text-(--text-secondary)">(Jun 2019)</span> – Short, clear,
+                and great for technical newcomers.
               </li>
             </ul>
           </div>
@@ -186,25 +191,26 @@ export default function Bitcoin() {
                   href="https://youtu.be/Pef22g53zsg"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 underline"
+                  className={linkClass}
                 >
                   Jack Mallers: Bitcoin is a Moral Revolution
                 </a>{' '}
-                <span className="text-sm text-white/60">(Jun 2025)</span> – A powerful and emotional
-                explanation of Bitcoin as more than just an investment - a moral revolution in money
-                offering hope and fairness to a generation facing economic hardship.
+                <span className="text-sm text-(--text-secondary)">(Jun 2025)</span> – A powerful and
+                emotional explanation of Bitcoin as more than just an investment - a moral
+                revolution in money offering hope and fairness to a generation facing economic
+                hardship.
               </li>
               <li>
                 <a
                   href="https://youtu.be/Flra35NJV_I"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-400 underline"
+                  className={linkClass}
                 >
                   THE Bitcoin Podcast: Saving in Bitcoin Ep. 1
                 </a>{' '}
-                <span className="text-sm text-white/60">(Mar 2025)</span> – Jeff Booth joins Walker
-                for Episode 1 to introduce Bitcoin.
+                <span className="text-sm text-(--text-secondary)">(Mar 2025)</span> – Jeff Booth
+                joins Walker for Episode 1 to introduce Bitcoin.
               </li>
             </ul>
           </div>
@@ -214,14 +220,14 @@ export default function Bitcoin() {
       {/* WHERE TO BUY */}
       <section>
         <h2 className="text-2xl font-semibold mt-8 mb-4">How I buy Bitcoin</h2>
-        <div className="bg-white/10 p-6 rounded-lg space-y-4">
+        <div className={`${cardClass} space-y-4`}>
           <p>
             I use{' '}
             <a
               href="https://river.com/signup?r=6UMRATB6"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-400 underline"
+              className={linkClass}
             >
               River
             </a>{' '}
@@ -238,7 +244,7 @@ export default function Bitcoin() {
               href="https://river.com/signup?r=6UMRATB6"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-blue-400 underline font-semibold"
+              className={`${linkClass} font-semibold`}
             >
               → Sign up here with my referral link
             </a>
@@ -248,9 +254,9 @@ export default function Bitcoin() {
 
       <section>
         <h2 className="text-2xl font-semibold mt-8 mb-4">Notes</h2>
-        <div className="bg-white/10 p-6 rounded-lg space-y-3 text-sm leading-relaxed">
+        <div className={`${cardClass} space-y-3 text-sm leading-relaxed`}>
           <p>
-            <Link href="/notes" className="text-blue-400 underline">
+            <Link href="/notes" className={linkClass}>
               Notes
             </Link>{' '}
             covers how I use AI day to day (models, harnesses, subscriptions, gear).

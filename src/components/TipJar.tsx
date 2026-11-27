@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useId, useRef } from 'react';
 
 import { PRESET_AMOUNTS } from '@/utils/tipjar';
 
@@ -39,6 +39,14 @@ export default function TipJar({ initialMemo }: TipJarProps) {
   const pollTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const pollAttemptsRef = useRef(0);
   const maxPollAttempts = 80;
+  const amountLabelId = useId();
+  const customAmountId = useId();
+  const messageId = useId();
+
+  const stopPolling = () => {
+    if (pollTimerRef.current) clearInterval(pollTimerRef.current);
+    pollTimerRef.current = null;
+  };
 
   useEffect(() => {
     const syncAccent = () => {
@@ -142,24 +150,24 @@ export default function TipJar({ initialMemo }: TipJarProps) {
   };
 
   const startPolling = (hash: string) => {
-    if (pollTimerRef.current) {
-      clearInterval(pollTimerRef.current);
-    }
+    stopPolling();
     pollAttemptsRef.current = 0;
     const baseMs = 3000;
-    pollTimerRef.current = setInterval(async () => {
+    const timer = setInterval(async () => {
       pollAttemptsRef.current += 1;
       if (pollAttemptsRef.current > maxPollAttempts) {
-        if (pollTimerRef.current) clearInterval(pollTimerRef.current);
+        stopPolling();
         setError('Still waiting on the network—check your wallet or try again in a moment.');
         return;
       }
       try {
         const res = await fetch(`/api/invoice?paymentHash=${hash}`);
+        // Polling was stopped (Change amount, reset) while this request was in flight.
+        if (pollTimerRef.current !== timer) return;
         if (!res.ok) return; // continue polling silently
         const data = await res.json();
         if (data.paid) {
-          if (pollTimerRef.current) clearInterval(pollTimerRef.current);
+          stopPolling();
           setState('success');
           setShowConfetti(true);
           setTimeout(() => setShowConfetti(false), 5000);
@@ -168,6 +176,16 @@ export default function TipJar({ initialMemo }: TipJarProps) {
         console.error('Error checking payment status:', err);
       }
     }, baseMs);
+    pollTimerRef.current = timer;
+  };
+
+  // Back from the invoice to amount selection, keeping the chosen amount and message.
+  const changeAmount = () => {
+    stopPolling();
+    setState('select');
+    setInvoice('');
+    setError('');
+    setCopyButtonText('Copy');
   };
 
   const resetForm = () => {
@@ -179,7 +197,7 @@ export default function TipJar({ initialMemo }: TipJarProps) {
     setError('');
     setShowConfetti(false);
     setCopyButtonText('Copy');
-    if (pollTimerRef.current) clearInterval(pollTimerRef.current);
+    stopPolling();
   };
 
   const copyToClipboard = async () => {
@@ -210,14 +228,17 @@ export default function TipJar({ initialMemo }: TipJarProps) {
         {state === 'select' && (
           <div className="space-y-6">
             <div>
-              <label className="block text-sm font-medium mb-1 text-(--text-primary)">
-                Select Amount (sats)
-              </label>
+              <p
+                id={amountLabelId}
+                className="block text-sm font-medium mb-1 text-(--text-primary)"
+              >
+                Select amount (sats)
+              </p>
               <div>
                 <div
                   className="grid grid-cols-2 gap-3"
                   role="radiogroup"
-                  aria-label="Tip amount in satoshis"
+                  aria-labelledby={amountLabelId}
                 >
                   {PRESET_AMOUNTS.map((amount) => (
                     <button
@@ -226,7 +247,7 @@ export default function TipJar({ initialMemo }: TipJarProps) {
                       role="radio"
                       aria-checked={selectedAmount === amount}
                       onClick={() => handleAmountSelect(amount as AmountOption)}
-                      className={`py-2 px-4 rounded-md transition-colors duration-200 ${
+                      className={`a11y-focus-ring py-2 px-4 rounded-md transition-colors duration-200 ${
                         selectedAmount === amount
                           ? 'bg-(--accent) text-(--on-accent)'
                           : 'bg-(--accent-transparent) text-(--text-primary) hover:bg-(--accent-hover)'
@@ -240,7 +261,7 @@ export default function TipJar({ initialMemo }: TipJarProps) {
                   <button
                     type="button"
                     onClick={() => handleAmountSelect('custom')}
-                    className={`px-3 py-1 rounded-md text-sm border border-(--accent-border) transition-colors duration-200 ${
+                    className={`a11y-focus-ring px-3 py-1 rounded-md text-sm border border-(--accent-border) transition-colors duration-200 ${
                       selectedAmount === 'custom'
                         ? 'bg-(--accent) text-(--on-accent) border-(--accent)'
                         : 'bg-(--accent-transparent) text-(--text-primary) hover:bg-(--accent-hover)'
@@ -249,13 +270,21 @@ export default function TipJar({ initialMemo }: TipJarProps) {
                     Custom
                   </button>
                   {selectedAmount === 'custom' && (
-                    <input
-                      type="text"
-                      value={customAmount}
-                      onChange={handleCustomAmountChange}
-                      placeholder="Enter sats"
-                      className="w-40 border border-(--accent-border) p-2 rounded-md bg-transparent text-(--text-primary)"
-                    />
+                    <>
+                      <label htmlFor={customAmountId} className="sr-only">
+                        Custom amount (sats)
+                      </label>
+                      <input
+                        id={customAmountId}
+                        type="text"
+                        inputMode="numeric"
+                        autoComplete="off"
+                        value={customAmount}
+                        onChange={handleCustomAmountChange}
+                        placeholder="Enter sats"
+                        className="a11y-focus-ring w-40 border border-(--accent-border) p-2 rounded-md bg-transparent text-(--text-primary)"
+                      />
+                    </>
                   )}
                 </div>
                 {selectedAmount !== 'custom' && usdRate !== null && getAmount() > 0 && (
@@ -272,44 +301,65 @@ export default function TipJar({ initialMemo }: TipJarProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2 text-(--text-primary)">
+              <label
+                htmlFor={messageId}
+                className="block text-sm font-medium mb-2 text-(--text-primary)"
+              >
                 Message (optional)
               </label>
               <textarea
+                id={messageId}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 rows={2}
                 placeholder="Add a note"
-                className="w-full border border-(--accent-border) p-2 rounded-md bg-transparent text-(--text-primary)"
+                className="a11y-focus-ring w-full border border-(--accent-border) p-2 rounded-md bg-transparent text-(--text-primary)"
               />
             </div>
 
             <button
+              type="button"
               onClick={generateInvoice}
               disabled={isGeneratingInvoice}
-              className="w-full py-2 rounded-md transition-colors duration-200 bg-(--accent) text-(--on-accent) disabled:opacity-50"
+              className="a11y-focus-ring w-full py-2 rounded-md transition-colors duration-200 bg-(--accent) text-(--on-accent) disabled:opacity-50"
             >
               {isGeneratingInvoice ? 'Generating...' : 'Tip me'}
             </button>
-
-            {error && <p className="text-red-500 mt-2">{error}</p>}
           </div>
         )}
 
         {state === 'pay' && (
           <div className="text-center space-y-4">
             <div className="mb-4 flex justify-center">
-              <QRCode value={invoice} size={200} />
+              {/* White quiet zone keeps the code scannable on dark and tinted backgrounds */}
+              <div className="rounded-md bg-white p-3">
+                <QRCode value={invoice} size={200} />
+              </div>
             </div>
-            <code className="block text-sm wrap-break-word bg-black/40 p-3 rounded-sm text-(--text-primary)">
+            {!error && (
+              <p role="status" className="text-sm text-(--text-secondary)">
+                Waiting for payment…
+              </p>
+            )}
+            <code className="block text-sm wrap-break-word bg-(--surface) border border-(--surface-border) p-3 rounded-sm text-(--text-primary)">
               {invoice}
             </code>
-            <button
-              onClick={copyToClipboard}
-              className="mt-4 py-2 px-4 rounded-md transition-colors duration-200 bg-(--accent) text-(--on-accent)"
-            >
-              {copyButtonText}
-            </button>
+            <div className="mt-4 flex flex-wrap justify-center gap-3">
+              <button
+                type="button"
+                onClick={copyToClipboard}
+                className="a11y-focus-ring py-2 px-4 rounded-md transition-colors duration-200 bg-(--accent) text-(--on-accent)"
+              >
+                {copyButtonText}
+              </button>
+              <button
+                type="button"
+                onClick={changeAmount}
+                className="a11y-focus-ring py-2 px-4 rounded-md border border-(--accent-border) text-(--text-primary) transition-colors duration-200 hover:bg-(--accent-hover)"
+              >
+                Change amount
+              </button>
+            </div>
           </div>
         )}
 
@@ -317,12 +367,23 @@ export default function TipJar({ initialMemo }: TipJarProps) {
           <div className="text-center space-y-4">
             <p className="text-(--accent) text-lg font-semibold">Thank you for your tip!</p>
             <button
+              type="button"
               onClick={resetForm}
-              className="mt-2 py-2 px-4 rounded-md transition-colors duration-200 bg-(--accent) text-(--on-accent)"
+              className="a11y-focus-ring mt-2 py-2 px-4 rounded-md transition-colors duration-200 bg-(--accent) text-(--on-accent)"
             >
               Send another
             </button>
           </div>
+        )}
+
+        {/* Shared by select (invoice request failed) and pay (polling timed out) */}
+        {error && state !== 'success' && (
+          <p
+            role="alert"
+            className={`mt-4 text-sm text-(--status-error) ${state === 'pay' ? 'text-center' : ''}`}
+          >
+            {error}
+          </p>
         )}
       </div>
     </div>
