@@ -37,6 +37,12 @@ describe('NotesSectionIndex', () => {
     expect(links[0]).toHaveAttribute('aria-current', 'location');
   });
 
+  it('does not scroll the page to reveal the active chip on load', () => {
+    render(<NotesSectionIndex sections={sections} layout="bar" />);
+
+    expect(Element.prototype.scrollIntoView).not.toHaveBeenCalled();
+  });
+
   it('scrolls a focused chip into view', () => {
     render(<NotesSectionIndex sections={sections} />);
     const link = screen.getByRole('link', { name: 'Three' });

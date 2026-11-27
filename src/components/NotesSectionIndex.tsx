@@ -60,13 +60,27 @@ export default function NotesSectionIndex({ sections, layout = 'rail' }: NotesSe
     };
   }, [sections]);
 
+  // Reveal the active chip by scrolling only the chip row. scrollIntoView would
+  // also scroll the page, e.g. on load when the index starts below the fold.
   useEffect(() => {
-    if (!activeId) {
+    const list = listRef.current;
+    const chip = activeId ? list?.querySelector(`a[href="#${activeId}"]`) : null;
+    if (!list || !chip) {
       return;
     }
-    listRef.current
-      ?.querySelector(`a[href="#${activeId}"]`)
-      ?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+
+    const listBox = list.getBoundingClientRect();
+    const chipBox = chip.getBoundingClientRect();
+    // Honor scroll-padding-inline-end so the chip stops clear of the fade.
+    const endInset = Number.parseFloat(getComputedStyle(list).scrollPaddingInlineEnd) || 0;
+    const hiddenLeft = chipBox.left - listBox.left;
+    const hiddenRight = chipBox.right - (listBox.right - endInset);
+
+    if (hiddenLeft < 0) {
+      list.scrollLeft += hiddenLeft;
+    } else if (hiddenRight > 0) {
+      list.scrollLeft += hiddenRight;
+    }
   }, [activeId]);
 
   // The fade only shows while chips overflow to the right, so the last chip is
