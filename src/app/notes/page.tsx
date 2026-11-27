@@ -4,7 +4,7 @@ import NotesSectionIndex from '@/components/NotesSectionIndex';
 import PageLayout from '@/components/PageLayout';
 import { PlanMarks } from '@/components/PlanMarks';
 import { fieldNotesLastUpdated, fieldNotesSections } from '@/data/field-notes';
-import { formatPostDate } from '@/utils/helpers';
+import { cn, formatPostDate } from '@/utils/helpers';
 import { SITE_NAME } from '@/utils/constants';
 
 const FIELD_NOTES_OG_IMAGE = '/notes/opengraph-image';
@@ -26,7 +26,7 @@ function ToolFavicon({ homepage, icon }: { homepage: string; icon?: string }) {
       width={16}
       height={16}
       loading="lazy"
-      className="inline-block h-4 w-4 shrink-0 rounded-sm bg-white"
+      className="inline-block h-5 w-5 shrink-0 rounded-sm bg-white/90 p-0.5 ring-1 ring-(--surface-border)"
     />
   );
 }
@@ -64,7 +64,7 @@ export default function NotesPage() {
   const sections = fieldNotesSections.filter((section) => section.items.length > 0);
 
   return (
-    <PageLayout title="Notes" backHref="/" backLabel="Back to Home" readingWidth>
+    <PageLayout title="Notes" readingWidth>
       <div className="max-w-2xl space-y-3">
         <p className="text-base leading-relaxed text-(--text-secondary)">
           What I’m using, learning, and spending time on. AI tools, Bitcoin, my church, and the
@@ -75,7 +75,7 @@ export default function NotesPage() {
         </p>
       </div>
 
-      <div className="mt-10 max-w-3xl md:grid md:grid-cols-[10rem_1fr] md:gap-8">
+      <div className="mt-10 max-w-3xl md:grid md:grid-cols-[8.5rem_minmax(0,1fr)] md:gap-6">
         <NotesSectionIndex
           sections={sections.map((section) => ({ id: section.id, title: section.title }))}
         />
@@ -103,7 +103,14 @@ export default function NotesPage() {
                         {item.title}
                       </h3>
                       {item.badge && (
-                        <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-(--accent)">
+                        <span
+                          className={cn(
+                            'rounded-full border px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.18em]',
+                            item.badge === 'daily'
+                              ? 'border-(--accent-border) bg-(--accent-transparent) text-(--accent)'
+                              : 'border-(--surface-border) text-(--text-secondary)'
+                          )}
+                        >
                           {item.badge}
                         </span>
                       )}
@@ -132,7 +139,7 @@ export default function NotesPage() {
                                 ? 'noopener noreferrer'
                                 : undefined
                             }
-                            className="text-(--accent) underline underline-offset-2 transition hover:opacity-80"
+                            className="a11y-focus-ring rounded-xs text-(--accent) underline underline-offset-2 transition hover:opacity-80"
                           >
                             {item.link.label ?? 'link'}
                           </a>
@@ -141,17 +148,29 @@ export default function NotesPage() {
                     </p>
                     {((item.pros && item.pros.length > 0) ||
                       (item.cons && item.cons.length > 0)) && (
-                      <div className="mt-3 space-y-1 text-xs leading-relaxed text-(--text-secondary)">
-                        {item.pros?.map((pro) => (
-                          <p key={pro}>
-                            <span className="font-mono text-(--accent)">+</span> {pro}
-                          </p>
-                        ))}
-                        {item.cons?.map((con) => (
-                          <p key={con}>
-                            <span className="font-mono text-(--text-secondary)">-</span> {con}
-                          </p>
-                        ))}
+                      // Grid gaps, not space-y: the unlayered .tradeoff-list margin reset
+                      // beats Tailwind's layered margin utilities.
+                      <div className="mt-3 grid gap-1 text-xs leading-relaxed text-(--text-secondary)">
+                        {item.pros && item.pros.length > 0 && (
+                          <ul
+                            aria-label="Pros"
+                            className="tradeoff-list tradeoff-list-pro grid gap-1"
+                          >
+                            {item.pros.map((pro) => (
+                              <li key={pro}>{pro}</li>
+                            ))}
+                          </ul>
+                        )}
+                        {item.cons && item.cons.length > 0 && (
+                          <ul
+                            aria-label="Cons"
+                            className="tradeoff-list tradeoff-list-con grid gap-1"
+                          >
+                            {item.cons.map((con) => (
+                              <li key={con}>{con}</li>
+                            ))}
+                          </ul>
+                        )}
                       </div>
                     )}
                   </article>
