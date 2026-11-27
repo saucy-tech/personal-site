@@ -16,12 +16,13 @@ const POLL_MS = 3000;
 const MAX_POLL_ATTEMPTS = 80;
 const INVOICE = 'lnbc210n1testinvoice';
 
-function mockFetch() {
+// pollBody supplies each payment-status response body, so a test can hold one back.
+function mockFetch(pollBody: () => Promise<unknown> = async () => ({ paid: false })) {
   return jest.fn(async (input: RequestInfo | URL) => {
     const url = String(input);
+    if (url.includes('paymentHash=')) return { ok: true, json: pollBody } as unknown as Response;
     let body: unknown = {};
     if (url === '/api/btcusd') body = { usd: 100_000 };
-    else if (url.includes('paymentHash=')) body = { paid: false };
     else if (url === '/api/invoice') body = { paymentRequest: INVOICE, paymentHash: 'hash123' };
     return { ok: true, json: async () => body } as Response;
   });
@@ -90,6 +91,42 @@ describe('TipJar', () => {
       await jest.advanceTimersByTimeAsync(POLL_MS * 10);
     });
     expect(pollCalls(fetchMock)).toBe(callsBeforeBack);
+  });
+
+  it('ignores a paid response that arrives after the invoice was abandoned', async () => {
+    let releaseFirstPoll: (body: unknown) => void = () => {};
+    const heldBodies = [
+      new Promise((resolve) => {
+        releaseFirstPoll = resolve;
+      }),
+    ];
+    fetchMock = mockFetch(() => heldBodies.shift() ?? Promise.resolve({ paid: false }));
+    global.fetch = fetchMock as unknown as typeof fetch;
+
+    await openInvoice();
+    // First poll gets its headers; its body is held back.
+    await act(async () => {
+      await jest.advanceTimersByTimeAsync(POLL_MS);
+    });
+    expect(pollCalls(fetchMock)).toBe(1);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Change amount' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Tip me' }));
+    await screen.findByRole('button', { name: 'Change amount' });
+
+    await act(async () => {
+      releaseFirstPoll({ paid: true });
+      await jest.advanceTimersByTimeAsync(0);
+    });
+
+    expect(screen.queryByText('Thank you for your tip!')).not.toBeInTheDocument();
+    expect(screen.getByText(INVOICE)).toBeInTheDocument();
+
+    // The stale response must not have stopped polling for the new invoice.
+    await act(async () => {
+      await jest.advanceTimersByTimeAsync(POLL_MS);
+    });
+    expect(pollCalls(fetchMock)).toBe(2);
   });
 
   it('labels the amount group, custom amount input and message field', async () => {

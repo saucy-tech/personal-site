@@ -162,10 +162,11 @@ export default function TipJar({ initialMemo }: TipJarProps) {
       }
       try {
         const res = await fetch(`/api/invoice?paymentHash=${hash}`);
-        // Polling was stopped (Change amount, reset) while this request was in flight.
-        if (pollTimerRef.current !== timer) return;
         if (!res.ok) return; // continue polling silently
         const data = await res.json();
+        // Polling was stopped or replaced (Change amount, a new invoice, reset) while this
+        // request or its body was in flight; its result no longer applies.
+        if (pollTimerRef.current !== timer) return;
         if (data.paid) {
           stopPolling();
           setState('success');
