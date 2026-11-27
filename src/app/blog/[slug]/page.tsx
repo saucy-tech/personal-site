@@ -8,7 +8,7 @@ import PostTableOfContents from '@/components/PostTableOfContents';
 import ReadingProgress from '@/components/ReadingProgress';
 import ShareButtons from '@/components/ShareButtons';
 import SubscribeCard from '@/components/SubscribeCard';
-import { formatPostDate } from '@/utils/helpers';
+import { cn, formatPostDate } from '@/utils/helpers';
 import {
   getAllPostsMeta,
   getPostBySlug,
@@ -19,6 +19,14 @@ import {
 } from '@/utils/posts';
 import { AUTHOR_NAME, absoluteUrl } from '@/utils/constants';
 import { getPostJsonLd } from '@/utils/structured-data';
+
+/** Uses the shared `--surface` token when defined, else a light/dark-safe foreground tint. */
+const surface = 'bg-[var(--surface,color-mix(in_srgb,var(--foreground)_4%,transparent))]';
+
+const chipClass = cn(
+  'rounded-full border border-(--surface-border) px-3 py-1 text-xs text-(--text-secondary)',
+  surface
+);
 
 export async function generateStaticParams() {
   return getAllPostsMeta().map((post) => ({ slug: post.slug }));
@@ -78,17 +86,9 @@ export default async function PostPage({ params }: PostPageProps) {
               <span className="rounded-full border border-(--accent-border) bg-(--accent-transparent) px-3 py-1 text-xs uppercase tracking-[0.18em] text-(--accent)">
                 {post.categoryLabel}
               </span>
-              <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary)">
-                {formatPostDate(post.date)}
-              </span>
-              <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary)">
-                {post.readingTimeMinutes} min read
-              </span>
-              {post.series && (
-                <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary)">
-                  {post.series}
-                </span>
-              )}
+              <span className={chipClass}>{formatPostDate(post.date)}</span>
+              <span className={chipClass}>{post.readingTimeMinutes} min read</span>
+              {post.series && <span className={chipClass}>{post.series}</span>}
             </div>
 
             {post.excerpt && (
@@ -100,10 +100,7 @@ export default async function PostPage({ params }: PostPageProps) {
             {post.tags.length > 0 && (
               <div className="mt-6 flex flex-wrap gap-2">
                 {post.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary)"
-                  >
+                  <span key={tag} className={chipClass}>
                     {tag}
                   </span>
                 ))}
@@ -146,7 +143,7 @@ export default async function PostPage({ params }: PostPageProps) {
             </div>
           )}
 
-          <article className="prose prose-invert prose-p:text-[1.05rem] prose-p:leading-8 prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:text-(--text-primary) prose-h2:mt-12 prose-h2:border-t prose-h2:border-white/10 prose-h2:pt-8 prose-h2:text-2xl prose-h3:mt-10 prose-h3:text-xl prose-a:text-(--accent) prose-a:no-underline prose-a:decoration-[0.1em] prose-a:underline-offset-[0.2em] prose-a:hover:text-(--text-primary) focus-visible:prose-a:rounded-xs focus-visible:prose-a:outline-hidden focus-visible:prose-a:ring-2 focus-visible:prose-a:ring-(--focus-ring) focus-visible:prose-a:ring-offset-2 focus-visible:prose-a:ring-offset-(--background) [&_a]:prose-headings:no-underline [&_a]:prose-headings:text-(--accent) [&_a]:prose-headings:hover:text-(--text-primary) prose-strong:text-(--text-primary) prose-blockquote:rounded-2xl prose-blockquote:border-l-4 prose-blockquote:border-(--accent) prose-blockquote:bg-white/4 prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:text-(--text-primary) prose-hr:border-white/10 prose-img:rounded-3xl prose-img:border prose-img:border-white/10 prose-img:shadow-[0_18px_40px_rgba(0,0,0,0.25)] prose-figcaption:text-sm prose-figcaption:text-(--text-secondary) max-w-none">
+          <article className="prose prose-invert prose-p:text-[1.05rem] prose-p:leading-8 prose-headings:scroll-mt-24 prose-headings:font-semibold prose-headings:text-(--text-primary) prose-h2:mt-12 prose-h2:border-t prose-h2:border-(--surface-border) prose-h2:pt-8 prose-h2:text-2xl prose-h3:mt-10 prose-h3:text-xl prose-a:text-(--accent) prose-a:no-underline prose-a:decoration-[0.1em] prose-a:underline-offset-[0.2em] prose-a:hover:text-(--text-primary) focus-visible:prose-a:rounded-xs focus-visible:prose-a:outline-hidden focus-visible:prose-a:ring-2 focus-visible:prose-a:ring-(--focus-ring) focus-visible:prose-a:ring-offset-2 focus-visible:prose-a:ring-offset-(--background) [&_a]:prose-headings:no-underline [&_a]:prose-headings:text-(--accent) [&_a]:prose-headings:hover:text-(--text-primary) prose-strong:text-(--text-primary) prose-blockquote:rounded-2xl prose-blockquote:border-l-4 prose-blockquote:border-(--accent) prose-blockquote:bg-[var(--surface,color-mix(in_srgb,var(--foreground)_4%,transparent))] prose-blockquote:px-6 prose-blockquote:py-4 prose-blockquote:text-(--text-primary) prose-hr:border-(--surface-border) prose-img:rounded-3xl prose-img:border prose-img:border-(--surface-border) prose-img:shadow-[0_18px_40px_rgba(0,0,0,0.25)] prose-figcaption:text-sm prose-figcaption:text-(--text-secondary) editorial-measure">
             {/* Compiled from markdown at build time (gen:posts); Workers cannot
                 run next-mdx-remote's request-time compile (no dynamic codegen). */}
             <div dangerouslySetInnerHTML={{ __html: post.html }} />
@@ -159,7 +156,9 @@ export default async function PostPage({ params }: PostPageProps) {
           />
 
           {relatedPosts.length > 0 && (
-            <section className="rounded-4xl border border-white/10 bg-white/3 p-6 sm:p-8">
+            <section
+              className={cn('rounded-4xl border border-(--surface-border) p-6 sm:p-8', surface)}
+            >
               <div className="flex items-center justify-between gap-4">
                 <div>
                   <p className="text-sm uppercase tracking-[0.18em] text-(--accent)">
@@ -182,7 +181,10 @@ export default async function PostPage({ params }: PostPageProps) {
                   <Link
                     key={relatedPost.slug}
                     href={`/blog/${relatedPost.slug}`}
-                    className="a11y-focus-ring group rounded-3xl border border-(--accent-border) bg-black/10 p-5 transition hover:border-(--accent) hover:bg-(--accent-transparent)"
+                    className={cn(
+                      'a11y-focus-ring group rounded-3xl border border-(--accent-border) p-5 transition hover:border-(--accent) hover:bg-(--accent-transparent)',
+                      surface
+                    )}
                   >
                     <p className="text-xs uppercase tracking-[0.18em] text-(--accent)">
                       {formatPostDate(relatedPost.date)}

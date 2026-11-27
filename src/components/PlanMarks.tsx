@@ -47,7 +47,7 @@ export function PlanMarks({ ids }: { ids: FieldNoteMark[] }) {
             >
               <path d={mark.d} transform={mark.transform} />
             </svg>
-            <span className="text-[10px] leading-none tracking-[0.06em] text-(--text-muted)">
+            <span className="text-xs leading-none tracking-[0.06em] text-(--text-secondary)">
               {mark.label}
             </span>
           </li>

@@ -15,7 +15,7 @@ export default function Footer({ className, navItems }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className={cn('py-6 transparent', className)}>
+    <footer className={cn('border-t border-(--surface-border) py-6', className)}>
       <div className="mx-auto flex w-full max-w-[min(100%,80rem)] flex-col items-center gap-4 px-4 sm:px-6">
         <SiteNav items={navItems} ariaLabel="Footer" />
         <div className="flex flex-wrap justify-center gap-4 text-sm">

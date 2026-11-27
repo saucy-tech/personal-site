@@ -3,8 +3,16 @@ import Link from 'next/link';
 
 import PageLayout from '@/components/PageLayout';
 import { siteOpenGraph } from '@/utils/open-graph';
-import { formatPostDate } from '@/utils/helpers';
+import { cn, formatPostDate } from '@/utils/helpers';
 import { getAllPostsMeta } from '@/utils/posts';
+
+/** Uses the shared `--surface` token when defined, else a light/dark-safe foreground tint. */
+const surface = 'bg-[var(--surface,color-mix(in_srgb,var(--foreground)_4%,transparent))]';
+
+const chipClass = cn(
+  'rounded-full border border-(--surface-border) px-2.5 py-0.5 text-xs text-(--text-secondary)',
+  surface
+);
 
 export const metadata: Metadata = {
   title: 'The Daily Word',
@@ -27,7 +35,7 @@ export default function DailyWordPage() {
   return (
     <PageLayout title="The Daily Word" backHref="/" backLabel="Back to Home">
       {/* Hero */}
-      <section className="rounded-4xl border border-(--accent-border) bg-white/3 p-6 sm:p-8">
+      <section className={cn('rounded-4xl border border-(--accent-border) p-6 sm:p-8', surface)}>
         <p className="text-sm uppercase tracking-[0.22em] text-(--accent)">Archive</p>
         <h2 className="mt-4 max-w-2xl text-3xl font-semibold leading-tight text-(--text-primary) sm:text-4xl">
           The Daily Word
@@ -71,15 +79,14 @@ export default function DailyWordPage() {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className="group rounded-2xl border border-(--accent-border) bg-white/3 p-5 transition hover:border-(--accent) hover:bg-(--accent-transparent)"
+              className={cn(
+                'a11y-focus-ring group rounded-2xl border border-(--accent-border) p-5 transition hover:border-(--accent) hover:bg-(--accent-transparent)',
+                surface
+              )}
             >
               <div className="flex flex-wrap items-center gap-2">
                 <span className="text-xs text-(--text-secondary)">{formatPostDate(post.date)}</span>
-                {post.series && (
-                  <span className="rounded-full border border-white/10 bg-black/10 px-2.5 py-0.5 text-xs text-(--text-secondary)">
-                    {post.series}
-                  </span>
-                )}
+                {post.series && <span className={chipClass}>{post.series}</span>}
               </div>
               <h4 className="mt-2 text-base font-semibold leading-snug text-(--text-primary) transition group-hover:text-(--accent)">
                 {post.title}

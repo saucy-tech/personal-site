@@ -7,9 +7,17 @@ import PageLayout from '@/components/PageLayout';
 import { siteOpenGraph } from '@/utils/open-graph';
 import Section from '@/components/Section';
 import SubscribeForm from '@/components/SubscribeForm';
-import { formatPostDate } from '@/utils/helpers';
+import { cn, formatPostDate } from '@/utils/helpers';
 import { getAllPostsMeta } from '@/utils/posts';
 import { POST_CATEGORIES } from '@/utils/post-taxonomy';
+
+/** Uses the shared `--surface` token when defined, else a light/dark-safe foreground tint. */
+const surface = 'bg-[var(--surface,color-mix(in_srgb,var(--foreground)_4%,transparent))]';
+
+const chipClass = cn(
+  'rounded-full border border-(--surface-border) px-3 py-1 text-xs text-(--text-secondary)',
+  surface
+);
 
 export const metadata: Metadata = {
   title: 'Articles & Reflections',
@@ -46,7 +54,7 @@ export default function BlogIndex() {
   return (
     <PageLayout title="Articles & Reflections" backHref="/" backLabel="Back to Home">
       <section className="grid gap-4 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.9fr)]">
-        <div className="rounded-4xl border border-(--accent-border) bg-white/3 p-6 sm:p-8">
+        <div className={cn('rounded-4xl border border-(--accent-border) p-6 sm:p-8', surface)}>
           <p className="text-sm uppercase tracking-[0.22em] text-(--accent)">Writing Library</p>
           <h2 className="mt-4 max-w-2xl text-3xl font-semibold leading-tight text-(--text-primary) sm:text-4xl">
             Biblical reflections, daily devotions, and essays with room to browse.
@@ -80,14 +88,8 @@ export default function BlogIndex() {
               <span className="rounded-full border border-(--accent-border) bg-(--accent-transparent) px-3 py-1 text-xs uppercase tracking-[0.18em] text-(--accent)">
                 {latest.categoryLabel}
               </span>
-              <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary)">
-                {formatPostDate(latest.date)}
-              </span>
-              {latest.series && (
-                <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary)">
-                  {latest.series}
-                </span>
-              )}
+              <span className={chipClass}>{formatPostDate(latest.date)}</span>
+              {latest.series && <span className={chipClass}>{latest.series}</span>}
             </div>
 
             <h3 className="mt-5 text-2xl font-semibold leading-tight text-(--text-primary)">
@@ -109,7 +111,7 @@ export default function BlogIndex() {
         {statCards.map((stat) => (
           <div
             key={stat.label}
-            className="rounded-3xl border border-(--accent-border) bg-white/3 p-5"
+            className={cn('rounded-3xl border border-(--accent-border) p-5', surface)}
           >
             <p className="text-sm uppercase tracking-[0.18em] text-(--text-secondary)">
               {stat.label}
@@ -123,15 +125,13 @@ export default function BlogIndex() {
         {categoryCards.map((category) => (
           <div
             key={category.key}
-            className="rounded-4xl border border-(--accent-border) bg-white/3 p-5"
+            className={cn('rounded-4xl border border-(--accent-border) p-5', surface)}
           >
             <div className="flex items-center justify-between gap-3">
               <p className="text-sm uppercase tracking-[0.18em] text-(--accent)">
                 {category.label}
               </p>
-              <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary)">
-                {category.count} posts
-              </span>
+              <span className={chipClass}>{category.count} posts</span>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-(--text-secondary)">
               {category.description}

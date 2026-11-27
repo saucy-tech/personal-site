@@ -21,6 +21,19 @@ import {
 
 type CategoryFilter = 'all' | PostCategory;
 
+/** Uses the shared `--surface` token when defined, else a light/dark-safe foreground tint. */
+const surface = 'bg-[var(--surface,color-mix(in_srgb,var(--foreground)_4%,transparent))]';
+
+const inactivePillClass = cn(
+  'border-(--surface-border) text-(--text-secondary) hover:border-(--accent-border) hover:text-(--text-primary)',
+  surface
+);
+
+const chipClass = cn(
+  'rounded-full border border-(--surface-border) px-3 py-1 text-xs text-(--text-secondary)',
+  surface
+);
+
 interface BlogArchiveProps {
   posts: PostMeta[];
 }
@@ -140,7 +153,7 @@ export default function BlogArchive({ posts }: BlogArchiveProps) {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-3xl border border-(--accent-border) bg-white/3 p-4 sm:p-6">
+      <div className={cn('rounded-3xl border border-(--accent-border) p-4 sm:p-6', surface)}>
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2 text-sm text-(--text-secondary)">
             <FunnelIcon className="h-4 w-4 text-(--accent)" />
@@ -156,22 +169,23 @@ export default function BlogArchive({ posts }: BlogArchiveProps) {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search titles, excerpts, tags, or series"
-              className="w-full rounded-2xl border border-white/10 bg-black/10 py-3 pl-10 pr-4 text-sm text-(--text-primary) outline-hidden transition focus:border-(--accent) focus:ring-2 focus:ring-[rgb(var(--accent-rgb)/0.22)]"
+              className="w-full rounded-2xl border border-(--surface-border) bg-(--background) py-3 pl-10 pr-4 text-sm text-(--text-primary) outline-hidden transition focus:border-(--accent) focus:ring-2 focus:ring-[rgb(var(--accent-rgb)/0.22)]"
             />
           </label>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by category">
             <button
               type="button"
               onClick={() => {
                 setActiveCategory('all');
                 setActiveTagSlug('all');
               }}
+              aria-pressed={activeCategory === 'all'}
               className={cn(
-                'rounded-full border px-4 py-2 text-sm transition',
+                'a11y-focus-ring rounded-full border px-4 py-2 text-sm transition',
                 activeCategory === 'all'
                   ? 'border-(--accent) bg-(--accent-transparent) text-(--text-primary)'
-                  : 'border-white/10 bg-white/3 text-(--text-secondary) hover:border-(--accent-border) hover:text-(--text-primary)'
+                  : inactivePillClass
               )}
             >
               All Posts
@@ -190,11 +204,12 @@ export default function BlogArchive({ posts }: BlogArchiveProps) {
                     setActiveCategory(categoryKey);
                     setActiveTagSlug('all');
                   }}
+                  aria-pressed={isActive}
                   className={cn(
-                    'inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition',
+                    'a11y-focus-ring inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition',
                     isActive
                       ? 'border-(--accent) bg-(--accent-transparent) text-(--text-primary)'
-                      : 'border-white/10 bg-white/3 text-(--text-secondary) hover:border-(--accent-border) hover:text-(--text-primary)'
+                      : inactivePillClass
                   )}
                 >
                   <CategoryIcon category={categoryKey} className="h-4 w-4" />
@@ -206,15 +221,16 @@ export default function BlogArchive({ posts }: BlogArchiveProps) {
           </div>
 
           {visibleTags.length > 0 && (
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by topic">
               <button
                 type="button"
                 onClick={() => setActiveTagSlug('all')}
+                aria-pressed={activeTagSlug === 'all'}
                 className={cn(
-                  'rounded-full border px-3 py-1.5 text-xs uppercase tracking-[0.18em] transition',
+                  'a11y-focus-ring rounded-full border px-3 py-1.5 text-xs uppercase tracking-[0.18em] transition',
                   activeTagSlug === 'all'
                     ? 'border-(--accent) bg-(--accent-transparent) text-(--text-primary)'
-                    : 'border-white/10 bg-white/3 text-(--text-secondary) hover:border-(--accent-border) hover:text-(--text-primary)'
+                    : inactivePillClass
                 )}
               >
                 All Topics
@@ -225,11 +241,12 @@ export default function BlogArchive({ posts }: BlogArchiveProps) {
                   key={slug}
                   type="button"
                   onClick={() => setActiveTagSlug(slug)}
+                  aria-pressed={activeTagSlug === slug}
                   className={cn(
-                    'rounded-full border px-3 py-1.5 text-xs uppercase tracking-[0.18em] transition',
+                    'a11y-focus-ring rounded-full border px-3 py-1.5 text-xs uppercase tracking-[0.18em] transition',
                     activeTagSlug === slug
                       ? 'border-(--accent) bg-(--accent-transparent) text-(--text-primary)'
-                      : 'border-white/10 bg-white/3 text-(--text-secondary) hover:border-(--accent-border) hover:text-(--text-primary)'
+                      : inactivePillClass
                   )}
                 >
                   {label}
@@ -254,7 +271,7 @@ export default function BlogArchive({ posts }: BlogArchiveProps) {
               setQuery('');
               router.replace(pathname, { scroll: false });
             }}
-            className="text-(--accent) transition hover:text-(--text-primary)"
+            className="a11y-focus-ring rounded-xs text-(--accent) transition hover:text-(--text-primary)"
           >
             Clear filters
           </button>
@@ -267,7 +284,10 @@ export default function BlogArchive({ posts }: BlogArchiveProps) {
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
-              className="group flex h-full flex-col rounded-3xl border border-(--accent-border) bg-white/3 p-5 transition hover:border-(--accent) hover:bg-(--accent-transparent) hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)]"
+              className={cn(
+                'a11y-focus-ring group flex h-full flex-col rounded-3xl border border-(--accent-border) p-5 transition hover:border-(--accent) hover:bg-(--accent-transparent) hover:shadow-[0_20px_40px_rgba(0,0,0,0.2)]',
+                surface
+              )}
             >
               <div className="flex flex-wrap items-center gap-2 text-xs uppercase tracking-[0.18em] text-(--accent)">
                 <CategoryIcon category={post.category} className="h-4 w-4" />
@@ -283,16 +303,9 @@ export default function BlogArchive({ posts }: BlogArchiveProps) {
               <p className="mt-3 text-sm leading-relaxed text-(--text-secondary)">{post.excerpt}</p>
 
               <div className="mt-4 flex flex-wrap gap-2">
-                {post.series && (
-                  <span className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary)">
-                    {post.series}
-                  </span>
-                )}
+                {post.series && <span className={chipClass}>{post.series}</span>}
                 {post.tags.slice(0, 3).map((tag) => (
-                  <span
-                    key={tag}
-                    className="rounded-full border border-white/10 bg-black/10 px-3 py-1 text-xs text-(--text-secondary)"
-                  >
+                  <span key={tag} className={chipClass}>
                     {tag}
                   </span>
                 ))}
@@ -305,7 +318,12 @@ export default function BlogArchive({ posts }: BlogArchiveProps) {
           ))}
         </div>
       ) : (
-        <div className="rounded-3xl border border-dashed border-(--accent-border) bg-white/2 p-8 text-center">
+        <div
+          className={cn(
+            'rounded-3xl border border-dashed border-(--accent-border) p-8 text-center',
+            surface
+          )}
+        >
           <p className="text-lg font-medium text-(--text-primary)">No posts match that filter.</p>
           <p className="mt-2 text-sm text-(--text-secondary)">
             Try a broader category, clear the topic filter, or search a different keyword.
