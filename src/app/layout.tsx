@@ -5,7 +5,13 @@ import './globals.css';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { getFooterNavItems, getSiteNavItems } from '@/config/site-nav';
-import { AUTHOR_NAME, SITE_NAME, SITE_DESCRIPTION_HIRING, SITE_URL } from '@/utils/constants';
+import {
+  AUTHOR_NAME,
+  SITE_DESCRIPTION_HIRING,
+  SITE_NAME,
+  SITE_URL,
+  SOCIAL_PROFILES,
+} from '@/utils/constants';
 import { DEFAULT_OG_IMAGE_PATH, siteOpenGraph } from '@/utils/open-graph';
 import { getSiteJsonLd } from '@/utils/structured-data';
 import { APPEARANCE_STORAGE_KEY, THEME_STORAGE_KEY } from '@/utils/theme';
@@ -96,11 +102,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const siteJsonLd = getSiteJsonLd({
     authorName: AUTHOR_NAME,
     authorImagePath: '/headshot.jpeg',
-    sameAs: [
-      'https://x.com/Saucy_Tech',
-      'https://github.com/saucy-tech',
-      'https://primal.net/p/nprofile1qqsvzs8gfntzjs2wg8670nrfy64h44zy69kc3r8rp5wd7kw6t6njsassf62c7',
-    ],
+    sameAs: Object.values(SOCIAL_PROFILES),
   });
   return (
     <html lang="en" suppressHydrationWarning>

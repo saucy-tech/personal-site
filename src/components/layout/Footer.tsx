@@ -4,7 +4,7 @@ import ThemeToggle from '@/components/ThemeToggle';
 import SiteNav from '@/components/layout/SiteNav';
 import type { SiteNavItem } from '@/config/site-nav';
 import { BaseProps } from '@/types';
-import { LEGAL_ENTITY } from '@/utils/constants';
+import { LEGAL_ENTITY, SOCIAL_PROFILES } from '@/utils/constants';
 import { cn } from '@/utils/helpers';
 
 type FooterProps = BaseProps & {
@@ -21,7 +21,7 @@ export default function Footer({ className, navItems }: FooterProps) {
         <div className="flex flex-wrap justify-center gap-4 text-sm">
           <EmailLink className="text-(--accent) a11y-focus-ring hover:underline underline-offset-4" />
           <a
-            href="https://linkedin.com/in/saucytech"
+            href={SOCIAL_PROFILES.linkedIn}
             target="_blank"
             rel="noopener noreferrer"
             className="text-(--accent) a11y-focus-ring hover:underline underline-offset-4"

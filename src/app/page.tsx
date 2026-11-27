@@ -8,7 +8,7 @@ import Profile from '@/components/Profile';
 import { fieldNotesLastUpdated } from '@/data/field-notes';
 import { projects, projectsLastUpdated } from '@/data/projects';
 import SocialBar from '@/components/SocialBar';
-import { AUTHOR_NAME } from '@/utils/constants';
+import { AUTHOR_NAME, SOCIAL_PROFILES } from '@/utils/constants';
 import { formatPostDate } from '@/utils/helpers';
 import { siteOpenGraph } from '@/utils/open-graph';
 
@@ -30,44 +30,19 @@ export default function Home() {
 
   const socialLinks = [
     {
-      href: 'https://x.com/Saucy_Tech',
-      icon: (
-        <Image src="/icons/x-logo.svg" width={32} height={32} alt="X (Twitter) logo" unoptimized />
-      ),
-      label: 'X',
+      href: SOCIAL_PROFILES.linkedIn,
+      icon: <Image src="/icons/linkedin-logo.svg" width={32} height={32} alt="" unoptimized />,
+      label: 'LinkedIn',
     },
     {
-      href: 'https://github.com/saucy-tech',
-      icon: (
-        <Image src="/icons/github-logo.svg" width={32} height={32} alt="GitHub logo" unoptimized />
-      ),
+      href: SOCIAL_PROFILES.github,
+      icon: <Image src="/icons/github-logo.svg" width={32} height={32} alt="" unoptimized />,
       label: 'GitHub',
     },
     {
-      href: 'https://primal.net/p/nprofile1qqsvzs8gfntzjs2wg8670nrfy64h44zy69kc3r8rp5wd7kw6t6njsassf62c7',
-      icon: (
-        <Image
-          src="/icons/nostr-logo.svg"
-          width={32}
-          height={32}
-          alt="Nostr protocol logo"
-          unoptimized
-        />
-      ),
-      label: 'Nostr',
-    },
-    {
-      href: 'https://discord.com/users/saucybtc',
-      icon: (
-        <Image
-          src="/icons/discord-logo.svg"
-          width={32}
-          height={32}
-          alt="Discord logo"
-          unoptimized
-        />
-      ),
-      label: 'Discord',
+      href: SOCIAL_PROFILES.x,
+      icon: <Image src="/icons/x-logo.svg" width={32} height={32} alt="" unoptimized />,
+      label: 'X',
     },
   ];
 

@@ -15,7 +15,7 @@ import {
   talks,
   publications,
 } from '@/data/projects';
-import { SITE_NAME, absoluteUrl } from '@/utils/constants';
+import { SITE_NAME, SOCIAL_PROFILES, absoluteUrl } from '@/utils/constants';
 import { getProfilePageJsonLd } from '@/utils/structured-data';
 
 const PORTFOLIO_OG_IMAGE = absoluteUrl('/portfolio/opengraph-image');
@@ -151,7 +151,7 @@ export default async function Portfolio() {
     jobTitle: portfolioAbout.title,
     description: portfolioAbout.summary,
     imagePath: '/headshot.jpeg',
-    sameAs: [portfolioAbout.linkedIn, portfolioAbout.github, 'https://x.com/Saucy_Tech'],
+    sameAs: Object.values(SOCIAL_PROFILES),
     dateModified: PORTFOLIO_LAST_UPDATED,
   });
 
