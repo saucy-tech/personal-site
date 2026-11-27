@@ -41,8 +41,8 @@ export default async function Support({ searchParams }: SupportPageProps) {
       : undefined;
 
   return (
-    <PageLayout title="Support Me">
-      <p className="text-lg text-gray-300 mb-10 text-center">
+    <PageLayout title="Support Me" readingWidth>
+      <p className="text-lg text-(--text-secondary) mb-10 text-center">
         Choose a way to support my work and our family.
       </p>
 
@@ -63,7 +63,7 @@ export default async function Support({ searchParams }: SupportPageProps) {
               href="https://www.ugift529.com/gifttpl/ugift/create/viewGiftCodeDetails.cs?ugiftcode=21W-40K"
               target="_blank"
               rel="noopener noreferrer"
-              className="block text-sm wrap-break-word bg-black/40 p-3 rounded-sm underline hover:bg-(--accent-transparent)"
+              className="a11y-focus-ring block text-sm wrap-break-word bg-(--surface) border border-(--surface-border) p-3 rounded-sm underline transition-colors hover:bg-(--surface-hover)"
             >
               21W-40K
             </a>
@@ -79,7 +79,7 @@ export default async function Support({ searchParams }: SupportPageProps) {
             </p>
             <EmailLink
               subject="Trump Account contribution link"
-              className="inline-block rounded-sm bg-(--accent) px-4 py-2 text-sm font-medium text-(--on-accent) transition hover:bg-(--accent-dark)"
+              className="a11y-focus-ring inline-block rounded-sm bg-(--accent) px-4 py-2 text-sm font-medium text-(--on-accent) transition hover:bg-(--accent-dark)"
             >
               Request the contribution link
             </EmailLink>
