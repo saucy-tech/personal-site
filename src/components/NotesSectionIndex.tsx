@@ -6,17 +6,25 @@ import { cn } from '@/utils/helpers';
 
 interface NotesSectionIndexProps {
   sections: { id: string; title: string }[];
+  /**
+   * `rail` (default, `/notes`): horizontal chip row on narrow screens, left
+   * rail from `md` up. `bar` (`/portfolio`): horizontal chip row at every width.
+   */
+  layout?: 'rail' | 'bar';
 }
 
 /**
- * Sticky section index for `/notes`. Renders as a horizontal chip row pinned
- * to the top on narrow screens and as a left rail from `md` up. Highlights the
- * section currently in view (same IntersectionObserver recipe as
- * PostTableOfContents) and keeps the active chip scrolled into view.
+ * Sticky section index. Renders as a horizontal chip row pinned to the top and,
+ * in the `rail` layout, as a left rail from `md` up. Highlights the section
+ * currently in view (same IntersectionObserver recipe as PostTableOfContents),
+ * keeps the active or focused chip scrolled into view, and fades the right edge
+ * while more chips sit off-screen.
  */
-export default function NotesSectionIndex({ sections }: NotesSectionIndexProps) {
+export default function NotesSectionIndex({ sections, layout = 'rail' }: NotesSectionIndexProps) {
   const [activeId, setActiveId] = useState(sections[0]?.id ?? null);
+  const [canScrollRight, setCanScrollRight] = useState(false);
   const listRef = useRef<HTMLUListElement>(null);
+  const isRail = layout === 'rail';
 
   useEffect(() => {
     const observedElements = sections
@@ -61,14 +69,49 @@ export default function NotesSectionIndex({ sections }: NotesSectionIndexProps) 
       ?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   }, [activeId]);
 
+  // The fade only shows while chips overflow to the right, so the last chip is
+  // never dimmed once the row is scrolled to its end.
+  useEffect(() => {
+    const list = listRef.current;
+    if (!list) {
+      return;
+    }
+
+    const update = () => {
+      setCanScrollRight(list.scrollLeft + list.clientWidth < list.scrollWidth - 1);
+    };
+
+    update();
+    list.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+
+    return () => {
+      list.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+    };
+  }, [sections]);
+
   return (
     <nav
       aria-label="Sections"
-      className="sticky top-0 z-20 -mx-4 border-b border-(--surface-border) bg-(--background) px-4 py-2 sm:-mx-6 sm:px-6 md:top-24 md:mx-0 md:self-start md:border-0 md:bg-transparent md:px-0 md:py-0"
+      className={cn(
+        'sticky top-0 z-20 -mx-4 border-b border-(--surface-border) bg-(--background) px-4 py-2 sm:-mx-6 sm:px-6',
+        isRail
+          ? 'md:top-24 md:mx-0 md:self-start md:border-0 md:bg-transparent md:px-0 md:py-0'
+          : 'md:mx-0 md:px-0'
+      )}
     >
       <ul
         ref={listRef}
-        className="no-scrollbar flex gap-2 overflow-x-auto md:flex-col md:gap-1 md:overflow-visible"
+        className={cn(
+          // scroll-pe keeps chips revealed by scrollIntoView clear of the fade.
+          'no-scrollbar flex scroll-pe-10 gap-2 overflow-x-auto',
+          canScrollRight &&
+            (isRail
+              ? 'max-md:[mask-image:linear-gradient(to_left,transparent,#000_2.5rem)]'
+              : '[mask-image:linear-gradient(to_left,transparent,#000_2.5rem)]'),
+          isRail && 'md:flex-col md:gap-1 md:overflow-visible'
+        )}
       >
         {sections.map((section) => (
           <li key={section.id} className="shrink-0">
@@ -79,7 +122,8 @@ export default function NotesSectionIndex({ sections }: NotesSectionIndexProps) 
               }}
               aria-current={activeId === section.id ? 'location' : undefined}
               className={cn(
-                'a11y-focus-ring focus-visible:ring-inset focus-visible:ring-offset-0 block rounded-full border px-3 py-1 text-xs whitespace-nowrap transition md:rounded-sm md:border-0 md:px-2 md:text-sm',
+                'a11y-focus-ring focus-visible:ring-inset focus-visible:ring-offset-0 block rounded-full border px-3 py-1 text-xs whitespace-nowrap transition',
+                isRail && 'md:rounded-sm md:border-0 md:px-2 md:text-sm md:whitespace-normal',
                 activeId === section.id
                   ? 'border-(--accent) bg-(--accent-transparent) text-(--text-primary)'
                   : 'border-(--surface-border) text-(--text-secondary) hover:text-(--text-primary)'
