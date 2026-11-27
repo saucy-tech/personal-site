@@ -30,7 +30,7 @@ describe('structured data helpers', () => {
     const jsonLd = getProfilePageJsonLd({
       path: '/portfolio',
       name: 'Brandon Sauceda',
-      jobTitle: 'IT Development Manager · Software Engineer',
+      jobTitle: 'IT Applications and GIS Manager · Software Engineer',
       description: 'Ten years in Georgia government technology.',
       imagePath: '/headshot.jpeg',
       sameAs: ['https://github.com/saucy-tech'],
@@ -45,7 +45,7 @@ describe('structured data helpers', () => {
       name: 'Brandon Sauceda',
       url: SITE_URL,
       image: absoluteUrl('/headshot.jpeg'),
-      jobTitle: 'IT Development Manager · Software Engineer',
+      jobTitle: 'IT Applications and GIS Manager · Software Engineer',
       description: 'Ten years in Georgia government technology.',
       sameAs: ['https://github.com/saucy-tech'],
     });
