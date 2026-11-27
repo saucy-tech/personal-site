@@ -1,5 +1,10 @@
 export const SITE_NAME = 'Saucy.Tech';
 export const AUTHOR_NAME = 'Brandon Sauceda';
+export const SOCIAL_PROFILES = {
+  linkedIn: 'https://linkedin.com/in/saucytech',
+  github: 'https://github.com/saucy-tech',
+  x: 'https://x.com/Saucy_Tech',
+} as const;
 export const LEGAL_ENTITY = 'Saucy Tech LLC';
 export const SITE_DESCRIPTION = 'Love Jesus, Explore Ideas, Create Things, Save in Bitcoin';
 export const SITE_DESCRIPTION_HIRING =
